@@ -18,8 +18,19 @@ const monacoModelsSlice = createSlice({
   initialState,
   reducers: {
     loadModel: (state, action: PayloadAction<MonacoModel>) => {
-      state.incantations.push(action.payload);
-      state.selected = state.incantations.length - 1;
+      let index = -1;
+      for (let i = 0; i < state.incantations.length; i++) {
+        if (state.incantations[i].name === action.payload.name) {
+          index = i;
+          break;
+        }
+      }
+      if (index !== -1) {
+        state.selected = index;
+      } else {
+        state.incantations.push(action.payload);
+        state.selected = state.incantations.length - 1;
+      }
     },
     closeModel: (state, action: PayloadAction<number>) => {
       state.incantations.splice(action.payload, 1);
