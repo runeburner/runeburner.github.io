@@ -22,6 +22,7 @@ export const IncantationsPage = () => {
                 loadModel({
                   name: n,
                   content: store.getState().incantations[n],
+                  isDirty: false,
                 })
               );
             }}

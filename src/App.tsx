@@ -1,13 +1,14 @@
-import { EditorPage } from "./EditorPage";
+import { Page as EditorPage } from "./Editor/Page/Page";
 import { IncantationsPage } from "./IncantationsPage";
 import { Sidebar } from "./Sidebar/Sidebar";
 import { WorldPage } from "./WorldPage";
+import classes from "./App.module.css";
 
 function App() {
   return (
-    <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
+    <div className={classes.fullscreenContainer}>
       <Sidebar />
-      <div style={{ width: "100%", height: "100%" }}>
+      <div className={classes.pageContainer}>
         <EditorPage />
         <IncantationsPage />
         <WorldPage />

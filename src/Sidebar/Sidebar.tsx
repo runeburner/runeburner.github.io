@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { changeTab, Tab, useIsTabSelected } from "../store/sidebar";
-import "./Sidebar.css";
+import classes from "./Sidebar.module.css";
 import { useAppDispatch } from "../store/hooks";
 
 interface SidebarTabProps {
@@ -12,7 +12,7 @@ const SidebarTab = ({ tab }: SidebarTabProps): ReactElement => {
   const dispatch = useAppDispatch();
   return (
     <li
-      className={"li " + (isSelected ? "selected" : "")}
+      className={classes.li + " " + (isSelected ? classes.selected : "")}
       onClick={() => dispatch(changeTab(tab))}
     >
       {tab}
@@ -22,7 +22,7 @@ const SidebarTab = ({ tab }: SidebarTabProps): ReactElement => {
 
 export const Sidebar = () => {
   return (
-    <ul className="ul">
+    <ul className={classes.ul}>
       <SidebarTab tab="INCANTATIONS" />
       <SidebarTab tab="EDITOR" />
       <SidebarTab tab="WORLD" />
