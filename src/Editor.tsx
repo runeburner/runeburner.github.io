@@ -1,13 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { store } from "./store/store";
-// monaco.languages.typescript.typescriptDefaults.addExtraLib(
-//   `declare global {
-//   const world = {
-//     ping(): Promise<string>;
-//   }
-// }`
-// );
+
+// https://microsoft.github.io/monaco-editor/typedoc/index.html
 export const Editor = () => {
   const [editor, setEditor] =
     useState<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -32,7 +27,7 @@ export const Editor = () => {
             fontSize: 20,
           });
         }
-        return monaco.editor.create(monacoRef.current!, {
+        const out = monaco.editor.create(monacoRef.current!, {
           value: ["function x() {", '\tconsole.log("Hello world!");', "}"].join(
             "\n"
           ),
@@ -41,6 +36,21 @@ export const Editor = () => {
           automaticLayout: true,
           fontSize: 20,
         });
+
+        out.addAction({
+          id: "runeburner-save-incantation",
+          label: "Save Incantation",
+          run() {
+            console.log("invoked");
+          },
+        });
+        monaco.languages.typescript.typescriptDefaults.addExtraLib(
+          `declare const world: {
+  ping(): Promise<string>;
+};
+`
+        );
+        return out;
       });
     }
 
