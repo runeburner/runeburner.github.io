@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { CreateIncantationForm } from "./CreateIncantationForm";
+import { Modal } from "./Modal/Modal";
 import { useAppDispatch } from "./store/hooks";
 import { useIncantationNames } from "./store/incantations";
 import { loadModel } from "./store/monacoModels";
@@ -6,6 +8,7 @@ import { changeTab, useIsTabSelected } from "./store/sidebar";
 import { store } from "./store/store";
 
 export const IncantationsPage = () => {
+  const [open, setOpen] = useState(true);
   const is = useIsTabSelected("INCANTATIONS");
   const names = useIncantationNames();
   const dispatch = useAppDispatch();
@@ -32,6 +35,9 @@ export const IncantationsPage = () => {
         ))}
       </ul>
       <CreateIncantationForm />
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <p>Hello World</p>
+      </Modal>
     </>
   );
 };
