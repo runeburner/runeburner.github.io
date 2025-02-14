@@ -6,6 +6,8 @@ type IncantationsState = Record<string, string>;
 export const defaultIncantation = `(async () => {
   while(true) {
     const pong = await world.ping();
+    await new Promise((res) => {
+    setTimeout(res, 1000)});
     console.log(pong);
   }
 })();

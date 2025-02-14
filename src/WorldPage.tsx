@@ -10,7 +10,7 @@ export const WorldPage = () => {
   useEffect(() => {
     if (!is || started) return;
 
-    const extraScript = `self.importScripts('${location}/public/worker.js');\n`;
+    const extraScript = `self.importScripts('${location}/worker.js');\n`;
     const o = URL.createObjectURL(
       new Blob([extraScript + i], { type: "application/javascript" })
     );
@@ -25,7 +25,6 @@ export const WorldPage = () => {
         });
       }
     };
-    setTimeout(() => worker.terminate(), 1000);
     setStarted(true);
   }, [is, started, setStarted, i]);
   if (!is) return <></>;
