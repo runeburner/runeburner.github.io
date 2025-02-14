@@ -15,6 +15,9 @@ export const defaultIncantation = `(async () => {
 
 const initialState: IncantationsState = {
   basic: defaultIncantation,
+  other: `function HelloWorld() {
+  console.log("Hello World!");
+}`,
 };
 
 export interface Incantation {
@@ -23,7 +26,7 @@ export interface Incantation {
 }
 
 const incantationsSlice = createSlice({
-  name: "sidebar",
+  name: "incantations",
   initialState,
   reducers: {
     saveIncantation: (state, action: PayloadAction<Incantation>) => {
