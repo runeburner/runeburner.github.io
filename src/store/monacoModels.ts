@@ -39,14 +39,22 @@ const monacoModelsSlice = createSlice({
       }
     },
     selectModel: (state, action: PayloadAction<number>) => {
-      state.selected = action.payload;
+      state.selected = Math.min(state.incantations.length - 1, action.payload);
     },
     setCurrentModelDirty: (state) => {
       state.incantations[state.selected].isDirty = true;
     },
+    setCurrentModelClean: (state) => {
+      state.incantations[state.selected].isDirty = false;
+    },
   },
 });
 
-export const { loadModel, closeModel, selectModel, setCurrentModelDirty } =
-  monacoModelsSlice.actions;
+export const {
+  loadModel,
+  closeModel,
+  selectModel,
+  setCurrentModelDirty,
+  setCurrentModelClean,
+} = monacoModelsSlice.actions;
 export const monacoModelsReducer = monacoModelsSlice.reducer;

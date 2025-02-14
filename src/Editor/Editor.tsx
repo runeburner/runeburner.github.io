@@ -2,7 +2,11 @@ import { useRef, useState, useEffect } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { store } from "../store/store";
 import { saveIncantation } from "../store/incantations";
-import { setCurrentModelDirty } from "../store/monacoModels";
+import {
+  selectModel,
+  setCurrentModelClean,
+  setCurrentModelDirty,
+} from "../store/monacoModels";
 import { useAppSelector } from "../store/hooks";
 
 // https://microsoft.github.io/monaco-editor/typedoc/index.html
@@ -74,21 +78,6 @@ export const Editor = (): React.ReactElement => {
           store.dispatch(setCurrentModelDirty());
         });
 
-        newEditor.addAction({
-          id: "runeburner-save-incantation",
-          label: "Save Incantation",
-          run() {
-            if (selected === -1) return;
-            const content = newEditor.getValue();
-            if (!content) return;
-            store.dispatch(
-              saveIncantation({
-                name: monacoModels.incantations[monacoModels.selected].name,
-                content: content,
-              })
-            );
-          },
-        });
         monaco.languages.typescript.typescriptDefaults.addExtraLib(
           `declare const world: {
   ping(): Promise<string>;
@@ -99,7 +88,36 @@ export const Editor = (): React.ReactElement => {
         newEditor.addCommand(
           monaco.KeyCode.KeyS | monaco.KeyMod.CtrlCmd,
           () => {
-            console.log("save");
+            store.dispatch(
+              saveIncantation({
+                name: currentIncantationName.current,
+                content: newEditor.getValue(),
+              })
+            );
+            store.dispatch(setCurrentModelClean());
+          }
+        );
+
+        const digitKeys = [
+          monaco.KeyCode.Digit1,
+          monaco.KeyCode.Digit2,
+          monaco.KeyCode.Digit3,
+          monaco.KeyCode.Digit4,
+          monaco.KeyCode.Digit5,
+          monaco.KeyCode.Digit6,
+          monaco.KeyCode.Digit7,
+          monaco.KeyCode.Digit8,
+          monaco.KeyCode.Digit9,
+        ];
+        for (let i = 0; i < digitKeys.length; i++) {
+          newEditor.addCommand(digitKeys[i] | monaco.KeyMod.CtrlCmd, () => {
+            store.dispatch(selectModel(i));
+          });
+        }
+        newEditor.addCommand(
+          monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyP,
+          () => {
+            newEditor.trigger("", "editor.action.quickCommand", null);
           }
         );
 
