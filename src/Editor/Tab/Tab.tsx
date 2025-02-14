@@ -1,8 +1,7 @@
 import classes from "./Tab.module.css";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import closeIcon from "../../icons/x.svg";
-import circleIcon from "../../icons/circle.svg";
 import { closeModel, selectModel } from "../../store/monacoModels";
+import { CircleIcon, XIcon } from "../../icons";
 
 interface TabProps {
   i: number;
@@ -28,11 +27,21 @@ export const Tab = ({ i }: TabProps): React.ReactElement => {
       className={classes.tab + (selected ? " " + classes.selected : "")}
     >
       {name}
-      <img
-        onClick={onClose}
-        src={isDirty ? circleIcon : closeIcon}
-        className={classes.icon + (selected ? " " + classes.iconHidden : "")}
-      />
+      {isDirty ? (
+        <CircleIcon
+          onClick={onClose}
+          className={
+            classes.icon + (selected ? " " + classes.iconSelected : "")
+          }
+        />
+      ) : (
+        <XIcon
+          onClick={onClose}
+          className={
+            classes.icon + (selected ? " " + classes.iconSelected : "")
+          }
+        />
+      )}
     </div>
   );
 };

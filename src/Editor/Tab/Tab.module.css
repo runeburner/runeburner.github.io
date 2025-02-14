@@ -25,16 +25,16 @@
 }
 
 .icon {
-  color: white;
+  color: #888;
   margin-left: 5px;
   border-radius: 5px;
   padding: 3px;
 }
 
 .icon:hover {
-  background-color: #333;
+  background-color: #383838;
 }
 
-.iconHidden {
-  color: #00000000;
+.iconSelected {
+  color: white;
 }
