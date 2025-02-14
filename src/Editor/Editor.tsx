@@ -98,5 +98,9 @@ export const Editor = (): React.ReactElement => {
     return () => editor?.dispose();
   }, [monacoRef, editor]);
 
-  return <div style={{ height: "100%", width: "100%" }} ref={monacoRef} />;
+  return (
+    <>
+      <div style={{ height: "100%", width: "100%" }} ref={monacoRef} />
+    </>
+  );
 };
