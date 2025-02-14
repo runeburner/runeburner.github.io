@@ -29,6 +29,15 @@ export const Editor = (): React.ReactElement => {
     currentIncantationName.current = selectedIncantationName;
   }, [editor, selectedIncantationName]);
 
+  // useEffect(() => {
+  //   document.addEventListener("keydown", (e) => {
+  //     if (e.key === "s" && e.ctrlKey && e.metaKey) {
+  //       console.log(e);
+  //       e.preventDefault();
+  //     }
+  //   });
+  // }, []);
+
   useEffect(() => {
     if (monacoRef) {
       setEditor((editor) => {
@@ -85,6 +94,13 @@ export const Editor = (): React.ReactElement => {
   ping(): Promise<string>;
 };
 `
+        );
+
+        newEditor.addCommand(
+          monaco.KeyCode.KeyS | monaco.KeyMod.CtrlCmd,
+          () => {
+            console.log("save");
+          }
         );
 
         const firstIncantationName =

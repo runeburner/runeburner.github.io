@@ -1,22 +1,27 @@
 import { ReactElement } from "react";
 import { changeTab, Tab, useIsTabSelected } from "../store/sidebar";
 import classes from "./Sidebar.module.css";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { EditIcon, FileIcon, MapIcon } from "../icons";
 
 interface SidebarTabProps {
   tab: Tab;
   icon: typeof EditIcon;
+  disabled?: boolean;
 }
 
-const SidebarTab = ({ tab, icon: Icon }: SidebarTabProps): ReactElement => {
+const SidebarTab = ({
+  tab,
+  icon: Icon,
+  disabled,
+}: SidebarTabProps): ReactElement => {
   const isSelected = useIsTabSelected(tab);
   const dispatch = useAppDispatch();
 
   return (
     <li
       className={classes.li + " " + (isSelected ? classes.selected : "")}
-      onClick={() => dispatch(changeTab(tab))}
+      onClick={() => !disabled && dispatch(changeTab(tab))}
     >
       <Icon />
     </li>
@@ -24,10 +29,11 @@ const SidebarTab = ({ tab, icon: Icon }: SidebarTabProps): ReactElement => {
 };
 
 export const Sidebar = () => {
+  const editorDisabled = useAppSelector((s) => s.monacoModels.selected !== -1);
   return (
     <ul className={classes.ul}>
       <SidebarTab tab="INCANTATIONS" icon={FileIcon} />
-      <SidebarTab tab="EDITOR" icon={EditIcon} />
+      <SidebarTab tab="EDITOR" icon={EditIcon} disabled={editorDisabled} />
       <SidebarTab tab="WORLD" icon={MapIcon} />
     </ul>
   );
