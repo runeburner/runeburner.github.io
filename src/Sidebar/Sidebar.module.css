@@ -1,20 +1,21 @@
 .ul {
-    list-style-type: none; 
-    margin:0;
-    /* padding:0; */
-    padding: 0;
+  list-style-type: none;
+  margin: 0;
+  /* padding:0; */
+  padding: 0;
 }
 
 .li {
-    font-size: 2em;
-    cursor: pointer;
-    user-select: none;
-    margin: 0;
-    padding: 1em 1em 1em 1em;
-    color:#ccccff;
-    background-color: #ff33ff;
+  font-size: 2em;
+  cursor: pointer;
+  user-select: none;
+  width: 32px;
+  margin: 0;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  color: #ccccff;
+  background-color: #ff33ff;
 }
 
 .selected {
-    background-color: red;
+  background-color: red;
 }

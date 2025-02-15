@@ -1,3 +1,8 @@
 .edit {
   cursor: pointer;
 }
+
+.icon {
+  width: 24px;
+  display: block;
+}

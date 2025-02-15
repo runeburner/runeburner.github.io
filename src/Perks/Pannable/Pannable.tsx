@@ -4,23 +4,19 @@ import classes from "./Pannable.module.css";
 export const Pannable = ({
   children,
 }: React.PropsWithChildren): React.ReactElement => {
-  const [pos, setPos] = useState<[number, number]>([0, 0]);
+  const [pos, setPos] = useState<[number, number]>([
+    window.innerWidth / 2,
+    window.innerHeight / 2,
+  ]);
   const isPanning = useRef(false);
   const container = useRef<HTMLDivElement | null>(null);
-  const c2 = useRef<HTMLDivElement | null>(null);
 
   const onMouseDown = (e: React.MouseEvent): void => {
-    if (
-      (e.target === container.current || e.target === c2.current) &&
-      e.button == 0
-    )
+    if (e.target === container.current && e.button == 0)
       isPanning.current = true;
   };
   const onMouseUp = (e: React.MouseEvent): void => {
-    if (
-      (e.target === container.current || e.target === c2.current) &&
-      e.button === 0
-    )
+    if (e.target === container.current && e.button === 0)
       isPanning.current = false;
   };
 
@@ -43,13 +39,7 @@ export const Pannable = ({
       onMouseLeave={onMouseLeave}
       ref={container}
     >
-      <div
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
-        className={classes.pan}
-        ref={c2}
-        style={{ left: pos[0], top: pos[1] }}
-      >
+      <div className={classes.pan} style={{ left: pos[0], top: pos[1] }}>
         {children}
       </div>
     </div>

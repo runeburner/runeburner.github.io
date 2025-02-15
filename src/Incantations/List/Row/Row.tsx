@@ -37,14 +37,14 @@ export const Row = ({ name }: RowProps) => {
       </td>
       <td>
         {renaming ? (
-          <CheckIcon onClick={onSave} />
+          <CheckIcon className={classes.icon} onClick={onSave} />
         ) : (
-          <ItalicIcon onClick={onRenaming} />
+          <ItalicIcon className={classes.icon} onClick={onRenaming} />
         )}
       </td>
       <td>
         <EditIcon
-          className={classes.edit}
+          className={classes.edit + " " + classes.icon}
           onClick={() => {
             dispatch(changeTab("EDITOR"));
             dispatch(
@@ -58,7 +58,7 @@ export const Row = ({ name }: RowProps) => {
         />
       </td>
       <td>
-        <TrashIcon />
+        <TrashIcon className={classes.icon} />
       </td>
     </tr>
   );
