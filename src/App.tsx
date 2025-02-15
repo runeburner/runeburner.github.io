@@ -1,9 +1,10 @@
 import { Page as EditorPage } from "./Editor/Page/Page";
-import { IncantationsPage } from "./IncantationsPage";
+import { Page as IncantationsPage } from "./Incantations/Page/Page";
 import { Sidebar } from "./Sidebar/Sidebar";
 import { WorldPage } from "./WorldPage";
 import classes from "./App.module.css";
 import { useEffect } from "react";
+import { Page as PerksPage } from "./Perks/Page/Page";
 
 function App() {
   useEffect(() => {
@@ -23,6 +24,7 @@ function App() {
         <EditorPage />
         <IncantationsPage />
         <WorldPage />
+        <PerksPage />
       </div>
     </div>
   );

@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "./hooks";
 
-export type Tab = "INCANTATIONS" | "EDITOR" | "WORLD";
+export type Tab = "INCANTATIONS" | "EDITOR" | "WORLD" | "PERKS";
 
 interface SidebarState {
   selected: Tab;
 }
 
 const initialState: SidebarState = {
-  selected: "INCANTATIONS",
+  selected: "PERKS",
 };
 
 const sidebarSlice = createSlice({
