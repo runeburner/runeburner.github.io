@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useAppDispatch } from "./store/hooks";
-import { defaultIncantation, saveIncantation } from "./store/incantations";
+import { useAppDispatch } from "../../store/hooks";
+import { defaultIncantation, saveIncantation } from "../../store/incantations";
 
-export const CreateIncantationForm = () => {
+export const Create = () => {
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
 

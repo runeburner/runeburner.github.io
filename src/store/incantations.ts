@@ -32,10 +32,15 @@ const incantationsSlice = createSlice({
     saveIncantation: (state, action: PayloadAction<Incantation>) => {
       state[action.payload.name] = action.payload.content;
     },
+    renameIncantation: (state, action: PayloadAction<[string, string]>) => {
+      const [old, next] = action.payload;
+      state[next] = state[old];
+      delete state[old];
+    },
   },
 });
 
-export const { saveIncantation } = incantationsSlice.actions;
+export const { saveIncantation, renameIncantation } = incantationsSlice.actions;
 export const incantationReducer = incantationsSlice.reducer;
 
 export const selectIncantationNames = createSelector(

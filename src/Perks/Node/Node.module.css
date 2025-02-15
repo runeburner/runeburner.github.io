@@ -1,0 +1,6 @@
+.node {
+  background-color: white;
+  user-select: none;
+  width: 64px;
+  height: 64px;
+}
