@@ -1,0 +1,6 @@
+export enum NodeStatus {
+  PURCHASED = "PURCHASED",
+  AVAILABLE = "AVAILABLE",
+  UNLOCKED = "UNLOCKED",
+  LOCKED = "LOCKED",
+}

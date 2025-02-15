@@ -1,6 +1,84 @@
 .node {
-  background-color: white;
   user-select: none;
   width: 64px;
   height: 64px;
+  border-radius: 128px;
+  padding: 16px;
+  position: absolute;
+}
+
+.purchasedContainer {
+  background-color: white;
+  box-shadow: 0 0 5px gold;
+  border-style: solid;
+  border-color: gold;
+}
+
+.purchasedIcon {
+  color: gold;
+}
+
+.availableContainer {
+  background-color: white;
+  border-style: solid;
+  animation-name: availableContainerAnimation;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+.availableIcon {
+  animation-name: availableIconAnimation;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes availableContainerAnimation {
+  0% {
+    box-shadow: 0 0 5px #a770ef;
+    border-color: #a770ef;
+  }
+  33% {
+    box-shadow: 0 0 5px #cf8bf3;
+    border-color: #cf8bf3;
+  }
+  66% {
+    box-shadow: 0 0 5px #fdb99b;
+    border-color: #fdb99b;
+  }
+  100% {
+    box-shadow: 0 0 5px #a770ef;
+    border-color: #a770ef;
+  }
+}
+@keyframes availableIconAnimation {
+  0% {
+    color: #a770ef;
+  }
+  33% {
+    color: #cf8bf3;
+  }
+  66% {
+    color: #fdb99b;
+  }
+  100% {
+    color: #a770ef;
+  }
+}
+
+.unlockedContainer {
+  background-color: white;
+  box-shadow: 0 0 5px grey;
+}
+
+.unlockedIcon {
+  color: grey;
+}
+
+.lockedContainer {
+  background-color: #ffffffaa;
+  box-shadow: none;
+}
+
+.lockedIcon {
+  color: #000;
 }

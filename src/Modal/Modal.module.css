@@ -12,6 +12,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Must be on top of everything */
+  z-index: 2147483647;
 }
 
 .container {

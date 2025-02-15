@@ -1,7 +1,23 @@
 import { useState } from "react";
-import { EditIcon } from "../../icons";
+import { EditIcon, LockIcon } from "../../icons";
 import { Modal } from "../../Modal/Modal";
 import classes from "./Node.module.css";
+import { NodeStatus } from "./NodeStatus";
+
+const statusContainerClasses: Record<string, string> = {
+  PURCHASED: classes.purchasedContainer,
+  AVAILABLE: classes.availableContainer,
+  UNLOCKED: classes.unlockedContainer,
+  LOCKED: classes.lockedContainer,
+};
+
+const statusIconClasses: Record<string, string> = {
+  PURCHASED: classes.purchasedIcon,
+  AVAILABLE: classes.availableIcon,
+  UNLOCKED: classes.unlockedIcon,
+  LOCKED: classes.lockedIcon,
+};
+
 interface NodeProps {
   icon: typeof EditIcon;
   x: number;
@@ -9,6 +25,7 @@ interface NodeProps {
   title: string;
   lvl: [number, number];
   description: string;
+  status: NodeStatus;
 }
 
 export const Node = (props: NodeProps): React.ReactElement => {
@@ -16,29 +33,28 @@ export const Node = (props: NodeProps): React.ReactElement => {
   const { x, y } = props;
   const { title, description } = props;
   const { lvl } = props;
-  const { icon: Icon } = props;
+  const { icon } = props;
+  const { status } = props;
 
-  const onClose = () => {
-    setOpen(false);
-    console.log("onclose");
-  };
-  console.log(open);
+  const Icon = status !== NodeStatus.LOCKED ? icon : LockIcon;
   return (
     <>
       <div
         onClick={() => setOpen(true)}
-        className={classes.node}
+        className={classes.node + " " + statusContainerClasses[status]}
         style={{ left: x, top: y }}
       >
-        <Icon style={{ width: "100%", height: "100%" }} />
+        <Icon className={statusIconClasses[status]} />
       </div>
 
-      <Modal open={open} onClose={onClose}>
-        <h1>
-          {title} {lvl[0]}/{lvl[1]}
-        </h1>
-        <p>{description}</p>
-      </Modal>
+      {open && (
+        <Modal open={true} onClose={() => setOpen(false)}>
+          <h1>
+            {title} {lvl[0]}/{lvl[1]}
+          </h1>
+          <p>{description}</p>
+        </Modal>
+      )}
     </>
   );
 };
