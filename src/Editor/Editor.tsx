@@ -22,6 +22,8 @@ export const Editor = (): React.ReactElement => {
   );
   const currentIncantationName = useRef("");
 
+  const selected = useAppSelector((s) => s.monacoModels.selected);
+  console.log(`editor selected ${selected}`);
   useEffect(() => {
     if (!editor) return;
     models[currentIncantationName.current] = editor.getModel();
@@ -32,15 +34,6 @@ export const Editor = (): React.ReactElement => {
     }
     currentIncantationName.current = selectedIncantationName;
   }, [editor, selectedIncantationName]);
-
-  // useEffect(() => {
-  //   document.addEventListener("keydown", (e) => {
-  //     if (e.key === "s" && e.ctrlKey && e.metaKey) {
-  //       console.log(e);
-  //       e.preventDefault();
-  //     }
-  //   });
-  // }, []);
 
   useEffect(() => {
     if (monacoRef) {

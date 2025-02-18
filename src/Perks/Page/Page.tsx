@@ -1,13 +1,9 @@
-import { useIsTabSelected } from "../../store/sidebar";
 import { Pannable } from "../Pannable/Pannable";
 import { Node } from "../Node/Node";
 import { BoxIcon, FeatherIcon, HeartIcon, SettingsIcon } from "../../icons";
 import { NodeStatus } from "../Node/NodeStatus";
 
 export const Page = (): React.ReactElement => {
-  const is = useIsTabSelected("PERKS");
-  if (!is) return <></>;
-
   return (
     <Pannable>
       <Node

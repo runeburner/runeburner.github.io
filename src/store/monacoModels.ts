@@ -9,12 +9,12 @@ type MonacoModelsState = {
 };
 
 const initialState: MonacoModelsState = {
-  selected: 0,
+  selected: -1,
   incantations: [],
 };
 
 const monacoModelsSlice = createSlice({
-  name: "monaco",
+  name: "monacoModels",
   initialState,
   reducers: {
     loadModel: (state, action: PayloadAction<MonacoModel>) => {
@@ -31,6 +31,7 @@ const monacoModelsSlice = createSlice({
         state.incantations.push(action.payload);
         state.selected = state.incantations.length - 1;
       }
+      console.log(`state.selected: ${state.selected}`);
     },
     closeModel: (state, action: PayloadAction<number>) => {
       state.incantations.splice(action.payload, 1);
