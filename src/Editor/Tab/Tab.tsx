@@ -2,6 +2,8 @@ import classes from "./Tab.module.css";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { closeModel, selectModel } from "../../store/monacoModels";
 import { CircleIcon, XIcon } from "../../icons";
+import { iTextModelStore } from "../Editor/editorStore";
+import { store } from "../../store/store";
 
 interface TabProps {
   i: number;
@@ -14,6 +16,8 @@ export const Tab = ({ i }: TabProps): React.ReactElement => {
 
   const onClose = (e: React.MouseEvent<HTMLImageElement>) => {
     dispatch(closeModel(i));
+    const state = store.getState().monacoModels;
+    iTextModelStore.remove(state.incantations[state.selected].name);
     e.stopPropagation();
   };
 

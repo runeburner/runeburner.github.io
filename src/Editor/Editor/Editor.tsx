@@ -1,63 +1,22 @@
 import { useRef, useState, useEffect } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { store } from "../../store/store";
-import { useAppSelector } from "../../store/hooks";
-import { setupMonacoEditor } from "./utils";
+import { createNewEditor } from "./utils";
+import { useSubscribeModelChange } from "./editorStore";
+import classes from "./Editor.module.css";
 
 // https://microsoft.github.io/monaco-editor/typedoc/index.html
-
-const models: Record<string, monaco.editor.ITextModel | null> = {};
 
 export const Editor = (): React.ReactElement => {
   const [editor, setEditor] =
     useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   const monacoRef = useRef<HTMLDivElement | null>(null);
-  const selectedIncantationName = useAppSelector(
-    (s) => s.monacoModels.incantations[s.monacoModels.selected]?.name ?? ""
-  );
-  const currentIncantationName = useRef("");
 
-  useEffect((): void => {
-    if (!editor) return;
-    models[currentIncantationName.current] = editor.getModel();
-    if (models[selectedIncantationName]) {
-      editor.setModel(models[selectedIncantationName]);
-    } else {
-      editor.setModel(monaco.editor.createModel("", "typescript"));
-    }
-    currentIncantationName.current = selectedIncantationName;
-  }, [editor, selectedIncantationName]);
+  useSubscribeModelChange(editor);
 
   useEffect(() => {
-    if (monacoRef) {
-      setEditor((editor): monaco.editor.IStandaloneCodeEditor => {
-        if (editor) return editor;
-        const monacoModels = store.getState().monacoModels;
-        const selected = monacoModels.selected;
-
-        const newEditor = monaco.editor.create(monacoRef.current!, {
-          model: monaco.editor.createModel(
-            monacoModels.incantations[selected].content,
-            "typescript"
-          ),
-          language: "typescript",
-          theme: "vs-dark",
-          automaticLayout: true,
-          fontSize: 26,
-        });
-
-        setupMonacoEditor(newEditor, currentIncantationName);
-
-        const firstIncantationName =
-          monacoModels.incantations[monacoModels.selected].name;
-        models[firstIncantationName] = newEditor.getModel();
-        currentIncantationName.current = firstIncantationName;
-        return newEditor;
-      });
-    }
-
-    return () => editor?.dispose();
+    if (!monacoRef.current || editor) return;
+    setEditor(createNewEditor(monacoRef));
   }, [monacoRef, editor]);
 
-  return <div style={{ height: "100%" }} ref={monacoRef} />;
+  return <div className={classes.editor} ref={monacoRef} />;
 };
