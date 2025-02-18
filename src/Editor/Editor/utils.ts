@@ -7,26 +7,34 @@ import {
 } from "../../store/monacoModels";
 import { saveIncantation } from "../../store/incantations";
 
-export const setupMonacoEditor = (
-  editor: monaco.editor.IStandaloneCodeEditor,
-  selectedIncantationName: React.MutableRefObject<string>
-): void => {
+export const createNewEditor = (
+  ref: React.MutableRefObject<HTMLDivElement | null>
+) => {
+  const editor = monaco.editor.create(ref.current!, {
+    model: monaco.editor.createModel("", "typescript"),
+    language: "typescript",
+    theme: "vs-dark",
+    automaticLayout: true,
+    fontSize: 26,
+  });
+
   addLibrary();
-  setupCtrlS(editor, selectedIncantationName);
+  setupCtrlS(editor);
   setupDirtying(editor);
   setupTabSwitch(editor);
   setupCtrlP(editor);
+
+  return editor;
 };
 
 // Setup the shortcut ctrl/cmd+s to save the currently selected incantation
-const setupCtrlS = (
-  editor: monaco.editor.IStandaloneCodeEditor,
-  selectedIncantationName: React.MutableRefObject<string>
-): void => {
+const setupCtrlS = (editor: monaco.editor.IStandaloneCodeEditor): void => {
   editor.addCommand(monaco.KeyCode.KeyS | monaco.KeyMod.CtrlCmd, (): void => {
     store.dispatch(
       saveIncantation({
-        name: selectedIncantationName.current,
+        name: store.getState().monacoModels.incantations[
+          store.getState().monacoModels.selected
+        ].name,
         content: editor.getValue(),
       })
     );
