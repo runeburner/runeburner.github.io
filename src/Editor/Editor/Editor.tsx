@@ -3,6 +3,7 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { createNewEditor } from "./utils";
 import { useSubscribeModelChange } from "./editorStore";
 import classes from "./Editor.module.css";
+import "./userWorker";
 
 // https://microsoft.github.io/monaco-editor/typedoc/index.html
 
