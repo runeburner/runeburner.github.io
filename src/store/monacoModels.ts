@@ -31,7 +31,6 @@ const monacoModelsSlice = createSlice({
         state.incantations.push(action.payload);
         state.selected = state.incantations.length - 1;
       }
-      console.log(`state.selected: ${state.selected}`);
     },
     closeModel: (state, action: PayloadAction<number>) => {
       state.incantations.splice(action.payload, 1);
