@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { store } from "../store/store";
-import { useAppSelector } from "../store/hooks";
+import { store } from "../../store/store";
+import { useAppSelector } from "../../store/hooks";
 import { setupMonacoEditor } from "./utils";
 
 // https://microsoft.github.io/monaco-editor/typedoc/index.html
@@ -35,31 +35,16 @@ export const Editor = (): React.ReactElement => {
         const monacoModels = store.getState().monacoModels;
         const selected = monacoModels.selected;
 
-        let newEditor: monaco.editor.IStandaloneCodeEditor;
-        if (selected !== -1) {
-          newEditor = monaco.editor.create(monacoRef.current!, {
-            model: monaco.editor.createModel(
-              monacoModels.incantations[selected].content,
-              "typescript"
-            ),
-            language: "typescript",
-            theme: "vs-dark",
-            automaticLayout: true,
-            fontSize: 26,
-          });
-        } else {
-          newEditor = monaco.editor.create(monacoRef.current!, {
-            value: [
-              "function x() {",
-              '\tconsole.log("Hello world!");',
-              "}",
-            ].join("\n"),
-            language: "typescript",
-            theme: "vs-dark",
-            automaticLayout: true,
-            fontSize: 26,
-          });
-        }
+        const newEditor = monaco.editor.create(monacoRef.current!, {
+          model: monaco.editor.createModel(
+            monacoModels.incantations[selected].content,
+            "typescript"
+          ),
+          language: "typescript",
+          theme: "vs-dark",
+          automaticLayout: true,
+          fontSize: 26,
+        });
 
         setupMonacoEditor(newEditor, currentIncantationName);
 

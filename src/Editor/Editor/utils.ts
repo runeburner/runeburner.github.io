@@ -1,11 +1,11 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { store } from "../store/store";
+import { store } from "../../store/store";
 import {
   selectModel,
   setCurrentModelClean,
   setCurrentModelDirty,
-} from "../store/monacoModels";
-import { saveIncantation } from "../store/incantations";
+} from "../../store/monacoModels";
+import { saveIncantation } from "../../store/incantations";
 
 export const setupMonacoEditor = (
   editor: monaco.editor.IStandaloneCodeEditor,
