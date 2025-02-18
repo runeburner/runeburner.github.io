@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "./store/hooks";
+import { useAppSelector } from "../../store/hooks";
 
 const extraScript = `self.importScripts('${location}/worker.js');\n`;
 
-export const WorldPage = () => {
+export const Page = () => {
   const i = useAppSelector((s) => s.incantations["basic"]);
   const [started, setStarted] = useState(false);
 

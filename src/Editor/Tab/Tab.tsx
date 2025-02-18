@@ -21,10 +21,7 @@ export const Tab = ({ i }: TabProps): React.ReactElement => {
     e.stopPropagation();
   };
 
-  const onClick = () => {
-    dispatch(selectModel(i));
-  };
-
+  const onClick = () => dispatch(selectModel(i));
   return (
     <div
       onClick={onClick}

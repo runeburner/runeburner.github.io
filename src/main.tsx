@@ -1,8 +1,10 @@
 import { createRoot } from "react-dom/client";
 import App from "./App/App.tsx";
-import "./userWorker";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
+import MyWorker from "./Game/worker?worker";
+
+export const gameWorker = new MyWorker();
 
 (() => {
   const rootDiv = document.getElementById("root");

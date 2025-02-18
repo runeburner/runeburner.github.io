@@ -1,7 +1,7 @@
 import { Page as EditorPage } from "../Editor/Page/Page";
 import { Page as IncantationsPage } from "../Incantations/Page/Page";
 import { Sidebar } from "../Sidebar/Sidebar";
-import { WorldPage } from "../WorldPage";
+import { Page as WorldPage } from "../World/Page/Page";
 import classes from "./App.module.css";
 import { useEffect } from "react";
 import { Page as PerksPage } from "../Perks/Page/Page";
