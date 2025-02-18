@@ -17,7 +17,7 @@ export const Editor = (): React.ReactElement => {
   );
   const currentIncantationName = useRef("");
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!editor) return;
     models[currentIncantationName.current] = editor.getModel();
     if (models[selectedIncantationName]) {
@@ -30,7 +30,7 @@ export const Editor = (): React.ReactElement => {
 
   useEffect(() => {
     if (monacoRef) {
-      setEditor((editor) => {
+      setEditor((editor): monaco.editor.IStandaloneCodeEditor => {
         if (editor) return editor;
         const monacoModels = store.getState().monacoModels;
         const selected = monacoModels.selected;
@@ -74,9 +74,5 @@ export const Editor = (): React.ReactElement => {
     return () => editor?.dispose();
   }, [monacoRef, editor]);
 
-  return (
-    <>
-      <div style={{ height: "100%", width: "100%" }} ref={monacoRef} />
-    </>
-  );
+  return <div style={{ height: "100%" }} ref={monacoRef} />;
 };
