@@ -1,13 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { store } from "../store/store";
-import { saveIncantation } from "../store/incantations";
-import {
-  selectModel,
-  setCurrentModelClean,
-  setCurrentModelDirty,
-} from "../store/monacoModels";
 import { useAppSelector } from "../store/hooks";
+import { setupMonacoEditor } from "./utils";
 
 // https://microsoft.github.io/monaco-editor/typedoc/index.html
 
@@ -22,8 +17,6 @@ export const Editor = (): React.ReactElement => {
   );
   const currentIncantationName = useRef("");
 
-  const selected = useAppSelector((s) => s.monacoModels.selected);
-  console.log(`editor selected ${selected}`);
   useEffect(() => {
     if (!editor) return;
     models[currentIncantationName.current] = editor.getModel();
@@ -52,7 +45,7 @@ export const Editor = (): React.ReactElement => {
             language: "typescript",
             theme: "vs-dark",
             automaticLayout: true,
-            fontSize: 20,
+            fontSize: 26,
           });
         } else {
           newEditor = monaco.editor.create(monacoRef.current!, {
@@ -64,55 +57,11 @@ export const Editor = (): React.ReactElement => {
             language: "typescript",
             theme: "vs-dark",
             automaticLayout: true,
-            fontSize: 20,
+            fontSize: 26,
           });
         }
-        newEditor.onDidChangeModelContent(() => {
-          store.dispatch(setCurrentModelDirty());
-        });
 
-        monaco.languages.typescript.typescriptDefaults.addExtraLib(
-          `declare const world: {
-  ping(): Promise<string>;
-};
-`
-        );
-
-        newEditor.addCommand(
-          monaco.KeyCode.KeyS | monaco.KeyMod.CtrlCmd,
-          () => {
-            store.dispatch(
-              saveIncantation({
-                name: currentIncantationName.current,
-                content: newEditor.getValue(),
-              })
-            );
-            store.dispatch(setCurrentModelClean());
-          }
-        );
-
-        const digitKeys = [
-          monaco.KeyCode.Digit1,
-          monaco.KeyCode.Digit2,
-          monaco.KeyCode.Digit3,
-          monaco.KeyCode.Digit4,
-          monaco.KeyCode.Digit5,
-          monaco.KeyCode.Digit6,
-          monaco.KeyCode.Digit7,
-          monaco.KeyCode.Digit8,
-          monaco.KeyCode.Digit9,
-        ];
-        for (let i = 0; i < digitKeys.length; i++) {
-          newEditor.addCommand(digitKeys[i] | monaco.KeyMod.CtrlCmd, () => {
-            store.dispatch(selectModel(i));
-          });
-        }
-        newEditor.addCommand(
-          monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyP,
-          () => {
-            newEditor.trigger("", "editor.action.quickCommand", null);
-          }
-        );
+        setupMonacoEditor(newEditor, currentIncantationName);
 
         const firstIncantationName =
           monacoModels.incantations[monacoModels.selected].name;
