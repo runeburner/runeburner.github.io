@@ -1,30 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "./hooks";
 
-export type Tab = "INCANTATIONS" | "EDITOR" | "WORLD" | "PERKS";
+export type Page = "INCANTATIONS" | "EDITOR" | "WORLD" | "PERKS";
 
 interface SidebarState {
-  selected: Tab;
+  selected: Page;
 }
 
 const initialState: SidebarState = {
-  selected: "PERKS",
+  selected: "INCANTATIONS",
 };
 
 const sidebarSlice = createSlice({
   name: "sidebar",
   initialState,
   reducers: {
-    changeTab: (state, action: PayloadAction<Tab>) => {
+    changePage: (state, action: PayloadAction<Page>) => {
       state.selected = action.payload;
     },
   },
 });
 
-export const { changeTab } = sidebarSlice.actions;
+export const { changePage } = sidebarSlice.actions;
 export const sidebarReducer = sidebarSlice.reducer;
 
-export const useTab = () => useAppSelector((s) => s.sidebar);
+export const usePage = () => useAppSelector((s) => s.sidebar);
 
-export const useIsTabSelected = (tab: Tab) =>
-  useAppSelector((s) => s.sidebar.selected === tab);
+export const useIsPageSelected = (page: Page) =>
+  useAppSelector((s) => s.sidebar.selected === page);

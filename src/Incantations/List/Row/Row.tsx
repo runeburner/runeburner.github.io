@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CheckIcon, EditIcon, ItalicIcon, TrashIcon } from "../../../icons";
 import { useAppDispatch } from "../../../store/hooks";
 import { loadModel } from "../../../store/monacoModels";
-import { changeTab } from "../../../store/sidebar";
+import { changePage } from "../../../store/sidebar";
 import { store } from "../../../store/store";
 import classes from "./Row.module.css";
 import { renameIncantation } from "../../../store/incantations";
@@ -46,7 +46,6 @@ export const Row = ({ name }: RowProps) => {
         <EditIcon
           className={classes.edit + " " + classes.icon}
           onClick={() => {
-            dispatch(changeTab("EDITOR"));
             dispatch(
               loadModel({
                 name: name,
@@ -54,6 +53,7 @@ export const Row = ({ name }: RowProps) => {
                 isDirty: false,
               })
             );
+            dispatch(changePage("EDITOR"));
           }}
         />
       </td>

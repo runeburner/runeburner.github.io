@@ -7,14 +7,16 @@ export const List = (): React.ReactElement => {
   return (
     <table>
       <thead>
-        <td>Incantation name</td>
-        <td>Rename</td>
-        <td>Edit</td>
-        <td>Delete</td>
+        <tr>
+          <th>Incantation name</th>
+          <th>Rename</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
       </thead>
       <tbody>
         {names.map((n) => (
-          <Row name={n} />
+          <Row key={n} name={n} />
         ))}
       </tbody>
     </table>
