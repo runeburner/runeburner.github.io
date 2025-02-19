@@ -5,7 +5,7 @@ import { NodeStatus } from "../Node/NodeStatus";
 
 export const Page = (): React.ReactElement => {
   return (
-    <Pannable>
+    <Pannable startX={window.innerWidth / 2} startY={window.innerHeight / 2}>
       <Node
         x={0}
         y={-0.86602540379 * 150}
