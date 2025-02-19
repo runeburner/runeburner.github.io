@@ -1,17 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import classes from "./Pannable.module.css";
 
 type PannableProps = React.PropsWithChildren<{
-  startX: number;
-  startY: number;
+  pos: [number, number];
+  onPan: (diff: [number, number]) => void;
 }>;
 
 export const Pannable = ({
-  startX,
-  startY,
   children,
+  pos,
+  onPan,
 }: PannableProps): React.ReactElement => {
-  const [pos, setPos] = useState<[number, number]>([startX, startY]);
   const isPanning = useRef(false);
 
   const onMouseDown = (e: React.MouseEvent): void => {
@@ -24,7 +23,7 @@ export const Pannable = ({
   const onMouseMove = (e: React.MouseEvent): void => {
     if (!isPanning.current) return;
     e.preventDefault();
-    setPos((pos) => [pos[0] + e.movementX, pos[1] + e.movementY]);
+    onPan([e.movementX, e.movementY]);
   };
 
   const onMouseLeave = (): void => {

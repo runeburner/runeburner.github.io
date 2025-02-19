@@ -1,6 +1,5 @@
 const world = (() => {
   const workerID = self.name;
-  console.log(workerID);
   const SEND = (command, args) => {
     return new Promise((res) => {
       const requestID = crypto.randomUUID();

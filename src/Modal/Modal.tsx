@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import classes from "./Modal.module.css";
 
-type ModalProps = React.PropsWithChildren<{
+export type ModalProps = React.PropsWithChildren<{
   open: boolean;
   onClose: () => void;
 }>;

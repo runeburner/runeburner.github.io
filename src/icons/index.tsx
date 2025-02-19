@@ -18,6 +18,9 @@ import Shield from "./shield.svg";
 import Trash from "./trash.svg";
 import X from "./x.svg";
 import Zap from "./zap.svg";
+import PlusSquare from "./plus-square.svg";
+import Plus from "./plus.svg";
+import Minus from "./minus.svg";
 
 type HTMLSpanProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLSpanElement>,
@@ -52,3 +55,6 @@ export const FeatherIcon = makeIcon(Feather);
 export const BoxIcon = makeIcon(Box);
 export const HexagonIcon = makeIcon(Hexagon);
 export const LockIcon = makeIcon(Lock);
+export const PlusSquareIcon = makeIcon(PlusSquare);
+export const PlusIcon = makeIcon(Plus);
+export const MinusIcon = makeIcon(Minus);

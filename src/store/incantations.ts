@@ -8,7 +8,6 @@ export const defaultIncantation = `(async () => {
     const pong = await world.ping();
     await new Promise((res) => {
     setTimeout(res, 1000)});
-    console.log(pong);
   }
 })();
 `;
@@ -16,7 +15,6 @@ export const defaultIncantation = `(async () => {
 const initialState: IncantationsState = {
   basic: defaultIncantation,
   other: `function HelloWorld() {
-  console.log("Hello World!");
 }`,
 };
 
