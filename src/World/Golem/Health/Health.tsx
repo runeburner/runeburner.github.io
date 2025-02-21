@@ -2,9 +2,12 @@ const healthColor = "#fd4c63";
 const armorColor = "#fde86f";
 const shieldColor = "#65c4fb";
 
+const outerDiameter = 31;
+const innerDiameter = 20;
+
 // spacing between chunks
 const spacing = Math.PI / 50;
-const innerSpacing = spacing * (31 / 20);
+const innerSpacing = spacing * (outerDiameter / innerDiameter);
 const chunkHealthValue = 5;
 
 const getColor = (props: HealthProps, i: number): string => {
@@ -62,26 +65,17 @@ export const Health = (props: HealthProps): React.ReactElement => {
         strokeWidth={selected ? 1 : 0}
         stroke={selected ? "#fff" : ""}
         fill={getColor(props, i)}
-        d={`M${p0[0] * 31} ${p0[1] * 31} A31 31 0 ${large} 0 ${p1[0] * 31} ${
-          p1[1] * 31
-        }L${p4[0] * 20} ${p4[1] * 20}A20 20 0 ${large} 1 ${p3[0] * 20} ${
-          p3[1] * 20
-        }Z`}
+        d={`M${p0[0] * outerDiameter} ${
+          p0[1] * outerDiameter
+        } A${outerDiameter} ${outerDiameter} 0 ${large} 0 ${
+          p1[0] * outerDiameter
+        } ${p1[1] * outerDiameter}L${p4[0] * innerDiameter} ${
+          p4[1] * innerDiameter
+        }A${innerDiameter} ${innerDiameter} 0 ${large} 1 ${
+          p3[0] * innerDiameter
+        } ${p3[1] * innerDiameter}Z`}
       />
     );
   }
   return <>{paths}</>;
 };
-
-/*
-  const p0 = [Math.sin(start) * 18, Math.cos(start) * 18];
-  const p1 = [Math.sin(end) * 18, Math.cos(end) * 18];
-  const large = end - start > Math.PI ? 1 : 0;
-  return (
-    <path
-      d={`M ${p0[0]} ${p0[1]} A 18 18 0 ${large} 0 ${p1[0]} ${p1[1]} L 0 0 Z`}
-      fill={runeColors[rune]}
-    />
-  );
-
-*/
