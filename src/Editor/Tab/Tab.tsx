@@ -5,9 +5,9 @@ import { CircleIcon, XIcon } from "../../icons";
 import { iTextModelStore } from "../Editor/editorStore";
 import { store } from "../../store/store";
 
-interface TabProps {
+type TabProps = {
   i: number;
-}
+};
 export const Tab = ({ i }: TabProps): React.ReactElement => {
   const selected = useAppSelector((s) => s.monacoModels.selected === i);
   const name = useAppSelector((s) => s.monacoModels.incantations[i].name);

@@ -1,36 +1,45 @@
-import { Rune, Runes } from "../../Game/runes";
+import { Rune } from "../../Game/runes";
+import { Health } from "./Health/Health";
 
-interface ArcProps {
+type ArcProps = {
   start: number;
   end: number;
   rune: Rune;
-}
+};
 
 const runeColors = {
-  [Runes.VOID]: "red",
-  [Runes.LABOR]: "blue",
-  [Runes.WIND]: "green",
+  [Rune.VOID]: "#ff000088",
+  [Rune.LABOR]: "#0000ff88",
+  [Rune.WIND]: "#00ff0088",
 };
 const Arc = ({ start, end, rune }: ArcProps): React.ReactElement => {
   start *= Math.PI * 2;
   end *= Math.PI * 2;
 
-  const p0 = [Math.sin(start) * 20, Math.cos(start) * 20];
-  const p1 = [Math.sin(end) * 20, Math.cos(end) * 20];
+  const p0 = [Math.sin(start) * 18, Math.cos(start) * 18];
+  const p1 = [Math.sin(end) * 18, Math.cos(end) * 18];
   const large = end - start > Math.PI ? 1 : 0;
   return (
     <path
-      d={`M ${p0[0]} ${p0[1]} A 20 20 0 ${large} 0 ${p1[0]} ${p1[1]} L 0 0 Z`}
+      d={`M ${p0[0]} ${p0[1]} A 18 18 0 ${large} 0 ${p1[0]} ${p1[1]} L 0 0 Z`}
       fill={runeColors[rune]}
     />
   );
 };
-
-interface GolemProps {
+type GolemProps = {
   runes: [Rune, number][];
-}
+  health: number;
+  armor: number;
+  shield: number;
+  percent: number;
+};
 
-export const Golem = ({ runes }: GolemProps): React.ReactElement => {
+const emptyHealth = (
+  <path d={`M0 32 A32 32 0 1 1 0.001 32L0.001 20 A20 20 0 1 0 0 20`} />
+);
+
+export const Golem = (props: GolemProps): React.ReactElement => {
+  const { runes, health, armor, shield, percent } = props;
   const total = runes.reduce((acc, c) => acc + c[1], 0);
 
   let cummulative = 0;
@@ -47,10 +56,14 @@ export const Golem = ({ runes }: GolemProps): React.ReactElement => {
     cummulative += runes[i][1];
   }
 
+  const totalHealth = health + armor + shield;
   return (
     <svg width="256" height="256" viewBox="-32 -32 64 64">
-      <circle r="32" fill="#444" />
-      <circle r="20" fill="#888" />
+      {totalHealth === 0 ? (
+        emptyHealth
+      ) : (
+        <Health {...props} totalHealth={totalHealth} percent={percent} />
+      )}
       {runeArcs}
     </svg>
   );

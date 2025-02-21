@@ -1,13 +1,13 @@
 import { Rune } from "../../../Game/runes";
 import { EditIcon, MinusIcon, PlusIcon } from "../../../icons";
 
-interface RuneSliderProps {
+type RuneSliderProps = {
   icon: typeof EditIcon;
   amount: number;
   disabled?: boolean;
   rune: Rune;
   onUpdate: React.Dispatch<React.SetStateAction<Record<string, number>>>;
-}
+};
 
 export const RuneSlider = ({
   icon: Icon,

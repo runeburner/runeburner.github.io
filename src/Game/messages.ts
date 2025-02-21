@@ -5,12 +5,12 @@ export const MessageTypes = Object.freeze({
 
 type MessageType = (typeof MessageTypes)[keyof typeof MessageTypes];
 
-export interface GenericMessage<T> {
+export type GenericMessage<T> = {
   type: MessageType;
   data?: T;
-}
+};
 
-interface SubscribeMessage {
+type SubscribeMessage = {
   type: "SUBSCRIBE";
   data: {
     x: number;
@@ -18,15 +18,15 @@ interface SubscribeMessage {
     width: number;
     height: number;
   };
-}
+};
 
-interface MapDataMessage {
+type MapDataMessage = {
   type: "MAP";
   data: {
     tiles: number[][];
     x: number;
     y: number;
   };
-}
+};
 
 export type UIMessage = SubscribeMessage | MapDataMessage;

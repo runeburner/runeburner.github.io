@@ -7,9 +7,9 @@ import { store } from "../../../store/store";
 import classes from "./Row.module.css";
 import { renameIncantation } from "../../../store/incantations";
 
-interface RowProps {
+type RowProps = {
   name: string;
-}
+};
 
 export const Row = ({ name }: RowProps) => {
   const [renaming, setRenaming] = useState(false);
