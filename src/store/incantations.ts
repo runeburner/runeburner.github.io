@@ -18,10 +18,10 @@ const initialState: IncantationsState = {
 }`,
 };
 
-export interface Incantation {
+export type Incantation = {
   name: string;
   content: string;
-}
+};
 
 const incantationsSlice = createSlice({
   name: "incantations",

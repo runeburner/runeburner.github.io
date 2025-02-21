@@ -5,11 +5,11 @@ import { Pannable } from "../Pannable/Pannable";
 import { useThrottledCallback } from "use-debounce";
 import { AddGolem } from "../AddGolem/AddGolem";
 
-interface UIChannel {
+type UIChannel = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onmessage: ((this: BroadcastChannel, ev: MessageEvent) => any) | null;
   postMessage: (message: UIMessage) => void;
-}
+};
 
 const bc: UIChannel = new BroadcastChannel("UI");
 

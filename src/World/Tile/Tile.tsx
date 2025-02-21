@@ -1,10 +1,10 @@
 import classes from "./Tile.module.css";
 
-interface TileProps {
+type TileProps = {
   id: number;
   x: number;
   y: number;
-}
+};
 const colors = [
   "#a2b9bc",
   "#b2ad7f",

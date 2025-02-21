@@ -3,9 +3,9 @@ import { useAppSelector } from "./hooks";
 
 export type Page = "INCANTATIONS" | "EDITOR" | "WORLD" | "PERKS";
 
-interface SidebarState {
+type SidebarState = {
   selected: Page;
-}
+};
 
 const initialState: SidebarState = {
   selected: "INCANTATIONS",

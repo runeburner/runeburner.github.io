@@ -18,7 +18,7 @@ const statusIconClasses: Record<string, string> = {
   LOCKED: classes.lockedIcon,
 };
 
-interface NodeProps {
+type NodeProps = {
   icon: typeof EditIcon;
   x: number;
   y: number;
@@ -26,7 +26,7 @@ interface NodeProps {
   lvl: [number, number];
   description: string;
   status: NodeStatus;
-}
+};
 
 export const Node = (props: NodeProps): React.ReactElement => {
   const [open, setOpen] = useState(false);

@@ -4,11 +4,11 @@ import classes from "./Sidebar.module.css";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { BookIcon, EditIcon, MapIcon, ShareIcon } from "../icons";
 
-interface SidebarTabProps {
+type SidebarTabProps = {
   page: Page;
   icon: typeof EditIcon;
   disabled?: boolean;
-}
+};
 
 const SidebarTab = ({
   page,
