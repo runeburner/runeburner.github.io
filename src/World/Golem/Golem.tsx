@@ -28,18 +28,13 @@ const Arc = ({ start, end, rune }: ArcProps): React.ReactElement => {
 };
 type GolemProps = {
   runes: [Rune, number][];
-  health: number;
-  armor: number;
-  shield: number;
-  percent: number;
+  health: [number, number];
+  armor: [number, number];
+  shield: [number, number];
 };
 
-const emptyHealth = (
-  <path d={`M0 32 A32 32 0 1 1 0.001 32L0.001 20 A20 20 0 1 0 0 20`} />
-);
-
 export const Golem = (props: GolemProps): React.ReactElement => {
-  const { runes, health, armor, shield, percent } = props;
+  const { runes } = props;
   const total = runes.reduce((acc, c) => acc + c[1], 0);
 
   let cummulative = 0;
@@ -56,14 +51,9 @@ export const Golem = (props: GolemProps): React.ReactElement => {
     cummulative += runes[i][1];
   }
 
-  const totalHealth = health + armor + shield;
   return (
     <svg width="256" height="256" viewBox="-32 -32 64 64">
-      {totalHealth === 0 ? (
-        emptyHealth
-      ) : (
-        <Health {...props} totalHealth={totalHealth} percent={percent} />
-      )}
+      <Health {...props} />
       {runeArcs}
     </svg>
   );
