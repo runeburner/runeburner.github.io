@@ -2,52 +2,12 @@ import { useState } from "react";
 import { EhwazIcon, OthalanIcon, TiwazIcon } from "../../icons";
 import { Modal, ModalProps } from "../../Modal/Modal";
 import { RuneSlider } from "./RuneSlider/RuneSlider";
-import { Rune } from "../../Game/runes";
+import { Rune } from "../../types/rune";
 import { Golem } from "../Golem/Golem";
-
-// type DemoBarProps = {
-//   label: string;
-//   value: [number, number];
-//   setValue: React.Dispatch<React.SetStateAction<[number, number]>>;
-// };
-
-// const DemoBar = ({ label, value, setValue }: DemoBarProps) => {
-//   return (
-//     <>
-//       <span>{label}</span>
-//       <input
-//         type="range"
-//         min={0}
-//         max={50}
-//         value={value[0]}
-//         onChange={(e) =>
-//           setValue(([, m]) => {
-//             const nextCurrent = parseInt(e.target.value);
-//             return [nextCurrent, Math.max(nextCurrent, m)];
-//           })
-//         }
-//       />
-//       <span>{value[0]}</span>
-//       <br />
-
-//       <span>max {label}</span>
-//       <input
-//         type="range"
-//         min={0}
-//         max={50}
-//         value={value[1]}
-//         onChange={(e) =>
-//           setValue(([c]) => {
-//             const nextMax = parseInt(e.target.value);
-//             return [Math.min(nextMax, c), nextMax];
-//           })
-//         }
-//       />
-//       <span>{value[1]}</span>
-//       <br />
-//     </>
-//   );
-// };
+import { MessageType } from "../../types/message";
+import { bc } from "../channel";
+import { useAppSelector } from "../../store/hooks";
+import { store } from "../../store/store";
 
 export const AddGolemModal = ({ open, onClose }: ModalProps) => {
   const [runes, setRunes] = useState<Record<Rune, number>>(
@@ -55,6 +15,10 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
       Rune,
       number
     >
+  );
+  const incantationNames = useAppSelector((s) => Object.keys(s.incantations));
+  const [selectedIncantation, setSelectedIncantation] = useState(
+    incantationNames[0]
   );
 
   const [health /*, setHealth*/] = useState<[number, number]>([0, 0]);
@@ -65,6 +29,17 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
     (r) => r[1] > 0
   ) as [Rune, number][];
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
+
+  const onAnimate = () => {
+    bc.postMessage({
+      type: MessageType.ANIMATE,
+      data: {
+        runes: appliedRunes,
+        incantation: store.getState().incantations[selectedIncantation],
+      },
+    });
+    onClose();
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -95,9 +70,19 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
           icon={OthalanIcon}
           amount={runes[Rune.VOID]}
         />
-        {/* <DemoBar label="health" value={health} setValue={setHealth} />
-        <DemoBar label="armor" value={armor} setValue={setArmor} />
-        <DemoBar label="shield" value={shield} setValue={setShield} /> */}
+        Incantation:
+        <select
+          value={selectedIncantation}
+          onChange={(e) => setSelectedIncantation(e.target.value)}
+        >
+          {incantationNames.map((i) => (
+            <option key={i} value={i}>
+              {i}
+            </option>
+          ))}
+        </select>
+        <br />
+        <button onClick={onAnimate}>Animate</button>
       </div>
     </Modal>
   );

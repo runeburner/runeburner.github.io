@@ -1,14 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "./hooks";
 
-export type Page = "INCANTATIONS" | "EDITOR" | "WORLD" | "PERKS";
+export const Page = Object.freeze({
+  INCANTATIONS: "INCANTATIONS",
+  EDITOR: "EDITOR",
+  WORLD: "WORLD",
+  PERKS: "PERKS",
+} as const);
+
+export type Page = (typeof Page)[keyof typeof Page];
 
 type SidebarState = {
   selected: Page;
 };
 
 const initialState: SidebarState = {
-  selected: "INCANTATIONS",
+  selected: Page.WORLD,
 };
 
 const sidebarSlice = createSlice({
