@@ -23,7 +23,7 @@ type SubscribeMessage = {
 type MapDataMessage = {
   type: "MAP";
   data: {
-    tiles: number[][];
+    tiles: Int32Array;
     x: number;
     y: number;
   };

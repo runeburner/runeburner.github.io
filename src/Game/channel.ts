@@ -1,5 +1,5 @@
 import { MessageTypes, UIMessage } from "./messages";
-import { map } from "./worker";
+import { ValuesPerTile, map } from "./worker";
 
 const UIChannel = new BroadcastChannel("UI");
 
@@ -16,30 +16,29 @@ UIChannel.onmessage = (event) => {
   switch (msg.type) {
     case MessageTypes.SUBSCRIBE: {
       Object.assign(camera, msg.data);
-      const submap: number[][] = [];
-      const startX = Math.max(0, camera.x);
-      const startY = Math.max(0, camera.y);
-      for (
-        let x = startX;
-        x < Math.min(map.length, camera.x + camera.width);
-        x++
-      ) {
-        const row: number[] = [];
-        for (
-          let y = startY;
-          y < Math.min(map.length, camera.y + camera.height);
-          y++
-        ) {
-          row.push(map[x][y]);
+      const x = Math.max(0, camera.x);
+      const y = Math.max(0, camera.y);
+      const X = Math.min(map.width, camera.x + camera.width);
+      const Y = Math.min(map.height, camera.y + camera.height);
+      const width = X - x;
+      const height = Y - y;
+      const data = new Int32Array(width * height * ValuesPerTile);
+      for (let i = x; i < X; i++) {
+        for (let j = y; j < Y; j++) {
+          data[((j - y) * width + i - x) * ValuesPerTile] =
+            map.data[(j * map.width + i) * ValuesPerTile];
         }
-        submap.push(row);
       }
       UIChannel.postMessage({
         type: "MAP",
         data: {
-          tiles: submap,
-          x: startX,
-          y: startY,
+          x,
+          y,
+          map: {
+            width,
+            height,
+            data,
+          },
         },
       });
     }
