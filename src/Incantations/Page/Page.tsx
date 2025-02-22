@@ -1,4 +1,3 @@
-import { AddGolemModal } from "../../World/AddGolemModal/AddGolemModal";
 import { Create } from "../Create/Create";
 import { List } from "../List/List";
 import classes from "./Page.module.css";
@@ -8,7 +7,6 @@ export const Page = () => {
     <div className={classes.container}>
       <List />
       <Create />
-      <AddGolemModal open={true} onClose={() => undefined} />
     </div>
   );
 };
