@@ -2,11 +2,10 @@ import { createRoot } from "react-dom/client";
 import App from "./App/App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
-import MyWorker from "./Game/worker?worker";
-
-export const gameWorker = new MyWorker();
+import GameWorker from "./Game/worker?worker";
 
 (() => {
+  new GameWorker();
   const rootDiv = document.getElementById("root");
   if (!rootDiv) {
     console.error("div with id 'root' not found");

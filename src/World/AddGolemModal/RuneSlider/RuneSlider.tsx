@@ -1,4 +1,4 @@
-import { Rune } from "../../../Game/runes";
+import { Rune } from "../../../types/rune";
 import { EditIcon, MinusIcon, PlusIcon } from "../../../icons";
 
 type RuneSliderProps = {

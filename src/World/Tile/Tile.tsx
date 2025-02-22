@@ -22,8 +22,6 @@ export const Tile = ({ id, x, y }: TileProps) => {
     <div
       className={classes.container}
       style={{ backgroundColor: colors[id], top: y * 64, left: x * 64 }}
-    >
-      {id}
-    </div>
+    ></div>
   );
 };

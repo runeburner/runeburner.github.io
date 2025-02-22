@@ -5,7 +5,9 @@ import { Page as WorldPage } from "../World/Page/Page";
 import classes from "./App.module.css";
 import { useEffect } from "react";
 import { Page as PerksPage } from "../Perks/Page/Page";
-import { Page } from "../Page/Page";
+import { PageWrapper } from "../PageWrapper/PageWrapper";
+import { Page } from "../store/sidebar";
+import { GameReadyGate } from "../World/GameReadyGate";
 
 function App() {
   useEffect(() => {
@@ -22,18 +24,20 @@ function App() {
     <div className={classes.fullscreenContainer}>
       <Sidebar />
       <div className={classes.pageContainer}>
-        <Page page="EDITOR">
+        <PageWrapper page={Page.EDITOR}>
           <EditorPage />
-        </Page>
-        <Page page="INCANTATIONS">
+        </PageWrapper>
+        <PageWrapper page={Page.INCANTATIONS}>
           <IncantationsPage />
-        </Page>
-        <Page page="WORLD">
-          <WorldPage />
-        </Page>
-        <Page page="PERKS">
+        </PageWrapper>
+        <PageWrapper page={Page.WORLD}>
+          <GameReadyGate>
+            <WorldPage />
+          </GameReadyGate>
+        </PageWrapper>
+        <PageWrapper page={Page.PERKS}>
           <PerksPage />
-        </Page>
+        </PageWrapper>
       </div>
     </div>
   );

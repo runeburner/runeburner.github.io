@@ -1,4 +1,4 @@
-import { Rune } from "../../Game/runes";
+import { Rune } from "../../types/rune";
 import { Health } from "./Health/Health";
 
 type ArcProps = {
@@ -52,7 +52,7 @@ export const Golem = (props: GolemProps): React.ReactElement => {
   }
 
   return (
-    <svg width="256" height="256" viewBox="-32 -32 64 64">
+    <svg width="100%" height="100%" viewBox="-32 -32 64 64">
       <Health {...props} />
       {runeArcs}
     </svg>
