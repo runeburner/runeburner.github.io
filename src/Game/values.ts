@@ -1,3 +1,4 @@
+import { Action } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { Map as GameMap, ValuesPerTile } from "../types/map";
 import { Camera } from "../types/message";
@@ -37,6 +38,8 @@ export const map: GameMap = (() => {
     data,
   };
 })();
+
+export const actions: Action[] = [];
 
 export const entities: Entity[] = [
   {

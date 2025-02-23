@@ -5,9 +5,9 @@ import { RuneSlider } from "./RuneSlider/RuneSlider";
 import { Rune } from "../../types/rune";
 import { Golem } from "../Golem/Golem";
 import { MessageType } from "../../types/message";
-import { bc } from "../channel";
 import { useAppSelector } from "../../store/hooks";
 import { store } from "../../store/store";
+import { Channel } from "../channel";
 
 export const AddGolemModal = ({ open, onClose }: ModalProps) => {
   const [runes, setRunes] = useState<Record<Rune, number>>(
@@ -31,7 +31,7 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
 
   const onAnimate = () => {
-    bc.postMessage({
+    Channel.send({
       type: MessageType.ANIMATE,
       data: {
         runes: appliedRunes,

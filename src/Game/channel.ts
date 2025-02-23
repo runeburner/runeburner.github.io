@@ -1,11 +1,10 @@
 import { EntityType } from "../types/entity";
 import { MessageType, UIChannel } from "../types/message";
-import { at, entities, map } from "./values";
+import { actions, at, entities, map } from "./values";
 import { ValuesPerTile } from "../types/map";
 import { determineInitialCameraPosition } from "./values";
 import { launchGolem } from "./launch_golem";
 import { Tile } from "../types/tile";
-import { actions } from "../types/actions";
 
 export const channel: UIChannel = new BroadcastChannel("UI");
 
@@ -77,13 +76,15 @@ const generateMapData = () => {
         camera.y <= e.y &&
         e.y <= camera.y + camera.height
     ),
-    actions: actions.filter(
-      (e) =>
-        camera.x <= e.path[0][0] &&
-        e.path[0][0] <= camera.x + camera.width &&
-        camera.y <= e.path[0][1] &&
-        e.path[0][1] <= camera.y + camera.height
-    ),
+    actions: actions
+      .filter(
+        (e) =>
+          camera.x <= e.path[0][0] &&
+          e.path[0][0] <= camera.x + camera.width &&
+          camera.y <= e.path[0][1] &&
+          e.path[0][1] <= camera.y + camera.height
+      )
+      .map((a) => a.id),
   };
 };
 

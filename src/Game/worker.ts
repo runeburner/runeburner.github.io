@@ -1,8 +1,7 @@
 import { MessageType } from "../types/message";
-import { actions } from "../types/actions";
 import "./channel";
 import { channel } from "./channel";
-import { entities } from "./values";
+import { actions, entities } from "./values";
 
 setInterval(() => {
   for (const action of actions) {
