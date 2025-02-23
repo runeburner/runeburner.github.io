@@ -4,16 +4,10 @@ import { useAppSelector } from "./hooks";
 type IncantationsState = Record<string, string>;
 
 export const defaultIncantation = `run(async () => {
-  let i = 0;
   while (true) {
     const loc = await world.findClosestTile("MANA_CRYSTAL", 9);
     await world.goNextTo(loc);
-    const ping = await world.ping();
-    await new Promise((res) => {
-      setTimeout(res, 10000);
-    });
-    i++;
-    if(i>5) throw new Error();
+    await world.goNextTo([0,0]);
   }
 })`;
 

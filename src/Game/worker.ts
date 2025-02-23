@@ -3,17 +3,16 @@ import { Entity } from "../types/entity";
 import { MessageType } from "../types/message";
 import "./channel";
 import { channel, isInView } from "./channel";
-import { actions, entities } from "./values";
+import { actions, entities, waitingActionMap } from "./values";
 
 const updateMoveAction = (entity: Entity, action: MoveAction): boolean => {
   action.path.shift();
-  if (action.path.length === 0) return true;
   const nextNode = action.path[0];
   entity.x = nextNode[0];
   entity.y = nextNode[1];
   action.x = nextNode[0];
   action.y = nextNode[1];
-  return false;
+  return action.path.length === 1;
 };
 
 setInterval(() => {
@@ -31,8 +30,14 @@ setInterval(() => {
 
     if (done) {
       actions.splice(i, 1);
+      const f = waitingActionMap[action.id];
+      if (f) {
+        f("OK");
+        delete waitingActionMap[action.id];
+      }
       i--;
     }
+
     if (isInView(entity.x, entity.y)) {
       channel.postMessage({
         type: MessageType.UPDATE_ENTITY,
@@ -46,7 +51,6 @@ setInterval(() => {
           data: action,
         });
       } else {
-        console.log("SENDING REMOVE");
         channel.postMessage({
           type: MessageType.REMOVE_ACTION,
           data: action.id,

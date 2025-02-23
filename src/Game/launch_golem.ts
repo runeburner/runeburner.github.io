@@ -1,8 +1,8 @@
 import { ActionType } from "../types/actions";
 import { MessageType } from "../types/message";
 import { Tile } from "../types/tile";
-import { channel, findClosest } from "./channel";
-import { actions, aStarPath, entities } from "./values";
+import { channel, findClosest, isInView } from "./channel";
+import { actions, aStarPath, entities, waitingActionMap } from "./values";
 import workerScriptHeader from "./workerScriptHeader.js?raw";
 
 export const launchGolem = (id: string, incantation: string) => {
@@ -65,15 +65,19 @@ export const launchGolem = (id: string, incantation: string) => {
         y: path[0][1],
       };
       actions.push(action);
-      worker.postMessage({
-        workerID: m.data.workerID,
-        requestID: m.data.requestID,
-        data: "OK",
-      });
-      channel.postMessage({
-        type: MessageType.ADD_ACTION,
-        data: action.id,
-      });
+      waitingActionMap[action.id] = (v: unknown) => {
+        worker.postMessage({
+          workerID: m.data.workerID,
+          requestID: m.data.requestID,
+          data: v,
+        });
+      };
+      if (isInView(action.x, action.y)) {
+        channel.postMessage({
+          type: MessageType.ADD_ACTION,
+          data: action.id,
+        });
+      }
     }
     if (m.data.command === "ping") {
       worker.postMessage({

@@ -39,6 +39,8 @@ export const map: GameMap = (() => {
   };
 })();
 
+export const waitingActionMap: Record<string, (v: unknown) => void> = {};
+
 export const actions: Action[] = [];
 
 export const entities: Entity[] = [

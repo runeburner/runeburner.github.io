@@ -31,7 +31,6 @@ export const Channel = (() => {
         break;
       }
       case MessageType.REMOVE_ACTION: {
-        console.log("RECEIVEING REMOVE");
         if (removeActionSub) removeActionSub(msg.data);
         break;
       }
