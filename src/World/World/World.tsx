@@ -27,8 +27,8 @@ export const World = () => {
   const cameraRef = useRef({
     x: 0,
     y: 0,
-    width: 24,
-    height: 24,
+    width: 8,
+    height: 8,
   });
 
   const fetchMap = useThrottledCallback(

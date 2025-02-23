@@ -16,6 +16,15 @@ const camera = {
   height: 0,
 };
 
+export const isInView = (x: number, y: number): boolean => {
+  return (
+    camera.x <= x &&
+    x < camera.x + camera.width &&
+    camera.y <= y &&
+    y < camera.y + camera.height
+  );
+};
+
 export const findClosest = (
   pos: [number, number],
   wantTile: Tile,
@@ -69,23 +78,9 @@ const generateMapData = () => {
       height,
       data,
     },
-    entities: entities
-      .filter(
-        (e) =>
-          camera.x <= e.x &&
-          e.x <= camera.x + camera.width &&
-          camera.y <= e.y &&
-          e.y <= camera.y + camera.height
-      )
-      .map((e) => e.id),
+    entities: entities.filter((e) => isInView(e.x, e.y)).map((e) => e.id),
     actions: actions
-      .filter(
-        (e) =>
-          camera.x <= e.path[0][0] &&
-          e.path[0][0] <= camera.x + camera.width &&
-          camera.y <= e.path[0][1] &&
-          e.path[0][1] <= camera.y + camera.height
-      )
+      .filter((e) => isInView(e.path[0][0], e.path[0][1]))
       .map((a) => a.id),
   };
 };
