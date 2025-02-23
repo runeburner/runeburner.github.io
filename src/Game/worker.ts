@@ -5,7 +5,7 @@ import { actions, entities } from "./values";
 
 setInterval(() => {
   for (const action of actions) {
-    const entity = entities.find((e) => e.id === action.id);
+    const entity = entities.find((e) => e.id === action.entityID);
     if (!entity) continue;
     action.path.shift();
     const nextNode = action.path[0];

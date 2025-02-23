@@ -6,7 +6,7 @@ export const Channel = (() => {
   const actionSubs: Record<string, (a: Action) => void> = {};
   const entitySubs: Record<string, (e: Entity) => void> = {};
   let mapDataSub: ((data: MapData) => void) | null = null;
-  let addEntitySub: ((data: Entity) => void) | null = null;
+  let addEntitySub: ((data: string) => void) | null = null;
   let addActionSub: ((data: string) => void) | null = null;
 
   const c: UIChannel = new BroadcastChannel("UI");
@@ -21,7 +21,17 @@ export const Channel = (() => {
         break;
       }
       case MessageType.ADD_ACTION: {
-        if (addActionSub) addActionSub(msg.data.id);
+        if (addActionSub) addActionSub(msg.data);
+        break;
+      }
+      case MessageType.UPDATE_ENTITY: {
+        const f = entitySubs[msg.data.id];
+        if (f) f(msg.data);
+        break;
+      }
+      case MessageType.UPDATE_ACTION: {
+        const f = actionSubs[msg.data.id];
+        if (f) f(msg.data);
         break;
       }
     }
@@ -42,7 +52,7 @@ export const Channel = (() => {
     },
     subMap: (
       f0: (data: MapData) => void,
-      f1: (data: Entity) => void,
+      f1: (data: string) => void,
       f2: (data: string) => void
     ): (() => void) => {
       mapDataSub = f0;

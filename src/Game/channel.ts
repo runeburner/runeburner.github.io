@@ -69,13 +69,15 @@ const generateMapData = () => {
       height,
       data,
     },
-    entities: entities.filter(
-      (e) =>
-        camera.x <= e.x &&
-        e.x <= camera.x + camera.width &&
-        camera.y <= e.y &&
-        e.y <= camera.y + camera.height
-    ),
+    entities: entities
+      .filter(
+        (e) =>
+          camera.x <= e.x &&
+          e.x <= camera.x + camera.width &&
+          camera.y <= e.y &&
+          e.y <= camera.y + camera.height
+      )
+      .map((e) => e.id),
     actions: actions
       .filter(
         (e) =>
@@ -108,6 +110,22 @@ channel.onmessage = ({ data: msg }) => {
       });
       break;
     }
+    case MessageType.REFRESH_ENTITY: {
+      const entity = entities.find((e) => e.id === msg.data)!;
+      channel.postMessage({
+        type: MessageType.UPDATE_ENTITY,
+        data: entity,
+      });
+      break;
+    }
+    case MessageType.REFRESH_ACTION: {
+      const action = actions.find((e) => e.id === msg.data)!;
+      channel.postMessage({
+        type: MessageType.UPDATE_ACTION,
+        data: action,
+      });
+      break;
+    }
     case MessageType.ANIMATE: {
       const id = crypto.randomUUID();
       const golem = {
@@ -121,7 +139,7 @@ channel.onmessage = ({ data: msg }) => {
       entities.push(golem);
       channel.postMessage({
         type: MessageType.ADD_ENTITY,
-        data: golem,
+        data: golem.id,
       });
 
       launchGolem(id, msg.data.incantation);

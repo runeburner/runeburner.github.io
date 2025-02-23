@@ -68,7 +68,7 @@ export const launchGolem = (id: string, incantation: string) => {
       });
       channel.postMessage({
         type: MessageType.ADD_ACTION,
-        data: action,
+        data: action.id,
       });
     }
     if (m.data.command === "ping") {
