@@ -1,27 +1,31 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageType } from "../../types/message";
+import { MapData, MessageType } from "../../types/message";
 import { Tile } from "../Tile/Tile";
 import { Pannable } from "../Pannable/Pannable";
 import { useThrottledCallback } from "use-debounce";
 import { AddGolem } from "../AddGolem/AddGolem";
 import { Entity, EntityType } from "../../types/entity";
 import { Golem } from "../Golem/Golem";
-import { bc } from "../channel";
-import { Map, ValuesPerTile } from "../../types/map";
+import { Channel } from "../channel";
+import { ValuesPerTile } from "../../types/map";
 import { EntityTile } from "../Entity/Entity";
-import { Path } from "../Path/Path";
-import { Action } from "../../types/actions";
+import { Action } from "../Action/Action";
 
-export const World = () => {
-  const [map, setMap] = useState<Map>({
-    data: new Int32Array(0),
+const emptyMapData = {
+  map: {
     width: 0,
     height: 0,
-  });
-  const [[startX, startY], setStartMap] = useState<[number, number]>([0, 0]);
+    data: new Int32Array(),
+  },
+  x: 0,
+  y: 0,
+  entities: [],
+  actions: [],
+};
+
+export const World = () => {
+  const [mapData, setMap] = useState<MapData>(emptyMapData);
   const [pos, setPos] = useState<[number, number]>([0, 0]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [actions, setActions] = useState<Action[]>([]);
   const cameraRef = useRef({
     x: 0,
     y: 0,
@@ -31,7 +35,7 @@ export const World = () => {
 
   const fetchMap = useThrottledCallback(
     () => {
-      bc.postMessage({
+      Channel.send({
         type: MessageType.QUERY,
         data: cameraRef.current,
       });
@@ -50,73 +54,61 @@ export const World = () => {
   };
 
   useEffect(() => {
-    bc.onmessage = ({ data: msg }) => {
-      switch (msg.type) {
-        case MessageType.MAP: {
-          setMap(msg.data.map);
-          setStartMap([msg.data.x, msg.data.y]);
-          setEntities(msg.data.entities);
-          setActions(msg.data.actions);
-          if (msg.data.camera) {
-            cameraRef.current = msg.data.camera;
-            setPos([msg.data.camera.x, msg.data.camera.y]);
-          }
-          break;
+    const unsub = Channel.subMap(
+      (data: MapData) => {
+        setMap(data);
+        if (data.camera) {
+          cameraRef.current = data.camera;
+          setPos([data.camera.x, data.camera.y]);
         }
-        case MessageType.ADD_ENTITY: {
-          setEntities((e) => [...e, msg.data]);
-          break;
-        }
-        case MessageType.ADD_ACTION: {
-          setActions((p) => [...p, msg.data]);
-          break;
-        }
-        case MessageType.UPDATE_ENTITY: {
-          setEntities((e) =>
-            e.map((e) => (e.id === msg.data.id ? msg.data : e))
-          );
-          break;
-        }
-        case MessageType.UPDATE_ACTION: {
-          setActions((e) =>
-            e.map((e) => (e.id === msg.data.id ? msg.data : e))
-          );
-          break;
-        }
+      },
+      (data: Entity) => {
+        setMap((m) => {
+          return {
+            ...m,
+            entities: [...m.entities, data],
+          };
+        });
+      },
+      (data: string) => {
+        setMap((m) => {
+          return {
+            ...m,
+            actions: [...m.actions, data],
+          };
+        });
       }
-    };
-    bc.postMessage({
+    );
+    Channel.send({
       type: MessageType.INITIALIZE,
       data: cameraRef.current,
     });
 
-    return () => {
-      bc.onmessage = null;
-    };
+    return unsub;
   }, []);
 
-  if (map.data.length === 0) return <></>;
+  if (mapData.map.data.length === 0) return <></>;
 
   const tiles: JSX.Element[] = [];
 
-  for (let i = 0; i < map.data.length / ValuesPerTile; i++) {
+  for (let i = 0; i < mapData.map.data.length / ValuesPerTile; i++) {
     tiles.push(
       <Tile
         key={i}
-        id={map.data[i * ValuesPerTile]}
-        x={startX + (i % map.width)}
-        y={startY + Math.floor(i / map.width)}
+        id={mapData.map.data[i * ValuesPerTile]}
+        x={mapData.x + (i % mapData.map.width)}
+        y={mapData.y + Math.floor(i / mapData.map.width)}
       />
     );
   }
 
   const pathComponents: JSX.Element[] = [];
-  for (const i in actions) {
-    pathComponents.push(<Path key={i} p={actions[i].path} />);
+  for (const id of mapData.actions) {
+    pathComponents.push(<Action key={id} id={id} />);
   }
 
   const entityComponents: JSX.Element[] = [];
-  for (const e of entities) {
+  for (const e of mapData.entities) {
     switch (e.type) {
       case EntityType.HEART: {
         entityComponents.push(

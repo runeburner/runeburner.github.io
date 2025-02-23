@@ -1,8 +1,7 @@
 import { MessageType } from "../types/message";
 import { Tile } from "../types/tile";
-import { actions } from "../types/actions";
 import { channel, findClosest } from "./channel";
-import { aStarPath, entities } from "./values";
+import { actions, aStarPath, entities } from "./values";
 import workerScriptHeader from "./workerScriptHeader.js?raw";
 
 export const launchGolem = (id: string, incantation: string) => {
@@ -57,7 +56,8 @@ export const launchGolem = (id: string, incantation: string) => {
       }
       path.pop();
       const action = {
-        id: golem.id,
+        id: crypto.randomUUID(),
+        entityID: golem.id,
         path: path,
       };
       actions.push(action);

@@ -20,7 +20,7 @@ export const MessageType = Object.freeze({
   UPDATE_ACTION: "UPDATE_ACTION",
 } as const);
 
-type MessageType = (typeof MessageType)[keyof typeof MessageType];
+export type MessageType = (typeof MessageType)[keyof typeof MessageType];
 
 export type Camera = {
   x: number;
@@ -38,20 +38,22 @@ type InitializeMessage = {
   data: Camera;
 } & GenericMessage;
 
+export type MapData = {
+  map: {
+    width: number;
+    height: number;
+    data: Int32Array;
+  };
+  x: number;
+  y: number;
+  entities: Entity[];
+  actions: string[];
+  camera?: Camera;
+};
+
 type MapDataMessage = {
   type: typeof MessageType.MAP;
-  data: {
-    map: {
-      width: number;
-      height: number;
-      data: Int32Array;
-    };
-    x: number;
-    y: number;
-    entities: Entity[];
-    actions: Action[];
-    camera?: Camera;
-  };
+  data: MapData;
 } & GenericMessage;
 
 type QueryMessage = {
