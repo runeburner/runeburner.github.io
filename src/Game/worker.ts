@@ -1,6 +1,6 @@
 import { MessageType } from "../types/message";
 import "./channel";
-import { channel } from "./channel";
+import { channel, isInView } from "./channel";
 import { actions, entities } from "./values";
 
 setInterval(() => {
@@ -11,13 +11,18 @@ setInterval(() => {
     const nextNode = action.path[0];
     entity.x = nextNode[0];
     entity.y = nextNode[1];
-    channel.postMessage({
-      type: MessageType.UPDATE_ENTITY,
-      data: entity,
-    });
-    channel.postMessage({
-      type: MessageType.UPDATE_ACTION,
-      data: action,
-    });
+
+    if (isInView(entity.x, entity.y)) {
+      channel.postMessage({
+        type: MessageType.UPDATE_ENTITY,
+        data: entity,
+      });
+    }
+    if (isInView(action.path[0][0], action.path[0][1])) {
+      channel.postMessage({
+        type: MessageType.UPDATE_ACTION,
+        data: action,
+      });
+    }
   }
 }, 1000);
