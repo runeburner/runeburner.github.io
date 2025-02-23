@@ -4,8 +4,6 @@ import { Tile } from "../Tile/Tile";
 import { Pannable } from "../Pannable/Pannable";
 import { useThrottledCallback } from "use-debounce";
 import { AddGolem } from "../AddGolem/AddGolem";
-import { Entity, EntityType } from "../../types/entity";
-import { Golem } from "../Golem/Golem";
 import { Channel } from "../channel";
 import { ValuesPerTile } from "../../types/map";
 import { EntityTile } from "../Entity/Entity";
@@ -62,7 +60,7 @@ export const World = () => {
           setPos([data.camera.x, data.camera.y]);
         }
       },
-      (data: Entity) => {
+      (data: string) => {
         setMap((m) => {
           return {
             ...m,
@@ -107,39 +105,16 @@ export const World = () => {
     pathComponents.push(<Action key={id} id={id} />);
   }
 
-  const entityComponents: JSX.Element[] = [];
-  for (const e of mapData.entities) {
-    switch (e.type) {
-      case EntityType.HEART: {
-        entityComponents.push(
-          <EntityTile key={`${e.x}_${e.y}_${e.type}`} y={e.y} x={e.x}>
-            <Golem runes={[]} health={[0, 0]} armor={[0, 0]} shield={[0, 0]} />
-          </EntityTile>
-        );
-        break;
-      }
-      case EntityType.GOLEM: {
-        entityComponents.push(
-          <EntityTile key={`${e.x}_${e.y}_${e.type}`} y={e.y} x={e.x}>
-            <Golem
-              runes={e.runes}
-              health={[0, 0]}
-              armor={[0, 0]}
-              shield={[0, 0]}
-            />
-          </EntityTile>
-        );
-        break;
-      }
-    }
-  }
-
   return (
     <>
       <Pannable pos={pos} onPan={onPan}>
         {tiles}
-        {pathComponents}
-        {entityComponents}
+        {mapData.actions.map((e) => (
+          <Action key={e} id={e} />
+        ))}
+        {mapData.entities.map((e) => (
+          <EntityTile key={e} id={e} />
+        ))}
       </Pannable>
       <AddGolem />
     </>

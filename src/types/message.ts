@@ -18,6 +18,8 @@ export const MessageType = Object.freeze({
   ADD_ACTION: "ADD_ACTION",
   UPDATE_ENTITY: "UPDATE_ENTITY",
   UPDATE_ACTION: "UPDATE_ACTION",
+  REFRESH_ENTITY: "REFRESH_ENTITY",
+  REFRESH_ACTION: "REFRESH_ACTION",
 } as const);
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType];
@@ -46,7 +48,7 @@ export type MapData = {
   };
   x: number;
   y: number;
-  entities: Entity[];
+  entities: string[];
   actions: string[];
   camera?: Camera;
 };
@@ -71,22 +73,32 @@ type AnimateMessage = {
 
 type AddEntityMessage = {
   type: typeof MessageType.ADD_ENTITY;
-  data: Entity;
+  data: string;
 };
 
 type AddActionMessage = {
   type: typeof MessageType.ADD_ACTION;
-  data: Action;
+  data: string;
 };
 
-type UpdateEntity = {
+type UpdateEntityMessage = {
   type: typeof MessageType.UPDATE_ENTITY;
   data: Entity;
 };
 
-type UpdateAction = {
+type UpdateActionmessage = {
   type: typeof MessageType.UPDATE_ACTION;
   data: Action;
+};
+
+type RefreshEntityMessage = {
+  type: typeof MessageType.REFRESH_ENTITY;
+  data: string;
+};
+
+type RefreshActionMessage = {
+  type: typeof MessageType.REFRESH_ACTION;
+  data: string;
 };
 
 export type UIMessage =
@@ -96,5 +108,7 @@ export type UIMessage =
   | AnimateMessage
   | AddEntityMessage
   | AddActionMessage
-  | UpdateEntity
-  | UpdateAction;
+  | UpdateEntityMessage
+  | UpdateActionmessage
+  | RefreshEntityMessage
+  | RefreshActionMessage;
