@@ -27,8 +27,8 @@ export const World = () => {
   const cameraRef = useRef({
     x: 0,
     y: 0,
-    width: 8,
-    height: 8,
+    width: 24,
+    height: 24,
   });
 
   const fetchMap = useThrottledCallback(
@@ -73,6 +73,22 @@ export const World = () => {
           return {
             ...m,
             actions: [...m.actions, data],
+          };
+        });
+      },
+      (data: string) => {
+        setMap((m) => {
+          return {
+            ...m,
+            entities: m.entities.filter((e) => e !== data),
+          };
+        });
+      },
+      (data: string) => {
+        setMap((m) => {
+          return {
+            ...m,
+            actions: m.actions.filter((a) => a !== data),
           };
         });
       }

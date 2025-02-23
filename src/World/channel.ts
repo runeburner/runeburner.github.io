@@ -8,6 +8,8 @@ export const Channel = (() => {
   let mapDataSub: ((data: MapData) => void) | null = null;
   let addEntitySub: ((data: string) => void) | null = null;
   let addActionSub: ((data: string) => void) | null = null;
+  let removeEntitySub: ((data: string) => void) | null = null;
+  let removeActionSub: ((data: string) => void) | null = null;
 
   const c: UIChannel = new BroadcastChannel("UI");
   c.onmessage = ({ data: msg }) => {
@@ -22,6 +24,15 @@ export const Channel = (() => {
       }
       case MessageType.ADD_ACTION: {
         if (addActionSub) addActionSub(msg.data);
+        break;
+      }
+      case MessageType.REMOVE_ENTITY: {
+        if (removeEntitySub) removeEntitySub(msg.data);
+        break;
+      }
+      case MessageType.REMOVE_ACTION: {
+        console.log("RECEIVEING REMOVE");
+        if (removeActionSub) removeActionSub(msg.data);
         break;
       }
       case MessageType.UPDATE_ENTITY: {
@@ -51,17 +62,23 @@ export const Channel = (() => {
       };
     },
     subMap: (
-      f0: (data: MapData) => void,
-      f1: (data: string) => void,
-      f2: (data: string) => void
+      mapDataSub0: (data: MapData) => void,
+      addEntitySub0: (data: string) => void,
+      addActionSub0: (data: string) => void,
+      removeEntitySub0: (data: string) => void,
+      removeActionSub0: (data: string) => void
     ): (() => void) => {
-      mapDataSub = f0;
-      addEntitySub = f1;
-      addActionSub = f2;
+      mapDataSub = mapDataSub0;
+      addEntitySub = addEntitySub0;
+      addActionSub = addActionSub0;
+      removeEntitySub = removeEntitySub0;
+      removeActionSub = removeActionSub0;
       return () => {
         mapDataSub = null;
         addEntitySub = null;
         addActionSub = null;
+        removeEntitySub = null;
+        removeActionSub = null;
       };
     },
     send: (msg: UIMessage) => {

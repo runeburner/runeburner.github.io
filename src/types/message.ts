@@ -20,6 +20,8 @@ export const MessageType = Object.freeze({
   UPDATE_ACTION: "UPDATE_ACTION",
   REFRESH_ENTITY: "REFRESH_ENTITY",
   REFRESH_ACTION: "REFRESH_ACTION",
+  REMOVE_ENTITY: "REMOVE_ENTITY",
+  REMOVE_ACTION: "REMOVE_ACTION",
 } as const);
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType];
@@ -100,6 +102,15 @@ type RefreshActionMessage = {
   type: typeof MessageType.REFRESH_ACTION;
   data: string;
 };
+type RemoveEntityMessage = {
+  type: typeof MessageType.REMOVE_ENTITY;
+  data: string;
+};
+
+type RemoveActionMessage = {
+  type: typeof MessageType.REMOVE_ACTION;
+  data: string;
+};
 
 export type UIMessage =
   | InitializeMessage
@@ -111,4 +122,6 @@ export type UIMessage =
   | UpdateEntityMessage
   | UpdateActionmessage
   | RefreshEntityMessage
-  | RefreshActionMessage;
+  | RefreshActionMessage
+  | RemoveEntityMessage
+  | RemoveActionMessage;
