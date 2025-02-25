@@ -12,10 +12,8 @@ const updateMoveAction = (entity: Entity, action: MoveAction): boolean => {
     action.progress[0] -= action.progress[1];
     action.path.shift();
     const nextNode = action.path[0];
-    entity.x = nextNode[0];
-    entity.y = nextNode[1];
-    action.x = nextNode[0];
-    action.y = nextNode[1];
+    entity.pos = [...nextNode];
+    action.pos = [...nextNode];
   }
   return action.path.length === 1;
 };
@@ -61,13 +59,13 @@ setInterval(() => {
       i--;
     }
 
-    if (isInView(entity.x, entity.y)) {
+    if (isInView(entity.pos)) {
       channel.postMessage({
         type: MessageType.UPDATE_ENTITY,
         data: entity,
       });
     }
-    if (isInView(action.x, action.y)) {
+    if (isInView(action.pos)) {
       if (!done) {
         channel.postMessage({
           type: MessageType.UPDATE_ACTION,

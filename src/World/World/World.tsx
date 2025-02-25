@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MapData, MessageType } from "../../types/message";
+import { Camera, MapData, MessageType } from "../../types/message";
 import { Tile } from "../Tile/Tile";
 import { Pannable } from "../Pannable/Pannable";
 import { useThrottledCallback } from "use-debounce";
@@ -16,20 +16,17 @@ const emptyMapData = {
     height: 0,
     data: new Int32Array(),
   },
-  x: 0,
-  y: 0,
+  pos: [0, 0],
   entities: [],
   actions: [],
-};
+} satisfies MapData;
 
 export const World = () => {
   const [mapData, setMap] = useState<MapData>(emptyMapData);
   const [pos, setPos] = useState<Vec>([0, 0]);
-  const cameraRef = useRef({
-    x: 0,
-    y: 0,
-    width: 24,
-    height: 24,
+  const cameraRef = useRef<Camera>({
+    pos: [0, 0],
+    size: [24, 24],
   });
 
   const fetchMap = useThrottledCallback(
@@ -46,8 +43,8 @@ export const World = () => {
   const onPan = ([dx, dy]: Vec) => {
     const nextPos: Vec = [pos[0] + dx, pos[1] + dy];
     setPos(nextPos);
-    cameraRef.current.x = -Math.floor(nextPos[0] / 64);
-    cameraRef.current.y = -Math.floor(nextPos[1] / 64);
+    cameraRef.current.pos[0] = -Math.floor(nextPos[0] / 64);
+    cameraRef.current.pos[1] = -Math.floor(nextPos[1] / 64);
 
     fetchMap();
   };
@@ -58,7 +55,7 @@ export const World = () => {
         setMap(data);
         if (data.camera) {
           cameraRef.current = data.camera;
-          setPos([data.camera.x, data.camera.y]);
+          setPos([...data.camera.pos]);
         }
       },
       (data: string) => {
@@ -111,8 +108,10 @@ export const World = () => {
       <Tile
         key={i}
         id={mapData.map.data[i * ValuesPerTile]}
-        x={mapData.x + (i % mapData.map.width)}
-        y={mapData.y + Math.floor(i / mapData.map.width)}
+        pos={[
+          mapData.pos[0] + (i % mapData.map.width),
+          mapData.pos[1] + Math.floor(i / mapData.map.width),
+        ]}
       />
     );
   }

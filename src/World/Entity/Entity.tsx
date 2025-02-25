@@ -58,8 +58,8 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
     <div
       className={classes.container}
       style={{
-        top: entity.y * 64,
-        left: entity.x * 64,
+        top: entity.pos[1] * 64,
+        left: entity.pos[0] * 64,
       }}
     >
       {child}

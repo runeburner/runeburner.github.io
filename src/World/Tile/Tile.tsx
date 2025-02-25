@@ -1,9 +1,9 @@
+import { Vec } from "../../types/vec";
 import classes from "./Tile.module.css";
 
 type TileProps = {
   id: number;
-  x: number;
-  y: number;
+  pos: Vec;
 };
 const colors = [
   "#a2b9bc",
@@ -17,11 +17,15 @@ const colors = [
   "#e3eaa7",
 ];
 
-export const Tile = ({ id, x, y }: TileProps) => {
+export const Tile = ({ id, pos }: TileProps) => {
   return (
     <div
       className={classes.container}
-      style={{ backgroundColor: colors[id], top: y * 64, left: x * 64 }}
+      style={{
+        backgroundColor: colors[id],
+        top: pos[1] * 64,
+        left: pos[0] * 64,
+      }}
     ></div>
   );
 };
