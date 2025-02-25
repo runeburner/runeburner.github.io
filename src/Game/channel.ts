@@ -1,10 +1,10 @@
 import { EntityType, GolemEntity } from "../types/entity";
 import {
   Camera,
+  GameThreadChannel,
+  GameThreadHandler,
   MapData,
-  MessageHandlers,
   MessageType,
-  UIChannel,
 } from "../types/message";
 import { actions, at, entities, map } from "./values";
 import { ValuesPerTile } from "../types/map";
@@ -14,7 +14,7 @@ import { Tile } from "../types/tile";
 import { Rune, RuneWeight } from "../types/rune";
 import { Vec } from "../types/vec";
 
-export const channel: UIChannel = new BroadcastChannel("UI");
+export const channel: GameThreadChannel = new BroadcastChannel("UI");
 
 // x, y, w, h
 const camera = {
@@ -84,7 +84,7 @@ const generateMapData = () => {
   } satisfies MapData;
 };
 
-const uiMessageHandlers: MessageHandlers = {
+const uiMessageHandlers: GameThreadHandler = {
   [MessageType.INITIALIZE]: (initialCam) => {
     const cam = determineInitialCameraPosition(initialCam);
 

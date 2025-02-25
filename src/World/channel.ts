@@ -3,10 +3,10 @@ import { Entity } from "../types/entity";
 import {
   Message,
   MapData,
-  MessageHandlers,
   MessageType,
-  UIChannel,
-  MessageDataMap,
+  MainThreadChannel,
+  GameThreadMessageReceiveDataTypes,
+  MainThreadHandler,
 } from "../types/message";
 
 export const Channel = (() => {
@@ -18,9 +18,9 @@ export const Channel = (() => {
   let removeEntitySub: ((data: string) => void) | null = null;
   let removeActionSub: ((data: string) => void) | null = null;
 
-  const c: UIChannel = new BroadcastChannel("UI");
+  const c: MainThreadChannel = new BroadcastChannel("UI");
 
-  const handlers: MessageHandlers = {
+  const handlers: MainThreadHandler = {
     [MessageType.MAP]: (data) => {
       if (mapDataSub) mapDataSub(data);
     },
@@ -79,7 +79,9 @@ export const Channel = (() => {
         removeActionSub = null;
       };
     },
-    send: <T extends MessageType>(msg: Message<T, MessageDataMap[T]>) => {
+    send: <T extends keyof GameThreadMessageReceiveDataTypes>(
+      msg: Message<T, GameThreadMessageReceiveDataTypes[T]>
+    ) => {
       c.postMessage(msg);
     },
   };
