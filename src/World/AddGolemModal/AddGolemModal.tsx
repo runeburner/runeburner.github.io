@@ -11,7 +11,7 @@ import { Channel } from "../channel";
 
 export const AddGolemModal = ({ open, onClose }: ModalProps) => {
   const [runes, setRunes] = useState<Record<Rune, number>>(
-    Object.fromEntries(Object.values(Rune).map((r) => [r, 0])) as Record<
+    Object.fromEntries(Object.values(Rune).map((r) => [r, 2])) as Record<
       Rune,
       number
     >
