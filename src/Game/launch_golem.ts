@@ -136,11 +136,7 @@ export const launchGolem = (id: string, incantation: string) => {
   });
   worker.onmessage = <T extends keyof EntityMessageReceiveDataTypes>(
     m: MessageEvent<EntityMessage<T>>
-  ) => {
-    const handler = wwHandlerMap[m.data.command];
-    if (!handler) return;
-    handler(id, worker, m.data);
-  };
+  ) => wwHandlerMap[m.data.command]?.(id, worker, m.data);
   worker.onerror = console.log;
   worker.onmessageerror = console.log;
 };
