@@ -1,6 +1,12 @@
 import { Action } from "../types/actions";
 import { Entity } from "../types/entity";
-import { MapData, MessageType, UIChannel, UIMessage } from "../types/message";
+import {
+  MapData,
+  MessageHandlers,
+  MessageType,
+  UIChannel,
+  UIMessage,
+} from "../types/message";
 
 export const Channel = (() => {
   const actionSubs: Record<string, (a: Action) => void> = {};
@@ -12,39 +18,37 @@ export const Channel = (() => {
   let removeActionSub: ((data: string) => void) | null = null;
 
   const c: UIChannel = new BroadcastChannel("UI");
+
+  const handlers: MessageHandlers = {
+    [MessageType.MAP]: (msg) => {
+      if (mapDataSub) mapDataSub(msg.data);
+    },
+    [MessageType.ADD_ENTITY]: (msg) => {
+      if (addEntitySub) addEntitySub(msg.data);
+    },
+    [MessageType.ADD_ACTION]: (msg) => {
+      if (addActionSub) addActionSub(msg.data);
+    },
+    [MessageType.REMOVE_ENTITY]: (msg) => {
+      if (removeEntitySub) removeEntitySub(msg.data);
+    },
+    [MessageType.REMOVE_ACTION]: (msg) => {
+      if (removeActionSub) removeActionSub(msg.data);
+    },
+    [MessageType.UPDATE_ENTITY]: (msg) => {
+      const f = entitySubs[msg.data.id];
+      if (f) f(msg.data);
+    },
+    [MessageType.UPDATE_ACTION]: (msg) => {
+      const f = actionSubs[msg.data.id];
+      if (f) f(msg.data);
+    },
+  };
   c.onmessage = ({ data: msg }) => {
-    switch (msg.type) {
-      case MessageType.MAP: {
-        if (mapDataSub) mapDataSub(msg.data);
-        break;
-      }
-      case MessageType.ADD_ENTITY: {
-        if (addEntitySub) addEntitySub(msg.data);
-        break;
-      }
-      case MessageType.ADD_ACTION: {
-        if (addActionSub) addActionSub(msg.data);
-        break;
-      }
-      case MessageType.REMOVE_ENTITY: {
-        if (removeEntitySub) removeEntitySub(msg.data);
-        break;
-      }
-      case MessageType.REMOVE_ACTION: {
-        if (removeActionSub) removeActionSub(msg.data);
-        break;
-      }
-      case MessageType.UPDATE_ENTITY: {
-        const f = entitySubs[msg.data.id];
-        if (f) f(msg.data);
-        break;
-      }
-      case MessageType.UPDATE_ACTION: {
-        const f = actionSubs[msg.data.id];
-        if (f) f(msg.data);
-        break;
-      }
-    }
+    const f = handlers[msg.type];
+    if (!f) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    f(msg as any);
   };
 
   return {
