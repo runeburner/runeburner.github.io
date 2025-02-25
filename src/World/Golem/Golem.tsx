@@ -1,4 +1,5 @@
 import { Rune } from "../../types/rune";
+import { Vec } from "../../types/vec";
 import { Health } from "./Health/Health";
 
 type ArcProps = {
@@ -28,9 +29,9 @@ const Arc = ({ start, end, rune }: ArcProps): React.ReactElement => {
 };
 type GolemProps = {
   runes: [Rune, number][];
-  health: [number, number];
-  armor: [number, number];
-  shield: [number, number];
+  health: Vec;
+  armor: Vec;
+  shield: Vec;
 };
 
 export const Golem = (props: GolemProps): React.ReactElement => {

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import classes from "./Pannable.module.css";
+import { Vec } from "../../types/vec";
 
 type PannableProps = React.PropsWithChildren<{
   startX: number;
@@ -11,7 +12,7 @@ export const Pannable = ({
   startY,
   children,
 }: PannableProps): React.ReactElement => {
-  const [pos, setPos] = useState<[number, number]>([startX, startY]);
+  const [pos, setPos] = useState<Vec>([startX, startY]);
   const isPanning = useRef(false);
 
   const onMouseDown = (e: React.MouseEvent): void => {

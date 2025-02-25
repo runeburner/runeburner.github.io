@@ -3,6 +3,7 @@ import { EditIcon, LockIcon } from "../../icons";
 import { Modal } from "../../Modal/Modal";
 import classes from "./Node.module.css";
 import { NodeStatus } from "./NodeStatus";
+import { Vec } from "../../types/vec";
 
 const statusContainerClasses: Record<string, string> = {
   PURCHASED: classes.purchasedContainer,
@@ -23,7 +24,7 @@ type NodeProps = {
   x: number;
   y: number;
   title: string;
-  lvl: [number, number];
+  lvl: Vec;
   description: string;
   status: NodeStatus;
 };

@@ -1,4 +1,4 @@
-import { ActionType, MoveAction } from "../types/actions";
+import { ActionType, MineAction, MoveAction } from "../types/actions";
 import { Entity, GolemEntity } from "../types/entity";
 import { MessageType } from "../types/message";
 import "./channel";
@@ -20,6 +20,20 @@ const updateMoveAction = (entity: Entity, action: MoveAction): boolean => {
   return action.path.length === 1;
 };
 
+const updateMineAction = (entity: Entity, action: MineAction): boolean => {
+  const golem = entity as GolemEntity;
+  action.progress[0] += golem.mineSpeed;
+  while (
+    action.progress[0] >= action.progress[1] &&
+    golem.minecapacity[0] < golem.minecapacity[1]
+  ) {
+    action.progress[0] -= action.progress[1];
+    golem.minecapacity[0]++;
+  }
+
+  return golem.minecapacity[0] === golem.minecapacity[1];
+};
+
 setInterval(() => {
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
@@ -29,6 +43,10 @@ setInterval(() => {
     switch (action.type) {
       case ActionType.GOLEM_MOVE: {
         done = updateMoveAction(entity, action);
+        break;
+      }
+      case ActionType.MINE: {
+        done = updateMineAction(entity, action);
         break;
       }
     }
