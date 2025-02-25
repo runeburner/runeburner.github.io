@@ -1,4 +1,4 @@
-import { EntityType } from "../types/entity";
+import { EntityType, GolemEntity } from "../types/entity";
 import { MessageType, UIChannel } from "../types/message";
 import { actions, at, entities, map } from "./values";
 import { ValuesPerTile } from "../types/map";
@@ -6,6 +6,7 @@ import { determineInitialCameraPosition } from "./values";
 import { launchGolem } from "./launch_golem";
 import { Tile } from "../types/tile";
 import { Rune, RuneWeight } from "../types/rune";
+import { Vec } from "../types/vec";
 
 export const channel: UIChannel = new BroadcastChannel("UI");
 
@@ -26,16 +27,12 @@ export const isInView = (x: number, y: number): boolean => {
   );
 };
 
-export const findClosest = (
-  pos: [number, number],
-  wantTile: Tile,
-  radius: number
-): [number, number] => {
+export const findClosest = (pos: Vec, wantTile: Tile, radius: number): Vec => {
   const x = Math.max(0, pos[0] - Math.floor(radius / 2));
   const X = Math.min(map.width, pos[0] + Math.ceil(radius / 2));
   const y = Math.max(0, pos[1] - Math.floor(radius / 2));
   const Y = Math.min(map.height, pos[1] + Math.ceil(radius / 2));
-  let closestTile: [number, number] = [-1, -1];
+  let closestTile: Vec = [-1, -1];
   let closestDist = 1e99;
   for (let j = y; j < Y; j++) {
     for (let i = x; i < X; i++) {
@@ -80,9 +77,7 @@ const generateMapData = () => {
       data,
     },
     entities: entities.filter((e) => isInView(e.x, e.y)).map((e) => e.id),
-    actions: actions
-      .filter((e) => isInView(e.path[0][0], e.path[0][1]))
-      .map((a) => a.id),
+    actions: actions.filter((e) => isInView(e.x, e.y)).map((a) => a.id),
   };
 };
 
@@ -136,8 +131,12 @@ channel.onmessage = ({ data: msg }) => {
         id: id,
         speed: msg.data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
         weight: Math.max(1, weight),
-      };
-
+        minecapacity: [
+          0,
+          msg.data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0,
+        ],
+        mineSpeed: msg.data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
+      } satisfies GolemEntity;
       entities.push(golem);
       channel.postMessage({
         type: MessageType.ADD_ENTITY,

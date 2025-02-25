@@ -1,9 +1,16 @@
-import { ActionType, MoveAction } from "../types/actions";
+import { ActionType, MineAction, MoveAction } from "../types/actions";
 import { GolemEntity } from "../types/entity";
 import { MessageType } from "../types/message";
 import { Tile } from "../types/tile";
+import { Vec } from "../types/vec";
 import { channel, findClosest, isInView } from "./channel";
-import { actions, aStarPath, entities, waitingActionMap } from "./values";
+import {
+  actions,
+  aStarPath,
+  entities,
+  vecDist,
+  waitingActionMap,
+} from "./values";
 import workerScriptHeader from "./workerScriptHeader.js?raw";
 
 export const launchGolem = (id: string, incantation: string) => {
@@ -33,7 +40,7 @@ export const launchGolem = (id: string, incantation: string) => {
       const radius = m.data.args[1] as number;
 
       const golem = entities.find((e) => e.id === id)!;
-      const pos: [number, number] = [golem.x, golem.y];
+      const pos: Vec = [golem.x, golem.y];
 
       worker.postMessage({
         workerID: m.data.workerID,
@@ -66,6 +73,41 @@ export const launchGolem = (id: string, incantation: string) => {
         y: path[0][1],
         progress: [0, (golem as GolemEntity).weight],
       } satisfies MoveAction;
+      actions.push(action);
+      waitingActionMap[action.id] = (v: unknown) => {
+        worker.postMessage({
+          workerID: m.data.workerID,
+          requestID: m.data.requestID,
+          data: v,
+        });
+      };
+      if (isInView(action.x, action.y)) {
+        channel.postMessage({
+          type: MessageType.ADD_ACTION,
+          data: action.id,
+        });
+      }
+    }
+    if (m.data.command === "mine") {
+      const golem = entities.find((e) => e.id === id)!;
+      const tile = m.data.args[0];
+      if (vecDist([golem.x, golem.y], tile) != 1) {
+        worker.postMessage({
+          workerID: m.data.workerID,
+          requestID: m.data.requestID,
+          data: null,
+        });
+        return;
+      }
+      const action = {
+        progress: [0, 16],
+        tile: tile,
+        entityID: golem.id,
+        id: crypto.randomUUID(),
+        type: ActionType.MINE,
+        x: golem.x,
+        y: golem.y,
+      } satisfies MineAction;
       actions.push(action);
       waitingActionMap[action.id] = (v: unknown) => {
         worker.postMessage({

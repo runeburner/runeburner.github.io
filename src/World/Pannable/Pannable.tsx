@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import classes from "./Pannable.module.css";
+import { Vec } from "../../types/vec";
 
 type PannableProps = React.PropsWithChildren<{
-  pos: [number, number];
-  onPan: (diff: [number, number]) => void;
+  pos: Vec;
+  onPan: (diff: Vec) => void;
 }>;
 
 export const Pannable = ({

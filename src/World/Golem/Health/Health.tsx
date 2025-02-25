@@ -1,3 +1,5 @@
+import { Vec } from "../../../types/vec";
+
 const healthColor = "#fd4c63";
 const armorColor = "#fde86f";
 const shieldColor = "#65c4fb";
@@ -56,9 +58,9 @@ const getNextPoints = (
 };
 
 type HealthProps = {
-  health: [number, number];
-  armor: [number, number];
-  shield: [number, number];
+  health: Vec;
+  armor: Vec;
+  shield: Vec;
 };
 export const Health = (props: HealthProps): React.ReactElement => {
   const { health, armor, shield } = props;

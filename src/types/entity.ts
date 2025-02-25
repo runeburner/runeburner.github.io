@@ -1,4 +1,5 @@
 import { Rune } from "./rune";
+import { Vec } from "./vec";
 
 export const EntityType = Object.freeze({
   HEART: "HEART",
@@ -22,6 +23,8 @@ export type GolemEntity = {
   type: typeof EntityType.GOLEM;
   speed: number;
   weight: number;
+  mineSpeed: number;
+  minecapacity: Vec;
   runes: [Rune, number][];
 } & BaseEntity;
 

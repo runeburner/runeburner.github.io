@@ -5,8 +5,9 @@ type IncantationsState = Record<string, string>;
 
 export const defaultIncantation = `run(async () => {
   while (true) {
-    const loc = await world.findClosestTile("MANA_CRYSTAL", 9);
-    await world.goNextTo(loc);
+    const crystal = await world.findClosestTile("MANA_CRYSTAL", 9);
+    await world.goNextTo(crystal);
+    await world.mine(crystal);
     await world.goNextTo([0,0]);
   }
 })`;

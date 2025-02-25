@@ -8,6 +8,7 @@ import { MessageType } from "../../types/message";
 import { useAppSelector } from "../../store/hooks";
 import { store } from "../../store/store";
 import { Channel } from "../channel";
+import { Vec } from "../../types/vec";
 
 export const AddGolemModal = ({ open, onClose }: ModalProps) => {
   const [runes, setRunes] = useState<Record<Rune, number>>(
@@ -21,9 +22,9 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
     incantationNames[0]
   );
 
-  const [health /*, setHealth*/] = useState<[number, number]>([0, 0]);
-  const [armor /*, setArmor*/] = useState<[number, number]>([0, 0]);
-  const [shield /*, setShield*/] = useState<[number, number]>([0, 0]);
+  const [health /*, setHealth*/] = useState<Vec>([0, 0]);
+  const [armor /*, setArmor*/] = useState<Vec>([0, 0]);
+  const [shield /*, setShield*/] = useState<Vec>([0, 0]);
 
   const appliedRunes: [Rune, number][] = Object.entries(runes).filter(
     (r) => r[1] > 0

@@ -8,6 +8,7 @@ import { Channel } from "../channel";
 import { ValuesPerTile } from "../../types/map";
 import { EntityTile } from "../Entity/Entity";
 import { Action } from "../Action/Action";
+import { Vec } from "../../types/vec";
 
 const emptyMapData = {
   map: {
@@ -23,7 +24,7 @@ const emptyMapData = {
 
 export const World = () => {
   const [mapData, setMap] = useState<MapData>(emptyMapData);
-  const [pos, setPos] = useState<[number, number]>([0, 0]);
+  const [pos, setPos] = useState<Vec>([0, 0]);
   const cameraRef = useRef({
     x: 0,
     y: 0,
@@ -42,8 +43,8 @@ export const World = () => {
     { leading: false }
   );
 
-  const onPan = ([dx, dy]: [number, number]) => {
-    const nextPos: [number, number] = [pos[0] + dx, pos[1] + dy];
+  const onPan = ([dx, dy]: Vec) => {
+    const nextPos: Vec = [pos[0] + dx, pos[1] + dy];
     setPos(nextPos);
     cameraRef.current.x = -Math.floor(nextPos[0] / 64);
     cameraRef.current.y = -Math.floor(nextPos[1] / 64);

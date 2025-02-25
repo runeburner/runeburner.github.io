@@ -3,6 +3,7 @@ import { Entity, EntityType } from "../types/entity";
 import { Map as GameMap, ValuesPerTile } from "../types/map";
 import { Camera } from "../types/message";
 import { AStarDist } from "../types/tile";
+import { Vec } from "../types/vec";
 
 export const defaultMap: number[][] = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -66,39 +67,36 @@ export const at = (x: number, y: number): Int32Array => {
   return map.data.slice(start, start + ValuesPerTile);
 };
 
-const aStarMaxWidth = Math.floor(Math.sqrt(Number.MAX_SAFE_INTEGER));
+// This hashing function will not work for coordinates outside {[0,0], [94_906_265, 94_906_265]}
+const hashMaxWidth = Math.floor(Math.sqrt(Number.MAX_SAFE_INTEGER));
 
-const vecToSingle = (point: [number, number]): number =>
-  point[0] * aStarMaxWidth + point[1];
+const hashVec = (point: Vec): number => point[0] * hashMaxWidth + point[1];
 
-const singleToVec = (single: number): [number, number] => [
-  Math.floor(single / aStarMaxWidth),
-  single % aStarMaxWidth,
+const unhashVec = (single: number): Vec => [
+  Math.floor(single / hashMaxWidth),
+  single % hashMaxWidth,
 ];
 
 const reconstruct_path = (
   cameFrom: Map<number, number>,
   current: number
-): [number, number][] => {
+): Vec[] => {
   const path = [current];
   while (cameFrom.has(current)) {
     current = cameFrom.get(current)!;
     path.unshift(current);
   }
 
-  return path.map((p) => singleToVec(p));
+  return path.map((p) => unhashVec(p));
 };
 
-const vecDist = (v0: [number, number], v1: [number, number]): number =>
+export const vecDist = (v0: Vec, v1: Vec): number =>
   Math.abs(v0[0] - v1[0]) + Math.abs(v0[1] - v1[1]);
 
-export const aStarPath = (
-  start: [number, number],
-  goal: [number, number]
-): [number, number][] | null => {
-  const singleStart = vecToSingle(start);
-  const singleGoal = vecToSingle(goal);
-  const openSet = [vecToSingle(start)];
+export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
+  const singleStart = hashVec(start);
+  const singleGoal = hashVec(goal);
+  const openSet = [hashVec(start)];
   const cameFrom = new Map<number, number>();
   const gScore = new Map<number, number>();
   gScore.set(singleStart, 0);
@@ -117,22 +115,27 @@ export const aStarPath = (
     const current = openSet[currentI];
     if (current === singleGoal) return reconstruct_path(cameFrom, current);
     openSet.splice(currentI, 1);
-    const currentV = singleToVec(current);
-    const neighbors: [number, number][] = [
+    const currentV = unhashVec(current);
+    const neighbors: Vec[] = [
       [currentV[0] - 1, currentV[1]],
       [currentV[0] + 1, currentV[1]],
       [currentV[0], currentV[1] - 1],
       [currentV[0], currentV[1] + 1],
+      [currentV[0] - 1, currentV[1] - 1],
+      [currentV[0] + 1, currentV[1] - 1],
+      [currentV[0] + 1, currentV[1] - 1],
+      [currentV[0] + 1, currentV[1] + 1],
     ];
     for (const neighbor of neighbors) {
       if (
         neighbor[0] < 0 ||
         neighbor[1] < 0 ||
         neighbor[0] > map.width ||
-        neighbor[1] > map.height
+        neighbor[1] > map.height ||
+        entities.find((e) => e.x === neighbor[0] && e.y === neighbor[1])
       )
         continue;
-      const singleNeighbor = vecToSingle(neighbor);
+      const singleNeighbor = hashVec(neighbor);
       const tile = at(neighbor[0], neighbor[1]);
       const tentative_gScore =
         (gScore.get(current) ?? Infinity) +

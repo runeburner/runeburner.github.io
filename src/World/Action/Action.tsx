@@ -3,6 +3,7 @@ import { Action as ActionT, ActionType } from "../../types/actions";
 import { Channel } from "../channel";
 import { MessageType } from "../../types/message";
 import { MoveAction } from "./MoveAction/MoveAction";
+import { MineAction } from "./MineAction/MineAction";
 
 type ActionProps = {
   id: string;
@@ -27,6 +28,8 @@ export const Action = ({ id }: ActionProps): React.ReactElement => {
   switch (action.type) {
     case ActionType.GOLEM_MOVE:
       return <MoveAction action={action} />;
+    case ActionType.MINE:
+      return <MineAction action={action} />;
     default:
       return <></>;
   }
