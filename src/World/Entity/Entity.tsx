@@ -33,7 +33,7 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
       child = (
         <>
           <svg width="100%" height="100%" viewBox="-32 -32 64 64">
-            <Health health={[0, 0]} armor={[0, 0]} shield={[0, 0]} />
+            <Health health={[50, 50]} armor={[0, 0]} shield={[0, 0]} />
           </svg>
           <HeartIcon style={{ position: "absolute", width: 24, height: 24 }} />
         </>
