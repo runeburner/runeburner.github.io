@@ -4,6 +4,8 @@ import classes from "./Entity.module.css";
 import { Channel } from "../channel";
 import { Golem } from "../Golem/Golem";
 import { MessageType } from "../../types/message";
+import { Health } from "../Golem/Health/Health";
+import { HeartIcon } from "../../icons";
 
 type EntityProps = {
   id: string;
@@ -29,7 +31,12 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
   switch (entity.type) {
     case EntityType.HEART: {
       child = (
-        <Golem runes={[]} health={[0, 0]} armor={[0, 0]} shield={[0, 0]} />
+        <>
+          <svg width="100%" height="100%" viewBox="-32 -32 64 64">
+            <Health health={[0, 0]} armor={[0, 0]} shield={[0, 0]} />
+          </svg>
+          <HeartIcon style={{ position: "absolute", width: 24, height: 24 }} />
+        </>
       );
       break;
     }
