@@ -1,5 +1,11 @@
 import { EntityType, GolemEntity } from "../types/entity";
-import { Camera, MapData, MessageType, UIChannel } from "../types/message";
+import {
+  Camera,
+  MapData,
+  MessageHandlers,
+  MessageType,
+  UIChannel,
+} from "../types/message";
 import { actions, at, entities, map } from "./values";
 import { ValuesPerTile } from "../types/map";
 import { determineInitialCameraPosition } from "./values";
@@ -78,70 +84,71 @@ const generateMapData = () => {
   } satisfies MapData;
 };
 
+const uiMessageHandlers: MessageHandlers = {
+  [MessageType.INITIALIZE]: (msg) => {
+    const cam = determineInitialCameraPosition(msg.data);
+
+    Object.assign(camera, cam);
+    channel.postMessage({
+      type: MessageType.MAP,
+      data: { ...generateMapData(), camera: camera },
+    });
+  },
+  [MessageType.QUERY]: (msg) => {
+    Object.assign(camera, msg.data);
+    channel.postMessage({
+      type: MessageType.MAP,
+      data: generateMapData(),
+    });
+  },
+  [MessageType.ANIMATE]: (msg) => {
+    const id = crypto.randomUUID();
+    const weight = msg.data.runes.reduce(
+      (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
+      0
+    );
+    const golem = {
+      type: EntityType.GOLEM,
+      pos: [1, 1],
+      runes: msg.data.runes,
+      id: id,
+      speed: msg.data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
+      weight: Math.max(1, weight),
+      minecapacity: [
+        0,
+        msg.data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0,
+      ],
+      mineSpeed: msg.data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
+    } satisfies GolemEntity;
+    entities.push(golem);
+    channel.postMessage({
+      type: MessageType.ADD_ENTITY,
+      data: golem.id,
+    });
+
+    launchGolem(id, msg.data.incantation);
+  },
+  [MessageType.REFRESH_ENTITY]: (msg) => {
+    const entity = entities.find((e) => e.id === msg.data)!;
+    channel.postMessage({
+      type: MessageType.UPDATE_ENTITY,
+      data: entity,
+    });
+  },
+  [MessageType.REFRESH_ACTION]: (msg) => {
+    const action = actions.find((e) => e.id === msg.data)!;
+    channel.postMessage({
+      type: MessageType.UPDATE_ACTION,
+      data: action,
+    });
+  },
+};
+
 channel.onmessage = ({ data: msg }) => {
-  switch (msg.type) {
-    case MessageType.INITIALIZE: {
-      const cam = determineInitialCameraPosition(msg.data);
-
-      Object.assign(camera, cam);
-      channel.postMessage({
-        type: MessageType.MAP,
-        data: { ...generateMapData(), camera: camera },
-      });
-      break;
-    }
-    case MessageType.QUERY: {
-      Object.assign(camera, msg.data);
-      channel.postMessage({
-        type: MessageType.MAP,
-        data: { ...generateMapData() },
-      });
-      break;
-    }
-    case MessageType.REFRESH_ENTITY: {
-      const entity = entities.find((e) => e.id === msg.data)!;
-      channel.postMessage({
-        type: MessageType.UPDATE_ENTITY,
-        data: entity,
-      });
-      break;
-    }
-    case MessageType.REFRESH_ACTION: {
-      const action = actions.find((e) => e.id === msg.data)!;
-      channel.postMessage({
-        type: MessageType.UPDATE_ACTION,
-        data: action,
-      });
-      break;
-    }
-    case MessageType.ANIMATE: {
-      const id = crypto.randomUUID();
-      const weight = msg.data.runes.reduce(
-        (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
-        0
-      );
-      const golem = {
-        type: EntityType.GOLEM,
-        pos: [1, 1],
-        runes: msg.data.runes,
-        id: id,
-        speed: msg.data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
-        weight: Math.max(1, weight),
-        minecapacity: [
-          0,
-          msg.data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0,
-        ],
-        mineSpeed: msg.data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
-      } satisfies GolemEntity;
-      entities.push(golem);
-      channel.postMessage({
-        type: MessageType.ADD_ENTITY,
-        data: golem.id,
-      });
-
-      launchGolem(id, msg.data.incantation);
-    }
-  }
+  const f = uiMessageHandlers[msg.type];
+  if (!f) return;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  f(msg as any);
 };
 
 // Send to the main thread that the game is ready

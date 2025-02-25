@@ -36,7 +36,7 @@ export type GenericMessage = {
   type: MessageType;
 };
 
-type InitializeMessage = {
+export type InitializeMessage = {
   type: typeof MessageType.INITIALIZE;
   data: Camera;
 } & GenericMessage;
@@ -53,17 +53,17 @@ export type MapData = {
   camera?: Camera;
 };
 
-type MapDataMessage = {
+export type MapDataMessage = {
   type: typeof MessageType.MAP;
   data: MapData;
 } & GenericMessage;
 
-type QueryMessage = {
+export type QueryMessage = {
   type: typeof MessageType.QUERY;
   data: Camera;
 } & GenericMessage;
 
-type AnimateMessage = {
+export type AnimateMessage = {
   type: typeof MessageType.ANIMATE;
   data: {
     runes: [Rune, number][];
@@ -71,43 +71,62 @@ type AnimateMessage = {
   };
 };
 
-type AddEntityMessage = {
+export type AddEntityMessage = {
   type: typeof MessageType.ADD_ENTITY;
   data: string;
 };
 
-type AddActionMessage = {
+export type AddActionMessage = {
   type: typeof MessageType.ADD_ACTION;
   data: string;
 };
 
-type UpdateEntityMessage = {
+export type UpdateEntityMessage = {
   type: typeof MessageType.UPDATE_ENTITY;
   data: Entity;
 };
 
-type UpdateActionmessage = {
+export type UpdateActionmessage = {
   type: typeof MessageType.UPDATE_ACTION;
   data: Action;
 };
 
-type RefreshEntityMessage = {
+export type RefreshEntityMessage = {
   type: typeof MessageType.REFRESH_ENTITY;
   data: string;
 };
 
-type RefreshActionMessage = {
+export type RefreshActionMessage = {
   type: typeof MessageType.REFRESH_ACTION;
   data: string;
 };
-type RemoveEntityMessage = {
+export type RemoveEntityMessage = {
   type: typeof MessageType.REMOVE_ENTITY;
   data: string;
 };
 
-type RemoveActionMessage = {
+export type RemoveActionMessage = {
   type: typeof MessageType.REMOVE_ACTION;
   data: string;
+};
+
+type MessageTypeMap = {
+  [MessageType.INITIALIZE]: InitializeMessage;
+  [MessageType.QUERY]: QueryMessage;
+  [MessageType.MAP]: MapDataMessage;
+  [MessageType.ANIMATE]: AnimateMessage;
+  [MessageType.ADD_ENTITY]: AddEntityMessage;
+  [MessageType.ADD_ACTION]: AddActionMessage;
+  [MessageType.UPDATE_ENTITY]: UpdateEntityMessage;
+  [MessageType.UPDATE_ACTION]: UpdateActionmessage;
+  [MessageType.REFRESH_ENTITY]: RefreshEntityMessage;
+  [MessageType.REFRESH_ACTION]: RefreshActionMessage;
+  [MessageType.REMOVE_ENTITY]: RemoveEntityMessage;
+  [MessageType.REMOVE_ACTION]: RemoveActionMessage;
+};
+
+export type MessageHandlers = {
+  [Type in keyof MessageTypeMap]?: (msg: MessageTypeMap[Type]) => void;
 };
 
 export type UIMessage =
