@@ -6,8 +6,8 @@ export const Rune = Object.freeze({
 
 export type Rune = (typeof Rune)[keyof typeof Rune];
 
-export const RuneWeight: Record<Rune, number> = Object.freeze({
+export const RuneWeight = Object.freeze({
   [Rune.WIND]: 0,
   [Rune.VOID]: 4,
   [Rune.LABOR]: 4,
-});
+} as const);
