@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // This blocks rendering the world if the game worker isn't ready
-const useGameReady = (() => {
+const useGameReady = ((): (() => boolean) => {
   const worldReadyChannel = new BroadcastChannel("READY");
   let receivedReady = false;
   let onReceiveReady = () => {};
@@ -11,7 +11,7 @@ const useGameReady = (() => {
     worldReadyChannel.close();
   };
 
-  return () => {
+  return (): boolean => {
     const [isReady, setReady] = useState(receivedReady);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const useGameReady = (() => {
 
 export const GameReadyGate = ({
   children,
-}: React.PropsWithChildren<object>) => {
+}: React.PropsWithChildren<object>): React.ReactElement => {
   const isReady = useGameReady();
   if (!isReady) return <></>;
   return <>{children}</>;
