@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Action as ActionT, ActionType } from "../../types/actions";
 import { Channel } from "../channel";
-import { MessageType } from "../../types/message";
+import { UIMessageType } from "../../types/uiMessages";
 import { MoveAction } from "./MoveAction/MoveAction";
 import { MineAction } from "./MineAction/MineAction";
 
@@ -14,7 +14,7 @@ const useAction = (id: string): ActionT | undefined => {
   useEffect(() => {
     const unsub = Channel.subAction(id, setAction);
     Channel.send({
-      type: MessageType.REFRESH_ACTION,
+      type: UIMessageType.REFRESH_ACTION,
       data: id,
     });
     return unsub;

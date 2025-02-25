@@ -1,11 +1,11 @@
 import { EntityType, GolemEntity } from "../types/entity";
 import {
   Camera,
-  GameThreadChannel,
-  GameThreadHandler,
+  GameThreadUIChannel,
+  GameThreadUIHandler,
   MapData,
-  MessageType,
-} from "../types/message";
+  UIMessageType,
+} from "../types/uiMessages";
 import { actions, at, entities, map } from "./values";
 import { ValuesPerTile } from "../types/map";
 import { determineInitialCameraPosition } from "./values";
@@ -14,7 +14,7 @@ import { Tile } from "../types/tile";
 import { Rune, RuneWeight } from "../types/rune";
 import { Vec } from "../types/vec";
 
-export const channel: GameThreadChannel = new BroadcastChannel("UI");
+export const channel: GameThreadUIChannel = new BroadcastChannel("UI");
 
 // x, y, w, h
 const camera = {
@@ -84,24 +84,24 @@ const generateMapData = () => {
   } satisfies MapData;
 };
 
-const uiMessageHandlers: GameThreadHandler = {
-  [MessageType.INITIALIZE]: (initialCam) => {
+const uiMessageHandlers: GameThreadUIHandler = {
+  [UIMessageType.INITIALIZE]: (initialCam) => {
     const cam = determineInitialCameraPosition(initialCam);
 
     Object.assign(camera, cam);
     channel.postMessage({
-      type: MessageType.MAP,
+      type: UIMessageType.MAP,
       data: { ...generateMapData(), camera: camera },
     });
   },
-  [MessageType.QUERY]: (camera) => {
+  [UIMessageType.QUERY]: (camera) => {
     Object.assign(camera, camera);
     channel.postMessage({
-      type: MessageType.MAP,
+      type: UIMessageType.MAP,
       data: generateMapData(),
     });
   },
-  [MessageType.ANIMATE]: (data) => {
+  [UIMessageType.ANIMATE]: (data) => {
     const id = crypto.randomUUID();
     const weight = data.runes.reduce(
       (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
@@ -119,23 +119,23 @@ const uiMessageHandlers: GameThreadHandler = {
     } satisfies GolemEntity;
     entities.push(golem);
     channel.postMessage({
-      type: MessageType.ADD_ENTITY,
+      type: UIMessageType.ADD_ENTITY,
       data: golem.id,
     });
 
     launchGolem(id, data.incantation);
   },
-  [MessageType.REFRESH_ENTITY]: (entityID) => {
+  [UIMessageType.REFRESH_ENTITY]: (entityID) => {
     const entity = entities.find((e) => e.id === entityID)!;
     channel.postMessage({
-      type: MessageType.UPDATE_ENTITY,
+      type: UIMessageType.UPDATE_ENTITY,
       data: entity,
     });
   },
-  [MessageType.REFRESH_ACTION]: (actionID) => {
+  [UIMessageType.REFRESH_ACTION]: (actionID) => {
     const action = actions.find((e) => e.id === actionID)!;
     channel.postMessage({
-      type: MessageType.UPDATE_ACTION,
+      type: UIMessageType.UPDATE_ACTION,
       data: action,
     });
   },

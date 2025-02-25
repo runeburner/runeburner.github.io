@@ -1,7 +1,7 @@
 import { Action } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { Map as GameMap, ValuesPerTile } from "../types/map";
-import { Camera } from "../types/message";
+import { Camera } from "../types/uiMessages";
 import { AStarDist } from "../types/tile";
 import { Vec } from "../types/vec";
 

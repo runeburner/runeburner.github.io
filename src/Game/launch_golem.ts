@@ -1,6 +1,6 @@
 import { ActionType, MineAction, MoveAction } from "../types/actions";
 import { GolemEntity } from "../types/entity";
-import { MessageType } from "../types/message";
+import { UIMessageType } from "../types/uiMessages";
 import { Tile } from "../types/tile";
 import { channel, findClosest, isInView } from "./channel";
 import {
@@ -11,19 +11,15 @@ import {
   waitingActionMap,
 } from "./values";
 import workerScriptHeader from "./workerScriptHeader.js?raw";
+import {
+  EntityMessage,
+  EntityMessageHandler,
+  EntityMessageReceiveDataTypes,
+  EntityWorker,
+} from "../types/entityMessages";
 
-type WorkerMessage = {
-  workerID: string;
-  requestID: string;
-  command: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  args: any[];
-};
-
-type HandlerFunc = (id: string, worker: Worker, m: WorkerMessage) => void;
-
-const wwHandlerMap: Record<string, HandlerFunc> = {
-  WORKER_READY: (id: string, worker: Worker, m: WorkerMessage) => {
+const wwHandlerMap: EntityMessageHandler = {
+  WORKER_READY: (id, worker, m) => {
     navigator.locks
       .request(id, () => {})
       .then(() => {
@@ -80,7 +76,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
     };
     if (isInView(action.pos)) {
       channel.postMessage({
-        type: MessageType.ADD_ACTION,
+        type: UIMessageType.ADD_ACTION,
         data: action.id,
       });
     }
@@ -114,7 +110,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
     };
     if (isInView(action.pos)) {
       channel.postMessage({
-        type: MessageType.ADD_ACTION,
+        type: UIMessageType.ADD_ACTION,
         data: action.id,
       });
     }
@@ -135,10 +131,12 @@ export const launchGolem = (id: string, incantation: string) => {
     })
   );
 
-  const worker = new Worker(new URL(o, import.meta.url), {
+  const worker: EntityWorker = new Worker(new URL(o, import.meta.url), {
     name: id,
   });
-  worker.onmessage = (m: MessageEvent<WorkerMessage>) => {
+  worker.onmessage = <T extends keyof EntityMessageReceiveDataTypes>(
+    m: MessageEvent<EntityMessage<T>>
+  ) => {
     const handler = wwHandlerMap[m.data.command];
     if (!handler) return;
     handler(id, worker, m.data);
