@@ -42,24 +42,6 @@ export type MapData = {
   camera?: Camera;
 };
 
-export type MessageDataMap = {
-  [MessageType.INITIALIZE]: Camera;
-  [MessageType.QUERY]: Camera;
-  [MessageType.MAP]: MapData;
-  [MessageType.ANIMATE]: {
-    runes: [Rune, number][];
-    incantation: string;
-  };
-  [MessageType.ADD_ENTITY]: string;
-  [MessageType.ADD_ACTION]: string;
-  [MessageType.UPDATE_ENTITY]: Entity;
-  [MessageType.UPDATE_ACTION]: Action;
-  [MessageType.REFRESH_ENTITY]: string;
-  [MessageType.REFRESH_ACTION]: string;
-  [MessageType.REMOVE_ENTITY]: string;
-  [MessageType.REMOVE_ACTION]: string;
-};
-
 export type MainThreadMessageReceiveDataTypes = {
   [MessageType.MAP]: MapData;
   [MessageType.ADD_ENTITY]: string;
