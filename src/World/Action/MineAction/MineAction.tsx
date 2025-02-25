@@ -6,10 +6,10 @@ type MineActionProps = {
 };
 
 export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
-  const x = Math.min(action.x, action.tile[0]);
-  const y = Math.min(action.y, action.tile[1]);
-  const X = Math.max(action.x, action.tile[0]);
-  const Y = Math.max(action.y, action.tile[1]);
+  const x = Math.min(action.pos[0], action.tile[0]);
+  const y = Math.min(action.pos[1], action.tile[1]);
+  const X = Math.max(action.pos[0], action.tile[0]);
+  const Y = Math.max(action.pos[1], action.tile[1]);
   return (
     <svg
       className={classes.container}
@@ -26,9 +26,10 @@ export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
       <path
         stroke={"#0000ff44"}
         strokeWidth={8}
-        d={`M ${(action.x - x) * 64},${(action.y - y) * 64 + 60} ${
-          (action.x - x) * 64 + 64 * (action.progress[0] / action.progress[1])
-        },${(action.y - y) * 64 + 60}`}
+        d={`M ${(action.pos[0] - x) * 64},${(action.pos[1] - y) * 64 + 60} ${
+          (action.pos[0] - x) * 64 +
+          64 * (action.progress[0] / action.progress[1])
+        },${(action.pos[1] - y) * 64 + 60}`}
       />
     </svg>
   );

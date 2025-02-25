@@ -1,5 +1,5 @@
 import { EntityType, GolemEntity } from "../types/entity";
-import { MessageType, UIChannel } from "../types/message";
+import { Camera, MapData, MessageType, UIChannel } from "../types/message";
 import { actions, at, entities, map } from "./values";
 import { ValuesPerTile } from "../types/map";
 import { determineInitialCameraPosition } from "./values";
@@ -12,18 +12,16 @@ export const channel: UIChannel = new BroadcastChannel("UI");
 
 // x, y, w, h
 const camera = {
-  x: 0,
-  y: 0,
-  width: 0,
-  height: 0,
-};
+  pos: [0, 0],
+  size: [0, 0],
+} satisfies Camera;
 
-export const isInView = (x: number, y: number): boolean => {
+export const isInView = (v: Vec): boolean => {
   return (
-    camera.x <= x &&
-    x < camera.x + camera.width &&
-    camera.y <= y &&
-    y < camera.y + camera.height
+    camera.pos[0] <= v[0] &&
+    v[0] < camera.pos[0] + camera.size[0] &&
+    camera.pos[1] <= v[1] &&
+    v[1] < camera.pos[1] + camera.size[1]
   );
 };
 
@@ -50,10 +48,10 @@ export const findClosest = (pos: Vec, wantTile: Tile, radius: number): Vec => {
 };
 
 const generateMapData = () => {
-  const x = Math.max(0, camera.x);
-  const y = Math.max(0, camera.y);
-  const X = Math.min(map.width, camera.x + camera.width);
-  const Y = Math.min(map.height, camera.y + camera.height);
+  const x = Math.max(0, camera.pos[0]);
+  const y = Math.max(0, camera.pos[1]);
+  const X = Math.min(map.width, camera.pos[0] + camera.size[0]);
+  const Y = Math.min(map.height, camera.pos[1] + camera.size[1]);
   const width = X - x;
   const height = Y - y;
   const data = new Int32Array(width * height * ValuesPerTile);
@@ -69,16 +67,15 @@ const generateMapData = () => {
   }
 
   return {
-    x,
-    y,
+    pos: [x, y],
     map: {
       width,
       height,
       data,
     },
-    entities: entities.filter((e) => isInView(e.x, e.y)).map((e) => e.id),
-    actions: actions.filter((e) => isInView(e.x, e.y)).map((a) => a.id),
-  };
+    entities: entities.filter((e) => isInView(e.pos)).map((e) => e.id),
+    actions: actions.filter((e) => isInView(e.pos)).map((a) => a.id),
+  } satisfies MapData;
 };
 
 channel.onmessage = ({ data: msg }) => {
@@ -125,8 +122,7 @@ channel.onmessage = ({ data: msg }) => {
       );
       const golem = {
         type: EntityType.GOLEM,
-        x: 1,
-        y: 1,
+        pos: [1, 1],
         runes: msg.data.runes,
         id: id,
         speed: msg.data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,

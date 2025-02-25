@@ -48,17 +48,17 @@ export const entities: Entity[] = [
   {
     type: EntityType.HEART,
     id: crypto.randomUUID(),
-    x: 2,
-    y: 2,
+    pos: [2, 2],
   },
 ];
 export const determineInitialCameraPosition = (cam: Camera): Camera => {
   const core = entities.find((e) => e.type === EntityType.HEART);
   return {
-    x: (core?.x ?? 0) - Math.floor(cam.width / 2),
-    y: (core?.y ?? 0) - Math.floor(cam.height / 2),
-    width: cam.width,
-    height: cam.height,
+    pos: [
+      (core?.pos[0] ?? 0) - Math.floor(cam.size[0] / 2),
+      (core?.pos[1] ?? 0) - Math.floor(cam.size[1] / 2),
+    ],
+    size: [...cam.size],
   };
 };
 
@@ -132,7 +132,9 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
         neighbor[1] < 0 ||
         neighbor[0] > map.width ||
         neighbor[1] > map.height ||
-        entities.find((e) => e.x === neighbor[0] && e.y === neighbor[1])
+        entities.find(
+          (e) => e.pos[0] === neighbor[0] && e.pos[1] === neighbor[1]
+        )
       )
         continue;
       const singleNeighbor = hashVec(neighbor);

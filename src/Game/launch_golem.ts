@@ -2,7 +2,6 @@ import { ActionType, MineAction, MoveAction } from "../types/actions";
 import { GolemEntity } from "../types/entity";
 import { MessageType } from "../types/message";
 import { Tile } from "../types/tile";
-import { Vec } from "../types/vec";
 import { channel, findClosest, isInView } from "./channel";
 import {
   actions,
@@ -40,13 +39,12 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
     const radius = m.args[1] as number;
 
     const golem = entities.find((e) => e.id === id)!;
-    const pos: Vec = [golem.x, golem.y];
 
     worker.postMessage({
       workerID: m.workerID,
       requestID: m.requestID,
       data: findClosest(
-        pos,
+        golem.pos,
         Object.entries(Tile).find((t) => t[0] === tileType)![1],
         radius
       ),
@@ -54,7 +52,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
   },
   goNextTo: (id, worker, m) => {
     const golem = entities.find((e) => e.id === id)!;
-    const path = aStarPath([golem.x, golem.y], m.args[0]);
+    const path = aStarPath(golem.pos, m.args[0]);
     if (path == null) {
       worker.postMessage({
         workerID: m.workerID,
@@ -69,8 +67,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
       id: crypto.randomUUID(),
       entityID: golem.id,
       path: path,
-      x: path[0][0],
-      y: path[0][1],
+      pos: [...path[0]],
       progress: [0, (golem as GolemEntity).weight],
     } satisfies MoveAction;
     actions.push(action);
@@ -81,7 +78,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
         data: v,
       });
     };
-    if (isInView(action.x, action.y)) {
+    if (isInView(action.pos)) {
       channel.postMessage({
         type: MessageType.ADD_ACTION,
         data: action.id,
@@ -91,7 +88,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
   mine: (id, worker, m) => {
     const golem = entities.find((e) => e.id === id)!;
     const tile = m.args[0];
-    if (vecDist([golem.x, golem.y], tile) != 1) {
+    if (vecDist(golem.pos, tile) != 1) {
       worker.postMessage({
         workerID: m.workerID,
         requestID: m.requestID,
@@ -105,8 +102,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
       entityID: golem.id,
       id: crypto.randomUUID(),
       type: ActionType.MINE,
-      x: golem.x,
-      y: golem.y,
+      pos: [...golem.pos],
     } satisfies MineAction;
     actions.push(action);
     waitingActionMap[action.id] = (v: unknown) => {
@@ -116,7 +112,7 @@ const wwHandlerMap: Record<string, HandlerFunc> = {
         data: v,
       });
     };
-    if (isInView(action.x, action.y)) {
+    if (isInView(action.pos)) {
       channel.postMessage({
         type: MessageType.ADD_ACTION,
         data: action.id,

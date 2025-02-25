@@ -11,8 +11,7 @@ type BaseAction = {
   type: ActionType;
   id: string;
   entityID: string;
-  x: number;
-  y: number;
+  pos: Vec;
 };
 
 export type MoveAction = {

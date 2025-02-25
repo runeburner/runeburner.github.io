@@ -11,8 +11,7 @@ export type EntityType = (typeof EntityType)[keyof typeof EntityType];
 export type BaseEntity = {
   type: EntityType;
   id: string;
-  x: number;
-  y: number;
+  pos: Vec;
 };
 
 export type HeartEntity = {

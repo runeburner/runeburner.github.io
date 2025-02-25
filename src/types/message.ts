@@ -1,6 +1,7 @@
 import { Action } from "./actions";
 import { Entity } from "./entity";
 import { Rune } from "./rune";
+import { Vec } from "./vec";
 
 export type UIChannel = {
   onmessage:
@@ -27,10 +28,8 @@ export const MessageType = Object.freeze({
 export type MessageType = (typeof MessageType)[keyof typeof MessageType];
 
 export type Camera = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+  pos: Vec;
+  size: Vec;
 };
 
 export type GenericMessage = {
@@ -48,8 +47,7 @@ export type MapData = {
     height: number;
     data: Int32Array;
   };
-  x: number;
-  y: number;
+  pos: Vec;
   entities: string[];
   actions: string[];
   camera?: Camera;
