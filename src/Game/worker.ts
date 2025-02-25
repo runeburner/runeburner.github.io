@@ -1,6 +1,6 @@
 import { ActionType, MineAction, MoveAction } from "../types/actions";
 import { Entity, GolemEntity } from "../types/entity";
-import { MessageType } from "../types/message";
+import { UIMessageType } from "../types/uiMessages";
 import "./channel";
 import { channel, isInView } from "./channel";
 import { actions, entities, waitingActionMap } from "./values";
@@ -61,19 +61,19 @@ setInterval(() => {
 
     if (isInView(entity.pos)) {
       channel.postMessage({
-        type: MessageType.UPDATE_ENTITY,
+        type: UIMessageType.UPDATE_ENTITY,
         data: entity,
       });
     }
     if (isInView(action.pos)) {
       if (!done) {
         channel.postMessage({
-          type: MessageType.UPDATE_ACTION,
+          type: UIMessageType.UPDATE_ACTION,
           data: action,
         });
       } else {
         channel.postMessage({
-          type: MessageType.REMOVE_ACTION,
+          type: UIMessageType.REMOVE_ACTION,
           data: action.id,
         });
       }

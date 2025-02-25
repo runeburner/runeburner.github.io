@@ -4,7 +4,7 @@ import { Modal, ModalProps } from "../../Modal/Modal";
 import { RuneSlider } from "./RuneSlider/RuneSlider";
 import { Rune } from "../../types/rune";
 import { Golem } from "../Golem/Golem";
-import { MessageType } from "../../types/message";
+import { UIMessageType } from "../../types/uiMessages";
 import { useAppSelector } from "../../store/hooks";
 import { store } from "../../store/store";
 import { Channel } from "../channel";
@@ -33,7 +33,7 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
 
   const onAnimate = () => {
     Channel.send({
-      type: MessageType.ANIMATE,
+      type: UIMessageType.ANIMATE,
       data: {
         runes: appliedRunes,
         incantation: store.getState().incantations[selectedIncantation],

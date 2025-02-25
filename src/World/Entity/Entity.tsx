@@ -3,7 +3,7 @@ import { Entity, EntityType } from "../../types/entity";
 import classes from "./Entity.module.css";
 import { Channel } from "../channel";
 import { Golem } from "../Golem/Golem";
-import { MessageType } from "../../types/message";
+import { UIMessageType } from "../../types/uiMessages";
 import { Health } from "../Golem/Health/Health";
 import { HeartIcon } from "../../icons";
 
@@ -16,7 +16,7 @@ const useEntity = (id: string): Entity | undefined => {
   useEffect(() => {
     const unsub = Channel.subEntity(id, setEntity);
     Channel.send({
-      type: MessageType.REFRESH_ENTITY,
+      type: UIMessageType.REFRESH_ENTITY,
       data: id,
     });
     return unsub;

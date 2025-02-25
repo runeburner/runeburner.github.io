@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Camera, MapData, MessageType } from "../../types/message";
+import { Camera, MapData, UIMessageType } from "../../types/uiMessages";
 import { Tile } from "../Tile/Tile";
 import { Pannable } from "../Pannable/Pannable";
 import { useThrottledCallback } from "use-debounce";
@@ -32,7 +32,7 @@ export const World = () => {
   const fetchMap = useThrottledCallback(
     () => {
       Channel.send({
-        type: MessageType.QUERY,
+        type: UIMessageType.QUERY,
         data: cameraRef.current,
       });
     },
@@ -92,7 +92,7 @@ export const World = () => {
       }
     );
     Channel.send({
-      type: MessageType.INITIALIZE,
+      type: UIMessageType.INITIALIZE,
       data: cameraRef.current,
     });
 

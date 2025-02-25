@@ -2,10 +2,10 @@ import { Action } from "../types/actions";
 import { Entity } from "../types/entity";
 import {
   MapData,
-  MessageType,
-  MainThreadChannel,
-  MainThreadHandler,
-} from "../types/message";
+  UIMessageType,
+  MainThreadUIChannel,
+  MainThreadUIHandler,
+} from "../types/uiMessages";
 
 export const Channel = (() => {
   const actionSubs: Record<string, (a: Action) => void> = {};
@@ -16,28 +16,28 @@ export const Channel = (() => {
   let removeEntitySub: ((data: string) => void) | null = null;
   let removeActionSub: ((data: string) => void) | null = null;
 
-  const c: MainThreadChannel = new BroadcastChannel("UI");
+  const c: MainThreadUIChannel = new BroadcastChannel("UI");
 
-  const handlers: MainThreadHandler = {
-    [MessageType.MAP]: (data) => {
+  const handlers: MainThreadUIHandler = {
+    [UIMessageType.MAP]: (data) => {
       if (mapDataSub) mapDataSub(data);
     },
-    [MessageType.ADD_ENTITY]: (entityID) => {
+    [UIMessageType.ADD_ENTITY]: (entityID) => {
       if (addEntitySub) addEntitySub(entityID);
     },
-    [MessageType.ADD_ACTION]: (actionID) => {
+    [UIMessageType.ADD_ACTION]: (actionID) => {
       if (addActionSub) addActionSub(actionID);
     },
-    [MessageType.REMOVE_ENTITY]: (entityID) => {
+    [UIMessageType.REMOVE_ENTITY]: (entityID) => {
       if (removeEntitySub) removeEntitySub(entityID);
     },
-    [MessageType.REMOVE_ACTION]: (actionID) => {
+    [UIMessageType.REMOVE_ACTION]: (actionID) => {
       if (removeActionSub) removeActionSub(actionID);
     },
-    [MessageType.UPDATE_ENTITY]: (entity) => {
+    [UIMessageType.UPDATE_ENTITY]: (entity) => {
       entitySubs[entity.id]?.(entity);
     },
-    [MessageType.UPDATE_ACTION]: (action) => {
+    [UIMessageType.UPDATE_ACTION]: (action) => {
       actionSubs[action.id]?.(action);
     },
   };
@@ -77,7 +77,7 @@ export const Channel = (() => {
         removeActionSub = null;
       };
     },
-    send: (msg: Parameters<MainThreadChannel["postMessage"]>[0]) => {
+    send: (msg: Parameters<MainThreadUIChannel["postMessage"]>[0]) => {
       c.postMessage(msg);
     },
   };
