@@ -85,8 +85,8 @@ const generateMapData = () => {
 };
 
 const uiMessageHandlers: MessageHandlers = {
-  [MessageType.INITIALIZE]: (msg) => {
-    const cam = determineInitialCameraPosition(msg.data);
+  [MessageType.INITIALIZE]: (initialCam) => {
+    const cam = determineInitialCameraPosition(initialCam);
 
     Object.assign(camera, cam);
     channel.postMessage({
@@ -94,31 +94,28 @@ const uiMessageHandlers: MessageHandlers = {
       data: { ...generateMapData(), camera: camera },
     });
   },
-  [MessageType.QUERY]: (msg) => {
-    Object.assign(camera, msg.data);
+  [MessageType.QUERY]: (camera) => {
+    Object.assign(camera, camera);
     channel.postMessage({
       type: MessageType.MAP,
       data: generateMapData(),
     });
   },
-  [MessageType.ANIMATE]: (msg) => {
+  [MessageType.ANIMATE]: (data) => {
     const id = crypto.randomUUID();
-    const weight = msg.data.runes.reduce(
+    const weight = data.runes.reduce(
       (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
       0
     );
     const golem = {
       type: EntityType.GOLEM,
       pos: [1, 1],
-      runes: msg.data.runes,
+      runes: data.runes,
       id: id,
-      speed: msg.data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
+      speed: data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
       weight: Math.max(1, weight),
-      minecapacity: [
-        0,
-        msg.data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0,
-      ],
-      mineSpeed: msg.data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
+      minecapacity: [0, data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0],
+      mineSpeed: data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
     } satisfies GolemEntity;
     entities.push(golem);
     channel.postMessage({
@@ -126,17 +123,17 @@ const uiMessageHandlers: MessageHandlers = {
       data: golem.id,
     });
 
-    launchGolem(id, msg.data.incantation);
+    launchGolem(id, data.incantation);
   },
-  [MessageType.REFRESH_ENTITY]: (msg) => {
-    const entity = entities.find((e) => e.id === msg.data)!;
+  [MessageType.REFRESH_ENTITY]: (entityID) => {
+    const entity = entities.find((e) => e.id === entityID)!;
     channel.postMessage({
       type: MessageType.UPDATE_ENTITY,
       data: entity,
     });
   },
-  [MessageType.REFRESH_ACTION]: (msg) => {
-    const action = actions.find((e) => e.id === msg.data)!;
+  [MessageType.REFRESH_ACTION]: (actionID) => {
+    const action = actions.find((e) => e.id === actionID)!;
     channel.postMessage({
       type: MessageType.UPDATE_ACTION,
       data: action,
@@ -144,12 +141,7 @@ const uiMessageHandlers: MessageHandlers = {
   },
 };
 
-channel.onmessage = ({ data: msg }) => {
-  const f = uiMessageHandlers[msg.type];
-  if (!f) return;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  f(msg as any);
-};
+channel.onmessage = ({ data: msg }) => uiMessageHandlers[msg.type]?.(msg.data);
 
 // Send to the main thread that the game is ready
 new BroadcastChannel("READY").postMessage("");

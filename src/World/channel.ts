@@ -1,11 +1,12 @@
 import { Action } from "../types/actions";
 import { Entity } from "../types/entity";
 import {
+  Message,
   MapData,
   MessageHandlers,
   MessageType,
   UIChannel,
-  UIMessage,
+  MessageDataMap,
 } from "../types/message";
 
 export const Channel = (() => {
@@ -20,36 +21,30 @@ export const Channel = (() => {
   const c: UIChannel = new BroadcastChannel("UI");
 
   const handlers: MessageHandlers = {
-    [MessageType.MAP]: (msg) => {
-      if (mapDataSub) mapDataSub(msg.data);
+    [MessageType.MAP]: (data) => {
+      if (mapDataSub) mapDataSub(data);
     },
-    [MessageType.ADD_ENTITY]: (msg) => {
-      if (addEntitySub) addEntitySub(msg.data);
+    [MessageType.ADD_ENTITY]: (entityID) => {
+      if (addEntitySub) addEntitySub(entityID);
     },
-    [MessageType.ADD_ACTION]: (msg) => {
-      if (addActionSub) addActionSub(msg.data);
+    [MessageType.ADD_ACTION]: (actionID) => {
+      if (addActionSub) addActionSub(actionID);
     },
-    [MessageType.REMOVE_ENTITY]: (msg) => {
-      if (removeEntitySub) removeEntitySub(msg.data);
+    [MessageType.REMOVE_ENTITY]: (entityID) => {
+      if (removeEntitySub) removeEntitySub(entityID);
     },
-    [MessageType.REMOVE_ACTION]: (msg) => {
-      if (removeActionSub) removeActionSub(msg.data);
+    [MessageType.REMOVE_ACTION]: (actionID) => {
+      if (removeActionSub) removeActionSub(actionID);
     },
-    [MessageType.UPDATE_ENTITY]: (msg) => {
-      const f = entitySubs[msg.data.id];
-      if (f) f(msg.data);
+    [MessageType.UPDATE_ENTITY]: (entity) => {
+      entitySubs[entity.id]?.(entity);
     },
-    [MessageType.UPDATE_ACTION]: (msg) => {
-      const f = actionSubs[msg.data.id];
-      if (f) f(msg.data);
+    [MessageType.UPDATE_ACTION]: (action) => {
+      actionSubs[action.id]?.(action);
     },
   };
-  c.onmessage = ({ data: msg }) => {
-    const f = handlers[msg.type];
-    if (!f) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    f(msg as any);
-  };
+
+  c.onmessage = ({ data: msg }) => handlers[msg.type]?.(msg.data);
 
   return {
     subAction: (id: string, f: (a: Action) => void): (() => void) => {
@@ -84,7 +79,7 @@ export const Channel = (() => {
         removeActionSub = null;
       };
     },
-    send: (msg: UIMessage) => {
+    send: <T extends MessageType>(msg: Message<T, MessageDataMap[T]>) => {
       c.postMessage(msg);
     },
   };

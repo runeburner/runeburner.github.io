@@ -5,9 +5,14 @@ import { Vec } from "./vec";
 
 export type UIChannel = {
   onmessage:
-    | ((this: BroadcastChannel, ev: MessageEvent<UIMessage>) => void)
+    | (<T extends MessageType>(
+        this: BroadcastChannel,
+        ev: MessageEvent<Message<T, MessageDataMap[T]>>
+      ) => void)
     | null;
-  postMessage: (message: UIMessage) => void;
+  postMessage: <T extends MessageType>(
+    message: Message<T, MessageDataMap[T]>
+  ) => void;
 };
 
 export const MessageType = Object.freeze({
@@ -32,14 +37,10 @@ export type Camera = {
   size: Vec;
 };
 
-export type GenericMessage = {
-  type: MessageType;
+export type Message<K extends MessageType, V> = {
+  type: K;
+  data: V;
 };
-
-export type InitializeMessage = {
-  type: typeof MessageType.INITIALIZE;
-  data: Camera;
-} & GenericMessage;
 
 export type MapData = {
   map: {
@@ -53,92 +54,24 @@ export type MapData = {
   camera?: Camera;
 };
 
-export type MapDataMessage = {
-  type: typeof MessageType.MAP;
-  data: MapData;
-} & GenericMessage;
-
-export type QueryMessage = {
-  type: typeof MessageType.QUERY;
-  data: Camera;
-} & GenericMessage;
-
-export type AnimateMessage = {
-  type: typeof MessageType.ANIMATE;
-  data: {
+export type MessageDataMap = {
+  [MessageType.INITIALIZE]: Camera;
+  [MessageType.QUERY]: Camera;
+  [MessageType.MAP]: MapData;
+  [MessageType.ANIMATE]: {
     runes: [Rune, number][];
     incantation: string;
   };
-};
-
-export type AddEntityMessage = {
-  type: typeof MessageType.ADD_ENTITY;
-  data: string;
-};
-
-export type AddActionMessage = {
-  type: typeof MessageType.ADD_ACTION;
-  data: string;
-};
-
-export type UpdateEntityMessage = {
-  type: typeof MessageType.UPDATE_ENTITY;
-  data: Entity;
-};
-
-export type UpdateActionmessage = {
-  type: typeof MessageType.UPDATE_ACTION;
-  data: Action;
-};
-
-export type RefreshEntityMessage = {
-  type: typeof MessageType.REFRESH_ENTITY;
-  data: string;
-};
-
-export type RefreshActionMessage = {
-  type: typeof MessageType.REFRESH_ACTION;
-  data: string;
-};
-export type RemoveEntityMessage = {
-  type: typeof MessageType.REMOVE_ENTITY;
-  data: string;
-};
-
-export type RemoveActionMessage = {
-  type: typeof MessageType.REMOVE_ACTION;
-  data: string;
-};
-
-type MessageTypeMap = {
-  [MessageType.INITIALIZE]: InitializeMessage;
-  [MessageType.QUERY]: QueryMessage;
-  [MessageType.MAP]: MapDataMessage;
-  [MessageType.ANIMATE]: AnimateMessage;
-  [MessageType.ADD_ENTITY]: AddEntityMessage;
-  [MessageType.ADD_ACTION]: AddActionMessage;
-  [MessageType.UPDATE_ENTITY]: UpdateEntityMessage;
-  [MessageType.UPDATE_ACTION]: UpdateActionmessage;
-  [MessageType.REFRESH_ENTITY]: RefreshEntityMessage;
-  [MessageType.REFRESH_ACTION]: RefreshActionMessage;
-  [MessageType.REMOVE_ENTITY]: RemoveEntityMessage;
-  [MessageType.REMOVE_ACTION]: RemoveActionMessage;
+  [MessageType.ADD_ENTITY]: string;
+  [MessageType.ADD_ACTION]: string;
+  [MessageType.UPDATE_ENTITY]: Entity;
+  [MessageType.UPDATE_ACTION]: Action;
+  [MessageType.REFRESH_ENTITY]: string;
+  [MessageType.REFRESH_ACTION]: string;
+  [MessageType.REMOVE_ENTITY]: string;
+  [MessageType.REMOVE_ACTION]: string;
 };
 
 export type MessageHandlers = {
-  [Type in keyof MessageTypeMap]?: (msg: MessageTypeMap[Type]) => void;
+  [Type in keyof MessageDataMap]?: (msg: MessageDataMap[Type]) => void;
 };
-
-export type UIMessage =
-  | InitializeMessage
-  | MapDataMessage
-  | QueryMessage
-  | AnimateMessage
-  | AddEntityMessage
-  | AddActionMessage
-  | UpdateEntityMessage
-  | UpdateActionmessage
-  | RefreshEntityMessage
-  | RefreshActionMessage
-  | RemoveEntityMessage
-  | RemoveActionMessage;
