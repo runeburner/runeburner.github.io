@@ -135,7 +135,7 @@ channel.onmessage = ({ data: msg }) => {
         runes: msg.data.runes,
         id: id,
         speed: msg.data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
-        weight: weight,
+        weight: Math.max(1, weight),
       };
 
       entities.push(golem);
