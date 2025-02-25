@@ -1,17 +1,22 @@
 import { ActionType, MoveAction } from "../types/actions";
-import { Entity } from "../types/entity";
+import { Entity, GolemEntity } from "../types/entity";
 import { MessageType } from "../types/message";
 import "./channel";
 import { channel, isInView } from "./channel";
 import { actions, entities, waitingActionMap } from "./values";
 
 const updateMoveAction = (entity: Entity, action: MoveAction): boolean => {
-  action.path.shift();
-  const nextNode = action.path[0];
-  entity.x = nextNode[0];
-  entity.y = nextNode[1];
-  action.x = nextNode[0];
-  action.y = nextNode[1];
+  const golem = entity as GolemEntity;
+  action.progress[0] += golem.speed;
+  while (action.progress[0] >= action.progress[1]) {
+    action.progress[0] -= action.progress[1];
+    action.path.shift();
+    const nextNode = action.path[0];
+    entity.x = nextNode[0];
+    entity.y = nextNode[1];
+    action.x = nextNode[0];
+    action.y = nextNode[1];
+  }
   return action.path.length === 1;
 };
 

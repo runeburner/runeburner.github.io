@@ -1,4 +1,5 @@
-import { ActionType } from "../types/actions";
+import { ActionType, MoveAction } from "../types/actions";
+import { GolemEntity } from "../types/entity";
 import { MessageType } from "../types/message";
 import { Tile } from "../types/tile";
 import { channel, findClosest, isInView } from "./channel";
@@ -63,7 +64,8 @@ export const launchGolem = (id: string, incantation: string) => {
         path: path,
         x: path[0][0],
         y: path[0][1],
-      };
+        progress: [0, (golem as GolemEntity).weight],
+      } satisfies MoveAction;
       actions.push(action);
       waitingActionMap[action.id] = (v: unknown) => {
         worker.postMessage({

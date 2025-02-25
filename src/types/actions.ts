@@ -1,3 +1,5 @@
+import { Vec } from "./vec";
+
 export const ActionType = Object.freeze({
   GOLEM_MOVE: "GOLEM_MOVE",
 } as const);
@@ -13,7 +15,8 @@ type BaseAction = {
 };
 
 export type MoveAction = {
-  path: [number, number][];
+  progress: Vec;
+  path: Vec[];
 } & BaseAction;
 
 export type Action = MoveAction;

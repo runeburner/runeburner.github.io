@@ -5,6 +5,7 @@ import { ValuesPerTile } from "../types/map";
 import { determineInitialCameraPosition } from "./values";
 import { launchGolem } from "./launch_golem";
 import { Tile } from "../types/tile";
+import { Rune, RuneWeight } from "../types/rune";
 
 export const channel: UIChannel = new BroadcastChannel("UI");
 
@@ -123,12 +124,18 @@ channel.onmessage = ({ data: msg }) => {
     }
     case MessageType.ANIMATE: {
       const id = crypto.randomUUID();
+      const weight = msg.data.runes.reduce(
+        (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
+        0
+      );
       const golem = {
         type: EntityType.GOLEM,
         x: 1,
         y: 1,
         runes: msg.data.runes,
         id: id,
+        speed: msg.data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
+        weight: weight,
       };
 
       entities.push(golem);

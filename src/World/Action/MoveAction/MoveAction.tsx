@@ -49,6 +49,13 @@ export const MoveAction = ({ action }: MoveActionProps): React.ReactElement => {
       fill={"#00ff0044"}
     >
       {parts}
+      <path
+        stroke={"#00ff0044"}
+        strokeWidth={8}
+        d={`M ${(p[0][0] - x) * 64},${(p[0][1] - y) * 64 + 60} ${
+          (p[0][0] - x) * 64 + 64 * (action.progress[0] / action.progress[1])
+        },${(p[0][1] - y) * 64 + 60}`}
+      />
     </svg>
   );
 };

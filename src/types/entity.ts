@@ -20,6 +20,8 @@ export type HeartEntity = {
 
 export type GolemEntity = {
   type: typeof EntityType.GOLEM;
+  speed: number;
+  weight: number;
   runes: [Rune, number][];
 } & BaseEntity;
 
