@@ -42,7 +42,7 @@ export type MapData = {
   camera?: Camera;
 };
 
-export type MainThreadMessageReceiveDataTypes = {
+type MainThreadMessageReceiveDataTypes = {
   [MessageType.MAP]: MapData;
   [MessageType.ADD_ENTITY]: string;
   [MessageType.ADD_ACTION]: string;
@@ -52,7 +52,7 @@ export type MainThreadMessageReceiveDataTypes = {
   [MessageType.REMOVE_ACTION]: string;
 };
 
-export type GameThreadMessageReceiveDataTypes = {
+type GameThreadMessageReceiveDataTypes = {
   [MessageType.INITIALIZE]: Camera;
   [MessageType.QUERY]: Camera;
   [MessageType.ANIMATE]: {

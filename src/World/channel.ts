@@ -1,11 +1,9 @@
 import { Action } from "../types/actions";
 import { Entity } from "../types/entity";
 import {
-  Message,
   MapData,
   MessageType,
   MainThreadChannel,
-  GameThreadMessageReceiveDataTypes,
   MainThreadHandler,
 } from "../types/message";
 
@@ -79,9 +77,7 @@ export const Channel = (() => {
         removeActionSub = null;
       };
     },
-    send: <T extends keyof GameThreadMessageReceiveDataTypes>(
-      msg: Message<T, GameThreadMessageReceiveDataTypes[T]>
-    ) => {
+    send: (msg: Parameters<MainThreadChannel["postMessage"]>[0]) => {
       c.postMessage(msg);
     },
   };
