@@ -141,7 +141,7 @@ const uiMessageHandlers: GameThreadUIHandler = {
   },
 };
 
-channel.onmessage = ({ data: msg }) => uiMessageHandlers[msg.type]?.(msg.data);
+channel.onmessage = ({ data }) => uiMessageHandlers[data.type]?.(data.data);
 
 // Send to the main thread that the game is ready
 new BroadcastChannel("READY").postMessage("");

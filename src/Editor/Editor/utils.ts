@@ -6,6 +6,7 @@ import {
   setCurrentModelDirty,
 } from "../../store/monacoModels";
 import { saveIncantation } from "../../store/incantations";
+import apiDefs from "../../types/api.d.ts?raw";
 
 export const createNewEditor = (
   ref: React.MutableRefObject<HTMLDivElement | null>
@@ -48,10 +49,8 @@ const addLibrary = (() => {
   return (): void => {
     if (once) return;
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      `declare const world: {
-          ping(): Promise<string>;
-        };
-        `
+      apiDefs,
+      "api.d.ts"
     );
     once = true;
   };

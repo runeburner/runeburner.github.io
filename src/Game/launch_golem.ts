@@ -20,11 +20,7 @@ import {
 
 const wwHandlerMap: EntityMessageHandler = {
   WORKER_READY: (id, worker, m) => {
-    navigator.locks
-      .request(id, () => {})
-      .then(() => {
-        console.log("DEATH");
-      });
+    navigator.locks.request(id, () => console.log("DEATH"));
     worker.postMessage({
       requestID: m.requestID,
     });
