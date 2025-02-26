@@ -19,28 +19,22 @@ export type EntityMessageReceiveDataTypes = {
   [EntityCallType.ping]: [void, string];
 };
 
-type BaseResponse = {
-  requestID: string;
-};
-
-type BaseRequest<T extends EntityCallType> = {
+export type EntityRequest<T extends EntityCallType> = {
   requestID: string;
   command: T;
-};
+} & (EntityMessageReceiveDataTypes[T][0] extends void
+  ? object
+  : {
+      args: EntityMessageReceiveDataTypes[T][0];
+    });
 
-export type EntityRequest<T extends EntityCallType> = BaseRequest<T> &
-  (EntityMessageReceiveDataTypes[T][0] extends void
-    ? object
-    : {
-        args: EntityMessageReceiveDataTypes[T][0];
-      });
-
-type EntityResponse<T extends EntityCallType> = BaseResponse &
-  (EntityMessageReceiveDataTypes[T][1] extends void
-    ? object
-    : {
-        data: EntityMessageReceiveDataTypes[T][1];
-      });
+type EntityResponse<T extends EntityCallType> = {
+  requestID: string;
+} & (EntityMessageReceiveDataTypes[T][1] extends void
+  ? object
+  : {
+      data: EntityMessageReceiveDataTypes[T][1];
+    });
 
 type ResponseWorker<T extends EntityCallType> = {
   postMessage: (message: EntityResponse<T>) => void;
