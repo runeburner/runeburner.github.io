@@ -12,25 +12,45 @@ export type EntityCallType =
   (typeof EntityCallType)[keyof typeof EntityCallType];
 
 export type EntityMessageReceiveDataTypes = {
-  [EntityCallType.WORKER_READY]: void;
-  [EntityCallType.findClosestTile]: [string, number];
-  [EntityCallType.goNextTo]: [Vec];
-  [EntityCallType.mine]: [Vec];
-  [EntityCallType.ping]: void;
+  [EntityCallType.WORKER_READY]: [void, void];
+  [EntityCallType.findClosestTile]: [[string, number], Vec];
+  [EntityCallType.goNextTo]: [[Vec], unknown];
+  [EntityCallType.mine]: [[Vec], unknown];
+  [EntityCallType.ping]: [void, string];
 };
 
-export type EntityMessage<T extends EntityCallType> = {
-  workerID: string;
+type BaseResponse = {
+  requestID: string;
+};
+
+type BaseRequest<T extends EntityCallType> = {
   requestID: string;
   command: T;
-  args: EntityMessageReceiveDataTypes[T];
+};
+
+export type EntityRequest<T extends EntityCallType> = BaseRequest<T> &
+  (EntityMessageReceiveDataTypes[T][0] extends void
+    ? object
+    : {
+        args: EntityMessageReceiveDataTypes[T][0];
+      });
+
+type EntityResponse<T extends EntityCallType> = BaseResponse &
+  (EntityMessageReceiveDataTypes[T][1] extends void
+    ? object
+    : {
+        data: EntityMessageReceiveDataTypes[T][1];
+      });
+
+type ResponseWorker<T extends EntityCallType> = {
+  postMessage: (message: EntityResponse<T>) => void;
 };
 
 export type EntityMessageHandler = {
   [Type in keyof EntityMessageReceiveDataTypes]: (
     id: string,
-    w: EntityWorker,
-    msg: EntityMessage<Type>
+    w: ResponseWorker<Type>,
+    msg: EntityRequest<Type>
   ) => void;
 };
 
@@ -38,7 +58,7 @@ export type EntityWorker = {
   onmessage:
     | (<T extends keyof EntityMessageReceiveDataTypes>(
         this: Worker,
-        ev: MessageEvent<EntityMessage<T>>
+        ev: MessageEvent<EntityRequest<T>>
       ) => void)
     | null;
 } & Worker;

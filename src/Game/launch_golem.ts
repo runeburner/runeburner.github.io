@@ -12,7 +12,7 @@ import {
 } from "./values";
 import workerScriptHeader from "./workerScriptHeader.js?raw";
 import {
-  EntityMessage,
+  EntityRequest,
   EntityMessageHandler,
   EntityMessageReceiveDataTypes,
   EntityWorker,
@@ -26,18 +26,14 @@ const wwHandlerMap: EntityMessageHandler = {
         console.log("DEATH");
       });
     worker.postMessage({
-      workerID: m.workerID,
       requestID: m.requestID,
     });
   },
   findClosestTile: (id, worker, m) => {
-    const tileType = m.args[0] as string;
-    const radius = m.args[1] as number;
-
+    const [tileType, radius] = m.args;
     const golem = entities.find((e) => e.id === id)!;
 
     worker.postMessage({
-      workerID: m.workerID,
       requestID: m.requestID,
       data: findClosest(
         golem.pos,
@@ -51,7 +47,6 @@ const wwHandlerMap: EntityMessageHandler = {
     const path = aStarPath(golem.pos, m.args[0]);
     if (path == null) {
       worker.postMessage({
-        workerID: m.workerID,
         requestID: m.requestID,
         data: null,
       });
@@ -69,7 +64,6 @@ const wwHandlerMap: EntityMessageHandler = {
     actions.push(action);
     waitingActionMap[action.id] = (v: unknown) => {
       worker.postMessage({
-        workerID: m.workerID,
         requestID: m.requestID,
         data: v,
       });
@@ -86,7 +80,6 @@ const wwHandlerMap: EntityMessageHandler = {
     const tile = m.args[0];
     if (vecDist(golem.pos, tile) != 1) {
       worker.postMessage({
-        workerID: m.workerID,
         requestID: m.requestID,
         data: null,
       });
@@ -103,7 +96,6 @@ const wwHandlerMap: EntityMessageHandler = {
     actions.push(action);
     waitingActionMap[action.id] = (v: unknown) => {
       worker.postMessage({
-        workerID: m.workerID,
         requestID: m.requestID,
         data: v,
       });
@@ -117,7 +109,6 @@ const wwHandlerMap: EntityMessageHandler = {
   },
   ping: (_, worker, m) => {
     worker.postMessage({
-      workerID: m.workerID,
       requestID: m.requestID,
       data: "pong",
     });
@@ -135,7 +126,7 @@ export const launchGolem = (id: string, incantation: string) => {
     name: id,
   });
   worker.onmessage = <T extends keyof EntityMessageReceiveDataTypes>(
-    m: MessageEvent<EntityMessage<T>>
+    m: MessageEvent<EntityRequest<T>>
   ) => wwHandlerMap[m.data.command]?.(id, worker, m.data);
   worker.onerror = console.log;
   worker.onmessageerror = console.log;
