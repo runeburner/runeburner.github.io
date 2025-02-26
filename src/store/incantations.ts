@@ -7,6 +7,7 @@ export const defaultIncantation = `run(async () => {
   while (true) {
     const crystal = await world.findClosestTile("MANA_CRYSTAL", 9);
     await world.goNextTo(crystal);
+    break;
     await world.mine(crystal);
     await world.goNextTo([0,0]);
   }

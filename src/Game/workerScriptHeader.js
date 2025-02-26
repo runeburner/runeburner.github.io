@@ -1,39 +1,31 @@
+Object.freeze(self);
+
 const world = (() => {
   const requests = {};
-  const workerID = self.name;
-  onmessage = ({ data }) => {
-    requests[data.requestID](data.data);
-  };
+  onmessage = ({ data }) => requests[data.requestID]?.(data.data);
   const SEND = (command, args) => {
     return new Promise((res) => {
       const requestID = crypto.randomUUID();
       requests[requestID] = res;
-      postMessage({
-        workerID,
-        requestID,
-        command,
-        args,
-      });
+      postMessage({ requestID, command, args });
     });
   };
 
-  const obj = Object.freeze(
-    new Proxy(
-      {},
-      {
-        get(_, prop) {
-          return (...args) => SEND(prop, args);
-        },
-      }
-    )
+  const proxyHandler = {
+    get:
+      (_, prop) =>
+      (...args) =>
+        SEND(prop, args),
+  };
+
+  const world = new Proxy({}, proxyHandler);
+
+  navigator.locks.request(
+    self.name,
+    () => new Promise(() => world.WORKER_READY())
   );
 
-  navigator.locks.request(name, () => {
-    obj.WORKER_READY();
-    return new Promise(() => {});
-  });
-
-  return obj;
+  return Object.freeze(world);
 })();
 
 const run = (f) => f().finally(close);
