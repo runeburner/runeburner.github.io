@@ -77,7 +77,7 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
       )
         continue;
       const singleNeighbor = hashVec(neighbor);
-      const tile = game.at(neighbor);
+      const tile = game.tileAt(neighbor);
       const tentative_gScore =
         gScore.get(current) +
         (singleNeighbor === singleGoal ? 1 : EnterWeight[tile[0] as Tile]);

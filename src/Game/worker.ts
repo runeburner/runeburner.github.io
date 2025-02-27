@@ -1,4 +1,10 @@
-import { ActionType } from "../types/actions";
+import {
+  Action,
+  ActionDataMap,
+  ActionHandlers,
+  ActionType,
+} from "../types/actions";
+import { Entity } from "../types/entity";
 import { UIMessageType } from "../types/uiMessages";
 import { updateMineAction, updateMoveAction } from "./actions";
 import { camera } from "./camera";
@@ -7,23 +13,22 @@ import { channel } from "./channel";
 import { game } from "./game";
 import { waitingActionMap } from "./values";
 
+const handlers: ActionHandlers = {
+  [ActionType.GOLEM_MOVE]: updateMoveAction,
+  [ActionType.MINE]: updateMineAction,
+};
+
+const processAction = <T extends ActionType>(
+  e: Entity,
+  a: Action<T, ActionDataMap[T]>
+): boolean => handlers[a.type](e, a);
+
 setInterval(() => {
   for (let i = 0; i < game.actions.length; i++) {
     const action = game.actions[i];
     const entity = game.entities.find((e) => e.id === action.entityID);
     if (!entity) continue;
-    let done = false;
-    switch (action.type) {
-      case ActionType.GOLEM_MOVE: {
-        done = updateMoveAction(entity, action);
-        break;
-      }
-      case ActionType.MINE: {
-        done = updateMineAction(entity, action);
-        break;
-      }
-    }
-
+    const done = processAction(entity, action);
     if (done) {
       game.actions.splice(i, 1);
       const f = waitingActionMap[action.id];
@@ -54,4 +59,4 @@ setInterval(() => {
       }
     }
   }
-}, 1000);
+}, 100);

@@ -1,3 +1,5 @@
+import { Action } from "../World/Action/Action";
+import { Entity } from "./entity";
 import { Vec } from "./vec";
 
 export const ActionType = Object.freeze({
@@ -7,23 +9,37 @@ export const ActionType = Object.freeze({
 
 export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 
-type BaseAction = {
-  type: ActionType;
+export type Action<
+  T extends ActionType = ActionType,
+  V extends object = object
+> = {
+  type: T;
   id: number;
   entityID: number;
   pos: Vec;
+} & V;
+
+export type MoveAction = Action<
+  typeof ActionType.GOLEM_MOVE,
+  {
+    progress: Vec;
+    path: Vec[];
+  }
+>;
+
+export type MineAction = Action<
+  typeof ActionType.MINE,
+  {
+    progress: Vec;
+    tile: Vec;
+  }
+>;
+
+export type ActionDataMap = {
+  [ActionType.GOLEM_MOVE]: MoveAction;
+  [ActionType.MINE]: MineAction;
 };
 
-export type MoveAction = {
-  type: typeof ActionType.GOLEM_MOVE;
-  progress: Vec;
-  path: Vec[];
-} & BaseAction;
-
-export type MineAction = {
-  type: typeof ActionType.MINE;
-  progress: Vec;
-  tile: Vec;
-} & BaseAction;
-
-export type Action = MoveAction | MineAction;
+export type ActionHandlers = {
+  [T in ActionType]: (e: Entity, a: ActionDataMap[T]) => boolean;
+};

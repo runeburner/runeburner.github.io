@@ -12,10 +12,21 @@ import {
   EntityWorker,
 } from "../types/entityMessages";
 import { game } from "./game";
-import { dist } from "../types/vec";
+import { dist, Vec } from "../types/vec";
 import { camera } from "./camera";
 import { aStarPath } from "./path";
 import { ID } from "./id";
+
+const isVec = (v: unknown): v is Vec =>
+  Array.isArray(v) && isNumber(v[0]) && isNumber(v[1]);
+const isString = (v: unknown): v is string => typeof v === typeof "";
+const isNumber = (v: unknown): v is string => typeof v === typeof 0;
+
+const isArgs = (
+  args: unknown[],
+  ...vals: ((v: unknown) => boolean)[]
+): boolean =>
+  args.length === vals.length && args.every((arg, i) => vals[i](arg));
 
 const wwHandlerMap: EntityMessageHandler = {
   WORKER_READY: (id) =>
@@ -32,6 +43,13 @@ const wwHandlerMap: EntityMessageHandler = {
       }
     }),
   findClosestTile: (id, worker, m) => {
+    if (!isArgs(m.args, isString, isNumber)) {
+      worker.postMessage({
+        requestID: m.requestID,
+        data: null,
+      });
+      return;
+    }
     const [tileType, radius] = m.args;
     const golem = game.entities.find((e) => e.id === id)!;
 
@@ -45,6 +63,13 @@ const wwHandlerMap: EntityMessageHandler = {
     });
   },
   goNextTo: (id, worker, m) => {
+    if (!isArgs(m.args, isVec)) {
+      worker.postMessage({
+        requestID: m.requestID,
+        data: null,
+      });
+      return;
+    }
     const golem = game.entities.find((e) => e.id === id)!;
     const path = aStarPath(golem.pos, m.args[0]);
     if (path == null) {
@@ -78,9 +103,16 @@ const wwHandlerMap: EntityMessageHandler = {
     }
   },
   mine: (id, worker, m) => {
+    if (!isArgs(m.args, isVec)) {
+      worker.postMessage({
+        requestID: m.requestID,
+        data: null,
+      });
+      return;
+    }
     const golem = game.entities.find((e) => e.id === id)!;
     const tile = m.args[0];
-    if (dist(golem.pos, tile) != 1) {
+    if (dist(golem.pos, tile) > Math.SQRT2) {
       worker.postMessage({
         requestID: m.requestID,
         data: null,
@@ -88,11 +120,11 @@ const wwHandlerMap: EntityMessageHandler = {
       return;
     }
     const action = {
+      type: ActionType.MINE,
       progress: [0, 16],
       tile: tile,
       entityID: golem.id,
       id: ID.next(),
-      type: ActionType.MINE,
       pos: [...golem.pos],
     } satisfies MineAction;
     game.actions.push(action);
@@ -123,13 +155,10 @@ export const launchGolem = (id: number, incantation: string) => {
       type: "application/javascript",
     })
   );
-
   const worker: EntityWorker = new Worker(new URL(o, import.meta.url), {
     name: String(id),
   });
   worker.onmessage = <T extends keyof EntityMessageReceiveDataTypes>(
     m: MessageEvent<EntityRequest<T>>
   ) => wwHandlerMap[m.data.command]?.(id, worker, m.data);
-  worker.onerror = console.log;
-  worker.onmessageerror = console.log;
 };
