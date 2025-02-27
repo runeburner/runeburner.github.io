@@ -12,5 +12,22 @@
     "rune_types": "Types de runes",
     "animate": "Anime",
     "incantation": "Incantation"
+  },
+  "settings": {
+    "language": "langue"
+  },
+  "runes": {
+    "WIND": {
+      "name": "Vent",
+      "effect": "Augment la vitesse de mouvement"
+    },
+    "VOID": {
+      "name": "Vide",
+      "effect": "Augment la capacité de transport"
+    },
+    "LABOR": {
+      "name": "Travail",
+      "effect": "Augmente la vitesse des travaux"
+    }
   }
 }

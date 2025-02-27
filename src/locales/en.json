@@ -12,5 +12,22 @@
     "rune_types": "Rune types",
     "animate": "Animate",
     "incantation": "Incantation"
+  },
+  "settings": {
+    "language": "language"
+  },
+  "runes": {
+    "WIND": {
+      "name": "Wind",
+      "effect": "Increase movement speed"
+    },
+    "VOID": {
+      "name": "Void",
+      "effect": "Increase carrying capacity"
+    },
+    "LABOR": {
+      "name": "Labor",
+      "effect": "Increase work speed"
+    }
   }
 }

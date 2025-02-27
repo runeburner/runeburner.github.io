@@ -15,7 +15,7 @@ const useResources = (): Resources => {
   return r;
 };
 
-export const ResourceHeader = () => {
+export const ResourceHeader = (): React.ReactElement => {
   const r = useResources();
   return (
     <div

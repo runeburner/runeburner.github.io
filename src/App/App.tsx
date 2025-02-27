@@ -5,6 +5,7 @@ import { Page as WorldPage } from "../World/Page/Page";
 import classes from "./App.module.css";
 import { useEffect } from "react";
 import { Page as PerksPage } from "../Perks/Page/Page";
+import { Page as SettingsPage } from "../Settings/Page";
 import { PageWrapper } from "../PageWrapper/PageWrapper";
 import { Page } from "../store/sidebar";
 import { GameReadyGate } from "../World/GameReadyGate";
@@ -40,6 +41,9 @@ function App() {
           </PageWrapper>
           <PageWrapper page={Page.PERKS}>
             <PerksPage />
+          </PageWrapper>
+          <PageWrapper page={Page.SETTINGS}>
+            <SettingsPage />
           </PageWrapper>
         </div>
       </div>
