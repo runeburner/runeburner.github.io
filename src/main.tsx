@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import GameWorker from "./Game/worker?worker";
 import "./i18n.ts";
+import "./main.module.css";
 
 (() => {
   new GameWorker();

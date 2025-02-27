@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MagicIcon } from "../icons";
 import { Resources } from "../types/resources";
 import { Channel } from "../World/channel";
+import classes from "./ResourcesHeader.module.css";
 
 const useResources = (): Resources => {
   const [r, setR] = useState<Resources>({
@@ -18,16 +19,7 @@ const useResources = (): Resources => {
 export const ResourceHeader = (): React.ReactElement => {
   const r = useResources();
   return (
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: "4px",
-        marginBottom: "4px",
-      }}
-    >
+    <div className={classes.container}>
       <span>{r.attunement}</span>
       <MagicIcon style={{ height: "24px", width: "24px" }} />
     </div>
