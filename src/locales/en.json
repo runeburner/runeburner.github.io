@@ -1,0 +1,10 @@
+{
+  "incantation_page": {
+    "incantation_name": "Incantation name",
+    "rename": "Rename",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create_placeholder": "New Incantation Name",
+    "create_incantation_button": "Create Incantation"
+  }
+}

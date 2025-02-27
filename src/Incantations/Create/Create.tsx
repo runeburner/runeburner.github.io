@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { defaultIncantation, saveIncantation } from "../../store/incantations";
+import { useTranslation } from "react-i18next";
 
 export const Create = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
 
@@ -19,11 +21,11 @@ export const Create = () => {
     <>
       <input
         type="text"
-        placeholder="New Incantation Name"
+        placeholder={t("incantation_page.create_placeholder")}
         onChange={(e) => setName(e.target.value)}
       />
       <button onClick={onClick} disabled={name === ""}>
-        Create Incantation
+        {t("incantation_page.create_incantation_button")}
       </button>
     </>
   );

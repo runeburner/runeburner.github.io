@@ -3,6 +3,7 @@ import App from "./App/App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import GameWorker from "./Game/worker?worker";
+import "./i18n.ts";
 
 (() => {
   new GameWorker();

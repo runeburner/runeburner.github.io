@@ -1,0 +1,10 @@
+{
+  "incantation_page": {
+    "incantation_name": "Nom de l'incantation",
+    "rename": "Renomer",
+    "edit": "Modifier",
+    "delete": "Effacer",
+    "create_placeholder": "Nom de la nouvelle incantation",
+    "create_incantation_button": "Cree l'Incantation"
+  }
+}
