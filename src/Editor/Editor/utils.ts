@@ -6,7 +6,7 @@ import {
   setCurrentModelDirty,
 } from "../../store/monacoModels";
 import { saveIncantation } from "../../store/incantations";
-import apiDefs from "../../types/api.d.ts?raw";
+import apiDefs from "./api.d.ts?raw";
 
 export const createNewEditor = (
   ref: React.MutableRefObject<HTMLDivElement | null>
