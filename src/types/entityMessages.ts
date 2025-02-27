@@ -20,7 +20,7 @@ export type EntityMessageReceiveDataTypes = {
 };
 
 export type EntityRequest<T extends EntityCallType> = {
-  requestID: string;
+  requestID: number;
   command: T;
 } & (EntityMessageReceiveDataTypes[T][0] extends void
   ? object
@@ -29,7 +29,7 @@ export type EntityRequest<T extends EntityCallType> = {
     });
 
 type EntityResponse<T extends EntityCallType> = {
-  requestID: string;
+  requestID: number;
 } & (EntityMessageReceiveDataTypes[T][1] extends void
   ? object
   : {
@@ -42,7 +42,7 @@ type ResponseWorker<T extends EntityCallType> = {
 
 export type EntityMessageHandler = {
   [Type in keyof EntityMessageReceiveDataTypes]: (
-    id: string,
+    id: number,
     w: ResponseWorker<Type>,
     msg: EntityRequest<Type>
   ) => void;

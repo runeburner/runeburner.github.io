@@ -1,41 +1,16 @@
-import { ActionType, MineAction, MoveAction } from "../types/actions";
-import { Entity, GolemEntity } from "../types/entity";
+import { ActionType } from "../types/actions";
 import { UIMessageType } from "../types/uiMessages";
+import { updateMineAction, updateMoveAction } from "./actions";
+import { camera } from "./camera";
 import "./channel";
-import { channel, isInView } from "./channel";
-import { actions, entities, waitingActionMap } from "./values";
-
-const updateMoveAction = (entity: Entity, action: MoveAction): boolean => {
-  const golem = entity as GolemEntity;
-  action.progress[0] += golem.speed;
-  while (action.progress[0] >= action.progress[1]) {
-    action.progress[0] -= action.progress[1];
-    action.path.shift();
-    const nextNode = action.path[0];
-    entity.pos = [...nextNode];
-    action.pos = [...nextNode];
-  }
-  return action.path.length === 1;
-};
-
-const updateMineAction = (entity: Entity, action: MineAction): boolean => {
-  const golem = entity as GolemEntity;
-  action.progress[0] += golem.mineSpeed;
-  while (
-    action.progress[0] >= action.progress[1] &&
-    golem.minecapacity[0] < golem.minecapacity[1]
-  ) {
-    action.progress[0] -= action.progress[1];
-    golem.minecapacity[0]++;
-  }
-
-  return golem.minecapacity[0] === golem.minecapacity[1];
-};
+import { channel } from "./channel";
+import { game } from "./game";
+import { waitingActionMap } from "./values";
 
 setInterval(() => {
-  for (let i = 0; i < actions.length; i++) {
-    const action = actions[i];
-    const entity = entities.find((e) => e.id === action.entityID);
+  for (let i = 0; i < game.actions.length; i++) {
+    const action = game.actions[i];
+    const entity = game.entities.find((e) => e.id === action.entityID);
     if (!entity) continue;
     let done = false;
     switch (action.type) {
@@ -50,7 +25,7 @@ setInterval(() => {
     }
 
     if (done) {
-      actions.splice(i, 1);
+      game.actions.splice(i, 1);
       const f = waitingActionMap[action.id];
       if (f) {
         f("OK");
@@ -59,13 +34,13 @@ setInterval(() => {
       i--;
     }
 
-    if (isInView(entity.pos)) {
+    if (camera.isInView(entity.pos)) {
       channel.postMessage({
         type: UIMessageType.UPDATE_ENTITY,
         data: entity,
       });
     }
-    if (isInView(action.pos)) {
+    if (camera.isInView(action.pos)) {
       if (!done) {
         channel.postMessage({
           type: UIMessageType.UPDATE_ACTION,

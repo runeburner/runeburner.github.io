@@ -37,19 +37,19 @@ export type MapData = {
     data: Int32Array;
   };
   pos: Vec;
-  entities: string[];
-  actions: string[];
+  entities: number[];
+  actions: number[];
   camera?: Camera;
 };
 
 type MainThreadUIMessageReceiveDataTypes = {
   [UIMessageType.MAP]: MapData;
-  [UIMessageType.ADD_ENTITY]: string;
-  [UIMessageType.ADD_ACTION]: string;
+  [UIMessageType.ADD_ENTITY]: number;
+  [UIMessageType.ADD_ACTION]: number;
   [UIMessageType.UPDATE_ENTITY]: Entity;
   [UIMessageType.UPDATE_ACTION]: Action;
-  [UIMessageType.REMOVE_ENTITY]: string;
-  [UIMessageType.REMOVE_ACTION]: string;
+  [UIMessageType.REMOVE_ENTITY]: number;
+  [UIMessageType.REMOVE_ACTION]: number;
 };
 
 type GameThreadUIMessageReceiveDataTypes = {
@@ -59,8 +59,8 @@ type GameThreadUIMessageReceiveDataTypes = {
     runes: [Rune, number][];
     incantation: string;
   };
-  [UIMessageType.REFRESH_ENTITY]: string;
-  [UIMessageType.REFRESH_ACTION]: string;
+  [UIMessageType.REFRESH_ENTITY]: number;
+  [UIMessageType.REFRESH_ACTION]: number;
 };
 
 export type MainThreadUIChannel = {

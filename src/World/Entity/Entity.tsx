@@ -8,10 +8,10 @@ import { Health } from "../Golem/Health/Health";
 import { HeartIcon } from "../../icons";
 
 type EntityProps = {
-  id: string;
+  id: number;
 };
 
-const useEntity = (id: string): Entity | undefined => {
+const useEntity = (id: number): Entity | undefined => {
   const [entity, setEntity] = useState<Entity>();
   useEffect(() => {
     const unsub = Channel.subEntity(id, setEntity);

@@ -10,7 +10,7 @@ export type EntityType = (typeof EntityType)[keyof typeof EntityType];
 
 export type BaseEntity = {
   type: EntityType;
-  id: string;
+  id: number;
   pos: Vec;
 };
 

@@ -4,9 +4,10 @@ const world = (() => {
     reqMap[data.requestID]?.(data.data);
     delete reqMap[data.requestID];
   };
+  let requestID = 0;
   const SEND = (command, args) => {
     return new Promise((res) => {
-      const requestID = crypto.randomUUID();
+      requestID++;
       reqMap[requestID] = res;
       postMessage({ requestID, command, args });
     });
