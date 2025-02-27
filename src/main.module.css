@@ -1,0 +1,7 @@
+:root {
+  --unit: 4px;
+  --s1: var(--unit);
+  --s2: calc(var(--unit) * 2);
+  --s3: calc(var(--unit) * 3);
+  --s4: calc(var(--unit) * 4);
+}
