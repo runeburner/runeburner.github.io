@@ -6,7 +6,10 @@ export const Page = (): React.ReactElement => {
   return (
     <div className={classes.container}>
       <Header />
-      <Editor />
+
+      <div style={{ height: "100%", width: "100%", backgroundColor: "red" }}>
+        <Editor />
+      </div>
     </div>
   );
 };

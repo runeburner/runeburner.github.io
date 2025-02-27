@@ -9,8 +9,10 @@ import { useAppSelector } from "../../store/hooks";
 import { store } from "../../store/store";
 import { Channel } from "../channel";
 import { Vec } from "../../types/vec";
+import { useTranslation } from "react-i18next";
 
 export const AddGolemModal = ({ open, onClose }: ModalProps) => {
+  const { t } = useTranslation();
   const [runes, setRunes] = useState<Record<Rune, number>>(
     Object.fromEntries(Object.values(Rune).map((r) => [r, 2])) as Record<
       Rune,
@@ -51,8 +53,12 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
           armor={armor}
           shield={shield}
         />
-        <p>Runes: {totalRunes}/6</p>
-        <p>Rune Types: {appliedRunes.length}/3</p>
+        <p>
+          {t("create_golem_modal.runes")}: {totalRunes}/6
+        </p>
+        <p>
+          {t("create_golem_modal.rune_types")}: {appliedRunes.length}/3
+        </p>
         <RuneSlider
           onUpdate={setRunes}
           rune={Rune.WIND}
@@ -71,7 +77,7 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
           icon={OthalanIcon}
           amount={runes[Rune.VOID]}
         />
-        Incantation:
+        {t("create_golem_modal.incantation")}:
         <select
           value={selectedIncantation}
           onChange={(e) => setSelectedIncantation(e.target.value)}
@@ -83,7 +89,7 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
           ))}
         </select>
         <br />
-        <button onClick={onAnimate}>Animate</button>
+        <button onClick={onAnimate}>{t("create_golem_modal.animate")}</button>
       </div>
     </Modal>
   );
