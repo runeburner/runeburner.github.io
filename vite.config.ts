@@ -21,4 +21,11 @@ export default defineConfig({
       include: "**/*.svg",
     }),
   ],
+  build: {
+    minify: false,
+    terserOptions: {
+      compress: false,
+      mangle: false,
+    },
+  },
 });
