@@ -1,12 +1,13 @@
-Object.freeze(self);
-
 const world = (() => {
-  const requests = {};
-  onmessage = ({ data }) => requests[data.requestID]?.(data.data);
+  const reqMap = {};
+  onmessage = ({ data }) => {
+    reqMap[data.requestID]?.(data.data);
+    delete reqMap[data.requestID];
+  };
   const SEND = (command, args) => {
     return new Promise((res) => {
       const requestID = crypto.randomUUID();
-      requests[requestID] = res;
+      reqMap[requestID] = res;
       postMessage({ requestID, command, args });
     });
   };
@@ -22,9 +23,10 @@ const world = (() => {
 
   navigator.locks.request(
     self.name,
-    () => new Promise(() => world.WORKER_READY())
+    () => new Promise(() => postMessage({ command: "WORKER_READY" }))
   );
 
+  Object.freeze(self);
   return Object.freeze(world);
 })();
 

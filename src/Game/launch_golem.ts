@@ -19,12 +19,7 @@ import {
 } from "../types/entityMessages";
 
 const wwHandlerMap: EntityMessageHandler = {
-  WORKER_READY: (id, worker, m) => {
-    navigator.locks.request(id, () => console.log("DEATH"));
-    worker.postMessage({
-      requestID: m.requestID,
-    });
-  },
+  WORKER_READY: (id) => navigator.locks.request(id, () => console.log("DEATH")),
   findClosestTile: (id, worker, m) => {
     const [tileType, radius] = m.args;
     const golem = entities.find((e) => e.id === id)!;
