@@ -73,9 +73,11 @@ const handlers: GameThreadUIHandler = {
       (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
       0
     );
+    const coord = game.golemSpawnCoordinates();
+    if (!coord) return;
     const golem = {
       type: EntityType.GOLEM,
-      pos: [1, 1],
+      pos: coord,
       runes: data.runes,
       id: id,
       speed: data.runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,

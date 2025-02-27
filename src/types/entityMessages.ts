@@ -13,7 +13,7 @@ export type EntityCallType =
 
 export type EntityMessageReceiveDataTypes = {
   [EntityCallType.WORKER_READY]: [void, void];
-  [EntityCallType.findClosestTile]: [[string, number], Vec];
+  [EntityCallType.findClosestTile]: [[string, number], Vec | null];
   [EntityCallType.goNextTo]: [[Vec], unknown];
   [EntityCallType.mine]: [[Vec], unknown];
   [EntityCallType.ping]: [void, string];
