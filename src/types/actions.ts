@@ -23,6 +23,7 @@ export type Action<
 export type MoveAction = Action<
   typeof ActionType.GOLEM_MOVE,
   {
+    goal: Vec;
     progress: Vec;
     path: Vec[];
   }
