@@ -2,11 +2,16 @@ import { Action, ActionDataMap, ActionType } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { ValuesPerTile } from "../types/map";
 import { Tile } from "../types/tile";
+import { UIMessageType } from "../types/uiMessages";
 import { Vec } from "../types/vec";
+import { channel } from "./channel";
 import { defaultEntities, defaultMap } from "./defaultValues";
 
 export const game = (() => {
   return {
+    resources: {
+      attunement: 0,
+    },
     entities: defaultEntities,
     actions: [] as Action<ActionType, ActionDataMap[ActionType]>[],
     map: (() => {
@@ -58,6 +63,13 @@ export const game = (() => {
       const heart = this.entities.find((e) => e.type === EntityType.HEART);
       if (!heart) return null;
       return this.findClosest(heart.pos, Tile.EMPTY, 3);
+    },
+    addAttunement(n: number): void {
+      this.resources.attunement += n;
+      channel.postMessage({
+        type: UIMessageType.RESOURCES,
+        data: this.resources,
+      });
     },
   };
 })();

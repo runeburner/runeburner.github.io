@@ -5,6 +5,7 @@ import { Vec } from "./vec";
 export const ActionType = Object.freeze({
   GOLEM_MOVE: "GOLEM_MOVE",
   MINE: "MINE",
+  ATTUNE: "ATTUNE",
 } as const);
 
 export type ActionType = (typeof ActionType)[keyof typeof ActionType];
@@ -35,9 +36,18 @@ export type MineAction = Action<
   }
 >;
 
+export type AttuneAction = Action<
+  typeof ActionType.ATTUNE,
+  {
+    heartPos: Vec;
+    progress: Vec;
+  }
+>;
+
 export type ActionDataMap = {
   [ActionType.GOLEM_MOVE]: MoveAction;
   [ActionType.MINE]: MineAction;
+  [ActionType.ATTUNE]: AttuneAction;
 };
 
 export type ActionHandlers = {

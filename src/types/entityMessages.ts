@@ -5,6 +5,7 @@ export const EntityCallType = Object.freeze({
   findClosestTile: "findClosestTile",
   goNextTo: "goNextTo",
   mine: "mine",
+  attune: "attune",
   ping: "ping",
 } as const);
 
@@ -16,6 +17,7 @@ export type EntityMessageReceiveDataTypes = {
   [EntityCallType.findClosestTile]: [[string, number], Vec | null];
   [EntityCallType.goNextTo]: [[Vec], unknown];
   [EntityCallType.mine]: [[Vec], unknown];
+  [EntityCallType.attune]: [void, void];
   [EntityCallType.ping]: [void, string];
 };
 

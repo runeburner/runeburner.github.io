@@ -45,6 +45,7 @@ import Sowilo from "./sowilo.svg";
 import Tiwaz from "./tiwaz.svg";
 import Uruz from "./uruz.svg";
 import Wunjo from "./wunjo.svg";
+import Magic from "./magic.svg";
 
 type HTMLSpanProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLSpanElement>,
@@ -107,3 +108,4 @@ export const SowiloIcon = makeIcon(Sowilo);
 export const TiwazIcon = makeIcon(Tiwaz);
 export const UruzIcon = makeIcon(Uruz);
 export const WunjoIcon = makeIcon(Wunjo);
+export const MagicIcon = makeIcon(Magic);

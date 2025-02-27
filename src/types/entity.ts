@@ -16,6 +16,7 @@ export type BaseEntity = {
 
 export type HeartEntity = {
   type: typeof EntityType.HEART;
+  attunement: number;
 } & BaseEntity;
 
 export type GolemEntity = {
