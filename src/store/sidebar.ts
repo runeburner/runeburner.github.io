@@ -6,6 +6,7 @@ export const Page = Object.freeze({
   EDITOR: "EDITOR",
   WORLD: "WORLD",
   PERKS: "PERKS",
+  SETTINGS: "SETTINGS",
 } as const);
 
 export type Page = (typeof Page)[keyof typeof Page];
