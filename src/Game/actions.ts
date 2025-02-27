@@ -8,19 +8,21 @@ export const updateMoveAction = (
   action: MoveAction
 ): boolean => {
   const golem = entity as GolemEntity;
-  if (action.path.length > 1 && game.entityAt(action.path[1])) {
-    const newPath = aStarPath(golem.pos, action.path[action.path.length - 1]);
-    if (!newPath) return false;
-    action.path = newPath;
-  }
   action.progress[0] += golem.speed;
   while (action.progress[0] >= action.progress[1]) {
+    if (game.entityAt(action.path[1])) {
+      const newPath = aStarPath(golem.pos, action.goal);
+      if (!newPath) return false;
+      newPath.pop();
+      action.path = newPath;
+    }
     action.progress[0] -= action.progress[1];
     action.path.shift();
     const nextNode = action.path[0];
     entity.pos = [...nextNode];
     action.pos = [...nextNode];
   }
+
   return action.path.length === 1;
 };
 

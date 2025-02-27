@@ -89,6 +89,7 @@ const wwHandlerMap: EntityMessageHandler = {
       type: ActionType.GOLEM_MOVE,
       id: ID.next(),
       entityID: golem.id,
+      goal: [...m.args[0]],
       path: path,
       pos: [...path[0]],
       progress: [0, (golem as GolemEntity).weight],
@@ -152,7 +153,7 @@ const wwHandlerMap: EntityMessageHandler = {
       (e) => e.type === EntityType.HEART
     )! as HeartEntity;
 
-    if (dist(golem.pos, heart.pos) >= Math.SQRT2) {
+    if (dist(golem.pos, heart.pos) > Math.SQRT2) {
       worker.postMessage({
         requestID: m.requestID,
       });

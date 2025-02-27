@@ -9,7 +9,7 @@ export const defaultIncantation = `run(async () => {
     if(!crystal) continue;
     await world.goNextTo(crystal);
     await world.mine(crystal);
-    await world.goNextTo([1, 1]);
+    await world.goNextTo([2, 2]);
     await world.attune();
   }
 })`;

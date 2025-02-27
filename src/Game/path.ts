@@ -1,5 +1,5 @@
 import { EnterWeight, Tile } from "../types/tile";
-import { dist, Vec } from "../types/vec";
+import { dist, eq, Vec } from "../types/vec";
 import { game } from "./game";
 
 // This hashing function will not work for coordinates outside {[0,0], [94_906_265, 94_906_265]}
@@ -70,17 +70,19 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
         neighbor[0] < 0 ||
         neighbor[1] < 0 ||
         neighbor[0] > game.map.width ||
-        neighbor[1] > game.map.height ||
-        game.entities.find(
-          (e) => e.pos[0] === neighbor[0] && e.pos[1] === neighbor[1]
-        )
-      )
+        neighbor[1] > game.map.height
+      ) {
         continue;
+      }
+      const isOccupied = game.entities.some((e) => eq(e.pos, neighbor));
       const singleNeighbor = hashVec(neighbor);
       const tile = game.tileAt(neighbor);
-      const tentative_gScore =
-        gScore.get(current) +
-        (singleNeighbor === singleGoal ? 1 : EnterWeight[tile[0] as Tile]);
+      const moveWeight =
+        singleNeighbor === singleGoal
+          ? 0
+          : EnterWeight[tile[0] as Tile] +
+            (isOccupied && singleNeighbor !== singleGoal ? Infinity : 0);
+      const tentative_gScore = gScore.get(current) + moveWeight;
       if (tentative_gScore < gScore.get(singleNeighbor)) {
         cameFrom.set(singleNeighbor, current);
         gScore.set(singleNeighbor, tentative_gScore);
