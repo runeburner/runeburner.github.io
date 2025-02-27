@@ -6,7 +6,11 @@ import {
 } from "../types/actions";
 import { Entity } from "../types/entity";
 import { UIMessageType } from "../types/uiMessages";
-import { updateMineAction, updateMoveAction } from "./actions";
+import {
+  updateAttuneAction,
+  updateMineAction,
+  updateMoveAction,
+} from "./actions";
 import { camera } from "./camera";
 import "./channel";
 import { channel } from "./channel";
@@ -16,6 +20,7 @@ import { waitingActionMap } from "./values";
 const handlers: ActionHandlers = {
   [ActionType.GOLEM_MOVE]: updateMoveAction,
   [ActionType.MINE]: updateMineAction,
+  [ActionType.ATTUNE]: updateAttuneAction,
 };
 
 const processAction = <T extends ActionType>(

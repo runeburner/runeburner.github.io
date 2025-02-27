@@ -1,5 +1,10 @@
-import { ActionType, MineAction, MoveAction } from "../types/actions";
-import { GolemEntity } from "../types/entity";
+import {
+  ActionType,
+  AttuneAction,
+  MineAction,
+  MoveAction,
+} from "../types/actions";
+import { EntityType, GolemEntity, HeartEntity } from "../types/entity";
 import { UIMessageType } from "../types/uiMessages";
 import { Tile } from "../types/tile";
 import { channel } from "./channel";
@@ -132,6 +137,40 @@ const wwHandlerMap: EntityMessageHandler = {
       worker.postMessage({
         requestID: m.requestID,
         data: v,
+      });
+    };
+    if (camera.isInView(action.pos)) {
+      channel.postMessage({
+        type: UIMessageType.ADD_ACTION,
+        data: action.id,
+      });
+    }
+  },
+  attune: (id, worker, m) => {
+    const golem = game.entities.find((e) => e.id === id)! as GolemEntity;
+    const heart = game.entities.find(
+      (e) => e.type === EntityType.HEART
+    )! as HeartEntity;
+
+    if (dist(golem.pos, heart.pos) >= Math.SQRT2) {
+      worker.postMessage({
+        requestID: m.requestID,
+      });
+      return;
+    }
+
+    const action = {
+      type: ActionType.ATTUNE,
+      id: ID.next(),
+      pos: [...golem.pos],
+      entityID: golem.id,
+      heartPos: [...heart.pos],
+      progress: [0, 16],
+    } satisfies AttuneAction;
+    game.actions.push(action);
+    waitingActionMap[action.id] = () => {
+      worker.postMessage({
+        requestID: m.requestID,
       });
     };
     if (camera.isInView(action.pos)) {

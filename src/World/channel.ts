@@ -1,5 +1,6 @@
 import { Action } from "../types/actions";
 import { Entity } from "../types/entity";
+import { Resources } from "../types/resources";
 import {
   MapData,
   UIMessageType,
@@ -15,6 +16,7 @@ export const Channel = (() => {
   let addActionSub: ((data: number) => void) | null = null;
   let removeEntitySub: ((data: number) => void) | null = null;
   let removeActionSub: ((data: number) => void) | null = null;
+  let resourcesSub: ((data: Resources) => void) | null = null;
 
   const c: MainThreadUIChannel = new BroadcastChannel("UI");
 
@@ -39,6 +41,9 @@ export const Channel = (() => {
     },
     [UIMessageType.UPDATE_ACTION]: (action) => {
       actionSubs[action.id]?.(action);
+    },
+    [UIMessageType.RESOURCES]: (resources) => {
+      if (resourcesSub) resourcesSub(resources);
     },
   };
 
@@ -76,6 +81,10 @@ export const Channel = (() => {
         removeEntitySub = null;
         removeActionSub = null;
       };
+    },
+    subResources: (f: (data: Resources) => void): (() => void) => {
+      resourcesSub = f;
+      return () => (resourcesSub = null);
     },
     send: (msg: Parameters<MainThreadUIChannel["postMessage"]>[0]) => {
       c.postMessage(msg);

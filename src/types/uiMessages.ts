@@ -1,5 +1,6 @@
 import { Action } from "./actions";
 import { Entity } from "./entity";
+import { Resources } from "./resources";
 import { Rune } from "./rune";
 import { Vec } from "./vec";
 
@@ -16,6 +17,7 @@ export const UIMessageType = Object.freeze({
   REFRESH_ACTION: "REFRESH_ACTION",
   REMOVE_ENTITY: "REMOVE_ENTITY",
   REMOVE_ACTION: "REMOVE_ACTION",
+  RESOURCES: "RESOURCES",
 } as const);
 
 export type UIMessageType = (typeof UIMessageType)[keyof typeof UIMessageType];
@@ -50,6 +52,7 @@ type MainThreadUIMessageReceiveDataTypes = {
   [UIMessageType.UPDATE_ACTION]: Action;
   [UIMessageType.REMOVE_ENTITY]: number;
   [UIMessageType.REMOVE_ACTION]: number;
+  [UIMessageType.RESOURCES]: Resources;
 };
 
 type GameThreadUIMessageReceiveDataTypes = {

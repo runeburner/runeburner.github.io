@@ -8,6 +8,7 @@ import { Page as PerksPage } from "../Perks/Page/Page";
 import { PageWrapper } from "../PageWrapper/PageWrapper";
 import { Page } from "../store/sidebar";
 import { GameReadyGate } from "../World/GameReadyGate";
+import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
 
 function App() {
   useEffect(() => {
@@ -22,22 +23,25 @@ function App() {
   }, []);
   return (
     <div className={classes.fullscreenContainer}>
-      <Sidebar />
-      <div className={classes.pageContainer}>
-        <PageWrapper page={Page.EDITOR}>
-          <EditorPage />
-        </PageWrapper>
-        <PageWrapper page={Page.INCANTATIONS}>
-          <IncantationsPage />
-        </PageWrapper>
-        <PageWrapper page={Page.WORLD}>
-          <GameReadyGate>
-            <WorldPage />
-          </GameReadyGate>
-        </PageWrapper>
-        <PageWrapper page={Page.PERKS}>
-          <PerksPage />
-        </PageWrapper>
+      <ResourceHeader />
+      <div className={classes.gameContainer}>
+        <Sidebar />
+        <div className={classes.pageContainer}>
+          <PageWrapper page={Page.EDITOR}>
+            <EditorPage />
+          </PageWrapper>
+          <PageWrapper page={Page.INCANTATIONS}>
+            <IncantationsPage />
+          </PageWrapper>
+          <PageWrapper page={Page.WORLD}>
+            <GameReadyGate>
+              <WorldPage />
+            </GameReadyGate>
+          </PageWrapper>
+          <PageWrapper page={Page.PERKS}>
+            <PerksPage />
+          </PageWrapper>
+        </div>
       </div>
     </div>
   );
