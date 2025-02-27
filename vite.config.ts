@@ -27,5 +27,6 @@ export default defineConfig({
       compress: false,
       mangle: false,
     },
+    sourcemap: "inline",
   },
 });
