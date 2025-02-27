@@ -3,7 +3,7 @@ import { MagicIcon } from "../icons";
 import { Resources } from "../types/resources";
 import { Channel } from "../World/channel";
 
-const useResources = () => {
+const useResources = (): Resources => {
   const [r, setR] = useState<Resources>({
     attunement: 0,
   });
@@ -24,9 +24,11 @@ export const ResourceHeader = () => {
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
+        marginTop: "4px",
+        marginBottom: "4px",
       }}
     >
-      <p>{r.attunement}</p>
+      <span>{r.attunement}</span>
       <MagicIcon style={{ height: "24px", width: "24px" }} />
     </div>
   );

@@ -6,5 +6,11 @@
     "delete": "Delete",
     "create_placeholder": "New Incantation Name",
     "create_incantation_button": "Create Incantation"
+  },
+  "create_golem_modal": {
+    "runes": "Runes",
+    "rune_types": "Rune types",
+    "animate": "Animate",
+    "incantation": "Incantation"
   }
 }

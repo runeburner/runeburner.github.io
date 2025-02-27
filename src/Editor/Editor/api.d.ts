@@ -4,6 +4,7 @@ type World = {
   goNextTo: (pos: [number, number]) => Promise<unknown>;
   mine: (pos: [number, number]) => Promise<unknown>;
   ping: () => Promise<string>;
+  attune: () => Promise<void>;
 };
 
 declare const world: World;
