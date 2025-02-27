@@ -58,7 +58,7 @@ export const World = () => {
           setPos([...data.camera.pos]);
         }
       },
-      (data: string) => {
+      (data: number) => {
         setMap((m) => {
           return {
             ...m,
@@ -66,7 +66,7 @@ export const World = () => {
           };
         });
       },
-      (data: string) => {
+      (data: number) => {
         setMap((m) => {
           return {
             ...m,
@@ -74,7 +74,7 @@ export const World = () => {
           };
         });
       },
-      (data: string) => {
+      (data: number) => {
         setMap((m) => {
           return {
             ...m,
@@ -82,7 +82,7 @@ export const World = () => {
           };
         });
       },
-      (data: string) => {
+      (data: number) => {
         setMap((m) => {
           return {
             ...m,

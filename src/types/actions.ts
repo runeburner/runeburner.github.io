@@ -9,8 +9,8 @@ export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 
 type BaseAction = {
   type: ActionType;
-  id: string;
-  entityID: string;
+  id: number;
+  entityID: number;
   pos: Vec;
 };
 

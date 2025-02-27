@@ -8,13 +8,13 @@ import {
 } from "../types/uiMessages";
 
 export const Channel = (() => {
-  const actionSubs: Record<string, (a: Action) => void> = {};
-  const entitySubs: Record<string, (e: Entity) => void> = {};
+  const actionSubs: Record<number, (a: Action) => void> = {};
+  const entitySubs: Record<number, (e: Entity) => void> = {};
   let mapDataSub: ((data: MapData) => void) | null = null;
-  let addEntitySub: ((data: string) => void) | null = null;
-  let addActionSub: ((data: string) => void) | null = null;
-  let removeEntitySub: ((data: string) => void) | null = null;
-  let removeActionSub: ((data: string) => void) | null = null;
+  let addEntitySub: ((data: number) => void) | null = null;
+  let addActionSub: ((data: number) => void) | null = null;
+  let removeEntitySub: ((data: number) => void) | null = null;
+  let removeActionSub: ((data: number) => void) | null = null;
 
   const c: MainThreadUIChannel = new BroadcastChannel("UI");
 
@@ -45,13 +45,13 @@ export const Channel = (() => {
   c.onmessage = ({ data: msg }) => handlers[msg.type]?.(msg.data);
 
   return {
-    subAction: (id: string, f: (a: Action) => void): (() => void) => {
+    subAction: (id: number, f: (a: Action) => void): (() => void) => {
       actionSubs[id] = f;
       return () => {
         delete actionSubs[id];
       };
     },
-    subEntity: (id: string, f: (a: Entity) => void): (() => void) => {
+    subEntity: (id: number, f: (a: Entity) => void): (() => void) => {
       entitySubs[id] = f;
       return () => {
         delete entitySubs[id];
@@ -59,10 +59,10 @@ export const Channel = (() => {
     },
     subMap: (
       mapDataSub0: (data: MapData) => void,
-      addEntitySub0: (data: string) => void,
-      addActionSub0: (data: string) => void,
-      removeEntitySub0: (data: string) => void,
-      removeActionSub0: (data: string) => void
+      addEntitySub0: (data: number) => void,
+      addActionSub0: (data: number) => void,
+      removeEntitySub0: (data: number) => void,
+      removeActionSub0: (data: number) => void
     ): (() => void) => {
       mapDataSub = mapDataSub0;
       addEntitySub = addEntitySub0;

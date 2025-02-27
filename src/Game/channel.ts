@@ -1,72 +1,34 @@
 import { EntityType, GolemEntity } from "../types/entity";
 import {
-  Camera,
   GameThreadUIChannel,
   GameThreadUIHandler,
   MapData,
   UIMessageType,
 } from "../types/uiMessages";
-import { actions, at, entities, map } from "./values";
 import { ValuesPerTile } from "../types/map";
 import { determineInitialCameraPosition } from "./values";
 import { launchGolem } from "./launch_golem";
-import { Tile } from "../types/tile";
 import { Rune, RuneWeight } from "../types/rune";
-import { Vec } from "../types/vec";
+import { game } from "./game";
+import { camera } from "./camera";
+import { ID } from "./id";
 
 export const channel: GameThreadUIChannel = new BroadcastChannel("UI");
 
-// x, y, w, h
-const camera = {
-  pos: [0, 0],
-  size: [0, 0],
-} satisfies Camera;
-
-export const isInView = (v: Vec): boolean => {
-  return (
-    camera.pos[0] <= v[0] &&
-    v[0] < camera.pos[0] + camera.size[0] &&
-    camera.pos[1] <= v[1] &&
-    v[1] < camera.pos[1] + camera.size[1]
-  );
-};
-
-export const findClosest = (pos: Vec, wantTile: Tile, radius: number): Vec => {
-  const x = Math.max(0, pos[0] - Math.floor(radius / 2));
-  const X = Math.min(map.width, pos[0] + Math.ceil(radius / 2));
-  const y = Math.max(0, pos[1] - Math.floor(radius / 2));
-  const Y = Math.min(map.height, pos[1] + Math.ceil(radius / 2));
-  let closestTile: Vec = [-1, -1];
-  let closestDist = 1e99;
-  for (let j = y; j < Y; j++) {
-    for (let i = x; i < X; i++) {
-      const tile = at(i, j);
-      if (tile[0] === wantTile) {
-        const dist = Math.abs(pos[0] - i) + Math.abs(pos[1] - j);
-        if (dist < closestDist) {
-          closestTile = [i, j];
-          closestDist = dist;
-        }
-      }
-    }
-  }
-  return closestTile;
-};
-
-const generateMapData = () => {
-  const x = Math.max(0, camera.pos[0]);
-  const y = Math.max(0, camera.pos[1]);
-  const X = Math.min(map.width, camera.pos[0] + camera.size[0]);
-  const Y = Math.min(map.height, camera.pos[1] + camera.size[1]);
+const generateUIMapData = (): MapData => {
+  const x = Math.max(0, camera.c.pos[0]);
+  const y = Math.max(0, camera.c.pos[1]);
+  const X = Math.min(game.map.width, camera.c.pos[0] + camera.c.size[0]);
+  const Y = Math.min(game.map.height, camera.c.pos[1] + camera.c.size[1]);
   const width = X - x;
   const height = Y - y;
   const data = new Int32Array(width * height * ValuesPerTile);
   for (let j = y; j < Y; j++) {
     const offset = (j - y) * width * ValuesPerTile;
     data.set(
-      map.data.slice(
-        (j * map.width + x) * ValuesPerTile,
-        (j * map.width + X) * ValuesPerTile
+      game.map.data.slice(
+        (j * game.map.width + x) * ValuesPerTile,
+        (j * game.map.width + X) * ValuesPerTile
       ),
       offset
     );
@@ -79,30 +41,34 @@ const generateMapData = () => {
       height,
       data,
     },
-    entities: entities.filter((e) => isInView(e.pos)).map((e) => e.id),
-    actions: actions.filter((e) => isInView(e.pos)).map((a) => a.id),
+    entities: game.entities
+      .filter((e) => camera.isInView(e.pos))
+      .map((e) => e.id),
+    actions: game.actions
+      .filter((e) => camera.isInView(e.pos))
+      .map((a) => a.id),
   } satisfies MapData;
 };
 
-const uiMessageHandlers: GameThreadUIHandler = {
+const handlers: GameThreadUIHandler = {
   [UIMessageType.INITIALIZE]: (initialCam) => {
     const cam = determineInitialCameraPosition(initialCam);
 
-    Object.assign(camera, cam);
+    Object.assign(camera.c, cam);
     channel.postMessage({
       type: UIMessageType.MAP,
-      data: { ...generateMapData(), camera: camera },
+      data: { ...generateUIMapData(), camera: camera.c },
     });
   },
-  [UIMessageType.QUERY]: (camera) => {
-    Object.assign(camera, camera);
+  [UIMessageType.QUERY]: (cam) => {
+    Object.assign(camera.c, cam);
     channel.postMessage({
       type: UIMessageType.MAP,
-      data: generateMapData(),
+      data: generateUIMapData(),
     });
   },
   [UIMessageType.ANIMATE]: (data) => {
-    const id = crypto.randomUUID();
+    const id = ID.next();
     const weight = data.runes.reduce(
       (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
       0
@@ -117,7 +83,7 @@ const uiMessageHandlers: GameThreadUIHandler = {
       minecapacity: [0, data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0],
       mineSpeed: data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
     } satisfies GolemEntity;
-    entities.push(golem);
+    game.entities.push(golem);
     channel.postMessage({
       type: UIMessageType.ADD_ENTITY,
       data: golem.id,
@@ -126,14 +92,14 @@ const uiMessageHandlers: GameThreadUIHandler = {
     launchGolem(id, data.incantation);
   },
   [UIMessageType.REFRESH_ENTITY]: (entityID) => {
-    const entity = entities.find((e) => e.id === entityID)!;
+    const entity = game.entities.find((e) => e.id === entityID)!;
     channel.postMessage({
       type: UIMessageType.UPDATE_ENTITY,
       data: entity,
     });
   },
   [UIMessageType.REFRESH_ACTION]: (actionID) => {
-    const action = actions.find((e) => e.id === actionID)!;
+    const action = game.actions.find((e) => e.id === actionID)!;
     channel.postMessage({
       type: UIMessageType.UPDATE_ACTION,
       data: action,
@@ -141,7 +107,7 @@ const uiMessageHandlers: GameThreadUIHandler = {
   },
 };
 
-channel.onmessage = ({ data }) => uiMessageHandlers[data.type]?.(data.data);
+channel.onmessage = ({ data }) => handlers[data.type]?.(data.data);
 
 // Send to the main thread that the game is ready
 new BroadcastChannel("READY").postMessage("");

@@ -6,10 +6,10 @@ import { MoveAction } from "./MoveAction/MoveAction";
 import { MineAction } from "./MineAction/MineAction";
 
 type ActionProps = {
-  id: string;
+  id: number;
 };
 
-const useAction = (id: string): ActionT | undefined => {
+const useAction = (id: number): ActionT | undefined => {
   const [action, setAction] = useState<ActionT>();
   useEffect(() => {
     const unsub = Channel.subAction(id, setAction);

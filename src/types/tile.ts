@@ -5,7 +5,7 @@ export const Tile = Object.freeze({
 
 export type Tile = (typeof Tile)[keyof typeof Tile];
 
-export const AStarDist: Record<number, number> = {
+export const EnterWeight: { [T in Tile]: number } = {
   [Tile.EMPTY]: 1,
   [Tile.MANA_CRYSTAL]: Infinity,
 };
