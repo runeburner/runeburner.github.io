@@ -1,9 +1,6 @@
 :root {
   --spacing: 0.25rem;
-
-  --unit: 4px;
-  --s1: var(--unit);
-  --s2: calc(var(--unit) * 2);
-  --s3: calc(var(--unit) * 3);
-  --s4: calc(var(--unit) * 4);
+  --spacing-2: calc(var(--spacing) * 2);
+  --spacing-3: calc(var(--spacing) * 3);
+  --spacing-4: calc(var(--spacing) * 4);
 }
