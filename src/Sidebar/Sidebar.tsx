@@ -20,10 +20,12 @@ const SidebarTab = ({
 
   return (
     <li
-      className={classes.li + " " + (isSelected ? classes.selected : "")}
+      className={
+        "p-4 " + classes.li + " " + (isSelected ? classes.selected : "")
+      }
       onClick={() => !disabled && dispatch(changePage(page))}
     >
-      <Icon />
+      <Icon style={{ width: "32px" }} />
     </li>
   );
 };
@@ -32,7 +34,7 @@ export const Sidebar = (): React.ReactElement => {
   const editorDisabled = useAppSelector((s) => s.monacoModels.selected === -1);
 
   return (
-    <ul className={classes.ul}>
+    <ul className={"p-0 " + classes.ul}>
       <SidebarTab page={Page.INCANTATIONS} icon={BookIcon} />
       <SidebarTab
         page={Page.EDITOR}

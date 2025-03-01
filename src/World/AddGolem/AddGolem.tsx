@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PlusSquareIcon } from "../../icons";
+import { PlusIcon } from "../../icons";
 import classes from "./AddGolem.module.css";
 import { AddGolemModal } from "../AddGolemModal/AddGolemModal";
 
@@ -8,8 +8,11 @@ export const AddGolem = () => {
   const onClick = () => setOpen(true);
   return (
     <>
-      <div className={classes.container}>
-        <PlusSquareIcon onClick={onClick} />
+      <div className={"m-4 " + classes.container}>
+        <button className="icon-button">
+          <PlusIcon onClick={onClick} />
+          {/* <div style={{ width: "24px", height: "24px" }} onClick={onClick} /> */}
+        </button>
       </div>
       <AddGolemModal open={open} onClose={() => setOpen(false)} />
     </>

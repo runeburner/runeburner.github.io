@@ -47,16 +47,16 @@ import Uruz from "./uruz.svg";
 import Wunjo from "./wunjo.svg";
 import Magic from "./magic.svg";
 
-type HTMLSpanProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLSpanElement>,
-  HTMLSpanElement
+type HTMLDivProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
 >;
 
-const makeIcon = (Icon: string) => (props: HTMLSpanProps) => {
+const makeIcon = (Icon: string) => (props: HTMLDivProps) => {
   return (
-    <span {...props}>
+    <div {...props}>
       <Icon />
-    </span>
+    </div>
   );
 };
 

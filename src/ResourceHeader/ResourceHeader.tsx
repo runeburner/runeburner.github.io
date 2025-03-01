@@ -19,7 +19,7 @@ const useResources = (): Resources => {
 export const ResourceHeader = (): React.ReactElement => {
   const r = useResources();
   return (
-    <div className={classes.container}>
+    <div className={"py-2 " + classes.container}>
       <span>{r.attunement}</span>
       <MagicIcon style={{ height: "24px", width: "24px" }} />
     </div>

@@ -42,7 +42,7 @@ export const Node = (props: NodeProps): React.ReactElement => {
     <>
       <div
         onClick={() => setOpen(true)}
-        className={classes.node + " " + statusContainerClasses[status]}
+        className={"p-4 " + classes.node + " " + statusContainerClasses[status]}
         style={{ left: x, top: y }}
       >
         <Icon className={statusIconClasses[status]} />

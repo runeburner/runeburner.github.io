@@ -4,7 +4,13 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import GameWorker from "./Game/worker?worker";
 import "./i18n.ts";
-import "./main.module.css";
+import "./styles/vars.css";
+import "./styles/m.css";
+import "./styles/p.css";
+import "./styles/reset.css";
+import "./styles/flex.css";
+import "./styles/size.css";
+import "./styles/main.module.css";
 
 (() => {
   new GameWorker();
