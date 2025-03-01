@@ -1,13 +1,34 @@
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .flex-row {
   flex-direction: row;
 }
 
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
 .flex-col {
   flex-direction: column;
+}
+
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+/* Not from tailwind preflight, but it's convenient */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
