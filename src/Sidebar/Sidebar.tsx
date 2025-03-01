@@ -21,7 +21,10 @@ const SidebarTab = ({
   return (
     <li
       className={
-        "p-4 " + classes.li + " " + (isSelected ? classes.selected : "")
+        "p-4 select-none cursor-pointer " +
+        classes.li +
+        " " +
+        (isSelected ? classes.selected : "")
       }
       onClick={() => !disabled && dispatch(changePage(page))}
     >

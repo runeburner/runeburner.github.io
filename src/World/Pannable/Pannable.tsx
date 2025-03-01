@@ -33,7 +33,7 @@ export const Pannable = ({
 
   return (
     <div
-      className={classes.container}
+      className={"w-full h-full " + classes.container}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
       onMouseMove={onMouseMove}

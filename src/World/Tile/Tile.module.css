@@ -3,8 +3,5 @@
   width: 64px;
   height: 64px;
   background-color: blue;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border: 1px solid #eeeeee22;
 }

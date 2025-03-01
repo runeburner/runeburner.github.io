@@ -1,14 +1,10 @@
 .ul {
-  list-style-type: none;
   border-right-color: var(--border);
   border-right-width: 1px;
   border-right-style: solid;
 }
 
 .li {
-  font-size: 2em;
-  cursor: pointer;
-  user-select: none;
   color: var(--primary);
   border-bottom-color: var(--border);
   border-bottom-width: 1px;

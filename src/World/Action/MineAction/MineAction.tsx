@@ -12,7 +12,7 @@ export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
   const Y = Math.max(action.pos[1], action.tile[1]);
   return (
     <svg
-      className={classes.container}
+      className={"flex-center " + classes.container}
       width={(X - x + 1) * 64}
       height={(Y - y + 1) * 64}
       style={{ top: y * 64, left: x * 64 }}

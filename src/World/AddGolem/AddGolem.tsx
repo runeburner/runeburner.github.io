@@ -9,7 +9,7 @@ export const AddGolem = () => {
   return (
     <>
       <div className={"m-4 " + classes.container}>
-        <button className="icon-button">
+        <button className="cursor-pointer icon-button">
           <PlusIcon onClick={onClick} />
           {/* <div style={{ width: "24px", height: "24px" }} onClick={onClick} /> */}
         </button>
