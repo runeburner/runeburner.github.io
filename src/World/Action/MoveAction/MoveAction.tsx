@@ -42,7 +42,7 @@ export const MoveAction = ({ action }: MoveActionProps): React.ReactElement => {
   );
   return (
     <svg
-      className={classes.container}
+      className={"flex-center " + classes.container}
       width={(X - x + 1) * 64}
       height={(Y - y + 1) * 64}
       style={{ top: y * 64, left: x * 64 }}

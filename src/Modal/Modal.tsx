@@ -17,7 +17,11 @@ export const Modal = ({ open, onClose, children }: ModalProps) => {
   return (
     <div
       onClick={onBackdropClick}
-      className={classes.backdrop + (!open ? " " + classes.hidden : "")}
+      className={
+        "w-screen h-screen flex-center " +
+        classes.backdrop +
+        (!open ? " " + classes.hidden : "")
+      }
       ref={backdropRef}
     >
       <div className={"p-3 " + classes.container}>{children}</div>

@@ -2,8 +2,6 @@
   position: relative;
   overflow: hidden;
   background-color: var(--container-dark);
-  width: 100%;
-  height: 100%;
 }
 
 .pan {

@@ -6,7 +6,7 @@ export const Header = (): React.ReactElement => {
   const tabCount = useAppSelector((s) => s.monacoModels.incantations.length);
 
   return (
-    <div className={classes.header}>
+    <div className={"flex " + classes.header}>
       {new Array(tabCount).fill(0).map((_, i) => (
         <Tab key={i} i={i} />
       ))}

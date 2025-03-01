@@ -26,7 +26,9 @@ export const Tab = ({ i }: TabProps): React.ReactElement => {
     <div
       onClick={onClick}
       className={
-        "p-3 " + classes.tab + (selected ? " " + classes.selected : "")
+        "p-3 flex-center cursor-pointer select-none " +
+        classes.tab +
+        (selected ? " " + classes.selected : "")
       }
     >
       {name}

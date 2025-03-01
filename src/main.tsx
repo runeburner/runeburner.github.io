@@ -10,6 +10,10 @@ import "./styles/p.css";
 import "./styles/reset.css";
 import "./styles/flex.css";
 import "./styles/size.css";
+import "./styles/justify.css";
+import "./styles/items.css";
+import "./styles/cursor.css";
+import "./styles/select.css";
 import "./styles/main.module.css";
 
 (() => {
