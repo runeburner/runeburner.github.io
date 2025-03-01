@@ -1,4 +1,3 @@
-import classes from "./MineAction.module.css";
 import { MineAction as MineActionT } from "../../../types/actions";
 
 type MineActionProps = {
@@ -12,7 +11,7 @@ export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
   const Y = Math.max(action.pos[1], action.tile[1]);
   return (
     <svg
-      className={"flex-center " + classes.container}
+      className={"flex-center absolute"}
       width={(X - x + 1) * 64}
       height={(Y - y + 1) * 64}
       style={{ top: y * 64, left: x * 64 }}

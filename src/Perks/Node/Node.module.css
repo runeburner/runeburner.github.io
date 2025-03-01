@@ -1,9 +1,7 @@
 .node {
-  user-select: none;
   width: 64px;
   height: 64px;
   border-radius: 128px;
-  position: absolute;
 }
 
 .purchasedContainer {

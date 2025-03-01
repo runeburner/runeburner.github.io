@@ -20,7 +20,7 @@ const colors = [
 export const Tile = ({ id, pos }: TileProps) => {
   return (
     <div
-      className={"flex-center " + classes.container}
+      className={"flex-center absolute " + classes.container}
       style={{
         backgroundColor: colors[id],
         top: pos[1] * 64,

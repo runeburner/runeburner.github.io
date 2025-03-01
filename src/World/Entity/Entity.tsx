@@ -56,7 +56,7 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
 
   return (
     <div
-      className={"flex-center " + classes.container}
+      className={"flex-center absolute " + classes.container}
       style={{
         top: entity.pos[1] * 64,
         left: entity.pos[0] * 64,
