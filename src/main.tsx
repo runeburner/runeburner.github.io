@@ -17,7 +17,7 @@ import "./styles/layout/position.css";
 import "./styles/layout/size.css";
 import "./styles/reset.css";
 import "./styles/user-select.css";
-import "./styles/main.module.css";
+import "./styles/theme.css";
 
 (() => {
   new GameWorker();
