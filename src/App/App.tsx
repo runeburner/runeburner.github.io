@@ -23,7 +23,7 @@ function App() {
     return () => document.removeEventListener("keydown", f);
   }, []);
   return (
-    <div className={classes.fullscreenContainer}>
+    <div className={"w-screen h-screen flex flex-col"}>
       <ResourceHeader />
       <div className={classes.gameContainer}>
         <Sidebar />

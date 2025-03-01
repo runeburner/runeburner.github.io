@@ -1,0 +1,35 @@
+:root {
+  --primary-dark: #506b9b;
+  --primary: #76a1b2;
+  --primary-light: #c8d4e4;
+  --container-dark: #333;
+  --container-primary: #444;
+  --container-primary-light: #666;
+  --highlight: #eee;
+  --border: #eeeeee44;
+  --selected: #444;
+
+  background-color: var(--container-dark);
+  color: var(--primary);
+
+  button {
+    border-radius: 100px;
+    padding: var(--s1);
+    width: 100%;
+    background-color: var(--primary-dark);
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--primary-light);
+    color: var(#444);
+  }
+  button:hover {
+    background-color: var(--primary-light);
+  }
+
+  .icon-button {
+    border-radius: 100%;
+    padding: var(--s2) var(--s2) var(--s2) var(--s2);
+    display: flex;
+    align-items: center;
+  }
+}

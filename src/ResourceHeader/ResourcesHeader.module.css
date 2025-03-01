@@ -3,6 +3,8 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  margin-top: var(--s2);
-  margin-bottom: var(--s2);
+  border-bottom-color: var(--border);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  box-sizing: border-box;
 }

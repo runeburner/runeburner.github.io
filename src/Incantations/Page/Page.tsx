@@ -1,10 +1,9 @@
 import { Create } from "../Create/Create";
 import { List } from "../List/List";
-import classes from "./Page.module.css";
 
 export const Page = () => {
   return (
-    <div className={classes.container}>
+    <div className={"p-3"}>
       <List />
       <Create />
     </div>

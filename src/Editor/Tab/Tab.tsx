@@ -25,21 +25,27 @@ export const Tab = ({ i }: TabProps): React.ReactElement => {
   return (
     <div
       onClick={onClick}
-      className={classes.tab + (selected ? " " + classes.selected : "")}
+      className={
+        "p-3 " + classes.tab + (selected ? " " + classes.selected : "")
+      }
     >
       {name}
       {isDirty ? (
         <CircleIcon
           onClick={onClose}
           className={
-            classes.icon + (selected ? " " + classes.iconSelected : "")
+            "ml-1 p-1 " +
+            classes.icon +
+            (selected ? " " + classes.iconSelected : "")
           }
         />
       ) : (
         <XIcon
           onClick={onClose}
           className={
-            classes.icon + (selected ? " " + classes.iconSelected : "")
+            "ml-1 p-1 " +
+            classes.icon +
+            (selected ? " " + classes.iconSelected : "")
           }
         />
       )}

@@ -1,4 +1,6 @@
 :root {
+  --spacing: 0.25rem;
+
   --unit: 4px;
   --s1: var(--unit);
   --s2: calc(var(--unit) * 2);

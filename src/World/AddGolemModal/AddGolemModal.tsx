@@ -47,12 +47,14 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
   return (
     <Modal open={open} onClose={onClose}>
       <div>
-        <Golem
-          runes={appliedRunes}
-          health={health}
-          armor={armor}
-          shield={shield}
-        />
+        <div style={{ height: "128px" }}>
+          <Golem
+            runes={appliedRunes}
+            health={health}
+            armor={armor}
+            shield={shield}
+          />
+        </div>
         <p>
           {t("create_golem_modal.runes")}: {totalRunes}/6
         </p>
@@ -89,7 +91,9 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
           ))}
         </select>
         <br />
-        <button onClick={onAnimate}>{t("create_golem_modal.animate")}</button>
+        <button className="my-2" onClick={onAnimate}>
+          {t("create_golem_modal.animate")}
+        </button>
       </div>
     </Modal>
   );

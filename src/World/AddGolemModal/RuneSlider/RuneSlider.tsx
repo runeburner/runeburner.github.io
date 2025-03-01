@@ -21,7 +21,7 @@ export const RuneSlider = ({
   return (
     <>
       <p>{t(`runes.${rune}.name`)}</p>
-      <div style={{ display: "flex", margin: "8px", alignItems: "center" }}>
+      <div className={"m-2"} style={{ display: "flex", alignItems: "center" }}>
         <Icon style={{ width: "24px", height: "24px" }} />
         <MinusIcon
           onClick={() =>

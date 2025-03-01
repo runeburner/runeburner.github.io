@@ -20,7 +20,7 @@ export const Modal = ({ open, onClose, children }: ModalProps) => {
       className={classes.backdrop + (!open ? " " + classes.hidden : "")}
       ref={backdropRef}
     >
-      <div className={classes.container}>{children}</div>
+      <div className={"p-3 " + classes.container}>{children}</div>
     </div>
   );
 };
