@@ -34,13 +34,13 @@ export const Pannable = ({
 
   return (
     <div
-      className={"w-full h-full " + classes.container}
+      className={"w-full h-full relative overflow-hidden " + classes.container}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
-      <div className={classes.pan} style={{ left: pos[0], top: pos[1] }}>
+      <div className={"absolute"} style={{ left: pos[0], top: pos[1] }}>
         {children}
       </div>
     </div>

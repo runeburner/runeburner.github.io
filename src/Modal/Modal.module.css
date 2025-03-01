@@ -4,7 +4,6 @@
 
 .backdrop {
   background-color: #00000088;
-  position: fixed;
   top: 0;
   left: 0;
   /* Must be on top of everything */

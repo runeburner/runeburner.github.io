@@ -5,16 +5,18 @@ import { store } from "./store/store.ts";
 import GameWorker from "./Game/worker?worker";
 import "./i18n.ts";
 import "./styles/vars.css";
-import "./styles/margin.css";
-import "./styles/padding.css";
-import "./styles/reset.css";
-import "./styles/flex.css";
-import "./styles/size.css";
-import "./styles/justify-content.css";
-import "./styles/align-items.css";
 import "./styles/cursor.css";
+import "./styles/layout/align-items.css";
+import "./styles/layout/display.css";
+import "./styles/layout/flex.css";
+import "./styles/layout/justify-content.css";
+import "./styles/layout/margin.css";
+import "./styles/layout/overflow.css";
+import "./styles/layout/padding.css";
+import "./styles/layout/position.css";
+import "./styles/layout/size.css";
+import "./styles/reset.css";
 import "./styles/user-select.css";
-import "./styles/position.css";
 import "./styles/main.module.css";
 
 (() => {

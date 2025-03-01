@@ -1,4 +1,3 @@
-import classes from "./AttuneAction.module.css";
 import { AttuneAction as AttuneActionT } from "../../../types/actions";
 
 type AttuneActionProps = {
@@ -14,7 +13,7 @@ export const AttuneAction = ({
   const Y = Math.max(action.pos[1], action.heartPos[1]);
   return (
     <svg
-      className={"flex-center " + classes.container}
+      className={"flex-center absolute"}
       width={(X - x + 1) * 64}
       height={(Y - y + 1) * 64}
       style={{ top: y * 64, left: x * 64 }}

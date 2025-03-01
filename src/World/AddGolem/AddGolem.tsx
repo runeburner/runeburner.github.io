@@ -8,7 +8,7 @@ export const AddGolem = () => {
   const onClick = () => setOpen(true);
   return (
     <>
-      <div className={"m-4 " + classes.container}>
+      <div className={"m-4 fixed " + classes.container}>
         <button className="cursor-pointer icon-button">
           <PlusIcon onClick={onClick} />
           {/* <div style={{ width: "24px", height: "24px" }} onClick={onClick} /> */}

@@ -44,7 +44,7 @@ export const Row = ({ name }: RowProps) => {
       </td>
       <td>
         <EditIcon
-          className={"cursor-pointer " + classes.icon}
+          className={"cursor-pointer block " + classes.icon}
           onClick={() => {
             dispatch(
               loadModel({

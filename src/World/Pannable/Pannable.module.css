@@ -1,9 +1,3 @@
 .container {
-  position: relative;
-  overflow: hidden;
   background-color: var(--container-dark);
-}
-
-.pan {
-  position: absolute;
 }
