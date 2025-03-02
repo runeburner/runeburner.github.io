@@ -21,12 +21,16 @@ import { game } from "./game";
 import { aStarPath } from "./path";
 
 const process: {
-  [T in ActionType]: (e: Entity, p: ActionProgress) => boolean;
+  [T in ActionType]: (rate: number, e: Entity, p: ActionProgress) => boolean;
 } = {
-  [ActionType.MOVE_NEXT_TO]: (e: Entity, p: ActionProgress): boolean => {
+  [ActionType.MOVE_NEXT_TO]: (
+    rate: number,
+    e: Entity,
+    p: ActionProgress
+  ): boolean => {
     const golem = e as GolemEntity;
     const mp = p as MOVE_NEXT_TOProgress;
-    mp.progress[0] += golem.speed;
+    mp.progress[0] += golem.speed * rate * game.powers.attune_power;
     if (mp.progress[0] >= mp.progress[1]) {
       const newPath = aStarPath(golem.pos, mp.goal);
       if (!newPath) return true;
@@ -41,24 +45,42 @@ const process: {
     }
     return mp.path.length === 1;
   },
-  [ActionType.MINE]: (e: Entity, p: ActionProgress): boolean => {
+  [ActionType.MINE]: (rate: number, e: Entity, p: ActionProgress): boolean => {
     const golem = e as GolemEntity;
     const action = p as MINEProgress;
-    action.progress[0] += golem.mineSpeed;
+    if (game.tileAt(action.tile)[0] !== Tile.MANA_CRYSTAL) return true;
+
+    action.progress[0] += golem.mineSpeed * rate * game.powers.attune_power;
     while (
       action.progress[0] >= action.progress[1] &&
-      golem.minecapacity[0] < golem.minecapacity[1]
+      golem.minecapacity[0] < golem.minecapacity[1] &&
+      game.tileAt(action.tile)[1] > 0
     ) {
       action.progress[0] -= action.progress[1];
       golem.minecapacity[0]++;
+
+      // reduce resources
+      const t = game.tileAt(action.tile);
+      t[1]--;
+      if (t[1] === 0) {
+        t[0] = 0;
+      }
+      game.setTileAt(action.tile, t);
     }
 
-    return golem.minecapacity[0] === golem.minecapacity[1];
+    return (
+      golem.minecapacity[0] === golem.minecapacity[1] ||
+      game.tileAt(action.tile)[0] !== Tile.MANA_CRYSTAL
+    );
   },
-  [ActionType.ATTUNE]: (e: Entity, p: ActionProgress): boolean => {
+  [ActionType.ATTUNE]: (
+    rate: number,
+    e: Entity,
+    p: ActionProgress
+  ): boolean => {
     const golem = e as GolemEntity;
     const action = p as ATTUNEProgress;
-    action.progress[0] += golem.mineSpeed;
+    action.progress[0] += golem.mineSpeed * rate * game.powers.attune_power;
     while (
       action.progress[0] >= action.progress[1] &&
       golem.minecapacity[0] > 0
@@ -105,6 +127,7 @@ const maker: {
   [T in ActionType]: (a: ActionTypeMap[T][0]) => ActionProgress | true | null;
 } = {
   [ActionType.MOVE_NEXT_TO]: (a: MOVE_NEXT_TO) => {
+    if (!isArgs([a.v], isVec)) return null;
     const golem = game.entityM[a.id] as GolemEntity;
     // If we're already there, do nothing.
     if (dist(golem.pos, a.v) <= 1) return null;
@@ -125,6 +148,7 @@ const maker: {
     } satisfies MOVE_NEXT_TOProgress;
   },
   [ActionType.MINE]: (a: MINE) => {
+    if (!isArgs([a.v], isVec)) return null;
     const old = game.actionM[a.id] as ActionProgress | undefined;
     const golem = game.entityM[a.id] as GolemEntity;
 
@@ -145,7 +169,7 @@ const maker: {
       type: ActionType.MINE,
       pos: [...golem.pos],
       // If we swap mining tile in the middle, carry over progress
-      progress: wasMining ? old.progress : [0, 16],
+      progress: wasMining ? old.progress : [0, 2],
       tile: [...a.v],
     } satisfies MINEProgress;
   },
@@ -167,12 +191,14 @@ const maker: {
 
     return {
       type: ActionType.ATTUNE,
-      progress: [0, 16],
+      progress: [0, 2],
       pos: [...golem.pos],
       heart: [...heart.pos],
     } satisfies ATTUNEProgress;
   },
 };
+
+const fps = 15;
 
 setInterval((): void => {
   // First, gather the action of all entities.
@@ -206,10 +232,11 @@ setInterval((): void => {
     }
   }
 
+  const rate = 1 / fps;
   for (const e of Object.values(game.entityM)) {
     const p = game.actionM[e.id];
     if (p) {
-      const del = process[p.type](e, p);
+      const del = process[p.type](rate, e, p);
       if (del) {
         delete game.actionM[e.id];
       }
@@ -222,4 +249,4 @@ setInterval((): void => {
       });
     }
   }
-}, 100);
+}, 1000 / fps);

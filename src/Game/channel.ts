@@ -14,7 +14,7 @@ import { ID } from "./id";
 
 export const channel: GameThreadUIChannel = new BroadcastChannel("UI");
 
-const generateUIMapData = (): MapData => {
+export const generateUIMapData = (): MapData => {
   const x = Math.max(0, camera.c.pos[0]);
   const y = Math.max(0, camera.c.pos[1]);
   const X = Math.min(game.map.width, camera.c.pos[0] + camera.c.size[0]);
