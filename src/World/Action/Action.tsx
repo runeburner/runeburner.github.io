@@ -14,7 +14,6 @@ type ActionProps = {
 };
 
 export const Action = ({ p }: ActionProps): React.ReactElement => {
-  if (!p) return <></>;
   switch (p.type) {
     case ActionType.MOVE_NEXT_TO:
       return <MoveAction action={p as MOVE_NEXT_TOProgress} />;
