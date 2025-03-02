@@ -92,6 +92,7 @@ const handlers: GameThreadUIHandler = {
     });
 
     launchGolem(id, data.incantation);
+    game.entityM[id] = golem;
   },
   [UIMessageType.REFRESH_ENTITY]: (entityID) => {
     const entity = game.entities.find((e) => e.id === entityID)!;

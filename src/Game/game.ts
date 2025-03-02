@@ -1,17 +1,25 @@
+import { ACTProgress } from "../types/ACT";
 import { Action, ActionDataMap, ActionType } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { ValuesPerTile } from "../types/map";
 import { Tile } from "../types/tile";
 import { UIMessageType } from "../types/uiMessages";
-import { Vec } from "../types/vec";
+import { dist, Vec } from "../types/vec";
 import { channel } from "./channel";
 import { defaultEntities, defaultMap } from "./defaultValues";
+import { Worker } from "./launch_golem";
 
 export const game = (() => {
   return {
+    workers: [] as Worker[],
     resources: {
       attunement: 0,
     },
+    entityM: defaultEntities.reduce(
+      (m, e) => ({ ...m, [e.id]: e }),
+      {}
+    ) as Record<number, Entity>,
+    actionM: {} as Record<number, ACTProgress>,
     entities: defaultEntities,
     actions: [] as Action<ActionType, ActionDataMap[ActionType]>[],
     map: (() => {
@@ -36,7 +44,7 @@ export const game = (() => {
     entityAt(v: Vec): Entity | undefined {
       return this.entities.find((e) => e.pos[0] === v[0] && e.pos[1] === v[1]);
     },
-    findClosest(pos: Vec, wantTile: Tile, radius: number): Vec | null {
+    findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null {
       const x = Math.max(0, pos[0] - Math.floor(radius / 2));
       const X = Math.min(this.map.width, pos[0] + Math.ceil(radius / 2));
       const y = Math.max(0, pos[1] - Math.floor(radius / 2));
@@ -59,10 +67,27 @@ export const game = (() => {
       }
       return closestTile;
     },
+    findClosestEntity(pos: Vec, entityType: EntityType): Vec | null {
+      const entities = Object.values(game.entityM).filter(
+        (e) => e.type === entityType
+      );
+      if (entities.length === 0) return null;
+      const v = entities.reduce(
+        (res: [number, Vec], e) => {
+          const d = dist(e.pos, pos);
+          if (d < res[0]) {
+            return [d, [...e.pos]] as [number, Vec];
+          }
+          return res as [number, Vec];
+        },
+        [1e99, entities[0].pos]
+      );
+      return v[1];
+    },
     golemSpawnCoordinates(): Vec | null {
       const heart = this.entities.find((e) => e.type === EntityType.HEART);
       if (!heart) return null;
-      return this.findClosest(heart.pos, Tile.EMPTY, 3);
+      return this.findClosestTile(heart.pos, Tile.EMPTY, 3);
     },
     addAttunement(n: number): void {
       this.resources.attunement += n;

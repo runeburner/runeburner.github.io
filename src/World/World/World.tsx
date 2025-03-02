@@ -9,6 +9,7 @@ import { ValuesPerTile } from "../../types/map";
 import { EntityTile } from "../Entity/Entity";
 import { Action } from "../Action/Action";
 import { Vec } from "../../types/vec";
+import { ACTProgress } from "../../types/ACT";
 
 const emptyMapData = {
   map: {
@@ -28,6 +29,7 @@ export const World = () => {
     pos: [0, 0],
     size: [24, 24],
   });
+  const [actP, setACTP] = useState<ACTProgress[]>([]);
 
   const fetchMap = useThrottledCallback(
     () => {
@@ -91,12 +93,18 @@ export const World = () => {
         });
       }
     );
+
+    const unsub2 = Channel.subACTProgress(setACTP);
+
     Channel.send({
       type: UIMessageType.INITIALIZE,
       data: cameraRef.current,
     });
 
-    return unsub;
+    return () => {
+      unsub();
+      unsub2();
+    };
   }, []);
 
   if (mapData.map.data.length === 0) return <></>;
@@ -116,17 +124,12 @@ export const World = () => {
     );
   }
 
-  const pathComponents: JSX.Element[] = [];
-  for (const id of mapData.actions) {
-    pathComponents.push(<Action key={id} id={id} />);
-  }
-
   return (
     <>
       <Pannable pos={pos} onPan={onPan}>
         {tiles}
-        {mapData.actions.map((e) => (
-          <Action key={e} id={e} />
+        {actP.map((e, i) => (
+          <Action key={i} p={e} />
         ))}
         {mapData.entities.map((e) => (
           <EntityTile key={e} id={e} />
