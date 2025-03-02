@@ -5,11 +5,11 @@ import { RuneSlider } from "./RuneSlider/RuneSlider";
 import { Rune } from "../../types/rune";
 import { Golem } from "../Golem/Golem";
 import { UIMessageType } from "../../types/uiMessages";
-import { useAppSelector } from "../../store/hooks";
 import { store } from "../../store/store";
 import { Channel } from "../channel";
 import { Vec } from "../../types/vec";
 import { useTranslation } from "react-i18next";
+import { useIncantationNames } from "../../store/incantations";
 
 export const AddGolemModal = ({
   open,
@@ -22,14 +22,14 @@ export const AddGolemModal = ({
       number
     >
   );
-  const incantationNames = useAppSelector((s) => Object.keys(s.incantations));
+  const incantationNames = useIncantationNames();
   const [selectedIncantation, setSelectedIncantation] = useState(
     incantationNames[0]
   );
 
-  const [health /*, setHealth*/] = useState<Vec>([0, 0]);
-  const [armor /*, setArmor*/] = useState<Vec>([0, 0]);
-  const [shield /*, setShield*/] = useState<Vec>([0, 0]);
+  const [health /*, setHealth*/] = useState<Vec>([50, 50]);
+  const [armor /*, setArmor*/] = useState<Vec>([50, 50]);
+  const [shield /*, setShield*/] = useState<Vec>([50, 50]);
 
   const appliedRunes: [Rune, number][] = Object.entries(runes).filter(
     (r) => r[1] > 0

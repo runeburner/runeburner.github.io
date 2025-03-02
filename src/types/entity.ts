@@ -17,6 +17,9 @@ export type BaseEntity<T extends object> = {
 export type HeartEntity = BaseEntity<{
   type: typeof EntityType.HEART;
   attunement: number;
+  health: Vec;
+  armor: Vec;
+  shield: Vec;
 }>;
 
 export type GolemEntity = BaseEntity<{
