@@ -32,7 +32,5 @@ const sidebarSlice = createSlice({
 export const { changePage } = sidebarSlice.actions;
 export const sidebarReducer = sidebarSlice.reducer;
 
-export const usePage = () => useAppSelector((s) => s.sidebar);
-
-export const useIsPageSelected = (page: Page) =>
+export const useIsPageSelected = (page: Page): boolean =>
   useAppSelector((s) => s.sidebar.selected === page);

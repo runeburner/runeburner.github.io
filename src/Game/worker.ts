@@ -96,7 +96,7 @@ setInterval((): void => {
     );
     const rs = new Proxy(rb, {
       get(_, prop) {
-        return (...args: unknown[]) =>
+        return (...args: unknown[]): unknown =>
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (rb as any)[prop](e, ...args);
       },
@@ -168,7 +168,6 @@ setInterval((): void => {
     }
   }
 
-  const visibleActions: ACTProgress[] = [];
   for (const e of Object.values(game.entityM)) {
     const p = game.actionM[e.id];
     if (!p) continue;
@@ -180,16 +179,8 @@ setInterval((): void => {
     if (camera.isInView(e.pos)) {
       channel.postMessage({
         type: UIMessageType.UPDATE_ENTITY,
-        data: e,
+        data: { entity: e, action: p },
       });
-      if (game.actionM[e.id]) {
-        visibleActions.push(game.actionM[e.id]);
-      }
     }
   }
-
-  channel.postMessage({
-    type: UIMessageType.ACTIONS,
-    data: visibleActions,
-  });
 }, 100);

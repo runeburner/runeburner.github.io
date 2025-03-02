@@ -10,7 +10,7 @@ import apiDefs from "./api.d.ts?raw";
 
 export const createNewEditor = (
   ref: React.MutableRefObject<HTMLDivElement | null>
-) => {
+): monaco.editor.IStandaloneCodeEditor => {
   const editor = monaco.editor.create(ref.current!, {
     model: monaco.editor.createModel("", "typescript"),
     language: "typescript",

@@ -11,7 +11,10 @@ import { Channel } from "../channel";
 import { Vec } from "../../types/vec";
 import { useTranslation } from "react-i18next";
 
-export const AddGolemModal = ({ open, onClose }: ModalProps) => {
+export const AddGolemModal = ({
+  open,
+  onClose,
+}: ModalProps): React.ReactElement => {
   const { t } = useTranslation();
   const [runes, setRunes] = useState<Record<Rune, number>>(
     Object.fromEntries(Object.values(Rune).map((r) => [r, 2])) as Record<
@@ -33,7 +36,7 @@ export const AddGolemModal = ({ open, onClose }: ModalProps) => {
   ) as [Rune, number][];
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
 
-  const onAnimate = () => {
+  const onAnimate = (): void => {
     Channel.send({
       type: UIMessageType.ANIMATE,
       data: {

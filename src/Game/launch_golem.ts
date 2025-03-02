@@ -19,7 +19,7 @@ export type Worker = {
   tick: (rb: unknown) => ACT;
 };
 
-export const launchGolem = (id: number, incantation: string) => {
+export const launchGolem = (id: number, incantation: string): void => {
   const idScript = `const ENTITY_ID = ${id};\n`;
   const o = URL.createObjectURL(
     new Blob([idScript + workerHeader + incantation], {

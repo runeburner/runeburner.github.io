@@ -41,10 +41,9 @@ const generateUIMapData = (): MapData => {
       height,
       data,
     },
-    entities: game.entities
+    entityIDs: game.entities
       .filter((e) => camera.isInView(e.pos))
       .map((e) => e.id),
-    actions: [],
   } satisfies MapData;
 };
 
@@ -94,15 +93,15 @@ const handlers: GameThreadUIHandler = {
   },
   [UIMessageType.REFRESH_ENTITY]: (entityID) => {
     const entity = game.entities.find((e) => e.id === entityID)!;
+    const actProgress = game.actionM[entity.id];
     channel.postMessage({
       type: UIMessageType.UPDATE_ENTITY,
-      data: entity,
+      data: { entity, action: actProgress },
     });
   },
-  [UIMessageType.REFRESH_ACTION]: () => {},
 };
 
-channel.onmessage = ({ data }) => handlers[data.type]?.(data.data);
+channel.onmessage = ({ data }): void => handlers[data.type]?.(data.data);
 
 // Send to the main thread that the game is ready
 new BroadcastChannel("READY").postMessage("");

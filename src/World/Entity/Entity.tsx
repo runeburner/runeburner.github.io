@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { Entity, EntityType } from "../../types/entity";
+import { EntityType } from "../../types/entity";
 import classes from "./Entity.module.css";
 import { Channel } from "../channel";
 import { Golem } from "../Golem/Golem";
-import { UIMessageType } from "../../types/uiMessages";
+import { UIEntity, UIMessageType } from "../../types/uiMessages";
 import { Health } from "../Golem/Health/Health";
 import { HeartIcon } from "../../icons";
+import { Action } from "../Action/Action";
 
 type EntityProps = {
   id: number;
 };
 
-const useEntity = (id: number): Entity | undefined => {
-  const [entity, setEntity] = useState<Entity>();
+const useEntity = (id: number): UIEntity | undefined => {
+  const [entity, setEntity] = useState<UIEntity>();
   useEffect(() => {
     const unsub = Channel.subEntity(id, setEntity);
     Channel.send({
@@ -28,7 +29,7 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
   const entity = useEntity(id);
   if (!entity) return <></>;
   let child = <></>;
-  switch (entity.type) {
+  switch (entity.entity.type) {
     case EntityType.HEART: {
       child = (
         <>
@@ -43,7 +44,7 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
     case EntityType.GOLEM: {
       child = (
         <Golem
-          runes={entity.runes}
+          runes={entity.entity.runes}
           health={[0, 0]}
           armor={[0, 0]}
           shield={[0, 0]}
@@ -55,14 +56,17 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
   }
 
   return (
-    <div
-      className={"flex-center absolute " + classes.container}
-      style={{
-        top: entity.pos[1] * 64,
-        left: entity.pos[0] * 64,
-      }}
-    >
-      {child}
-    </div>
+    <>
+      {entity.action && <Action p={entity.action} />}
+      <div
+        className={"flex-center absolute " + classes.container}
+        style={{
+          top: entity.entity.pos[1] * 64,
+          left: entity.entity.pos[0] * 64,
+        }}
+      >
+        {child}
+      </div>
+    </>
   );
 };

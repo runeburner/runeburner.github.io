@@ -5,13 +5,19 @@ import { useAppSelector } from "../../store/hooks";
 import { useEffect, useRef } from "react";
 import { store } from "../../store/store";
 
-export const iTextModelStore = (() => {
+type ITextModelStore = {
+  add(name: string, model: monaco.editor.ITextModel): void;
+  remove(name: string): void;
+  get(name: string): monaco.editor.ITextModel | undefined;
+};
+
+export const iTextModelStore = ((): ITextModelStore => {
   const models: Record<string, monaco.editor.ITextModel> = {};
   return {
-    add(name: string, model: monaco.editor.ITextModel) {
+    add(name: string, model: monaco.editor.ITextModel): void {
       models[name] = model;
     },
-    remove(name: string) {
+    remove(name: string): void {
       delete models[name];
     },
     get(name: string): monaco.editor.ITextModel | undefined {
@@ -22,7 +28,7 @@ export const iTextModelStore = (() => {
 
 export const useSubscribeModelChange = (
   editor: monaco.editor.IStandaloneCodeEditor | null
-) => {
+): void => {
   const selectedModelName = useAppSelector(
     (s) => s.monacoModels.incantations[s.monacoModels.selected]?.name ?? ""
   );

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 const useGameReady = ((): (() => boolean) => {
   const worldReadyChannel = new BroadcastChannel("READY");
   let receivedReady = false;
-  let onReceiveReady = () => {};
-  worldReadyChannel.onmessage = () => {
+  let onReceiveReady = (): void => {};
+  worldReadyChannel.onmessage = (): void => {
     receivedReady = true;
     onReceiveReady();
     worldReadyChannel.close();
@@ -16,7 +16,7 @@ const useGameReady = ((): (() => boolean) => {
 
     useEffect(() => {
       if (receivedReady) return;
-      onReceiveReady = () => setReady(true);
+      onReceiveReady = (): void => setReady(true);
     }, []);
 
     return isReady;

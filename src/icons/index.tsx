@@ -52,13 +52,15 @@ type HTMLDivProps = React.DetailedHTMLProps<
   HTMLDivElement
 >;
 
-const makeIcon = (Icon: string) => (props: HTMLDivProps) => {
-  return (
-    <div {...props}>
-      <Icon />
-    </div>
-  );
-};
+const makeIcon =
+  (Icon: string) =>
+  (props: HTMLDivProps): React.ReactElement => {
+    return (
+      <div {...props}>
+        <Icon />
+      </div>
+    );
+  };
 
 export const CircleIcon = makeIcon(Circle);
 export const EditIcon = makeIcon(Edit);

@@ -7,9 +7,7 @@ import { AddGolem } from "../AddGolem/AddGolem";
 import { Channel } from "../channel";
 import { ValuesPerTile } from "../../types/map";
 import { EntityTile } from "../Entity/Entity";
-import { Action } from "../Action/Action";
 import { Vec } from "../../types/vec";
-import { ACTProgress } from "../../types/ACT";
 
 const emptyMapData = {
   map: {
@@ -18,18 +16,16 @@ const emptyMapData = {
     data: new Int32Array(),
   },
   pos: [0, 0],
-  entities: [],
-  actions: [],
+  entityIDs: [],
 } satisfies MapData;
 
-export const World = () => {
+export const World = (): React.ReactElement => {
   const [mapData, setMap] = useState<MapData>(emptyMapData);
   const [pos, setPos] = useState<Vec>([0, 0]);
   const cameraRef = useRef<Camera>({
     pos: [0, 0],
     size: [24, 24],
   });
-  const [actP, setACTP] = useState<ACTProgress[]>([]);
 
   const fetchMap = useThrottledCallback(
     () => {
@@ -42,7 +38,7 @@ export const World = () => {
     { leading: false }
   );
 
-  const onPan = ([dx, dy]: Vec) => {
+  const onPan = ([dx, dy]: Vec): void => {
     const nextPos: Vec = [pos[0] + dx, pos[1] + dy];
     setPos(nextPos);
     cameraRef.current.pos[0] = -Math.floor(nextPos[0] / 64);
@@ -64,7 +60,7 @@ export const World = () => {
         setMap((m) => {
           return {
             ...m,
-            entities: [...m.entities, data],
+            entityIDs: [...m.entityIDs, data],
           };
         });
       },
@@ -72,39 +68,18 @@ export const World = () => {
         setMap((m) => {
           return {
             ...m,
-            actions: [...m.actions, data],
-          };
-        });
-      },
-      (data: number) => {
-        setMap((m) => {
-          return {
-            ...m,
-            entities: m.entities.filter((e) => e !== data),
-          };
-        });
-      },
-      (data: number) => {
-        setMap((m) => {
-          return {
-            ...m,
-            actions: m.actions.filter((a) => a !== data),
+            entityIDs: m.entityIDs.filter((e) => e !== data),
           };
         });
       }
     );
-
-    const unsub2 = Channel.subACTProgress(setACTP);
 
     Channel.send({
       type: UIMessageType.INITIALIZE,
       data: cameraRef.current,
     });
 
-    return () => {
-      unsub();
-      unsub2();
-    };
+    return unsub;
   }, []);
 
   if (mapData.map.data.length === 0) return <></>;
@@ -128,10 +103,7 @@ export const World = () => {
     <>
       <Pannable pos={pos} onPan={onPan}>
         {tiles}
-        {actP.map((e, i) => (
-          <Action key={i} p={e} />
-        ))}
-        {mapData.entities.map((e) => (
+        {mapData.entityIDs.map((e) => (
           <EntityTile key={e} id={e} />
         ))}
       </Pannable>

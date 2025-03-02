@@ -14,14 +14,16 @@ export const Tab = ({ i }: TabProps): React.ReactElement => {
   const isDirty = useAppSelector((s) => s.monacoModels.incantations[i].isDirty);
   const dispatch = useAppDispatch();
 
-  const onClose = (e: React.MouseEvent<HTMLImageElement>) => {
+  const onClose = (e: React.MouseEvent<HTMLImageElement>): void => {
     dispatch(closeModel(i));
     const state = store.getState().monacoModels;
     iTextModelStore.remove(state.incantations[state.selected].name);
     e.stopPropagation();
   };
 
-  const onClick = () => dispatch(selectModel(i));
+  const onClick = (): void => {
+    dispatch(selectModel(i));
+  };
   return (
     <div
       onClick={onClick}

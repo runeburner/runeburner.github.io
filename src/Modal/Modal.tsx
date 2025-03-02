@@ -6,9 +6,13 @@ export type ModalProps = React.PropsWithChildren<{
   onClose: () => void;
 }>;
 
-export const Modal = ({ open, onClose, children }: ModalProps) => {
+export const Modal = ({
+  open,
+  onClose,
+  children,
+}: ModalProps): React.ReactElement => {
   const backdropRef = useRef<HTMLDivElement | null>(null);
-  const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onBackdropClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     if (e.target === backdropRef.current) {
       onClose();
     }

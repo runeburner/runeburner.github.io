@@ -19,7 +19,7 @@ import "./styles/reset.css";
 import "./styles/user-select.css";
 import "./styles/theme.css";
 
-(() => {
+((): void => {
   new GameWorker();
   const rootDiv = document.getElementById("root");
   if (!rootDiv) {

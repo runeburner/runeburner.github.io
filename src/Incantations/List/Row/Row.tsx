@@ -11,7 +11,7 @@ type RowProps = {
   name: string;
 };
 
-export const Row = ({ name }: RowProps) => {
+export const Row = ({ name }: RowProps): React.ReactElement => {
   const [renaming, setRenaming] = useState(false);
   const [newName, setNewName] = useState(name);
   const dispatch = useAppDispatch();
