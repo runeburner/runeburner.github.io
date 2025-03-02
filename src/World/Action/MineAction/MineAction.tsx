@@ -21,7 +21,9 @@ export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
       <path
         stroke={"#0000ff44"}
         strokeWidth={4}
-        d={`M${32},${32} ${(X - x) * 64 + 32},${(Y - y) * 64 + 32}`}
+        d={`M${(action.pos[0] - x) * 64 + 32},${
+          (action.pos[1] - y) * 64 + 32
+        } ${(action.tile[0] - x) * 64 + 32},${(action.tile[1] - y) * 64 + 32}`}
       />
       <ProgressBar
         pos={[action.pos[0] - x, action.pos[1] - y]}
