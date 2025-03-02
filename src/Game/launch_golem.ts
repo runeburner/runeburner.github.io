@@ -9,18 +9,14 @@ import { UIMessageType } from "../types/uiMessages";
 import { Tile } from "../types/tile";
 import { channel } from "./channel";
 import { waitingActionMap } from "./values";
-import workerScriptHeader from "./workerScriptHeader.js?raw";
-import {
-  EntityRequest,
-  EntityMessageHandler,
-  EntityMessageReceiveDataTypes,
-  EntityWorker,
-} from "../types/entityMessages";
+import { EntityMessageHandler } from "../types/entityMessages";
 import { game } from "./game";
 import { dist, Vec } from "../types/vec";
 import { camera } from "./camera";
 import { aStarPath } from "./path";
 import { ID } from "./id";
+import workerHeader from "./workerScriptHeader.js?raw";
+import { ACT } from "../types/ACT";
 
 const isVec = (v: unknown): v is Vec =>
   Array.isArray(v) && isNumber(v[0]) && isNumber(v[1]);
@@ -33,7 +29,7 @@ const isArgs = (
 ): boolean =>
   args.length === vals.length && args.every((arg, i) => vals[i](arg));
 
-const wwHandlerMap: EntityMessageHandler = {
+export const wwHandlerMap: EntityMessageHandler = {
   WORKER_READY: (id) =>
     navigator.locks.request(String(id), () => {
       const i = game.entities.findIndex((e) => e.id === id);
@@ -60,7 +56,7 @@ const wwHandlerMap: EntityMessageHandler = {
 
     worker.postMessage({
       requestID: m.requestID,
-      data: game.findClosest(
+      data: game.findClosestTile(
         golem.pos,
         Object.entries(Tile).find((t) => t[0] === tileType)![1],
         radius
@@ -189,16 +185,25 @@ const wwHandlerMap: EntityMessageHandler = {
   },
 };
 
+export type Worker = {
+  id: number;
+  tick: (rb: unknown) => ACT;
+};
+
 export const launchGolem = (id: number, incantation: string) => {
+  const idScript = `const ENTITY_ID = ${id};\n`;
   const o = URL.createObjectURL(
-    new Blob([workerScriptHeader + incantation], {
+    new Blob([idScript + workerHeader + incantation], {
       type: "application/javascript",
     })
   );
-  const worker: EntityWorker = new Worker(new URL(o, import.meta.url), {
-    name: String(id),
-  });
-  worker.onmessage = <T extends keyof EntityMessageReceiveDataTypes>(
-    m: MessageEvent<EntityRequest<T>>
-  ) => wwHandlerMap[m.data.command]?.(id, worker, m.data);
+  {
+    const p = import(/* @vite-ignore */ o);
+    p.then((m) => {
+      game.workers.push({
+        id: id,
+        tick: m.tick,
+      });
+    });
+  }
 };

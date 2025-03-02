@@ -1,3 +1,4 @@
+import { ACTProgress } from "../types/ACT";
 import { Action } from "../types/actions";
 import { Entity } from "../types/entity";
 import { Resources } from "../types/resources";
@@ -17,6 +18,7 @@ export const Channel = (() => {
   let removeEntitySub: ((data: number) => void) | null = null;
   let removeActionSub: ((data: number) => void) | null = null;
   let resourcesSub: ((data: Resources) => void) | null = null;
+  let actProgressSub: ((data: ACTProgress[]) => void) | null = null;
 
   const c: MainThreadUIChannel = new BroadcastChannel("UI");
 
@@ -44,6 +46,9 @@ export const Channel = (() => {
     },
     [UIMessageType.RESOURCES]: (resources) => {
       if (resourcesSub) resourcesSub(resources);
+    },
+    [UIMessageType.ACTIONS]: (progress) => {
+      if (actProgressSub) actProgressSub(progress);
     },
   };
 
@@ -85,6 +90,10 @@ export const Channel = (() => {
     subResources: (f: (data: Resources) => void): (() => void) => {
       resourcesSub = f;
       return () => (resourcesSub = null);
+    },
+    subACTProgress: (f: (data: ACTProgress[]) => void): (() => void) => {
+      actProgressSub = f;
+      return () => (actProgressSub = null);
     },
     send: (msg: Parameters<MainThreadUIChannel["postMessage"]>[0]) => {
       c.postMessage(msg);

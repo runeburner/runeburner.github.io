@@ -1,7 +1,7 @@
-import { MoveAction as MoveActionT } from "../../../types/actions";
+import { MOVEProgress } from "../../../types/ACT";
 
 type MoveActionProps = {
-  action: MoveActionT;
+  action: MOVEProgress;
 };
 
 export const MoveAction = ({ action }: MoveActionProps): React.ReactElement => {

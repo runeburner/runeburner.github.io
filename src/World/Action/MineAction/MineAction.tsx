@@ -1,7 +1,7 @@
-import { MineAction as MineActionT } from "../../../types/actions";
+import { MINEProgress } from "../../../types/ACT";
 
 type MineActionProps = {
-  action: MineActionT;
+  action: MINEProgress;
 };
 
 export const MineAction = ({ action }: MineActionProps): React.ReactElement => {

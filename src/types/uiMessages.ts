@@ -1,3 +1,4 @@
+import { ACTProgress } from "./ACT";
 import { Action } from "./actions";
 import { Entity } from "./entity";
 import { Resources } from "./resources";
@@ -18,6 +19,7 @@ export const UIMessageType = Object.freeze({
   REMOVE_ENTITY: "REMOVE_ENTITY",
   REMOVE_ACTION: "REMOVE_ACTION",
   RESOURCES: "RESOURCES",
+  ACTIONS: "ACTIONS",
 } as const);
 
 export type UIMessageType = (typeof UIMessageType)[keyof typeof UIMessageType];
@@ -53,6 +55,7 @@ type MainThreadUIMessageReceiveDataTypes = {
   [UIMessageType.REMOVE_ENTITY]: number;
   [UIMessageType.REMOVE_ACTION]: number;
   [UIMessageType.RESOURCES]: Resources;
+  [UIMessageType.ACTIONS]: ACTProgress[];
 };
 
 type GameThreadUIMessageReceiveDataTypes = {

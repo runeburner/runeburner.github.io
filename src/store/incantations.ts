@@ -3,16 +3,29 @@ import { useAppSelector } from "./hooks";
 
 type IncantationsState = Record<string, string>;
 
-export const defaultIncantation = `run(async () => {
-  while (true) {
-    const crystal = await world.findClosestTile("MANA_CRYSTAL", 19);
-    if(!crystal) continue;
-    await world.goNextTo(crystal);
-    await world.mine(crystal);
-    await world.goNextTo([2, 2]);
-    await world.attune();
+export const defaultIncantation = `
+let mining = true;
+export const tick = (rs) => {
+  const me = rs.me();
+  mining = mining ?
+    me.minecapacity[0] < me.minecapacity[1] :
+    me.minecapacity[0] === 0;
+  if(mining) {
+    const crystal = rs.findNearest("MANA_CRYSTAL", 19);
+    if(!rs.isInRange(crystal)) {
+      return MOVE(crystal);
+    } else {
+      return MINE(crystal);
+    }
+  } else {
+    const heart = rs.findClosestEntity("HEART");
+    if(!rs.isInRange(heart)) {
+      return MOVE(heart);
+    } else {
+      return ATTUNE();
+    }
   }
-})`;
+}`;
 
 const initialState: IncantationsState = {
   basic: defaultIncantation,

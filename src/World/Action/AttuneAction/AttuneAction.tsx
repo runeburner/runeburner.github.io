@@ -1,16 +1,16 @@
-import { AttuneAction as AttuneActionT } from "../../../types/actions";
+import { ATTUNEProgress } from "../../../types/ACT";
 
 type AttuneActionProps = {
-  action: AttuneActionT;
+  action: ATTUNEProgress;
 };
 
 export const AttuneAction = ({
   action,
 }: AttuneActionProps): React.ReactElement => {
-  const x = Math.min(action.pos[0], action.heartPos[0]);
-  const y = Math.min(action.pos[1], action.heartPos[1]);
-  const X = Math.max(action.pos[0], action.heartPos[0]);
-  const Y = Math.max(action.pos[1], action.heartPos[1]);
+  const x = Math.min(action.pos[0], action.heart[0]);
+  const y = Math.min(action.pos[1], action.heart[1]);
+  const X = Math.max(action.pos[0], action.heart[0]);
+  const Y = Math.max(action.pos[1], action.heart[1]);
   return (
     <svg
       className={"flex-center absolute"}
