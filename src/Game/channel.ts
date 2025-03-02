@@ -6,7 +6,6 @@ import {
   UIMessageType,
 } from "../types/uiMessages";
 import { ValuesPerTile } from "../types/map";
-import { determineInitialCameraPosition } from "./values";
 import { launchGolem } from "./launch_golem";
 import { Rune, RuneWeight } from "../types/rune";
 import { game } from "./game";
@@ -49,7 +48,7 @@ const generateUIMapData = (): MapData => {
 
 const handlers: GameThreadUIHandler = {
   [UIMessageType.INITIALIZE]: (initialCam) => {
-    const cam = determineInitialCameraPosition(initialCam);
+    const cam = game.determineInitialCameraPosition(initialCam);
 
     Object.assign(camera.c, cam);
     channel.postMessage({
@@ -82,13 +81,15 @@ const handlers: GameThreadUIHandler = {
       minecapacity: [0, data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0],
       mineSpeed: data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
     } satisfies GolemEntity;
-    channel.postMessage({
-      type: UIMessageType.ADD_ENTITY,
-      data: golem.id,
-    });
 
-    launchGolem(id, data.incantation);
-    game.entityM[id] = golem;
+    launchGolem(id, data.incantation).then((success) => {
+      if (!success) return;
+      game.entityM[id] = golem;
+      channel.postMessage({
+        type: UIMessageType.ADD_ENTITY,
+        data: golem.id,
+      });
+    });
   },
   [UIMessageType.REFRESH_ENTITY]: (entityID) => {
     const entity = game.entityM[entityID];
