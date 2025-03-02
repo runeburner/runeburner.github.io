@@ -109,19 +109,30 @@ const maker: {
     // If we're already there, do nothing.
     if (dist(golem.pos, a.v) <= 1) return null;
 
+    const old = game.actionM[a.id] as ActionProgress | undefined;
+    const wasMoving = old && old.type === ActionType.MOVE;
+    if (wasMoving) {
+      return {
+        type: ActionType.MOVE,
+        goal: [...a.v],
+        path: old.path,
+        // carry over progress
+        progress: wasMoving
+          ? [old.progress[0], golem.weight]
+          : [0, golem.weight],
+      } satisfies MOVEProgress;
+    }
+
     // Calculate new path
     const path = aStarPath(golem.pos, a.v);
     if (path == null) return null;
     path.pop();
-    const old = game.actionM[a.id] as ActionProgress | undefined;
-    const wasMoving = old && old.type === ActionType.MOVE;
-    // Create new ActionProgress
     return {
       type: ActionType.MOVE,
       goal: [...a.v],
       path: path,
       // carry over progress
-      progress: wasMoving ? [old.progress[0], golem.weight] : [0, golem.weight],
+      progress: [0, golem.weight],
     } satisfies MOVEProgress;
   },
   [ActionType.MINE]: (a: MINE) => {
