@@ -56,14 +56,14 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
     openSet.splice(currentI, 1);
     const currentV = unhashVec(current);
     const neighbors: Vec[] = [
-      [currentV[0] - 1, currentV[1]],
-      [currentV[0] + 1, currentV[1]],
-      [currentV[0], currentV[1] - 1],
-      [currentV[0], currentV[1] + 1],
       [currentV[0] - 1, currentV[1] - 1],
       [currentV[0] + 1, currentV[1] - 1],
       [currentV[0] + 1, currentV[1] - 1],
       [currentV[0] + 1, currentV[1] + 1],
+      [currentV[0] - 1, currentV[1]],
+      [currentV[0] + 1, currentV[1]],
+      [currentV[0], currentV[1] - 1],
+      [currentV[0], currentV[1] + 1],
     ];
     for (const neighbor of neighbors) {
       if (
