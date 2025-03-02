@@ -21,12 +21,12 @@ export default defineConfig({
       include: "**/*.svg",
     }),
   ],
-  build: {
-    minify: false,
-    terserOptions: {
-      compress: false,
-      mangle: false,
-    },
-    sourcemap: "inline",
-  },
+  // build: {
+  //   minify: false,
+  //   terserOptions: {
+  //     compress: false,
+  //     mangle: false,
+  //   },
+  //   sourcemap: "inline",
+  // },
 });
