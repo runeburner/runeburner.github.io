@@ -11,7 +11,6 @@ export const AddGolem = (): React.ReactElement => {
       <div className={"m-4 fixed " + classes.container}>
         <button className="cursor-pointer icon-button">
           <PlusIcon onClick={onClick} />
-          {/* <div style={{ width: "24px", height: "24px" }} onClick={onClick} /> */}
         </button>
       </div>
       <AddGolemModal open={open} onClose={() => setOpen(false)} />
