@@ -27,13 +27,13 @@ const process: {
     const golem = e as GolemEntity;
     const mp = p as MOVEProgress;
     mp.progress[0] += golem.speed;
+    if (mp.progress[0] >= mp.progress[1]) {
+      const newPath = aStarPath(golem.pos, mp.goal);
+      if (!newPath) return true;
+      newPath.pop();
+      mp.path = newPath;
+    }
     while (mp.progress[0] >= mp.progress[1]) {
-      if (game.entityAt(mp.path[1])) {
-        const newPath = aStarPath(golem.pos, mp.goal);
-        if (!newPath) return true;
-        newPath.pop();
-        mp.path = newPath;
-      }
       mp.progress[0] -= mp.progress[1];
       mp.path.shift();
       const nextNode = mp.path[0];
@@ -109,30 +109,19 @@ const maker: {
     // If we're already there, do nothing.
     if (dist(golem.pos, a.v) <= 1) return null;
 
-    const old = game.actionM[a.id] as ActionProgress | undefined;
-    const wasMoving = old && old.type === ActionType.MOVE;
-    if (wasMoving) {
-      return {
-        type: ActionType.MOVE,
-        goal: [...a.v],
-        path: old.path,
-        // carry over progress
-        progress: wasMoving
-          ? [old.progress[0], golem.weight]
-          : [0, golem.weight],
-      } satisfies MOVEProgress;
-    }
-
     // Calculate new path
     const path = aStarPath(golem.pos, a.v);
     if (path == null) return null;
     path.pop();
+    const old = game.actionM[a.id] as ActionProgress | undefined;
+    const wasMoving = old && old.type === ActionType.MOVE;
+    // Create new ActionProgress
     return {
       type: ActionType.MOVE,
       goal: [...a.v],
       path: path,
       // carry over progress
-      progress: [0, golem.weight],
+      progress: wasMoving ? [old.progress[0], golem.weight] : [0, golem.weight],
     } satisfies MOVEProgress;
   },
   [ActionType.MINE]: (a: MINE) => {
