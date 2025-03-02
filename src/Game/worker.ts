@@ -1,6 +1,5 @@
 import {
   Action,
-  ActionProgress,
   ActionType,
   ActionTypeMap,
   ATTUNE,
@@ -9,6 +8,7 @@ import {
   MINEProgress,
   MOVE,
   MOVEProgress,
+  ActionProgress,
 } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Tile } from "../types/tile";
@@ -102,57 +102,75 @@ const rsObject = {
 };
 
 const maker: {
-  [T in ActionType]: (a: ActionTypeMap[T][0]) => void;
+  [T in ActionType]: (a: ActionTypeMap[T][0]) => ActionProgress | true | null;
 } = {
   [ActionType.MOVE]: (a: MOVE) => {
-    const old = game.actionM[a.id] as MOVEProgress | undefined;
     const golem = game.entityM[a.id] as GolemEntity;
-    if (dist(golem.pos, a.v) <= 1) return;
-    if (old && eq(old.goal, a.v)) return;
-    delete game.actionM[a.id];
+    // If we're already there, do nothing.
+    if (dist(golem.pos, a.v) <= 1) return null;
+
+    // Calculate new path
     const path = aStarPath(golem.pos, a.v);
-    if (path == null) return;
+    if (path == null) return null;
     path.pop();
-    const progress = {
+    const old = game.actionM[a.id] as ActionProgress | undefined;
+    const wasMoving = old && old.type === ActionType.MOVE;
+    // Create new ActionProgress
+    return {
       type: ActionType.MOVE,
       goal: [...a.v],
       path: path,
-      progress: [0, golem.weight],
+      // carry over progress
+      progress: wasMoving ? [old.progress[0], golem.weight] : [0, golem.weight],
     } satisfies MOVEProgress;
-    game.actionM[a.id] = progress;
   },
   [ActionType.MINE]: (a: MINE) => {
-    const old = game.actionM[a.id] as MINEProgress | undefined;
+    const old = game.actionM[a.id] as ActionProgress | undefined;
     const golem = game.entityM[a.id] as GolemEntity;
-    if (dist(golem.pos, a.v) > 1) return;
-    if (golem.minecapacity[0] === golem.minecapacity[1]) return;
-    if (game.tileAt(a.v)[0] !== Tile.MANA_CRYSTAL) return;
-    if (old && eq(old.tile, a.v)) return;
-    delete game.actionM[a.id];
-    const progress = {
+
+    // If it's too far.
+    if (dist(golem.pos, a.v) > 1) return null;
+
+    // If the golem is full.
+    if (golem.minecapacity[0] === golem.minecapacity[1]) return null;
+
+    // If we're trying to mine anything other than a mana crystal
+    if (game.tileAt(a.v)[0] !== Tile.MANA_CRYSTAL) return null;
+
+    // If we were already mining this tile.
+    const wasMining = old && old.type === ActionType.MINE;
+    if (wasMining && eq(old.tile, a.v)) return true;
+
+    return {
       type: ActionType.MINE,
       pos: [...golem.pos],
-      progress: [0, 16],
+      // If we swap mining tile in the middle, carry over progress
+      progress: wasMining ? old.progress : [0, 16],
       tile: [...a.v],
     } satisfies MINEProgress;
-    game.actionM[a.id] = progress;
   },
   [ActionType.ATTUNE]: (a: ATTUNE) => {
-    const old = game.actionM[a.id] as ATTUNEProgress | undefined;
+    const old = game.actionM[a.id] as ActionProgress | undefined;
     const golem = game.entityM[a.id] as GolemEntity;
-    if (golem.minecapacity[0] === 0) return;
-    if (old) return;
-    delete game.actionM[a.id];
-    const progress = {
+    const heart = Object.values(game.entityM).find(
+      (e) => e.type === EntityType.HEART
+    )!;
+
+    // If it's too far.
+    if (dist(golem.pos, heart.pos) > 1) return null;
+
+    // If we have no mana crystals
+    if (golem.minecapacity[0] === 0) return null;
+
+    // If we were already attuning
+    if (old && old.type === ActionType.ATTUNE) return true;
+
+    return {
       type: ActionType.ATTUNE,
       progress: [0, 16],
       pos: [...golem.pos],
-      heart: [
-        ...Object.values(game.entityM).find((e) => e.type === EntityType.HEART)!
-          .pos,
-      ],
+      heart: [...heart.pos],
     } satisfies ATTUNEProgress;
-    game.actionM[a.id] = progress;
   },
 };
 
@@ -180,21 +198,27 @@ setInterval((): void => {
     const a = actions[i];
     if (!a) continue;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    maker[a.type](a as any);
+    const p = maker[a.type](a as any);
+    if (p === null) {
+      delete game.actionM[a.id];
+    } else if (p !== true) {
+      game.actionM[a.id] = p;
+    }
   }
 
   for (const e of Object.values(game.entityM)) {
     const p = game.actionM[e.id];
-    if (!p) continue;
-    const del = process[p.type](e, p);
-    if (del) {
-      delete game.actionM[e.id];
+    if (p) {
+      const del = process[p.type](e, p);
+      if (del) {
+        delete game.actionM[e.id];
+      }
     }
 
     if (camera.isInView(e.pos)) {
       channel.postMessage({
         type: UIMessageType.UPDATE_ENTITY,
-        data: { entity: e, action: p },
+        data: { entity: e, action: game.actionM[e.id] },
       });
     }
   }

@@ -20,14 +20,14 @@ export type MOVE = Action<typeof ActionType.MOVE, { v: Vec }>;
 export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
 export type ATTUNE = Action<typeof ActionType.ATTUNE>;
 
-export type ActionProgress<
+type BaseActionProgress<
   T extends ActionType = ActionType,
   V extends object = object
 > = {
   type: T;
 } & V;
 
-export type MOVEProgress = ActionProgress<
+export type MOVEProgress = BaseActionProgress<
   typeof ActionType.MOVE,
   {
     goal: Vec;
@@ -36,7 +36,7 @@ export type MOVEProgress = ActionProgress<
   }
 >;
 
-export type MINEProgress = ActionProgress<
+export type MINEProgress = BaseActionProgress<
   typeof ActionType.MINE,
   {
     pos: Vec;
@@ -45,7 +45,7 @@ export type MINEProgress = ActionProgress<
   }
 >;
 
-export type ATTUNEProgress = ActionProgress<
+export type ATTUNEProgress = BaseActionProgress<
   typeof ActionType.ATTUNE,
   {
     progress: Vec;
@@ -53,6 +53,8 @@ export type ATTUNEProgress = ActionProgress<
     heart: Vec;
   }
 >;
+
+export type ActionProgress = MOVEProgress | MINEProgress | ATTUNEProgress;
 
 export type ActionTypeMap = {
   [ActionType.MOVE]: [MOVE, MOVEProgress];
