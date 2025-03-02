@@ -10,16 +10,16 @@ import { Page } from "../store/sidebar";
 import { GameReadyGate } from "../World/GameReadyGate";
 import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
 
-function App() {
+const App = (): React.ReactElement => {
   useEffect(() => {
-    const f = (e: KeyboardEvent) => {
+    const f = (e: KeyboardEvent): void => {
       const isMeta = e.ctrlKey || e.metaKey;
       if (isMeta && ["p"].includes(e.key)) {
         e.preventDefault();
       }
     };
     document.addEventListener("keydown", f);
-    return () => document.removeEventListener("keydown", f);
+    return (): void => document.removeEventListener("keydown", f);
   }, []);
   return (
     <div className={"w-screen h-screen flex flex-col"}>
@@ -48,6 +48,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

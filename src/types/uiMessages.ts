@@ -1,5 +1,4 @@
 import { ACTProgress } from "./ACT";
-import { Action } from "./actions";
 import { Entity } from "./entity";
 import { Resources } from "./resources";
 import { Rune } from "./rune";
@@ -51,7 +50,7 @@ type MainThreadUIMessageReceiveDataTypes = {
   [UIMessageType.ADD_ENTITY]: number;
   [UIMessageType.ADD_ACTION]: number;
   [UIMessageType.UPDATE_ENTITY]: Entity;
-  [UIMessageType.UPDATE_ACTION]: Action;
+  [UIMessageType.UPDATE_ACTION]: unknown;
   [UIMessageType.REMOVE_ENTITY]: number;
   [UIMessageType.REMOVE_ACTION]: number;
   [UIMessageType.RESOURCES]: Resources;

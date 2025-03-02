@@ -1,5 +1,4 @@
 import { ACTProgress } from "../types/ACT";
-import { Action } from "../types/actions";
 import { Entity } from "../types/entity";
 import { Resources } from "../types/resources";
 import {
@@ -10,7 +9,6 @@ import {
 } from "../types/uiMessages";
 
 export const Channel = (() => {
-  const actionSubs: Record<number, (a: Action) => void> = {};
   const entitySubs: Record<number, (e: Entity) => void> = {};
   let mapDataSub: ((data: MapData) => void) | null = null;
   let addEntitySub: ((data: number) => void) | null = null;
@@ -41,9 +39,7 @@ export const Channel = (() => {
     [UIMessageType.UPDATE_ENTITY]: (entity) => {
       entitySubs[entity.id]?.(entity);
     },
-    [UIMessageType.UPDATE_ACTION]: (action) => {
-      actionSubs[action.id]?.(action);
-    },
+    [UIMessageType.UPDATE_ACTION]: () => {},
     [UIMessageType.RESOURCES]: (resources) => {
       if (resourcesSub) resourcesSub(resources);
     },
@@ -55,12 +51,6 @@ export const Channel = (() => {
   c.onmessage = ({ data: msg }) => handlers[msg.type]?.(msg.data);
 
   return {
-    subAction: (id: number, f: (a: Action) => void): (() => void) => {
-      actionSubs[id] = f;
-      return () => {
-        delete actionSubs[id];
-      };
-    },
     subEntity: (id: number, f: (a: Entity) => void): (() => void) => {
       entitySubs[id] = f;
       return () => {

@@ -1,5 +1,4 @@
 import { ACTProgress } from "../types/ACT";
-import { Action, ActionDataMap, ActionType } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { ValuesPerTile } from "../types/map";
 import { Tile } from "../types/tile";
@@ -21,7 +20,6 @@ export const game = (() => {
     ) as Record<number, Entity>,
     actionM: {} as Record<number, ACTProgress>,
     entities: defaultEntities,
-    actions: [] as Action<ActionType, ActionDataMap[ActionType]>[],
     map: (() => {
       const height = defaultMap.length;
       const width = defaultMap[0].length;
