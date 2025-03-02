@@ -1,11 +1,12 @@
 // This file is ONLY used by the text editor. Not by the game itself.
-type World = {
-  findClosestTile: (tile: string, radius: number) => Promise<[number, number]>;
-  goNextTo: (pos: [number, number]) => Promise<unknown>;
-  mine: (pos: [number, number]) => Promise<unknown>;
-  ping: () => Promise<string>;
-  attune: () => Promise<void>;
+type Vec = [number, number];
+type RS = {
+  findNearest(e: Entity, tile: string, radius: number): Vec | null;
+  me(e: Entity): Entity;
+  isInRange(e: Entity, v: Vec): boolean;
+  findClosestEntity(e: Entity, entityType: string): Vec | null;
 };
 
-declare const world: World;
-declare const run: (f: () => Promise<void>) => void;
+declare const MOVE: (v: Vec) => unknown;
+declare const MINE: (v: Vec) => unknown;
+declare const ATTUNE: () => unknown;

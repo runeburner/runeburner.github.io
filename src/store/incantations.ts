@@ -4,8 +4,9 @@ import { RootState } from "./store";
 
 type IncantationsState = Record<string, string>;
 
-export const defaultIncantation = `
-let mining = true;
+export const defaultIncantation = `let mining = true;
+
+/** @param {RS} rs */
 export const tick = (rs) => {
   const me = rs.me();
   mining = mining ?
@@ -19,7 +20,7 @@ export const tick = (rs) => {
       return MINE(crystal);
     }
   } else {
-    const heart = [1,1] //rs.findClosestEntity("HEART");
+    const heart = rs.findClosestEntity("HEART");
     if(!rs.isInRange(heart)) {
       return MOVE(heart);
     } else {
