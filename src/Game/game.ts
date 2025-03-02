@@ -1,18 +1,17 @@
 import { ActionProgress } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { Map, ValuesPerTile } from "../types/map";
+import { Resources } from "../types/resources";
 import { Tile } from "../types/tile";
-import { UIMessageType } from "../types/uiMessages";
+import { Camera, UIMessageType } from "../types/uiMessages";
 import { dist, Vec } from "../types/vec";
 import { channel } from "./channel";
 import { defaultEntities, defaultMap } from "./defaultValues";
-import { Worker } from "./launch_golem";
+import { EntityTicker } from "./launch_golem";
 
 type Game = {
-  workers: Worker[];
-  resources: {
-    attunement: number;
-  };
+  workers: EntityTicker[];
+  resources: Resources;
   entityM: Record<number, Entity>;
   actionM: Record<number, ActionProgress>;
   map: Map;
@@ -22,19 +21,17 @@ type Game = {
   findClosestEntity(pos: Vec, entityType: EntityType): Vec | null;
   golemSpawnCoordinates(): Vec | null;
   addAttunement(n: number): void;
+  determineInitialCameraPosition(cam: Camera): Camera;
 };
 
 export const game = ((): Game => {
   return {
-    workers: [] as Worker[],
+    workers: [],
     resources: {
       attunement: 0,
     },
-    entityM: defaultEntities.reduce(
-      (m, e) => ({ ...m, [e.id]: e }),
-      {}
-    ) as Record<number, Entity>,
-    actionM: {} as Record<number, ActionProgress>,
+    entityM: defaultEntities.reduce((m, e) => ({ ...m, [e.id]: e }), {}),
+    actionM: {},
     map: ((): Map => {
       const height = defaultMap.length;
       const width = defaultMap[0].length;
@@ -88,12 +85,12 @@ export const game = ((): Game => {
       );
       if (entities.length === 0) return null;
       const v = entities.reduce(
-        (res: [number, Vec], e) => {
+        (res: [number, Vec], e): [number, Vec] => {
           const d = dist(e.pos, pos);
           if (d < res[0]) {
-            return [d, [...e.pos]] as [number, Vec];
+            return [d, [...e.pos]];
           }
-          return res as [number, Vec];
+          return res;
         },
         [1e99, entities[0].pos]
       );
@@ -112,6 +109,19 @@ export const game = ((): Game => {
         type: UIMessageType.RESOURCES,
         data: this.resources,
       });
+    },
+
+    determineInitialCameraPosition: (cam: Camera): Camera => {
+      const core = Object.values(game.entityM).find(
+        (e) => e.type === EntityType.HEART
+      );
+      return {
+        pos: [
+          (core?.pos[0] ?? 0) - Math.floor(cam.size[0] / 2),
+          (core?.pos[1] ?? 0) - Math.floor(cam.size[1] / 2),
+        ],
+        size: [...cam.size],
+      };
     },
   };
 })();

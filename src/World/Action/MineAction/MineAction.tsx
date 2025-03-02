@@ -30,5 +30,4 @@ export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
       />
     </svg>
   );
-  return <></>;
 };
