@@ -6,7 +6,7 @@ import {
   ActionType,
   ATTUNEProgress,
   MINEProgress,
-  MOVEProgress,
+  MOVE_NEXT_TOProgress,
 } from "../../types/actions";
 
 type ActionProps = {
@@ -16,8 +16,8 @@ type ActionProps = {
 export const Action = ({ p }: ActionProps): React.ReactElement => {
   if (!p) return <></>;
   switch (p.type) {
-    case ActionType.MOVE:
-      return <MoveAction action={p as MOVEProgress} />;
+    case ActionType.MOVE_NEXT_TO:
+      return <MoveAction action={p as MOVE_NEXT_TOProgress} />;
     case ActionType.MINE:
       return <MineAction action={p as MINEProgress} />;
     case ActionType.ATTUNE:

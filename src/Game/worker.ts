@@ -6,8 +6,8 @@ import {
   ATTUNEProgress,
   MINE,
   MINEProgress,
-  MOVE,
-  MOVEProgress,
+  MOVE_NEXT_TO,
+  MOVE_NEXT_TOProgress,
   ActionProgress,
 } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
@@ -23,9 +23,9 @@ import { aStarPath } from "./path";
 const process: {
   [T in ActionType]: (e: Entity, p: ActionProgress) => boolean;
 } = {
-  [ActionType.MOVE]: (e: Entity, p: ActionProgress): boolean => {
+  [ActionType.MOVE_NEXT_TO]: (e: Entity, p: ActionProgress): boolean => {
     const golem = e as GolemEntity;
-    const mp = p as MOVEProgress;
+    const mp = p as MOVE_NEXT_TOProgress;
     mp.progress[0] += golem.speed;
     if (mp.progress[0] >= mp.progress[1]) {
       const newPath = aStarPath(golem.pos, mp.goal);
@@ -104,7 +104,7 @@ const rsObject = {
 const maker: {
   [T in ActionType]: (a: ActionTypeMap[T][0]) => ActionProgress | true | null;
 } = {
-  [ActionType.MOVE]: (a: MOVE) => {
+  [ActionType.MOVE_NEXT_TO]: (a: MOVE_NEXT_TO) => {
     const golem = game.entityM[a.id] as GolemEntity;
     // If we're already there, do nothing.
     if (dist(golem.pos, a.v) <= 1) return null;
@@ -114,15 +114,15 @@ const maker: {
     if (path == null) return null;
     path.pop();
     const old = game.actionM[a.id] as ActionProgress | undefined;
-    const wasMoving = old && old.type === ActionType.MOVE;
+    const wasMoving = old && old.type === ActionType.MOVE_NEXT_TO;
     // Create new ActionProgress
     return {
-      type: ActionType.MOVE,
+      type: ActionType.MOVE_NEXT_TO,
       goal: [...a.v],
       path: path,
       // carry over progress
       progress: wasMoving ? [old.progress[0], golem.weight] : [0, golem.weight],
-    } satisfies MOVEProgress;
+    } satisfies MOVE_NEXT_TOProgress;
   },
   [ActionType.MINE]: (a: MINE) => {
     const old = game.actionM[a.id] as ActionProgress | undefined;
