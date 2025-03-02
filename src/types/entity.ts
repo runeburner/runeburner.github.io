@@ -8,24 +8,24 @@ export const EntityType = Object.freeze({
 
 export type EntityType = (typeof EntityType)[keyof typeof EntityType];
 
-export type BaseEntity = {
+export type BaseEntity<T extends object> = {
   type: EntityType;
   id: number;
   pos: Vec;
-};
+} & T;
 
-export type HeartEntity = {
+export type HeartEntity = BaseEntity<{
   type: typeof EntityType.HEART;
   attunement: number;
-} & BaseEntity;
+}>;
 
-export type GolemEntity = {
+export type GolemEntity = BaseEntity<{
   type: typeof EntityType.GOLEM;
   speed: number;
   weight: number;
   mineSpeed: number;
   minecapacity: Vec;
   runes: [Rune, number][];
-} & BaseEntity;
+}>;
 
 export type Entity = HeartEntity | GolemEntity;

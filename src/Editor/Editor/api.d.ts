@@ -7,6 +7,6 @@ type RS = {
   findClosestEntity(e: Entity, entityType: string): Vec | null;
 };
 
-declare const MOVE: (v: Vec) => unknown;
+declare const MOVE_NEXT_TO: (v: Vec) => unknown;
 declare const MINE: (v: Vec) => unknown;
 declare const ATTUNE: () => unknown;

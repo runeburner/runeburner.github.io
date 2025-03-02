@@ -1,8 +1,8 @@
-import { MOVEProgress } from "../../../types/actions";
+import { MOVE_NEXT_TOProgress } from "../../../types/actions";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type MoveActionProps = {
-  action: MOVEProgress;
+  action: MOVE_NEXT_TOProgress;
 };
 
 export const MoveAction = ({ action }: MoveActionProps): React.ReactElement => {

@@ -1,7 +1,7 @@
 import { Vec } from "./vec";
 
 export const ActionType = Object.freeze({
-  MOVE: "MOVE",
+  MOVE_NEXT_TO: "MOVE_NEXT_TO",
   MINE: "MINE",
   ATTUNE: "ATTUNE",
 } as const);
@@ -16,7 +16,7 @@ export type Action<
   id: number;
 } & V;
 
-export type MOVE = Action<typeof ActionType.MOVE, { v: Vec }>;
+export type MOVE_NEXT_TO = Action<typeof ActionType.MOVE_NEXT_TO, { v: Vec }>;
 export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
 export type ATTUNE = Action<typeof ActionType.ATTUNE>;
 
@@ -27,8 +27,8 @@ type BaseActionProgress<
   type: T;
 } & V;
 
-export type MOVEProgress = BaseActionProgress<
-  typeof ActionType.MOVE,
+export type MOVE_NEXT_TOProgress = BaseActionProgress<
+  typeof ActionType.MOVE_NEXT_TO,
   {
     goal: Vec;
     progress: Vec;
@@ -54,10 +54,13 @@ export type ATTUNEProgress = BaseActionProgress<
   }
 >;
 
-export type ActionProgress = MOVEProgress | MINEProgress | ATTUNEProgress;
+export type ActionProgress =
+  | MOVE_NEXT_TOProgress
+  | MINEProgress
+  | ATTUNEProgress;
 
 export type ActionTypeMap = {
-  [ActionType.MOVE]: [MOVE, MOVEProgress];
+  [ActionType.MOVE_NEXT_TO]: [MOVE_NEXT_TO, MOVE_NEXT_TOProgress];
   [ActionType.MINE]: [MINE, MINEProgress];
   [ActionType.ATTUNE]: [ATTUNE, ATTUNEProgress];
 };

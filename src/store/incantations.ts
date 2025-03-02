@@ -15,14 +15,14 @@ export const tick = (rs) => {
   if(mining) {
     const crystal = rs.findNearest("MANA_CRYSTAL", 19);
     if(!rs.isInRange(crystal)) {
-      return MOVE(crystal);
+      return MOVE_NEXT_TO(crystal);
     } else {
       return MINE(crystal);
     }
   } else {
     const heart = rs.findClosestEntity("HEART");
     if(!rs.isInRange(heart)) {
-      return MOVE(heart);
+      return MOVE_NEXT_TO(heart);
     } else {
       return ATTUNE();
     }
