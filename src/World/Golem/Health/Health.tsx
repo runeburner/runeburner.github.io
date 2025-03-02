@@ -1,10 +1,10 @@
 import { Vec } from "../../../types/vec";
 
-const healthColor = "#fd4c63";
-const armorColor = "#fde86f";
+const healthColor = "#fbf9f5";
+const armorColor = "#ff9e4a";
 const shieldColor = "#65c4fb";
-const emptyColor = "#ffffff22";
-const healthColors = [healthColor, armorColor, shieldColor];
+const emptyColor = "#00000022";
+const healthColors = [healthColor, armorColor, shieldColor, emptyColor];
 
 const outerDiameter = 31;
 const innerDiameter = 20;
@@ -17,7 +17,7 @@ const emptyHealth = (
 );
 
 // spacing between chunks
-const spacing = Math.PI / 32;
+const spacing = Math.PI / 64;
 const innerSpacing = spacing * (outerDiameter / innerDiameter);
 const chunkSize = 5;
 
@@ -62,6 +62,7 @@ type HealthProps = {
   armor: Vec;
   shield: Vec;
 };
+
 export const Health = (props: HealthProps): React.ReactElement => {
   const { health, armor, shield } = props;
   const totalHealth = health[1] + armor[1] + shield[1];
@@ -76,7 +77,11 @@ export const Health = (props: HealthProps): React.ReactElement => {
   let pointsUsed = 0;
   for (let i = 0; i < numChunks; i++) {
     const thisChunkSize =
-      i < numChunks - 1 ? chunkSize : totalHealth % (i * chunkSize);
+      i < numChunks - 1
+        ? chunkSize
+        : totalHealth % chunkSize === 0
+        ? chunkSize
+        : totalHealth % chunkSize;
     const pts = getNextPoints(props, pointsUsed, thisChunkSize);
     pointsUsed += pts.reduce((acc, c) => acc + c, 0);
 

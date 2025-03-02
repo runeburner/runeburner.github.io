@@ -26,5 +26,8 @@ export const defaultEntities: Entity[] = [
     id: ID.next(),
     pos: [2, 2],
     attunement: 0,
+    health: [50, 50],
+    armor: [0, 0],
+    shield: [0, 0],
   },
 ];
