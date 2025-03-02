@@ -2,25 +2,25 @@ import { MoveAction } from "./MoveAction/MoveAction";
 import { MineAction } from "./MineAction/MineAction";
 import { AttuneAction } from "./AttuneAction/AttuneAction";
 import {
-  ACTProgress,
-  ACTType,
+  ActionProgress,
+  ActionType,
   ATTUNEProgress,
   MINEProgress,
   MOVEProgress,
-} from "../../types/ACT";
+} from "../../types/actions";
 
 type ActionProps = {
-  p: ACTProgress;
+  p: ActionProgress;
 };
 
 export const Action = ({ p }: ActionProps): React.ReactElement => {
   if (!p) return <></>;
   switch (p.type) {
-    case ACTType.MOVE:
+    case ActionType.MOVE:
       return <MoveAction action={p as MOVEProgress} />;
-    case ACTType.MINE:
+    case ActionType.MINE:
       return <MineAction action={p as MINEProgress} />;
-    case ACTType.ATTUNE:
+    case ActionType.ATTUNE:
       return <AttuneAction action={p as ATTUNEProgress} />;
     default:
       return <></>;

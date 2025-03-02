@@ -1,7 +1,7 @@
 import { game } from "./game";
 import { Vec } from "../types/vec";
 import workerHeader from "./workerScriptHeader.js?raw";
-import { ACT } from "../types/ACT";
+import { Action } from "../types/actions";
 
 export const isVec = (v: unknown): v is Vec =>
   Array.isArray(v) && isNumber(v[0]) && isNumber(v[1]);
@@ -16,7 +16,7 @@ export const isArgs = (
 
 export type Worker = {
   id: number;
-  tick: (rb: unknown) => ACT;
+  tick: (rb: unknown) => Action;
 };
 
 export const launchGolem = (id: number, incantation: string): void => {

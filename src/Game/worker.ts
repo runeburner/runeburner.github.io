@@ -1,14 +1,14 @@
 import {
-  ACT,
-  ACTProgress,
-  ACTType,
+  Action,
+  ActionProgress,
+  ActionType,
   ATTUNE,
   ATTUNEProgress,
   MINE,
   MINEProgress,
   MOVE,
   MOVEProgress,
-} from "../types/ACT";
+} from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Tile } from "../types/tile";
 import { UIMessageType } from "../types/uiMessages";
@@ -20,9 +20,9 @@ import { game } from "./game";
 import { aStarPath } from "./path";
 
 const process: {
-  [T in ACTType]: (e: Entity, p: ACTProgress) => boolean;
+  [T in ActionType]: (e: Entity, p: ActionProgress) => boolean;
 } = {
-  [ACTType.MOVE]: (e: Entity, p: ACTProgress): boolean => {
+  [ActionType.MOVE]: (e: Entity, p: ActionProgress): boolean => {
     const golem = e as GolemEntity;
     const mp = p as MOVEProgress;
     mp.progress[0] += golem.speed;
@@ -40,7 +40,7 @@ const process: {
     }
     return mp.path.length === 1;
   },
-  [ACTType.MINE]: (e: Entity, p: ACTProgress): boolean => {
+  [ActionType.MINE]: (e: Entity, p: ActionProgress): boolean => {
     const golem = e as GolemEntity;
     const action = p as MINEProgress;
     action.progress[0] += golem.mineSpeed;
@@ -54,7 +54,7 @@ const process: {
 
     return golem.minecapacity[0] === golem.minecapacity[1];
   },
-  [ACTType.ATTUNE]: (e: Entity, p: ACTProgress): boolean => {
+  [ActionType.ATTUNE]: (e: Entity, p: ActionProgress): boolean => {
     const golem = e as GolemEntity;
     const action = p as ATTUNEProgress;
     action.progress[0] += golem.mineSpeed;
@@ -87,7 +87,7 @@ const rb = {
 };
 
 setInterval((): void => {
-  const actions: ACT[] = new Array(game.workers.length);
+  const actions: Action[] = new Array(game.workers.length);
   for (let i = 0; i < game.workers.length; i++) {
     const e = JSON.parse(
       JSON.stringify(
@@ -108,7 +108,7 @@ setInterval((): void => {
   for (let i = 0; i < actions.length; i++) {
     if (!actions[i]) continue;
     switch (actions[i].type) {
-      case ACTType.MOVE: {
+      case ActionType.MOVE: {
         const a = actions[i] as MOVE;
         const old = game.actionM[a.id] as MOVEProgress | undefined;
         const golem = game.entityM[a.id] as GolemEntity;
@@ -119,7 +119,7 @@ setInterval((): void => {
         if (path == null) break;
         path.pop();
         const progress = {
-          type: ACTType.MOVE,
+          type: ActionType.MOVE,
           goal: [...a.v],
           path: path,
           progress: [0, golem.weight],
@@ -127,7 +127,7 @@ setInterval((): void => {
         game.actionM[a.id] = progress;
         break;
       }
-      case ACTType.MINE: {
+      case ActionType.MINE: {
         const a = actions[i] as MINE;
         const old = game.actionM[a.id] as MINEProgress | undefined;
         const golem = game.entityM[a.id] as GolemEntity;
@@ -137,7 +137,7 @@ setInterval((): void => {
         if (old && eq(old.tile, a.v)) continue;
         delete game.actionM[a.id];
         const progress = {
-          type: ACTType.MINE,
+          type: ActionType.MINE,
           pos: [...golem.pos],
           progress: [0, 16],
           tile: [...a.v],
@@ -145,7 +145,7 @@ setInterval((): void => {
         game.actionM[a.id] = progress;
         break;
       }
-      case ACTType.ATTUNE: {
+      case ActionType.ATTUNE: {
         const a = actions[i] as ATTUNE;
         const old = game.actionM[a.id] as ATTUNEProgress | undefined;
         const golem = game.entityM[a.id] as GolemEntity;
@@ -153,7 +153,7 @@ setInterval((): void => {
         if (old) continue;
         delete game.actionM[a.id];
         const progress = {
-          type: ACTType.ATTUNE,
+          type: ActionType.ATTUNE,
           progress: [0, 16],
           pos: [...golem.pos],
           heart: [

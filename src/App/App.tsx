@@ -10,7 +10,7 @@ import { Page } from "../store/sidebar";
 import { GameReadyGate } from "../World/GameReadyGate";
 import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
 
-const App = (): React.ReactElement => {
+export const App = (): React.ReactElement => {
   useEffect(() => {
     const f = (e: KeyboardEvent): void => {
       const isMeta = e.ctrlKey || e.metaKey;
@@ -21,6 +21,7 @@ const App = (): React.ReactElement => {
     document.addEventListener("keydown", f);
     return (): void => document.removeEventListener("keydown", f);
   }, []);
+
   return (
     <div className={"w-screen h-screen flex flex-col"}>
       <ResourceHeader />
@@ -49,5 +50,3 @@ const App = (): React.ReactElement => {
     </div>
   );
 };
-
-export default App;

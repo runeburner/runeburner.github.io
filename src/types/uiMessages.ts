@@ -1,4 +1,4 @@
-import { ACTProgress } from "./ACT";
+import { ActionProgress } from "./actions";
 import { Entity } from "./entity";
 import { Resources } from "./resources";
 import { Rune } from "./rune";
@@ -41,7 +41,7 @@ export type MapData = {
 
 export type UIEntity = {
   entity: Entity;
-  action?: ACTProgress;
+  action?: ActionProgress;
 };
 
 type MainThreadUIMessageReceiveDataTypes = {

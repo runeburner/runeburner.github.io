@@ -41,7 +41,7 @@ const generateUIMapData = (): MapData => {
       height,
       data,
     },
-    entityIDs: game.entities
+    entityIDs: Object.values(game.entityM)
       .filter((e) => camera.isInView(e.pos))
       .map((e) => e.id),
   } satisfies MapData;
@@ -82,7 +82,6 @@ const handlers: GameThreadUIHandler = {
       minecapacity: [0, data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0],
       mineSpeed: data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
     } satisfies GolemEntity;
-    game.entities.push(golem);
     channel.postMessage({
       type: UIMessageType.ADD_ENTITY,
       data: golem.id,
@@ -92,8 +91,8 @@ const handlers: GameThreadUIHandler = {
     game.entityM[id] = golem;
   },
   [UIMessageType.REFRESH_ENTITY]: (entityID) => {
-    const entity = game.entities.find((e) => e.id === entityID)!;
-    const actProgress = game.actionM[entity.id];
+    const entity = game.entityM[entityID];
+    const actProgress = game.actionM[entityID];
     channel.postMessage({
       type: UIMessageType.UPDATE_ENTITY,
       data: { entity, action: actProgress },
