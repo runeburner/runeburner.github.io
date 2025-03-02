@@ -1,4 +1,4 @@
-import { ATTUNEProgress } from "../../../types/ACT";
+import { ATTUNEProgress } from "../../../types/actions";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type AttuneActionProps = {

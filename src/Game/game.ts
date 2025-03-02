@@ -1,4 +1,4 @@
-import { ACTProgress } from "../types/ACT";
+import { ActionProgress } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { Map, ValuesPerTile } from "../types/map";
 import { Tile } from "../types/tile";
@@ -14,8 +14,7 @@ type Game = {
     attunement: number;
   };
   entityM: Record<number, Entity>;
-  actionM: Record<number, ACTProgress>;
-  entities: Entity[];
+  actionM: Record<number, ActionProgress>;
   map: Map;
   tileAt(v: Vec): Int32Array;
   entityAt(v: Vec): Entity | undefined;
@@ -35,8 +34,7 @@ export const game = ((): Game => {
       (m, e) => ({ ...m, [e.id]: e }),
       {}
     ) as Record<number, Entity>,
-    actionM: {} as Record<number, ACTProgress>,
-    entities: defaultEntities,
+    actionM: {} as Record<number, ActionProgress>,
     map: ((): Map => {
       const height = defaultMap.length;
       const width = defaultMap[0].length;
@@ -57,7 +55,9 @@ export const game = ((): Game => {
       return this.map.data.slice(start, start + ValuesPerTile);
     },
     entityAt(v: Vec): Entity | undefined {
-      return this.entities.find((e) => e.pos[0] === v[0] && e.pos[1] === v[1]);
+      return Object.values(this.entityM).find(
+        (e) => e.pos[0] === v[0] && e.pos[1] === v[1]
+      );
     },
     findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null {
       const x = Math.max(0, pos[0] - Math.floor(radius / 2));
@@ -100,7 +100,9 @@ export const game = ((): Game => {
       return v[1];
     },
     golemSpawnCoordinates(): Vec | null {
-      const heart = this.entities.find((e) => e.type === EntityType.HEART);
+      const heart = Object.values(this.entityM).find(
+        (e) => e.type === EntityType.HEART
+      );
       if (!heart) return null;
       return this.findClosestTile(heart.pos, Tile.EMPTY, 3);
     },

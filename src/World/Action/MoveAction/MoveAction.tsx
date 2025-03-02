@@ -1,4 +1,4 @@
-import { MOVEProgress } from "../../../types/ACT";
+import { MOVEProgress } from "../../../types/actions";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type MoveActionProps = {

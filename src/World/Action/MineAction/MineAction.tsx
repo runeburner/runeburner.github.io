@@ -1,4 +1,4 @@
-import { MINEProgress } from "../../../types/ACT";
+import { MINEProgress } from "../../../types/actions";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type MineActionProps = {
