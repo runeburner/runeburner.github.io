@@ -44,9 +44,7 @@ const generateUIMapData = (): MapData => {
     entities: game.entities
       .filter((e) => camera.isInView(e.pos))
       .map((e) => e.id),
-    actions: game.actions
-      .filter((e) => camera.isInView(e.pos))
-      .map((a) => a.id),
+    actions: [],
   } satisfies MapData;
 };
 
@@ -101,13 +99,7 @@ const handlers: GameThreadUIHandler = {
       data: entity,
     });
   },
-  [UIMessageType.REFRESH_ACTION]: (actionID) => {
-    const action = game.actions.find((e) => e.id === actionID)!;
-    channel.postMessage({
-      type: UIMessageType.UPDATE_ACTION,
-      data: action,
-    });
-  },
+  [UIMessageType.REFRESH_ACTION]: () => {},
 };
 
 channel.onmessage = ({ data }) => handlers[data.type]?.(data.data);
