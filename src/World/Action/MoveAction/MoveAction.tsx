@@ -1,4 +1,5 @@
 import { MOVEProgress } from "../../../types/ACT";
+import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type MoveActionProps = {
   action: MOVEProgress;
@@ -48,12 +49,10 @@ export const MoveAction = ({ action }: MoveActionProps): React.ReactElement => {
       fill={"#00ff0044"}
     >
       {parts}
-      <path
-        stroke={"#00ff0044"}
-        strokeWidth={8}
-        d={`M ${(p[0][0] - x) * 64},${(p[0][1] - y) * 64 + 60} ${
-          (p[0][0] - x) * 64 + 64 * (action.progress[0] / action.progress[1])
-        },${(p[0][1] - y) * 64 + 60}`}
+      <ProgressBar
+        pos={[p[0][0] - x, p[0][1] - y]}
+        progress={action.progress}
+        color={"#00ff0044"}
       />
     </svg>
   );

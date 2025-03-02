@@ -3,12 +3,12 @@ import { useAppDispatch } from "../../store/hooks";
 import { defaultIncantation, saveIncantation } from "../../store/incantations";
 import { useTranslation } from "react-i18next";
 
-export const Create = () => {
+export const Create = (): React.ReactElement => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
 
-  const onClick = () => {
+  const onClick = (): void => {
     dispatch(
       saveIncantation({
         name,

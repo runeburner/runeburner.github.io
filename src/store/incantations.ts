@@ -1,5 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "./hooks";
+import { RootState } from "./store";
 
 type IncantationsState = Record<string, string>;
 
@@ -18,7 +19,7 @@ export const tick = (rs) => {
       return MINE(crystal);
     }
   } else {
-    const heart = rs.findClosestEntity("HEART");
+    const heart = [1,1] //rs.findClosestEntity("HEART");
     if(!rs.isInRange(heart)) {
       return MOVE(heart);
     } else {
@@ -57,8 +58,9 @@ export const { saveIncantation, renameIncantation } = incantationsSlice.actions;
 export const incantationReducer = incantationsSlice.reducer;
 
 export const selectIncantationNames = createSelector(
-  [(s) => s.incantations],
+  [(s: RootState): Record<string, string> => s.incantations],
   (i) => Object.keys(i)
 );
 
-export const useIncantationNames = () => useAppSelector(selectIncantationNames);
+export const useIncantationNames = (): string[] =>
+  useAppSelector(selectIncantationNames);

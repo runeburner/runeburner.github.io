@@ -17,7 +17,7 @@ const colors = [
   "#e3eaa7",
 ];
 
-export const Tile = ({ id, pos }: TileProps) => {
+export const Tile = ({ id, pos }: TileProps): React.ReactElement => {
   return (
     <div
       className={"flex-center absolute " + classes.container}

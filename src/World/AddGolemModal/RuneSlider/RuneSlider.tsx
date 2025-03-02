@@ -16,7 +16,7 @@ export const RuneSlider = ({
   onUpdate,
   amount,
   disabled,
-}: RuneSliderProps) => {
+}: RuneSliderProps): React.ReactElement => {
   const { t } = useTranslation();
   return (
     <>

@@ -1,4 +1,5 @@
 import { MINEProgress } from "../../../types/ACT";
+import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type MineActionProps = {
   action: MINEProgress;
@@ -22,13 +23,10 @@ export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
         strokeWidth={4}
         d={`M${32},${32} ${(X - x) * 64 + 32},${(Y - y) * 64 + 32}`}
       />
-      <path
-        stroke={"#0000ff44"}
-        strokeWidth={8}
-        d={`M ${(action.pos[0] - x) * 64},${(action.pos[1] - y) * 64 + 60} ${
-          (action.pos[0] - x) * 64 +
-          64 * (action.progress[0] / action.progress[1])
-        },${(action.pos[1] - y) * 64 + 60}`}
+      <ProgressBar
+        pos={[action.pos[0] - x, action.pos[1] - y]}
+        progress={action.progress}
+        color={"#0000ff44"}
       />
     </svg>
   );

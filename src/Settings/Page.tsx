@@ -5,7 +5,7 @@ import { Languages } from "../i18n";
 export const Page = (): React.ReactElement => {
   const { t, i18n } = useTranslation();
 
-  const onLanguageChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+  const onLanguageChange = (ev: ChangeEvent<HTMLSelectElement>): void => {
     i18n.changeLanguage(ev.target.value);
   };
   return (

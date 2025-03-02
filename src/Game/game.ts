@@ -1,6 +1,6 @@
 import { ACTProgress } from "../types/ACT";
 import { Entity, EntityType } from "../types/entity";
-import { ValuesPerTile } from "../types/map";
+import { Map, ValuesPerTile } from "../types/map";
 import { Tile } from "../types/tile";
 import { UIMessageType } from "../types/uiMessages";
 import { dist, Vec } from "../types/vec";
@@ -8,7 +8,24 @@ import { channel } from "./channel";
 import { defaultEntities, defaultMap } from "./defaultValues";
 import { Worker } from "./launch_golem";
 
-export const game = (() => {
+type Game = {
+  workers: Worker[];
+  resources: {
+    attunement: number;
+  };
+  entityM: Record<number, Entity>;
+  actionM: Record<number, ACTProgress>;
+  entities: Entity[];
+  map: Map;
+  tileAt(v: Vec): Int32Array;
+  entityAt(v: Vec): Entity | undefined;
+  findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null;
+  findClosestEntity(pos: Vec, entityType: EntityType): Vec | null;
+  golemSpawnCoordinates(): Vec | null;
+  addAttunement(n: number): void;
+};
+
+export const game = ((): Game => {
   return {
     workers: [] as Worker[],
     resources: {
@@ -20,7 +37,7 @@ export const game = (() => {
     ) as Record<number, Entity>,
     actionM: {} as Record<number, ACTProgress>,
     entities: defaultEntities,
-    map: (() => {
+    map: ((): Map => {
       const height = defaultMap.length;
       const width = defaultMap[0].length;
       const data = new Int32Array(width * height * ValuesPerTile);

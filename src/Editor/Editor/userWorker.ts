@@ -3,7 +3,7 @@ import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 
 self.MonacoEnvironment = {
-  getWorker(_: unknown, label: string) {
+  getWorker(_: unknown, label: string): Worker | Promise<Worker> {
     if (label === "typescript" || label === "javascript") {
       return new tsWorker();
     }

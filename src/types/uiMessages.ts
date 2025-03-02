@@ -10,15 +10,10 @@ export const UIMessageType = Object.freeze({
   MAP: "MAP",
   ANIMATE: "ANIMATE",
   ADD_ENTITY: "ADD_ENTITY",
-  ADD_ACTION: "ADD_ACTION",
   UPDATE_ENTITY: "UPDATE_ENTITY",
-  UPDATE_ACTION: "UPDATE_ACTION",
   REFRESH_ENTITY: "REFRESH_ENTITY",
-  REFRESH_ACTION: "REFRESH_ACTION",
   REMOVE_ENTITY: "REMOVE_ENTITY",
-  REMOVE_ACTION: "REMOVE_ACTION",
   RESOURCES: "RESOURCES",
-  ACTIONS: "ACTIONS",
 } as const);
 
 export type UIMessageType = (typeof UIMessageType)[keyof typeof UIMessageType];
@@ -40,21 +35,21 @@ export type MapData = {
     data: Int32Array;
   };
   pos: Vec;
-  entities: number[];
-  actions: number[];
+  entityIDs: number[];
   camera?: Camera;
+};
+
+export type UIEntity = {
+  entity: Entity;
+  action?: ACTProgress;
 };
 
 type MainThreadUIMessageReceiveDataTypes = {
   [UIMessageType.MAP]: MapData;
   [UIMessageType.ADD_ENTITY]: number;
-  [UIMessageType.ADD_ACTION]: number;
-  [UIMessageType.UPDATE_ENTITY]: Entity;
-  [UIMessageType.UPDATE_ACTION]: unknown;
+  [UIMessageType.UPDATE_ENTITY]: UIEntity;
   [UIMessageType.REMOVE_ENTITY]: number;
-  [UIMessageType.REMOVE_ACTION]: number;
   [UIMessageType.RESOURCES]: Resources;
-  [UIMessageType.ACTIONS]: ACTProgress[];
 };
 
 type GameThreadUIMessageReceiveDataTypes = {
@@ -65,7 +60,6 @@ type GameThreadUIMessageReceiveDataTypes = {
     incantation: string;
   };
   [UIMessageType.REFRESH_ENTITY]: number;
-  [UIMessageType.REFRESH_ACTION]: number;
 };
 
 export type MainThreadUIChannel = {

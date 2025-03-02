@@ -3,9 +3,9 @@ import { PlusIcon } from "../../icons";
 import classes from "./AddGolem.module.css";
 import { AddGolemModal } from "../AddGolemModal/AddGolemModal";
 
-export const AddGolem = () => {
+export const AddGolem = (): React.ReactElement => {
   const [open, setOpen] = useState(false);
-  const onClick = () => setOpen(true);
+  const onClick = (): void => setOpen(true);
   return (
     <>
       <div className={"m-4 fixed " + classes.container}>
