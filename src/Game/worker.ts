@@ -196,7 +196,7 @@ const maker: {
       heart: [...heart.pos],
     } satisfies ATTUNEProgress;
   },
-};
+} as const;
 
 const fps = 15;
 

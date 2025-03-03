@@ -10,7 +10,6 @@ import { Channel } from "../channel";
 import { Vec } from "../../types/vec";
 import { useTranslation } from "react-i18next";
 import { useIncantationNames } from "../../store/incantations";
-
 export const AddGolemModal = ({
   open,
   onClose,
@@ -30,6 +29,7 @@ export const AddGolemModal = ({
   const [health /*, setHealth*/] = useState<Vec>([50, 50]);
   const [armor /*, setArmor*/] = useState<Vec>([50, 50]);
   const [shield /*, setShield*/] = useState<Vec>([50, 50]);
+  const [mana /*, setMana*/] = useState<Vec>([50, 50]);
 
   const appliedRunes: [Rune, number][] = Object.entries(runes).filter(
     (r) => r[1] > 0
@@ -56,6 +56,7 @@ export const AddGolemModal = ({
             health={health}
             armor={armor}
             shield={shield}
+            mana={mana}
           />
         </div>
         <p>
@@ -94,7 +95,7 @@ export const AddGolemModal = ({
           ))}
         </select>
         <br />
-        <button className="my-2" onClick={onAnimate}>
+        <button className="w-full my-2" onClick={onAnimate}>
           {t("create_golem_modal.animate")}
         </button>
       </div>

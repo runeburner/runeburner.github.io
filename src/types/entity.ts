@@ -29,6 +29,10 @@ export type GolemEntity = BaseEntity<{
   mineSpeed: number;
   minecapacity: Vec;
   runes: [Rune, number][];
+  health: Vec;
+  armor: Vec;
+  shield: Vec;
+  mana: Vec;
 }>;
 
 export type Entity = HeartEntity | GolemEntity;

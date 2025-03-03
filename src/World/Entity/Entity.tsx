@@ -49,9 +49,10 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
       child = (
         <Golem
           runes={entity.entity.runes}
-          health={[0, 0]}
-          armor={[0, 0]}
-          shield={[0, 0]}
+          health={entity.entity.health}
+          armor={entity.entity.armor}
+          shield={entity.entity.shield}
+          mana={entity.entity.mana}
         />
       );
 
