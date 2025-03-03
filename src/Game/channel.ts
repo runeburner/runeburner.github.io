@@ -80,6 +80,10 @@ const handlers: GameThreadUIHandler = {
       weight: Math.max(1, weight),
       minecapacity: [0, data.runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0],
       mineSpeed: data.runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
+      health: [0, 0],
+      armor: [0, 0],
+      shield: [0, 0],
+      mana: [0, 0],
     } satisfies GolemEntity;
 
     launchGolem(id, data.incantation).then((success) => {

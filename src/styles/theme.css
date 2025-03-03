@@ -15,7 +15,6 @@
   button {
     border-radius: 100px;
     padding: var(--spacing);
-    width: 100%;
     background-color: var(--primary-dark);
     border-width: 1px;
     border-style: solid;
