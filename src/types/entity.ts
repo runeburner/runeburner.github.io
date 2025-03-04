@@ -1,4 +1,5 @@
 import { Rune } from "./rune";
+import { Typed } from "./typed_object";
 import { Vec } from "./vec";
 
 export const EntityType = Object.freeze({
@@ -8,11 +9,13 @@ export const EntityType = Object.freeze({
 
 export type EntityType = (typeof EntityType)[keyof typeof EntityType];
 
-export type BaseEntity<T extends EntityType, V extends object> = {
-  __type: T;
-  id: number;
-  pos: Vec;
-} & V;
+export type BaseEntity<T extends EntityType, V extends object> = Typed<
+  T,
+  {
+    id: number;
+    pos: Vec;
+  } & V
+>;
 
 export type HeartEntity = BaseEntity<
   typeof EntityType.HEART,

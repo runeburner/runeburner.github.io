@@ -24,9 +24,12 @@ export type Camera = {
   size: Vec;
 };
 
-export type UIMessage<K extends UIMessageType, V> = Typed<K> & {
-  data: V;
-};
+export type UIMessage<K extends UIMessageType, V> = Typed<
+  K,
+  {
+    data: V;
+  }
+>;
 
 export type MapData = {
   map: {

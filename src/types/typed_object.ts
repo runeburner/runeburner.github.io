@@ -1,3 +1,3 @@
-export type Typed<T> = {
+export type Typed<T, V> = {
   __type: T;
-};
+} & V;
