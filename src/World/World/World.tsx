@@ -30,7 +30,7 @@ export const World = (): React.ReactElement => {
   const fetchMap = useThrottledCallback(
     () => {
       Channel.send({
-        type: UIMessageType.QUERY,
+        __type: UIMessageType.QUERY,
         data: cameraRef.current,
       });
     },
@@ -75,7 +75,7 @@ export const World = (): React.ReactElement => {
     );
 
     Channel.send({
-      type: UIMessageType.INITIALIZE,
+      __type: UIMessageType.INITIALIZE,
       data: cameraRef.current,
     });
 

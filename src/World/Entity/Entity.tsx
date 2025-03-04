@@ -17,7 +17,7 @@ const useEntity = (id: number): UIEntity | undefined => {
   useEffect(() => {
     const unsub = Channel.subEntity(id, setEntity);
     Channel.send({
-      type: UIMessageType.REFRESH_ENTITY,
+      __type: UIMessageType.REFRESH_ENTITY,
       data: id,
     });
     return unsub;
@@ -29,7 +29,7 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
   const entity = useEntity(id);
   if (!entity) return <></>;
   let child = <></>;
-  switch (entity.entity.type) {
+  switch (entity.entity.__type) {
     case EntityType.HEART: {
       child = (
         <>

@@ -2,6 +2,7 @@ import { ActionProgress } from "./actions";
 import { Entity } from "./entity";
 import { Resources } from "./resources";
 import { Rune } from "./rune";
+import { Typed } from "./typed_object";
 import { Vec } from "./vec";
 
 export const UIMessageType = Object.freeze({
@@ -23,8 +24,7 @@ export type Camera = {
   size: Vec;
 };
 
-export type UIMessage<K extends UIMessageType, V> = {
-  type: K;
+export type UIMessage<K extends UIMessageType, V> = Typed<K> & {
   data: V;
 };
 

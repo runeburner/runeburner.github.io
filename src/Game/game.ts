@@ -69,7 +69,7 @@ export const game = ((): Game => {
       this.map.data.set(t, start);
       if (camera.isInView(v)) {
         channel.postMessage({
-          type: UIMessageType.MAP,
+          __type: UIMessageType.MAP,
           data: generateUIMapData(),
         });
       }
@@ -104,7 +104,7 @@ export const game = ((): Game => {
     },
     findClosestEntity(pos: Vec, entityType: EntityType): Vec | null {
       const entities = Object.values(game.entityM).filter(
-        (e) => e.type === entityType
+        (e) => e.__type === entityType
       );
       if (entities.length === 0) return null;
       const v = entities.reduce(
@@ -121,7 +121,7 @@ export const game = ((): Game => {
     },
     golemSpawnCoordinates(): Vec | null {
       const heart = Object.values(this.entityM).find(
-        (e) => e.type === EntityType.HEART
+        (e) => e.__type === EntityType.HEART
       );
       if (!heart) return null;
       return this.findClosestTile(heart.pos, Tile.EMPTY, 3);
@@ -133,14 +133,14 @@ export const game = ((): Game => {
         Math.sqrt(0.5 * this.resources.attunement)
       );
       channel.postMessage({
-        type: UIMessageType.RESOURCES,
+        __type: UIMessageType.RESOURCES,
         data: this.resources,
       });
     },
 
     determineInitialCameraPosition: (cam: Camera): Camera => {
       const core = Object.values(game.entityM).find(
-        (e) => e.type === EntityType.HEART
+        (e) => e.__type === EntityType.HEART
       );
       return {
         pos: [

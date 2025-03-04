@@ -22,7 +22,7 @@ export const defaultMap: number[][] = [
 
 export const defaultEntities: Entity[] = [
   {
-    type: EntityType.HEART,
+    __type: EntityType.HEART,
     id: ID.next(),
     pos: [2, 2],
     attunement: 0,

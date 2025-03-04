@@ -38,7 +38,7 @@ export const AddGolemModal = ({
 
   const onAnimate = (): void => {
     Channel.send({
-      type: UIMessageType.ANIMATE,
+      __type: UIMessageType.ANIMATE,
       data: {
         runes: appliedRunes,
         incantation: store.getState().incantations[selectedIncantation],
