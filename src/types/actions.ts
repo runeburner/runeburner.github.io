@@ -12,9 +12,12 @@ export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 export type Action<
   T extends ActionType = ActionType,
   V extends object = object
-> = Typed<T> & {
-  id: number;
-} & V;
+> = Typed<
+  T,
+  {
+    id: number;
+  } & V
+>;
 
 export type MOVE_NEXT_TO = Action<typeof ActionType.MOVE_NEXT_TO, { v: Vec }>;
 export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
@@ -23,7 +26,7 @@ export type ATTUNE = Action<typeof ActionType.ATTUNE>;
 type BaseActionProgress<
   T extends ActionType = ActionType,
   V extends object = object
-> = Typed<T> & V;
+> = Typed<T, V>;
 
 export type MOVE_NEXT_TOProgress = BaseActionProgress<
   typeof ActionType.MOVE_NEXT_TO,
