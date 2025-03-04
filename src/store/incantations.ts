@@ -12,21 +12,12 @@ export const tick = (rs) => {
   mining = mining ?
     me.minecapacity[0] < me.minecapacity[1] :
     me.minecapacity[0] === 0;
-  if(mining) {
+  if (mining) {
     const crystal = rs.findNearest("MANA_CRYSTAL", 19);
-    if(!rs.isInRange(crystal)) {
-      return MOVE_NEXT_TO(crystal);
-    } else {
-      return MINE(crystal);
-    }
-  } else {
-    const heart = rs.findClosestEntity("HEART");
-    if(!rs.isInRange(heart)) {
-      return MOVE_NEXT_TO(heart);
-    } else {
-      return ATTUNE();
-    }
+    return rs.isInRange(crystal) ? MINE(crystal) : MOVE_NEXT_TO(crystal);
   }
+  const heart = rs.findClosestEntity("HEART");
+  return rs.isInRange(heart) ? ATTUNE() : MOVE_NEXT_TO(heart);
 }`;
 
 const initialState: IncantationsState = {

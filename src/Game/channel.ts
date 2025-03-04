@@ -52,14 +52,14 @@ const handlers: GameThreadUIHandler = {
 
     Object.assign(camera.c, cam);
     channel.postMessage({
-      type: UIMessageType.MAP,
+      __type: UIMessageType.MAP,
       data: { ...generateUIMapData(), camera: camera.c },
     });
   },
   [UIMessageType.QUERY]: (cam) => {
     Object.assign(camera.c, cam);
     channel.postMessage({
-      type: UIMessageType.MAP,
+      __type: UIMessageType.MAP,
       data: generateUIMapData(),
     });
   },
@@ -72,7 +72,7 @@ const handlers: GameThreadUIHandler = {
     const coord = game.golemSpawnCoordinates();
     if (!coord) return;
     const golem = {
-      type: EntityType.GOLEM,
+      __type: EntityType.GOLEM,
       pos: coord,
       runes: data.runes,
       id: id,
@@ -90,7 +90,7 @@ const handlers: GameThreadUIHandler = {
       if (!success) return;
       game.entityM[id] = golem;
       channel.postMessage({
-        type: UIMessageType.ADD_ENTITY,
+        __type: UIMessageType.ADD_ENTITY,
         data: golem.id,
       });
     });
@@ -99,13 +99,13 @@ const handlers: GameThreadUIHandler = {
     const entity = game.entityM[entityID];
     const actProgress = game.actionM[entityID];
     channel.postMessage({
-      type: UIMessageType.UPDATE_ENTITY,
+      __type: UIMessageType.UPDATE_ENTITY,
       data: { entity, action: actProgress },
     });
   },
 };
 
-channel.onmessage = ({ data }): void => handlers[data.type]?.(data.data);
+channel.onmessage = ({ data }): void => handlers[data.__type]?.(data.data);
 
 // Send to the main thread that the game is ready
 new BroadcastChannel("READY").postMessage("");

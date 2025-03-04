@@ -1,3 +1,4 @@
+import { Typed } from "./typed_object";
 import { Vec } from "./vec";
 
 export const ActionType = Object.freeze({
@@ -11,8 +12,7 @@ export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 export type Action<
   T extends ActionType = ActionType,
   V extends object = object
-> = {
-  type: T;
+> = Typed<T> & {
   id: number;
 } & V;
 
@@ -23,9 +23,7 @@ export type ATTUNE = Action<typeof ActionType.ATTUNE>;
 type BaseActionProgress<
   T extends ActionType = ActionType,
   V extends object = object
-> = {
-  type: T;
-} & V;
+> = Typed<T> & V;
 
 export type MOVE_NEXT_TOProgress = BaseActionProgress<
   typeof ActionType.MOVE_NEXT_TO,

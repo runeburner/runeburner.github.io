@@ -45,7 +45,7 @@ export const Channel = ((): C => {
     },
   };
 
-  c.onmessage = ({ data: msg }): void => handlers[msg.type]?.(msg.data);
+  c.onmessage = ({ data: msg }): void => handlers[msg.__type]?.(msg.data);
 
   return {
     subEntity: (id: number, f: (a: UIEntity) => void): (() => void) => {

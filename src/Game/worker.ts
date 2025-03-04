@@ -137,10 +137,10 @@ const maker: {
     if (path == null) return null;
     path.pop();
     const old = game.actionM[a.id] as ActionProgress | undefined;
-    const wasMoving = old && old.type === ActionType.MOVE_NEXT_TO;
+    const wasMoving = old && old.__type === ActionType.MOVE_NEXT_TO;
     // Create new ActionProgress
     return {
-      type: ActionType.MOVE_NEXT_TO,
+      __type: ActionType.MOVE_NEXT_TO,
       goal: [...a.v],
       path: path,
       // carry over progress
@@ -162,11 +162,11 @@ const maker: {
     if (game.tileAt(a.v)[0] !== Tile.MANA_CRYSTAL) return null;
 
     // If we were already mining this tile.
-    const wasMining = old && old.type === ActionType.MINE;
+    const wasMining = old && old.__type === ActionType.MINE;
     if (wasMining && eq(old.tile, a.v)) return true;
 
     return {
-      type: ActionType.MINE,
+      __type: ActionType.MINE,
       pos: [...golem.pos],
       // If we swap mining tile in the middle, carry over progress
       progress: wasMining ? old.progress : [0, 2],
@@ -177,7 +177,7 @@ const maker: {
     const old = game.actionM[a.id] as ActionProgress | undefined;
     const golem = game.entityM[a.id] as GolemEntity;
     const heart = Object.values(game.entityM).find(
-      (e) => e.type === EntityType.HEART
+      (e) => e.__type === EntityType.HEART
     )!;
 
     // If it's too far.
@@ -187,10 +187,10 @@ const maker: {
     if (golem.minecapacity[0] === 0) return null;
 
     // If we were already attuning
-    if (old && old.type === ActionType.ATTUNE) return true;
+    if (old && old.__type === ActionType.ATTUNE) return true;
 
     return {
-      type: ActionType.ATTUNE,
+      __type: ActionType.ATTUNE,
       progress: [0, 2],
       pos: [...golem.pos],
       heart: [...heart.pos],
@@ -224,7 +224,7 @@ setInterval((): void => {
     const a = actions[i];
     if (!a) continue;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const p = maker[a.type](a as any);
+    const p = maker[a.__type](a as any);
     if (p === null) {
       delete game.actionM[a.id];
     } else if (p !== true) {
@@ -236,7 +236,7 @@ setInterval((): void => {
   for (const e of Object.values(game.entityM)) {
     const p = game.actionM[e.id];
     if (p) {
-      const del = process[p.type](rate, e, p);
+      const del = process[p.__type](rate, e, p);
       if (del) {
         delete game.actionM[e.id];
       }
@@ -244,7 +244,7 @@ setInterval((): void => {
 
     if (camera.isInView(e.pos)) {
       channel.postMessage({
-        type: UIMessageType.UPDATE_ENTITY,
+        __type: UIMessageType.UPDATE_ENTITY,
         data: { entity: e, action: game.actionM[e.id] },
       });
     }
