@@ -1,3 +1,4 @@
+import { Offset } from "../types/map";
 import { EnterWeight, Tile } from "../types/tile";
 import { dist, eq, Vec } from "../types/vec";
 import { game } from "./game";
@@ -82,7 +83,7 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
       const moveWeight =
         singleNeighbor === singleGoal
           ? 0
-          : EnterWeight[tile[0] as Tile] +
+          : EnterWeight[tile[Offset.TILE_ID] as Tile] +
             (isOccupied && singleNeighbor !== singleGoal ? Infinity : 0);
       const tentative_gScore = gScore.get(current) + moveWeight;
       if (tentative_gScore < gScore.get(singleNeighbor)) {

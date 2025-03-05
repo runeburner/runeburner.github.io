@@ -1,8 +1,9 @@
+import { Offset } from "../../types/map";
 import { Vec } from "../../types/vec";
 import classes from "./Tile.module.css";
 
 type TileProps = {
-  id: number;
+  data: Int32Array;
   pos: Vec;
 };
 const colors = [
@@ -17,12 +18,14 @@ const colors = [
   "#e3eaa7",
 ];
 
-export const Tile = ({ id, pos }: TileProps): React.ReactElement => {
+export const Tile = ({ data, pos }: TileProps): React.ReactElement => {
   return (
     <div
       className={"flex-center absolute " + classes.container}
       style={{
-        backgroundColor: colors[id],
+        backgroundColor: data[Offset.FOG_OF_WAR]
+          ? colors[data[Offset.TILE_ID]]
+          : "#00000000",
         top: pos[1] * 64,
         left: pos[0] * 64,
       }}

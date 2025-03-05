@@ -11,6 +11,7 @@ import {
   ActionProgress,
 } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
+import { Offset } from "../types/map";
 import { Tile } from "../types/tile";
 import { UIMessageType } from "../types/uiMessages";
 import { dist, eq, Vec } from "../types/vec";
@@ -41,36 +42,38 @@ const process: {
       mp.progress[0] -= mp.progress[1];
       mp.path.shift();
       const nextNode = mp.path[0];
-      e.pos = [...nextNode];
+      game.updateFoW(golem.pos, nextNode, golem.visionRange);
+      golem.pos = [...nextNode];
     }
     return mp.path.length === 1;
   },
   [ActionType.MINE]: (rate: number, e: Entity, p: ActionProgress): boolean => {
     const golem = e as GolemEntity;
     const action = p as MINEProgress;
-    if (game.tileAt(action.tile)[0] !== Tile.MANA_CRYSTAL) return true;
+    if (game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.MANA_CRYSTAL)
+      return true;
 
     action.progress[0] += golem.mineSpeed * rate * game.powers.attune_power;
     while (
       action.progress[0] >= action.progress[1] &&
       golem.minecapacity[0] < golem.minecapacity[1] &&
-      game.tileAt(action.tile)[1] > 0
+      game.tileAt(action.tile)[Offset.DATA_0] > 0
     ) {
       action.progress[0] -= action.progress[1];
       golem.minecapacity[0]++;
 
       // reduce resources
       const t = game.tileAt(action.tile);
-      t[1]--;
-      if (t[1] === 0) {
-        t[0] = 0;
+      t[Offset.DATA_0]--;
+      if (t[Offset.DATA_0] === 0) {
+        t[Offset.TILE_ID] = 0;
       }
       game.setTileAt(action.tile, t);
     }
 
     return (
       golem.minecapacity[0] === golem.minecapacity[1] ||
-      game.tileAt(action.tile)[0] !== Tile.MANA_CRYSTAL
+      game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.MANA_CRYSTAL
     );
   },
   [ActionType.ATTUNE]: (
@@ -159,7 +162,7 @@ const maker: {
     if (golem.minecapacity[0] === golem.minecapacity[1]) return null;
 
     // If we're trying to mine anything other than a mana crystal
-    if (game.tileAt(a.v)[0] !== Tile.MANA_CRYSTAL) return null;
+    if (game.tileAt(a.v)[Offset.TILE_ID] !== Tile.MANA_CRYSTAL) return null;
 
     // If we were already mining this tile.
     const wasMining = old && old.__type === ActionType.MINE;

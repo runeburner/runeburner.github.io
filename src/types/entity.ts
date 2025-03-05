@@ -13,6 +13,7 @@ export type BaseEntity<T extends EntityType, V extends object> = Typed<
   T,
   {
     id: number;
+    visionRange: number;
     pos: Vec;
   } & V
 >;
