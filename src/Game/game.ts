@@ -1,4 +1,4 @@
-import { MapBoundedAABB } from "../types/aabb";
+import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { Map, Offset, ValuesPerTile } from "../types/map";
@@ -24,6 +24,7 @@ type Game = {
   setTileAt(v: Vec, t: Int32Array): void;
   entityAt(v: Vec): Entity | undefined;
   findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null;
+  findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[];
   findClosestEntity(pos: Vec, entityType: EntityType): Vec | null;
   golemSpawnCoordinates(): Vec | null;
   addAttunement(n: number): void;
@@ -45,10 +46,10 @@ export const game = ((): Game => {
     map: ((): Map => {
       const width = defaultMap[0].length;
       const height = defaultMap.length;
-      const mapAABB = new Int32Array([0, 0, width, height]);
+      const bounds = new Int32Array([0, 0, width, height]);
       const data = new Int32Array(width * height * ValuesPerTile);
-      for (let j = 0; j < mapAABB[2]; j++) {
-        for (let i = 0; i < mapAABB[3]; i++) {
+      for (let j = 0; j < bounds[2]; j++) {
+        for (let i = 0; i < bounds[3]; i++) {
           data[(j * width + i) * ValuesPerTile + Offset.TILE_ID] =
             defaultMap[j][i];
 
@@ -59,25 +60,24 @@ export const game = ((): Game => {
         }
       }
       for (const e of defaultEntities) {
-        const bounds = MapBoundedAABB(mapAABB, e.pos, e.visionRange);
-        for (let i = bounds[0]; i < bounds[2]; i++) {
-          for (let j = bounds[1]; j < bounds[3]; j++) {
+        const visionBounds = BoundedAABB(bounds, e.pos, e.visionRange);
+        for (let i = visionBounds[0]; i < visionBounds[2]; i++) {
+          for (let j = visionBounds[1]; j < visionBounds[3]; j++) {
             data[(j * width + i) * ValuesPerTile + Offset.FOG_OF_WAR]++;
           }
         }
       }
       return {
-        width,
-        height,
+        bounds,
         data,
       };
     })(),
     tileAt(v: Vec): Int32Array {
-      const start = (v[1] * this.map.width + v[0]) * ValuesPerTile;
+      const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
       return this.map.data.slice(start, start + ValuesPerTile);
     },
     setTileAt(v: Vec, t: Int32Array): void {
-      const start = (v[1] * this.map.width + v[0]) * ValuesPerTile;
+      const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
       this.map.data.set(t, start);
       if (camera.isInView(v)) {
         channel.postMessage({
@@ -87,7 +87,39 @@ export const game = ((): Game => {
       }
     },
     updateFoW(before: Vec | null, after: Vec, radius: number): void {
-      console.log(before, after, radius);
+      if (before !== null) {
+        const bounds = BoundedAABB(this.map.bounds, before, radius);
+
+        for (let i = bounds[0]; i < bounds[2]; i++) {
+          for (let j = bounds[1]; j < bounds[3]; j++) {
+            this.map.data[
+              (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
+            ]--;
+          }
+        }
+      }
+
+      const bounds = BoundedAABB(this.map.bounds, after, radius);
+
+      for (let i = bounds[0]; i < bounds[2]; i++) {
+        for (let j = bounds[1]; j < bounds[3]; j++) {
+          this.map.data[
+            (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
+          ]++;
+        }
+      }
+
+      // const isInView = camera.isAABBInView(
+      //   before === null
+      //     ? RadiusAABB(after, radius)
+      //     : AddAABB(RadiusAABB(before, radius), RadiusAABB(after, radius))
+      // );
+      // if (isInView) {
+      //   channel.postMessage({
+      //     __type: UIMessageType.MAP,
+      //     data: generateUIMapData(),
+      //   });
+      // }
     },
     entityAt(v: Vec): Entity | undefined {
       return Object.values(this.entityM).find(
@@ -96,9 +128,9 @@ export const game = ((): Game => {
     },
     findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null {
       const x = Math.max(0, pos[0] - Math.floor(radius));
-      const X = Math.min(this.map.width, pos[0] + Math.ceil(radius));
+      const X = Math.min(this.map.bounds[2], pos[0] + Math.ceil(radius));
       const y = Math.max(0, pos[1] - Math.floor(radius));
-      const Y = Math.min(this.map.height, pos[1] + Math.ceil(radius));
+      const Y = Math.min(this.map.bounds[3], pos[1] + Math.ceil(radius));
       let closestTile: Vec | null = null;
       let closestDist = 1e99;
       for (let j = y; j < Y; j++) {
@@ -116,6 +148,25 @@ export const game = ((): Game => {
         }
       }
       return closestTile;
+    },
+    findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[] {
+      const x = Math.max(0, pos[0] - Math.floor(radius));
+      const X = Math.min(this.map.bounds[2], pos[0] + Math.ceil(radius));
+      const y = Math.max(0, pos[1] - Math.floor(radius));
+      const Y = Math.min(this.map.bounds[3], pos[1] + Math.ceil(radius));
+
+      const tiles: Vec[] = [];
+      for (let j = y; j < Y; j++) {
+        for (let i = x; i < X; i++) {
+          const v = [i, j] satisfies Vec;
+          const tile = this.tileAt(v);
+
+          if (tile[0] === wantTile && !this.entityAt(v)) {
+            tiles.push(v);
+          }
+        }
+      }
+      return tiles;
     },
     findClosestEntity(pos: Vec, entityType: EntityType): Vec | null {
       const entities = Object.values(game.entityM).filter(

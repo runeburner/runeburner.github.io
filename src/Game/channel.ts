@@ -17,8 +17,8 @@ export const channel: GameThreadUIChannel = new BroadcastChannel("UI");
 export const generateUIMapData = (): MapData => {
   const x = Math.max(0, camera.c.pos[0]);
   const y = Math.max(0, camera.c.pos[1]);
-  const X = Math.min(game.map.width, camera.c.pos[0] + camera.c.size[0]);
-  const Y = Math.min(game.map.height, camera.c.pos[1] + camera.c.size[1]);
+  const X = Math.min(game.map.bounds[2], camera.c.pos[0] + camera.c.size[0]);
+  const Y = Math.min(game.map.bounds[3], camera.c.pos[1] + camera.c.size[1]);
   const width = X - x;
   const height = Y - y;
   const data = new Int32Array(width * height * ValuesPerTile);
@@ -26,8 +26,8 @@ export const generateUIMapData = (): MapData => {
     const offset = (j - y) * width * ValuesPerTile;
     data.set(
       game.map.data.slice(
-        (j * game.map.width + x) * ValuesPerTile,
-        (j * game.map.width + X) * ValuesPerTile
+        (j * game.map.bounds[2] + x) * ValuesPerTile,
+        (j * game.map.bounds[2] + X) * ValuesPerTile
       ),
       offset
     );
@@ -55,6 +55,10 @@ const handlers: GameThreadUIHandler = {
       __type: UIMessageType.MAP,
       data: { ...generateUIMapData(), camera: camera.c },
     });
+  },
+  [UIMessageType.DEINITIALIZE]: () => {
+    camera.c.pos = [0, 0];
+    camera.c.size = [0, 0];
   },
   [UIMessageType.QUERY]: (cam) => {
     Object.assign(camera.c, cam);
@@ -87,9 +91,8 @@ const handlers: GameThreadUIHandler = {
       mana: [0, 0],
     } satisfies GolemEntity;
 
-    game.updateFoW(null, golem.pos, golem.visionRange);
-
     launchGolem(id, data.incantation).then((success) => {
+      game.updateFoW(null, golem.pos, golem.visionRange);
       if (!success) return;
       game.entityM[id] = golem;
       channel.postMessage({

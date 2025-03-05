@@ -43,9 +43,17 @@ export const Channel = ((): C => {
     [UIMessageType.RESOURCES]: (resources) => {
       if (resourcesSub) resourcesSub(resources);
     },
+    [UIMessageType.UPDATE_ENTITIES]: (entities) => {
+      for (const e of entities) {
+        entitySubs[e.entity.id]?.(e);
+      }
+    },
   };
 
-  c.onmessage = ({ data: msg }): void => handlers[msg.__type]?.(msg.data);
+  c.onmessage = ({ data: msg }): void => {
+    console.log(msg.__type);
+    handlers[msg.__type]?.(msg.data);
+  };
 
   return {
     subEntity: (id: number, f: (a: UIEntity) => void): (() => void) => {
@@ -66,6 +74,10 @@ export const Channel = ((): C => {
         mapDataSub = null;
         addEntitySub = null;
         removeEntitySub = null;
+        c.postMessage({
+          __type: UIMessageType.DEINITIALIZE,
+          data: undefined,
+        });
       };
     },
     subResources: (f: (data: Resources) => void): (() => void) => {

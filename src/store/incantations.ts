@@ -6,6 +6,8 @@ type IncantationsState = Record<string, string>;
 
 export const defaultIncantation = `let mining = true;
 
+let crystal = null;
+
 /** @param {RS} rs */
 export const tick = (rs) => {
   const me = rs.me();
@@ -13,9 +15,13 @@ export const tick = (rs) => {
     me.minecapacity[0] < me.minecapacity[1] :
     me.minecapacity[0] === 0;
   if (mining) {
-    const crystal = rs.findNearest("MANA_CRYSTAL", 19);
+    if(crystal == null) {
+      const crystals = rs.findAll("MANA_CRYSTAL", 19);
+      crystal = crystals[Math.floor(Math.random()*crystals.length)];
+    }
     return rs.isInRange(crystal) ? MINE(crystal) : MOVE_NEXT_TO(crystal);
   }
+  crystal = null;
   const heart = rs.findClosestEntity("HEART");
   return rs.isInRange(heart) ? ATTUNE() : MOVE_NEXT_TO(heart);
 }`;
