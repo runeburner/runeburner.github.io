@@ -1,17 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import classes from "./Pannable.module.css";
 import { Vec } from "../../types/vec";
 
 type PannableProps = React.PropsWithChildren<{
-  pos: Vec;
-  onPan: (diff: Vec) => void;
+  onPan: (pos: Vec) => void;
 }>;
 
 export const Pannable = ({
   children,
-  pos,
   onPan,
 }: PannableProps): React.ReactElement => {
+  const [pos, setPos] = useState<Vec>([0, 0]);
   const isPanning = useRef(false);
 
   const onMouseDown = (e: React.MouseEvent): void => {
@@ -24,7 +23,8 @@ export const Pannable = ({
   const onMouseMove = (e: React.MouseEvent): void => {
     if (!isPanning.current) return;
     e.preventDefault();
-    onPan([e.movementX, e.movementY]);
+    onPan([pos[0] + e.movementX, pos[1] + e.movementY]);
+    setPos([pos[0] + e.movementX, pos[1] + e.movementY]);
   };
 
   const onMouseLeave = (): void => {

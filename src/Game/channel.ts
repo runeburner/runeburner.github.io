@@ -9,8 +9,9 @@ import { ValuesPerTile } from "../types/map";
 import { launchGolem } from "./launch_golem";
 import { Rune, RuneWeight } from "../types/rune";
 import { game } from "./game";
-import { camera } from "./camera";
 import { ID } from "./id";
+import { entityUpdateMap } from "../World/Entity/Entity";
+import { camera } from "../World/World/Camera";
 
 export const channel: GameThreadUIChannel = new BroadcastChannel("UI");
 
@@ -95,19 +96,14 @@ const handlers: GameThreadUIHandler = {
       game.updateFoW(null, golem.pos, golem.visionRange);
       if (!success) return;
       game.entityM[id] = golem;
-      channel.postMessage({
-        __type: UIMessageType.ADD_ENTITY,
-        data: golem.id,
-      });
+
+      camera.onAddEntity(golem);
     });
   },
   [UIMessageType.REFRESH_ENTITY]: (entityID) => {
     const entity = game.entityM[entityID];
     const actProgress = game.actionM[entityID];
-    channel.postMessage({
-      __type: UIMessageType.UPDATE_ENTITY,
-      data: { entity, action: actProgress },
-    });
+    entityUpdateMap[entity.id]?.({ entity, action: actProgress });
   },
 };
 

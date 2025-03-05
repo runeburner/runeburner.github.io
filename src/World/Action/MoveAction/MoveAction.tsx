@@ -2,10 +2,14 @@ import { MOVE_NEXT_TOProgress } from "../../../types/actions";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type MoveActionProps = {
+  id: number;
   action: MOVE_NEXT_TOProgress;
 };
 
-export const MoveAction = ({ action }: MoveActionProps): React.ReactElement => {
+export const MoveAction = ({
+  id,
+  action,
+}: MoveActionProps): React.ReactElement => {
   const p = action.path;
   let x = 1e99;
   let X = -1;
@@ -49,11 +53,7 @@ export const MoveAction = ({ action }: MoveActionProps): React.ReactElement => {
       fill={"#00ff0044"}
     >
       {parts}
-      <ProgressBar
-        pos={[p[0][0] - x, p[0][1] - y]}
-        progress={action.progress}
-        color={"#00ff0044"}
-      />
+      <ProgressBar id={id} min={[x, y]} color={"#00ff0044"} />
     </svg>
   );
 };

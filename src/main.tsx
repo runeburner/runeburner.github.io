@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import { App } from "./App/App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
-import GameWorker from "./Game/worker?worker";
+import "./Game/worker";
 import "./i18n.ts";
 import "./styles/vars.css";
 import "./styles/cursor.css";
@@ -20,7 +20,6 @@ import "./styles/user-select.css";
 import "./styles/theme.css";
 
 ((): void => {
-  new GameWorker();
   const rootDiv = document.getElementById("root");
   if (!rootDiv) {
     console.error("div with id 'root' not found");

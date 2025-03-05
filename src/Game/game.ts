@@ -6,8 +6,9 @@ import { Resources } from "../types/resources";
 import { Tile } from "../types/tile";
 import { Camera, UIMessageType } from "../types/uiMessages";
 import { dist, Vec } from "../types/vec";
-import { camera } from "./camera";
-import { channel, generateUIMapData } from "./channel";
+import { tilesUpdate } from "../World/Tiles";
+import { camera } from "../World/World/Camera";
+import { channel } from "./channel";
 import { defaultEntities, defaultMap } from "./defaultValues";
 import { EntityTicker } from "./launch_golem";
 
@@ -41,7 +42,16 @@ export const game = ((): Game => {
     powers: {
       attune_power: 1,
     },
-    entityM: defaultEntities.reduce((m, e) => ({ ...m, [e.id]: e }), {}),
+    entityM: (() => {
+      const entities = defaultEntities.reduce(
+        (m, e) => ({ ...m, [e.id]: e }),
+        {}
+      ) as Record<string, Entity>;
+      for (const e of Object.values(entities)) {
+        camera.onAddEntity(e);
+      }
+      return entities;
+    })(),
     actionM: {},
     map: ((): Map => {
       const width = defaultMap[0].length;
@@ -79,14 +89,10 @@ export const game = ((): Game => {
     setTileAt(v: Vec, t: Int32Array): void {
       const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
       this.map.data.set(t, start);
-      if (camera.isInView(v)) {
-        channel.postMessage({
-          __type: UIMessageType.MAP,
-          data: generateUIMapData(),
-        });
-      }
+      if (camera.isInView(v)) tilesUpdate?.();
     },
     updateFoW(before: Vec | null, after: Vec, radius: number): void {
+      let shouldUpdate = false;
       if (before !== null) {
         const bounds = BoundedAABB(this.map.bounds, before, radius);
 
@@ -97,6 +103,7 @@ export const game = ((): Game => {
             ]--;
           }
         }
+        shouldUpdate = shouldUpdate || camera.isAABBInView(bounds);
       }
 
       const bounds = BoundedAABB(this.map.bounds, after, radius);
@@ -108,18 +115,8 @@ export const game = ((): Game => {
           ]++;
         }
       }
-
-      // const isInView = camera.isAABBInView(
-      //   before === null
-      //     ? RadiusAABB(after, radius)
-      //     : AddAABB(RadiusAABB(before, radius), RadiusAABB(after, radius))
-      // );
-      // if (isInView) {
-      //   channel.postMessage({
-      //     __type: UIMessageType.MAP,
-      //     data: generateUIMapData(),
-      //   });
-      // }
+      shouldUpdate = shouldUpdate || camera.isAABBInView(bounds);
+      if (shouldUpdate) tilesUpdate?.();
     },
     entityAt(v: Vec): Entity | undefined {
       return Object.values(this.entityM).find(

@@ -2,10 +2,14 @@ import { MINEProgress } from "../../../types/actions";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type MineActionProps = {
+  id: number;
   action: MINEProgress;
 };
 
-export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
+export const MineAction = ({
+  id,
+  action,
+}: MineActionProps): React.ReactElement => {
   const x = Math.min(action.pos[0], action.tile[0]);
   const y = Math.min(action.pos[1], action.tile[1]);
   const X = Math.max(action.pos[0], action.tile[0]);
@@ -25,11 +29,7 @@ export const MineAction = ({ action }: MineActionProps): React.ReactElement => {
           (action.pos[1] - y) * 64 + 32
         } ${(action.tile[0] - x) * 64 + 32},${(action.tile[1] - y) * 64 + 32}`}
       />
-      <ProgressBar
-        pos={[action.pos[0] - x, action.pos[1] - y]}
-        progress={action.progress}
-        color={"#0000ff44"}
-      />
+      <ProgressBar id={id} min={[x, y]} color={"#0000ff44"} />
     </svg>
   );
 };
