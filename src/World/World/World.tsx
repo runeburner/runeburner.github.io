@@ -90,7 +90,10 @@ export const World = (): React.ReactElement => {
     tiles.push(
       <Tile
         key={i}
-        id={mapData.map.data[i * ValuesPerTile]}
+        data={mapData.map.data.slice(
+          i * ValuesPerTile,
+          (i + 1) * ValuesPerTile
+        )}
         pos={[
           mapData.pos[0] + (i % mapData.map.width),
           mapData.pos[1] + Math.floor(i / mapData.map.width),
