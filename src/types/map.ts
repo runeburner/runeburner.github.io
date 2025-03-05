@@ -1,3 +1,5 @@
+import { AABB } from "./aabb";
+
 // First int is the tile id, second is the metadata like durability, mana count, etc
 export const ValuesPerTile = 3;
 
@@ -10,7 +12,6 @@ export const Offset = Object.freeze({
 export type Offset = (typeof Offset)[keyof typeof Offset];
 
 export type Map = {
-  width: number;
-  height: number;
+  bounds: AABB;
   data: Int32Array;
 };

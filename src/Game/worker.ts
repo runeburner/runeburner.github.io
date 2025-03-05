@@ -13,7 +13,7 @@ import {
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Offset } from "../types/map";
 import { Tile } from "../types/tile";
-import { UIMessageType } from "../types/uiMessages";
+import { UIEntity, UIMessageType } from "../types/uiMessages";
 import { dist, eq, Vec } from "../types/vec";
 import { camera } from "./camera";
 import "./channel";
@@ -113,6 +113,10 @@ const rsObject = {
     if (!isArgs([tile, radius], isString, isNumber)) return null;
     return game.findClosestTile(e.pos, Tile[tile], radius);
   },
+  findAll(e: Entity, tile: keyof typeof Tile, radius: number): Vec[] {
+    if (!isArgs([tile, radius], isString, isNumber)) return [];
+    return game.findAllTiles(e.pos, Tile[tile], radius);
+  },
   me(e: Entity): Entity {
     return e;
   },
@@ -201,7 +205,7 @@ const maker: {
   },
 } as const;
 
-const fps = 15;
+const fps = 30;
 
 setInterval((): void => {
   // First, gather the action of all entities.
@@ -236,6 +240,7 @@ setInterval((): void => {
   }
 
   const rate = 1 / fps;
+  const updateEntities: UIEntity[] = [];
   for (const e of Object.values(game.entityM)) {
     const p = game.actionM[e.id];
     if (p) {
@@ -246,10 +251,13 @@ setInterval((): void => {
     }
 
     if (camera.isInView(e.pos)) {
-      channel.postMessage({
-        __type: UIMessageType.UPDATE_ENTITY,
-        data: { entity: e, action: game.actionM[e.id] },
-      });
+      updateEntities.push({ entity: e, action: game.actionM[e.id] });
     }
+  }
+  if (updateEntities.length > 0) {
+    channel.postMessage({
+      __type: UIMessageType.UPDATE_ENTITIES,
+      data: updateEntities,
+    });
   }
 }, 1000 / fps);

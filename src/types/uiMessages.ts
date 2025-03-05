@@ -7,11 +7,13 @@ import { Vec } from "./vec";
 
 export const UIMessageType = Object.freeze({
   INITIALIZE: "INITIALIZE",
+  DEINITIALIZE: "DEINITIALIZE",
   QUERY: "QUERY",
   MAP: "MAP",
   ANIMATE: "ANIMATE",
   ADD_ENTITY: "ADD_ENTITY",
   UPDATE_ENTITY: "UPDATE_ENTITY",
+  UPDATE_ENTITIES: "UPDATE_ENTITIES",
   REFRESH_ENTITY: "REFRESH_ENTITY",
   REMOVE_ENTITY: "REMOVE_ENTITY",
   RESOURCES: "RESOURCES",
@@ -51,12 +53,14 @@ type MainThreadUIMessageReceiveDataTypes = {
   [UIMessageType.MAP]: MapData;
   [UIMessageType.ADD_ENTITY]: number;
   [UIMessageType.UPDATE_ENTITY]: UIEntity;
+  [UIMessageType.UPDATE_ENTITIES]: UIEntity[];
   [UIMessageType.REMOVE_ENTITY]: number;
   [UIMessageType.RESOURCES]: Resources;
 };
 
 type GameThreadUIMessageReceiveDataTypes = {
   [UIMessageType.INITIALIZE]: Camera;
+  [UIMessageType.DEINITIALIZE]: undefined;
   [UIMessageType.QUERY]: Camera;
   [UIMessageType.ANIMATE]: {
     runes: [Rune, number][];

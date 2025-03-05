@@ -37,13 +37,19 @@ export const AddGolemModal = ({
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
 
   const onAnimate = (): void => {
-    Channel.send({
-      __type: UIMessageType.ANIMATE,
-      data: {
-        runes: appliedRunes,
-        incantation: store.getState().incantations[selectedIncantation],
-      },
-    });
+    for (let i = 0; i < 5; i++) {
+      setTimeout(
+        () =>
+          Channel.send({
+            __type: UIMessageType.ANIMATE,
+            data: {
+              runes: appliedRunes,
+              incantation: store.getState().incantations[selectedIncantation],
+            },
+          }),
+        i * 200
+      );
+    }
     onClose();
   };
 

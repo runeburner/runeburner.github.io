@@ -70,8 +70,8 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
       if (
         neighbor[0] < 0 ||
         neighbor[1] < 0 ||
-        neighbor[0] > game.map.width ||
-        neighbor[1] > game.map.height
+        neighbor[0] > game.map.bounds[2] ||
+        neighbor[1] > game.map.bounds[3]
       ) {
         continue;
       }
