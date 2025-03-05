@@ -1,10 +1,10 @@
-import { Offset } from "../../types/map";
-import { Vec } from "../../types/vec";
+import { game } from "../../Game/game";
+import { Offset, ValuesPerTile } from "../../types/map";
 import classes from "./Tile.module.css";
 
 type TileProps = {
-  data: Int32Array;
-  pos: Vec;
+  x: number;
+  y: number;
 };
 const colors = [
   "#a2b9bc",
@@ -18,16 +18,22 @@ const colors = [
   "#e3eaa7",
 ];
 
-export const Tile = ({ data, pos }: TileProps): React.ReactElement => {
+export const Tile = ({ x, y }: TileProps): React.ReactElement => {
+  const tileID =
+    game.map.data[
+      (y * game.map.bounds[2] + x) * ValuesPerTile + Offset.TILE_ID
+    ];
+  const fow =
+    game.map.data[
+      (y * game.map.bounds[2] + x) * ValuesPerTile + Offset.FOG_OF_WAR
+    ];
   return (
     <div
       className={"flex-center absolute " + classes.container}
       style={{
-        backgroundColor: data[Offset.FOG_OF_WAR]
-          ? colors[data[Offset.TILE_ID]]
-          : "#00000000",
-        top: pos[1] * 64,
-        left: pos[0] * 64,
+        backgroundColor: fow ? colors[game.map.data[tileID]] : "#00000000",
+        top: y * 64,
+        left: x * 64,
       }}
     ></div>
   );

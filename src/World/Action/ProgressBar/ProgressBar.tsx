@@ -1,23 +1,25 @@
-import { Vec } from "../../../types/vec";
+import { useActionProgress, useActionProgressPos } from "../Progress";
 
 type ProgressBarProps = {
-  pos: Vec;
-  progress: Vec;
+  id: number;
   color: string;
+  min: Vec;
 };
 
 export const ProgressBar = ({
-  pos,
-  progress,
+  id,
+  min,
   color,
 }: ProgressBarProps): React.ReactElement => {
+  const v = useActionProgress(id);
+  const p = useActionProgressPos(id);
   return (
     <path
       stroke={color}
       strokeWidth={8}
-      d={`M ${pos[0] * 64},${pos[1] * 64 + 60} ${
-        pos[0] * 64 + 64 * (progress[0] / progress[1])
-      },${pos[1] * 64 + 60}`}
+      d={`M ${(p[0] - min[0]) * 64},${(p[1] - min[1]) * 64 + 60} ${
+        (p[0] - min[0]) * 64 + 64 * (v[0] / v[1])
+      },${(p[1] - min[1]) * 64 + 60}`}
     />
   );
 };

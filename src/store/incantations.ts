@@ -19,6 +19,8 @@ export const tick = (rs) => {
       const crystals = rs.findAll("MANA_CRYSTAL", 19);
       crystal = crystals[Math.floor(Math.random()*crystals.length)];
     }
+
+    // const crystal = rs.findNearest("MANA_CRYSTAL", 19);
     return rs.isInRange(crystal) ? MINE(crystal) : MOVE_NEXT_TO(crystal);
   }
   crystal = null;

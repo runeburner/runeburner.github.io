@@ -7,7 +7,6 @@ import { Page as PerksPage } from "../Perks/Page/Page";
 import { Page as SettingsPage } from "../Settings/Page";
 import { PageWrapper } from "../PageWrapper/PageWrapper";
 import { Page } from "../store/sidebar";
-import { GameReadyGate } from "../World/GameReadyGate";
 import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
 
 export const App = (): React.ReactElement => {
@@ -35,9 +34,7 @@ export const App = (): React.ReactElement => {
             <IncantationsPage />
           </PageWrapper>
           <PageWrapper page={Page.WORLD}>
-            <GameReadyGate>
-              <WorldPage />
-            </GameReadyGate>
+            <WorldPage />
           </PageWrapper>
           <PageWrapper page={Page.PERKS}>
             <PerksPage />
