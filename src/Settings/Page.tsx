@@ -3,20 +3,22 @@ import { ChangeEvent, useState } from "react";
 import { Languages } from "../i18n";
 import { setUIFPS, uiFPS } from "../World/uiThrottler";
 
+const fpsValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30];
 export const Page = (): React.ReactElement => {
-  const [fps, setFPS] = useState(uiFPS);
+  const [sliderIndex, setSliderIndex] = useState(fpsValues.indexOf(uiFPS) + 1);
   const { t, i18n } = useTranslation();
 
   const onLanguageChange = (ev: ChangeEvent<HTMLSelectElement>): void => {
     i18n.changeLanguage(ev.target.value);
   };
-  const onFPSChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    const v = parseFloat(ev.target.value);
-    setUIFPS(v);
-    setFPS(v);
+
+  const onSliderChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const v = parseInt(ev.target.value);
+    setUIFPS(fpsValues[v - 1]);
+    setSliderIndex(v);
   };
   return (
-    <>
+    <div className="m-4">
       <p>{t("settings.language")}:</p>
       <select value={i18n.language} onChange={onLanguageChange}>
         {Object.keys(Languages).map((l) => (
@@ -26,14 +28,15 @@ export const Page = (): React.ReactElement => {
         ))}
       </select>
       <br />
-      <p>FPS: {fps}</p>
+      <p>FPS: {fpsValues[sliderIndex - 1]}</p>
       <input
         type="range"
-        min="1"
-        max="100"
-        value={fps}
-        onChange={onFPSChange}
+        min={1}
+        max={fpsValues.length}
+        step={1}
+        value={sliderIndex}
+        onChange={onSliderChange}
       />
-    </>
+    </div>
   );
 };
