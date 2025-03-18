@@ -8,10 +8,12 @@ export const [actionUpdateMap, useAction] = makeThrottledUse(
 
 export const [progressUpdateMap, useActionProgress] = makeThrottledUse(
   (id) => game.actionM[id]?.progress ?? [0, 0],
-  eq
+  eq,
+  (a): Vec => [...a]
 );
 
 export const [progressPosUpdateMap, useActionProgressPos] = makeThrottledUse(
   (id) => game.actionM[id]?.pos ?? [0, 0],
-  eq
+  eq,
+  (a): Vec => [...a]
 );

@@ -174,7 +174,7 @@ const maker: {
       wasMoving &&
       old.path.every((v, i) => path[i].length === v.length && eq(path[i], v))
     ) {
-      actionUpdateMap[golem.id]?.(action);
+      return true;
     }
     // Create new ActionProgress
     return action;
@@ -230,7 +230,7 @@ const maker: {
   },
 } as const;
 
-const fps = 30;
+const fps = 10;
 
 const gameTick = (): void => {
   // First, gather the action of all entities.
