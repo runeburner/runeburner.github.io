@@ -1,36 +1,31 @@
 import { useEffect, useRef, useState } from "react";
-import { DebouncedState, useThrottledCallback } from "use-debounce";
 
-const emptyUpdate = (() => {
-  const f = () => undefined;
-  f.cancel = () => undefined;
-  f.flush = () => undefined;
-  f.isPending = () => false;
-  return f;
-})();
-export let uiUpdate: DebouncedState<() => void> = emptyUpdate;
+const throttle = (callback: () => void, delay: number): (() => void) => {
+  let timerFlag: number | null = null;
+
+  return () => {
+    if (timerFlag !== null) return;
+    callback();
+    timerFlag = setTimeout(() => {
+      timerFlag = null;
+      callback();
+    }, delay);
+  };
+};
+
+export let uiUpdate = throttle(() => {
+  for (const f of Object.values(throttleCallback)) f();
+}, 1000 / 3);
 
 let throttleCallbackN = 0;
 const throttleCallback: Record<number, () => void> = {};
 
 export const useUIThrottle = (callback: () => void) => {
-  const f = useThrottledCallback(
-    () => {
-      for (const f of Object.values(throttleCallback)) f();
-    },
-    1000 / 15,
-    {
-      leading: true,
-      trailing: true,
-    }
-  );
   useEffect(() => {
-    uiUpdate = f;
     throttleCallbackN++;
     const n = throttleCallbackN;
     throttleCallback[n] = callback;
     return () => {
-      uiUpdate = emptyUpdate;
       delete throttleCallback[n];
     };
   }, [callback]);
