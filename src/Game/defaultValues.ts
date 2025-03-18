@@ -1,4 +1,5 @@
 import { Entity, EntityType } from "../types/entity";
+import { Rune } from "../types/rune";
 import { ID } from "./id";
 
 export const defaultMap: number[][] = [
@@ -142,5 +143,24 @@ export const defaultEntities: Entity[] = [
     health: [50, 50],
     armor: [0, 0],
     shield: [0, 0],
+  },
+  {
+    __type: EntityType.GOLEM,
+    id: ID.next(),
+    pos: [2, 3],
+    visionRange: 5,
+    health: [50, 50],
+    armor: [0, 0],
+    shield: [0, 0],
+    speed: 0,
+    weight: 0,
+    minecapacity: [0, 0],
+    mineSpeed: 0,
+    runes: [
+      [Rune.LABOR, 2],
+      [Rune.WIND, 2],
+      [Rune.VOID, 2],
+    ],
+    mana: [0, 0],
   },
 ];
