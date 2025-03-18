@@ -37,7 +37,7 @@ export const AddGolemModal = ({
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
 
   const onAnimate = (): void => {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 1; i++) {
       setTimeout(
         () =>
           Channel.send({
