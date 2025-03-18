@@ -1,33 +1,51 @@
-import { useEffect, useState } from "react";
 import { EntityType } from "../../types/entity";
 import classes from "./Entity.module.css";
-import { Channel } from "../channel";
 import { Golem } from "../Golem/Golem";
-import { UIEntity, UIMessageType } from "../../types/uiMessages";
 import { Health } from "../Golem/Health/Health";
 import { HeartIcon } from "../../icons";
 import { Action } from "../Action/Action";
+import { game } from "../../Game/game";
+import { Action as ActionT } from "../../types/actions";
+import { UIEntity } from "../../types/uiMessages";
+import { makeThrottledUse } from "../uiThrottler";
+import { eq } from "../../types/vec";
 
 type EntityProps = {
   id: number;
 };
 
-const useEntity = (id: number): UIEntity | undefined => {
-  const [entity, setEntity] = useState<UIEntity>();
-  useEffect(() => {
-    const unsub = Channel.subEntity(id, setEntity);
-    Channel.send({
-      __type: UIMessageType.REFRESH_ENTITY,
-      data: id,
-    });
-    return unsub;
-  }, [id]);
-  return entity;
+export const entityUpdateMap: Record<string, (e: UIEntity) => void> = {};
+
+export const entityUpdateActionMap: Record<string, (e: ActionT) => void> = {};
+
+export const [entityUpdatePosMap, useEntityPos] = makeThrottledUse(
+  (id) => game.entityM[id].pos,
+  eq
+);
+
+const EntityPos = ({
+  children,
+  id,
+}: React.PropsWithChildren<EntityProps>): React.ReactElement => {
+  const pos = useEntityPos(id);
+  return (
+    <div
+      className={"flex-center absolute " + classes.container}
+      style={{
+        top: pos[1] * 64,
+        left: pos[0] * 64,
+      }}
+    >
+      {children}
+    </div>
+  );
 };
 
 export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
-  const entity = useEntity(id);
-  if (!entity) return <></>;
+  const entity = {
+    entity: game.entityM[id],
+    action: game.actionM[id],
+  };
   let child = <></>;
   switch (entity.entity.__type) {
     case EntityType.HEART: {
@@ -62,16 +80,8 @@ export const EntityTile = ({ id }: EntityProps): React.ReactElement => {
 
   return (
     <>
-      {entity.action && <Action p={entity.action} />}
-      <div
-        className={"flex-center absolute " + classes.container}
-        style={{
-          top: entity.entity.pos[1] * 64,
-          left: entity.entity.pos[0] * 64,
-        }}
-      >
-        {child}
-      </div>
+      <Action id={id} />
+      <EntityPos id={id}>{child}</EntityPos>
     </>
   );
 };

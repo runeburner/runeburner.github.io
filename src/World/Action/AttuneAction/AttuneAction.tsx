@@ -2,10 +2,12 @@ import { ATTUNEProgress } from "../../../types/actions";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 
 type AttuneActionProps = {
+  id: number;
   action: ATTUNEProgress;
 };
 
 export const AttuneAction = ({
+  id,
   action,
 }: AttuneActionProps): React.ReactElement => {
   const x = Math.min(action.pos[0], action.heart[0]);
@@ -29,11 +31,7 @@ export const AttuneAction = ({
           (action.heart[1] - y) * 64 + 32
         }`}
       />
-      <ProgressBar
-        pos={[action.pos[0] - x, action.pos[1] - y]}
-        progress={action.progress}
-        color={"#44000044"}
-      />
+      <ProgressBar id={id} min={[x, y]} color={"#44000044"} />
     </svg>
   );
 };

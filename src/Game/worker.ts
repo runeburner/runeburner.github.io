@@ -13,11 +13,14 @@ import {
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Offset } from "../types/map";
 import { Tile } from "../types/tile";
-import { UIEntity, UIMessageType } from "../types/uiMessages";
 import { dist, eq, Vec } from "../types/vec";
-import { camera } from "./camera";
+import {
+  actionUpdateMap,
+  progressPosUpdateMap,
+  progressUpdateMap,
+} from "../World/Action/Progress";
+import { entityUpdateMap, entityUpdatePosMap } from "../World/Entity/Entity";
 import "./channel";
-import { channel } from "./channel";
 import { game } from "./game";
 import { aStarPath } from "./path";
 
@@ -32,18 +35,24 @@ const process: {
     const golem = e as GolemEntity;
     const mp = p as MOVE_NEXT_TOProgress;
     mp.progress[0] += golem.speed * rate * game.powers.attune_power;
-    if (mp.progress[0] >= mp.progress[1]) {
-      const newPath = aStarPath(golem.pos, mp.goal);
-      if (!newPath) return true;
-      newPath.pop();
-      mp.path = newPath;
-    }
     while (mp.progress[0] >= mp.progress[1]) {
+      if (game.entityAt(mp.path[1])) {
+        const newPath = aStarPath(golem.pos, mp.goal);
+        if (!newPath) return true;
+        newPath.pop();
+        if (!mp.path.every((v, i) => eq(v, newPath[i]))) {
+          actionUpdateMap[golem.id]?.(mp);
+        }
+        mp.path = newPath;
+      }
       mp.progress[0] -= mp.progress[1];
       mp.path.shift();
       const nextNode = mp.path[0];
       game.updateFoW(golem.pos, nextNode, golem.visionRange);
       golem.pos = [...nextNode];
+      mp.pos = [...nextNode];
+      progressPosUpdateMap[golem.id]?.(mp.pos);
+      entityUpdatePosMap[golem.id]?.(golem.pos);
     }
     return mp.path.length === 1;
   },
@@ -140,19 +149,35 @@ const maker: {
     if (dist(golem.pos, a.v) <= 1) return null;
 
     // Calculate new path
-    const path = aStarPath(golem.pos, a.v);
-    if (path == null) return null;
-    path.pop();
     const old = game.actionM[a.id] as ActionProgress | undefined;
     const wasMoving = old && old.__type === ActionType.MOVE_NEXT_TO;
-    // Create new ActionProgress
-    return {
+
+    const path = (() => {
+      if (wasMoving) {
+        return old.path;
+      }
+      const path = aStarPath(golem.pos, a.v);
+      if (path == null) return null;
+      path.pop();
+      return path;
+    })();
+    if (!path) return null;
+    const action = {
       __type: ActionType.MOVE_NEXT_TO,
       goal: [...a.v],
       path: path,
+      pos: path[0],
       // carry over progress
       progress: wasMoving ? [old.progress[0], golem.weight] : [0, golem.weight],
     } satisfies MOVE_NEXT_TOProgress;
+    if (
+      wasMoving &&
+      old.path.every((v, i) => path[i].length === v.length && eq(path[i], v))
+    ) {
+      return true;
+    }
+    // Create new ActionProgress
+    return action;
   },
   [ActionType.MINE]: (a: MINE) => {
     if (!isArgs([a.v], isVec)) return null;
@@ -205,9 +230,9 @@ const maker: {
   },
 } as const;
 
-const fps = 30;
+const fps = 15;
 
-setInterval((): void => {
+const gameTick = (): void => {
   // First, gather the action of all entities.
   const actions: Action[] = new Array(game.workers.length);
   for (let i = 0; i < game.workers.length; i++) {
@@ -236,28 +261,25 @@ setInterval((): void => {
       delete game.actionM[a.id];
     } else if (p !== true) {
       game.actionM[a.id] = p;
+      actionUpdateMap[a.id]?.(p);
     }
   }
 
   const rate = 1 / fps;
-  const updateEntities: UIEntity[] = [];
   for (const e of Object.values(game.entityM)) {
     const p = game.actionM[e.id];
     if (p) {
       const del = process[p.__type](rate, e, p);
+
       if (del) {
         delete game.actionM[e.id];
+      } else {
+        progressUpdateMap[e.id]?.(game.actionM[e.id].progress);
       }
     }
 
-    if (camera.isInView(e.pos)) {
-      updateEntities.push({ entity: e, action: game.actionM[e.id] });
-    }
+    entityUpdateMap[e.id]?.({ entity: e, action: game.actionM[e.id] });
   }
-  if (updateEntities.length > 0) {
-    channel.postMessage({
-      __type: UIMessageType.UPDATE_ENTITIES,
-      data: updateEntities,
-    });
-  }
-}, 1000 / fps);
+};
+
+setInterval(gameTick, 1000 / fps);

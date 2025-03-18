@@ -26,7 +26,7 @@ export type ATTUNE = Action<typeof ActionType.ATTUNE>;
 type BaseActionProgress<
   T extends ActionType = ActionType,
   V extends object = object
-> = Typed<T, V>;
+> = Typed<T, { pos: Vec } & V>;
 
 export type MOVE_NEXT_TOProgress = BaseActionProgress<
   typeof ActionType.MOVE_NEXT_TO,
@@ -40,7 +40,6 @@ export type MOVE_NEXT_TOProgress = BaseActionProgress<
 export type MINEProgress = BaseActionProgress<
   typeof ActionType.MINE,
   {
-    pos: Vec;
     progress: Vec;
     tile: Vec;
   }
@@ -50,7 +49,6 @@ export type ATTUNEProgress = BaseActionProgress<
   typeof ActionType.ATTUNE,
   {
     progress: Vec;
-    pos: Vec;
     heart: Vec;
   }
 >;
