@@ -18,7 +18,7 @@ export const useUIThrottle = (callback: () => void) => {
     () => {
       for (const f of Object.values(throttleCallback)) f();
     },
-    100,
+    250,
     {
       leading: true,
       trailing: true,
@@ -49,4 +49,33 @@ export const useIDThrottle = (i: string) => {
     m[i] = (v) => (ref.current = v);
   }, []);
   return n;
+};
+
+export const makeThrottledUse = <T,>(
+  defaultValue: (id: number) => T,
+  eq: (a: T, b: T) => boolean
+): [Record<string, (e: T) => void>, (id: number) => T] => {
+  const record: Record<string, (e: T) => void> = {};
+
+  const useF = (id: number): T => {
+    const def = defaultValue(id);
+    const ref = useRef<T>(def);
+    const [pos, setPos] = useState<T>(def);
+    useUIThrottle(() => {
+      if (eq(ref.current, pos)) return;
+      setPos(ref.current);
+    });
+
+    useEffect(() => {
+      record[id] = (p) => {
+        ref.current = p;
+        uiUpdate();
+      };
+      return () => {
+        delete record[id];
+      };
+    }, [id]);
+    return pos;
+  };
+  return [record, useF];
 };

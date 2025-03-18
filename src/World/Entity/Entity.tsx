@@ -20,19 +20,6 @@ export const entityUpdateMap: Record<string, (e: UIEntity) => void> = {};
 export const entityUpdatePosMap: Record<string, (e: Vec) => void> = {};
 export const entityUpdateActionMap: Record<string, (e: ActionT) => void> = {};
 
-// export const useIDThrottle = (i: string) => {
-//   const ref = useRef(0);
-//   const [n, setN] = useState(0);
-//   useUIThrottle(() => {
-//     if (ref.current === n) return;
-//     setN(ref.current);
-//   });
-//   useEffect(() => {
-//     m[i] = (v) => (ref.current = v);
-//   }, []);
-//   return n;
-// };
-
 const useEntityPos = (id: number): Vec => {
   const ref = useRef<Vec>(game.entityM[id].pos);
   const [pos, setPos] = useState<Vec>(game.entityM[id].pos);
