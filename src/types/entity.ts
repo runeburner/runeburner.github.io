@@ -18,17 +18,23 @@ export type BaseEntity<T extends EntityType, V extends object> = Typed<
   } & V
 >;
 
-export type HeartEntity = BaseEntity<
-  typeof EntityType.HEART,
+export type HealthEntity<T extends EntityType, V extends object> = BaseEntity<
+  T,
   {
-    attunement: number;
     health: Vec;
     armor: Vec;
     shield: Vec;
+  } & V
+>;
+
+export type HeartEntity = HealthEntity<
+  typeof EntityType.HEART,
+  {
+    attunement: number;
   }
 >;
 
-export type GolemEntity = BaseEntity<
+export type GolemEntity = HealthEntity<
   typeof EntityType.GOLEM,
   {
     speed: number;
@@ -36,9 +42,6 @@ export type GolemEntity = BaseEntity<
     mineSpeed: number;
     minecapacity: Vec;
     runes: [Rune, number][];
-    health: Vec;
-    armor: Vec;
-    shield: Vec;
     mana: Vec;
   }
 >;

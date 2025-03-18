@@ -1,21 +1,19 @@
 import { game } from "../../Game/game";
-import { EntityType, GolemEntity } from "../../types/entity";
+import { EntityType, GolemEntity, HealthEntity } from "../../types/entity";
 import { Rune } from "../../types/rune";
-import { Vec } from "../../types/vec";
 import { camera } from "./Camera";
+import { renderAction } from "./CanvasAction";
+import { renderHealth } from "./CanvasHealth";
+import { renderMana } from "./CanvasMana";
 
-const size = 60;
+const size = 12;
 const runeColors = {
   [Rune.VOID]: "#ff000088",
   [Rune.LABOR]: "#0000ff88",
   [Rune.WIND]: "#00ff0088",
 };
-const renderRuneArcs = (
-  ctx: CanvasRenderingContext2D,
-  golem: GolemEntity,
-  pos: Vec
-) => {
-  const { runes } = golem;
+const renderRuneArcs = (ctx: CanvasRenderingContext2D, golem: GolemEntity) => {
+  const { pos, runes } = golem;
   const total = runes.reduce((acc, c) => acc + c[1], 0);
 
   let cummulative = 0;
@@ -24,18 +22,12 @@ const renderRuneArcs = (
     const start = (cummulative / total) * Math.PI * 2;
     const end = ((cummulative + runes[i][1]) / total) * Math.PI * 2;
 
-    const p0 = [Math.sin(start) * size, Math.cos(start) * size];
-    const p1 = [Math.sin(end) * size, Math.cos(end) * size];
     const color = runeColors[runes[i][0] as Rune];
     ctx.fillStyle = color;
 
     ctx.beginPath();
     ctx.moveTo(c[0], c[1]);
-
-    ctx.lineTo(c[0] + p0[0], c[1] + p0[1]);
-    ctx.lineTo(c[0] + p1[0], c[1] + p1[1]);
-    // ctx.arc(c[0], c[1], size, 0, end - start, true);
-    // ctx.moveTo(c[0], c[1]);
+    ctx.arc(c[0], c[1], size, start, end, false);
     ctx.closePath();
     ctx.fill();
 
@@ -48,7 +40,17 @@ export const renderEntities = (ctx: CanvasRenderingContext2D) => {
     if (!camera.isInView(e.pos)) continue;
     switch (e.__type) {
       case EntityType.GOLEM: {
-        renderRuneArcs(ctx, e, e.pos);
+        renderHealth(ctx, e);
+        renderRuneArcs(ctx, e);
+        renderMana(ctx, e);
+
+        if (game.actionM[e.id]) {
+          renderAction(ctx, game.actionM[e.id]);
+        }
+        break;
+      }
+      case EntityType.HEART: {
+        renderHealth(ctx, e);
         break;
       }
     }

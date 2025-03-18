@@ -1,0 +1,80 @@
+import {
+  ActionProgress,
+  ActionType,
+  ATTUNEProgress,
+  MINEProgress,
+  MOVE_NEXT_TOProgress,
+} from "../../types/actions";
+import { renderProgress } from "./CanvasProgress";
+
+const renderMoveNextTo = (
+  ctx: CanvasRenderingContext2D,
+  action: MOVE_NEXT_TOProgress
+) => {
+  const p = action.path;
+  let x = 1e99;
+  let X = -1;
+  let y = 1e99;
+  let Y = -1;
+  for (const point of p) {
+    if (point[0] < x) x = point[0];
+    if (point[1] < y) y = point[1];
+    if (X < point[0]) X = point[0];
+    if (Y < point[1]) Y = point[1];
+  }
+
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#00ff0044";
+
+  ctx.beginPath();
+  ctx.moveTo(p[0][0] * 64 + 32, p[0][1] * 64 + 32);
+  for (let i = 1; i < p.length; i++) {
+    ctx.lineTo(p[i][0] * 64 + 32, p[i][1] * 64 + 32);
+  }
+  ctx.stroke();
+  renderProgress(ctx, [x, y], action.progress, "#00ff0044");
+};
+
+const renderMine = (ctx: CanvasRenderingContext2D, action: MINEProgress) => {
+  const x = Math.min(action.pos[0], action.tile[0]);
+  const y = Math.min(action.pos[1], action.tile[1]);
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#0000ff44";
+  ctx.beginPath();
+  ctx.moveTo(action.pos[0] * 64 + 32, action.pos[1] * 64 + 32);
+  ctx.lineTo(action.tile[0] * 64 + 32, action.tile[1] * 64 + 32);
+  ctx.stroke();
+  renderProgress(ctx, [x, y], action.progress, "#0000ff44");
+};
+
+const renderAttune = (
+  ctx: CanvasRenderingContext2D,
+  action: ATTUNEProgress
+) => {
+  const x = Math.min(action.pos[0], action.heart[0]);
+  const y = Math.min(action.pos[1], action.heart[1]);
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#0000ff44";
+  ctx.beginPath();
+  ctx.moveTo(action.pos[0] * 64 + 32, action.pos[1] * 64 + 32);
+  ctx.lineTo(action.heart[0] * 64 + 32, action.heart[1] * 64 + 32);
+  ctx.stroke();
+  renderProgress(ctx, [x, y], action.progress, "#0000ff44");
+};
+
+export const renderAction = (
+  ctx: CanvasRenderingContext2D,
+  p: ActionProgress
+) => {
+  switch (p.__type) {
+    case ActionType.MOVE_NEXT_TO:
+      renderMoveNextTo(ctx, p);
+      break;
+    case ActionType.MINE:
+      renderMine(ctx, p);
+      break;
+    case ActionType.ATTUNE:
+      renderAttune(ctx, p);
+      break;
+  }
+};
