@@ -51,7 +51,6 @@ export const Channel = ((): C => {
   };
 
   c.onmessage = ({ data: msg }): void => {
-    console.log(msg.__type);
     handlers[msg.__type]?.(msg.data);
   };
 
