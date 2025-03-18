@@ -230,7 +230,7 @@ const maker: {
   },
 } as const;
 
-const fps = 10;
+const fps = 15;
 
 const gameTick = (): void => {
   // First, gather the action of all entities.
