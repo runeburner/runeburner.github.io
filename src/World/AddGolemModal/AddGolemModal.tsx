@@ -37,7 +37,7 @@ export const AddGolemModal = ({
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
 
   const onAnimate = (): void => {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 25; i++) {
       setTimeout(
         () =>
           Channel.send({
@@ -47,7 +47,7 @@ export const AddGolemModal = ({
               incantation: store.getState().incantations[selectedIncantation],
             },
           }),
-        i * 200
+        i * 50
       );
     }
     onClose();
