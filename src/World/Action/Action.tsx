@@ -9,22 +9,6 @@ import {
 } from "../../types/actions";
 import { useAction } from "./Progress";
 
-// export const actionProgressUpdateMap: Record<
-//   string,
-//   (p?: ActionProgress) => void
-// > = {};
-
-// export const useActionProgress = (id: number): ActionProgress | undefined => {
-//   const [v, setV] = useState<ActionProgress>();
-//   useEffect(() => {
-//     actionProgressUpdateMap[id] = setV;
-//     return () => {
-//       delete actionProgressUpdateMap[id];
-//     };
-//   }, [id]);
-//   return v;
-// };
-
 type ActionProps = {
   id: number;
 };
