@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-const throttle = (callback: () => void, delay: number): (() => void) => {
+export let uiFPS = 3;
+export const setUIFPS = (next: number) => (uiFPS = next);
+
+const throttle = (callback: () => void): (() => void) => {
   let timerFlag: number | null = null;
 
   return () => {
@@ -9,13 +12,13 @@ const throttle = (callback: () => void, delay: number): (() => void) => {
     timerFlag = setTimeout(() => {
       timerFlag = null;
       callback();
-    }, delay);
+    }, 1000 / uiFPS);
   };
 };
 
 export let uiUpdate = throttle(() => {
   for (const f of Object.values(throttleCallback)) f();
-}, 1000 / 3);
+});
 
 let throttleCallbackN = 0;
 const throttleCallback: Record<number, () => void> = {};
