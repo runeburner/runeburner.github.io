@@ -18,7 +18,7 @@ export const World = (): React.ReactElement => {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       renderTiles(ctx, cam);
       renderEntities(ctx);
-    }, 50);
+    }, 1000 / 30);
     return () => clearInterval(id);
   }, []);
 
