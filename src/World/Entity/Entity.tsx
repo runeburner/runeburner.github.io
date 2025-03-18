@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { EntityType } from "../../types/entity";
 import classes from "./Entity.module.css";
 import { Golem } from "../Golem/Golem";
@@ -8,7 +7,7 @@ import { Action } from "../Action/Action";
 import { game } from "../../Game/game";
 import { Action as ActionT } from "../../types/actions";
 import { UIEntity } from "../../types/uiMessages";
-import { uiUpdate, useUIThrottle } from "../uiThrottler";
+import { makeThrottledUse } from "../uiThrottler";
 import { eq } from "../../types/vec";
 
 type EntityProps = {
@@ -17,28 +16,12 @@ type EntityProps = {
 
 export const entityUpdateMap: Record<string, (e: UIEntity) => void> = {};
 
-export const entityUpdatePosMap: Record<string, (e: Vec) => void> = {};
 export const entityUpdateActionMap: Record<string, (e: ActionT) => void> = {};
 
-const useEntityPos = (id: number): Vec => {
-  const ref = useRef<Vec>(game.entityM[id].pos);
-  const [pos, setPos] = useState<Vec>(game.entityM[id].pos);
-  useUIThrottle(() => {
-    if (eq(ref.current, pos)) return;
-    setPos([...ref.current]);
-  });
-
-  useEffect(() => {
-    entityUpdatePosMap[id] = (p) => {
-      ref.current = p;
-      uiUpdate();
-    };
-    return () => {
-      delete entityUpdatePosMap[id];
-    };
-  }, [id]);
-  return pos;
-};
+export const [entityUpdatePosMap, useEntityPos] = makeThrottledUse(
+  (id) => game.entityM[id].pos,
+  eq
+);
 
 const EntityPos = ({
   children,

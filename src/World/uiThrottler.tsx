@@ -53,7 +53,7 @@ export const useIDThrottle = (i: string) => {
 
 export const makeThrottledUse = <T,>(
   defaultValue: (id: number) => T,
-  eq: (a: T, b: T) => boolean
+  eq: (a: T, b: T) => boolean = (a: T, b: T) => a === b
 ): [Record<string, (e: T) => void>, (id: number) => T] => {
   const record: Record<string, (e: T) => void> = {};
 
