@@ -1,3 +1,5 @@
+import { setAttunement } from "../store/resources";
+import { store } from "../store/store";
 import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
@@ -187,6 +189,7 @@ export const game = ((): Game => {
         1.01,
         Math.sqrt(0.5 * this.resources.attunement)
       );
+      store.dispatch(setAttunement(this.resources.attunement));
     },
 
     determineInitialCameraPosition: (cam: Camera): Camera => {

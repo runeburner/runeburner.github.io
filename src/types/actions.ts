@@ -5,6 +5,7 @@ export const ActionType = Object.freeze({
   MOVE_NEXT_TO: "MOVE_NEXT_TO",
   MINE: "MINE",
   ATTUNE: "ATTUNE",
+  DIE: "DIE",
 } as const);
 
 export type ActionType = (typeof ActionType)[keyof typeof ActionType];
@@ -22,6 +23,7 @@ export type Action<
 export type MOVE_NEXT_TO = Action<typeof ActionType.MOVE_NEXT_TO, { v: Vec }>;
 export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
 export type ATTUNE = Action<typeof ActionType.ATTUNE>;
+export type DIE = Action<typeof ActionType.DIE>;
 
 type BaseActionProgress<
   T extends ActionType = ActionType,
@@ -62,4 +64,5 @@ export type ActionTypeMap = {
   [ActionType.MOVE_NEXT_TO]: [MOVE_NEXT_TO, MOVE_NEXT_TOProgress];
   [ActionType.MINE]: [MINE, MINEProgress];
   [ActionType.ATTUNE]: [ATTUNE, ATTUNEProgress];
+  [ActionType.DIE]: [DIE, void];
 };

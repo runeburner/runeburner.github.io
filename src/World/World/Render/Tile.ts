@@ -1,6 +1,6 @@
-import { game } from "../../Game/game";
-import { Offset, ValuesPerTile } from "../../types/map";
-import { camera } from "./Camera";
+import { game } from "../../../Game/game";
+import { Offset, ValuesPerTile } from "../../../types/map";
+import { camera } from "../Camera";
 
 const colors = [
   "#a2b9bc",

@@ -9,6 +9,7 @@ import {
   MOVE_NEXT_TO,
   MOVE_NEXT_TOProgress,
   ActionProgress,
+  DIE,
 } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Offset } from "../types/map";
@@ -92,6 +93,7 @@ const process: {
 
     return golem.minecapacity[0] === 0;
   },
+  [ActionType.DIE]: () => true,
 };
 
 const isVec = (v: unknown): v is Vec =>
@@ -116,6 +118,10 @@ const rsObject = {
   },
   me(e: Entity): Entity {
     return e;
+  },
+  at(e: Entity, v: Vec): Int32Array {
+    if (!isArgs([v], isVec)) return new Int32Array();
+    return game.tileAt(v);
   },
   isInRange(e: Entity, v: Vec): boolean {
     if (!isArgs([v], isVec)) return false;
@@ -215,6 +221,16 @@ const maker: {
       pos: [...golem.pos],
       heart: [...heart.pos],
     } satisfies ATTUNEProgress;
+  },
+  [ActionType.DIE]: (a: DIE) => {
+    console.log("DIE CALLED");
+    delete game.actionM[a.id];
+    delete game.entityM[a.id];
+    const i = game.workers.findIndex((w) => w.id === a.id);
+    if (i === -1) return null;
+    game.workers.splice(i, 1);
+
+    return null;
   },
 } as const;
 

@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import { AddGolem } from "../AddGolem/AddGolem";
 import { camera } from "./Camera";
-import { renderTiles } from "./CanvasTile";
-import { renderEntities } from "./CanvasEntities";
-import { uiFPS } from "../uiThrottler";
+import { renderTiles } from "./Render/Tile";
+import { renderEntities } from "./Render/Entities";
+import { uiFPS } from "../uiFPS";
 
-let scale = 32;
+let scale = 64;
 export const World = (): React.ReactElement => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const pos = useRef<Vec>([0, 0]);

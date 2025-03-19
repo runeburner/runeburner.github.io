@@ -1,4 +1,4 @@
-import { EntityType, HealthEntity } from "../../types/entity";
+import { EntityType, HealthEntity } from "../../../types/entity";
 const healthColor = "#fbf9f5";
 const armorColor = "#ff9e4a";
 const shieldColor = "#65c4fb";

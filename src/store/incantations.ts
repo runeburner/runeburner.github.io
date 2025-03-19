@@ -15,8 +15,9 @@ export const tick = (rs) => {
     me.minecapacity[0] < me.minecapacity[1] :
     me.minecapacity[0] === 0;
   if (mining) {
-    if(crystal == null) {
+    if(crystal == null || rs.at(crystal)[0] !== 1) {
       const crystals = rs.findAll("MANA_CRYSTAL", 19);
+      if(crystals.length === 0) return DIE();
       crystal = crystals[Math.floor(Math.random()*crystals.length)];
     }
 
