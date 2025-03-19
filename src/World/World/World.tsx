@@ -50,6 +50,11 @@ export const World = (): React.ReactElement => {
     const ctx = getContext();
     if (!ctx) return;
 
+    camera.setSize([
+      Math.floor(ctx.canvas.width / 64) + 1,
+      Math.floor(ctx.canvas.height / 64) + 1,
+    ]);
+
     const id = setInterval(() => render(ctx), 1000 / uiFPS);
     return () => clearInterval(id);
   }, []);
@@ -60,8 +65,8 @@ export const World = (): React.ReactElement => {
       if (!ctx) return;
       render(ctx);
       camera.setSize([
-        Math.floor(ctx.canvas.width / 64) + 1,
-        Math.floor(ctx.canvas.height / 64) + 1,
+        Math.floor(ctx.canvas.width / 64),
+        Math.floor(ctx.canvas.height / 64),
       ]);
     };
 
@@ -70,12 +75,8 @@ export const World = (): React.ReactElement => {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const throttledSetCamera = useThrottledCallback((p) => {
-    camera.setPos(p);
-  }, 100);
-
   const onPan = ([x, y]: Vec): void => {
-    throttledSetCamera([-Math.floor(x / 64), -Math.floor(y / 64)]);
+    camera.setPos([-x / 64, -y / 64]);
   };
 
   return (
