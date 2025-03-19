@@ -3,7 +3,7 @@ export const renderProgress = (
   pos: Vec,
   progress: Vec,
   color: string
-) => {
+): void => {
   ctx.strokeStyle = color;
   ctx.lineWidth = 4;
   ctx.beginPath();

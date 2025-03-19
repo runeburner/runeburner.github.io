@@ -26,7 +26,7 @@ const getNextPoints = (
 export const renderMana = (
   ctx: CanvasRenderingContext2D,
   golem: GolemEntity
-) => {
+): void => {
   const { mana } = golem;
   const c: Vec = [golem.pos[0] * 64 + 32, golem.pos[1] * 64 + 32];
   if (mana[1] === 0) return;

@@ -8,7 +8,7 @@ const healthColors = [healthColor, armorColor, shieldColor, emptyColor];
 const outerDiameter = 31;
 const innerDiameter = 20;
 
-const renderEmptyHealth = (ctx: CanvasRenderingContext2D, c: Vec) => {
+const renderEmptyHealth = (ctx: CanvasRenderingContext2D, c: Vec): void => {
   ctx.beginPath();
   ctx.arc(c[0], c[1], outerDiameter, 0, Math.PI * 2, false);
   ctx.arc(c[0], c[1], innerDiameter, Math.PI * 2, 0, true);
@@ -52,7 +52,7 @@ const getNextPoints = <T extends EntityType, V extends object>(
 export const renderHealth = <T extends EntityType, V extends object>(
   ctx: CanvasRenderingContext2D,
   e: HealthEntity<T, V>
-) => {
+): void => {
   const { health, armor, shield } = e;
 
   const totalHealth = health[1] + armor[1] + shield[1];

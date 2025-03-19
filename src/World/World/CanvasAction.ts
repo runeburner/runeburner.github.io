@@ -10,7 +10,7 @@ import { renderProgress } from "./CanvasProgress";
 const renderMoveNextTo = (
   ctx: CanvasRenderingContext2D,
   action: MOVE_NEXT_TOProgress
-) => {
+): void => {
   const p = action.path;
   let x = 1e99;
   let X = -1;
@@ -35,7 +35,10 @@ const renderMoveNextTo = (
   renderProgress(ctx, p[0], action.progress, "#00ff0044");
 };
 
-const renderMine = (ctx: CanvasRenderingContext2D, action: MINEProgress) => {
+const renderMine = (
+  ctx: CanvasRenderingContext2D,
+  action: MINEProgress
+): void => {
   ctx.lineWidth = 4;
   ctx.strokeStyle = "#0000ff44";
   ctx.beginPath();
@@ -48,7 +51,7 @@ const renderMine = (ctx: CanvasRenderingContext2D, action: MINEProgress) => {
 const renderAttune = (
   ctx: CanvasRenderingContext2D,
   action: ATTUNEProgress
-) => {
+): void => {
   ctx.lineWidth = 4;
   ctx.strokeStyle = "#0000ff44";
   ctx.beginPath();
@@ -61,7 +64,7 @@ const renderAttune = (
 export const renderAction = (
   ctx: CanvasRenderingContext2D,
   p: ActionProgress
-) => {
+): void => {
   switch (p.__type) {
     case ActionType.MOVE_NEXT_TO:
       renderMoveNextTo(ctx, p);

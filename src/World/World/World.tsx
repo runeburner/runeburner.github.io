@@ -3,7 +3,6 @@ import { AddGolem } from "../AddGolem/AddGolem";
 import { camera } from "./Camera";
 import { renderTiles } from "./CanvasTile";
 import { renderEntities } from "./CanvasEntities";
-import { useThrottledCallback } from "use-debounce";
 import { uiFPS } from "../uiThrottler";
 
 export const World = (): React.ReactElement => {
@@ -38,7 +37,7 @@ export const World = (): React.ReactElement => {
     return ctx;
   };
 
-  const render = (ctx: CanvasRenderingContext2D) => {
+  const render = (ctx: CanvasRenderingContext2D): void => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     const transform = ctx.getTransform();
     ctx.translate(pos.current[0] - transform.e, pos.current[1] - transform.f);
@@ -56,11 +55,11 @@ export const World = (): React.ReactElement => {
     ]);
 
     const id = setInterval(() => render(ctx), 1000 / uiFPS);
-    return () => clearInterval(id);
+    return (): void => clearInterval(id);
   }, []);
 
   useEffect(() => {
-    const onResize = () => {
+    const onResize = (): void => {
       const ctx = getContext();
       if (!ctx) return;
       render(ctx);
@@ -72,7 +71,7 @@ export const World = (): React.ReactElement => {
 
     window.addEventListener("resize", onResize);
 
-    return () => window.removeEventListener("resize", onResize);
+    return (): void => window.removeEventListener("resize", onResize);
   }, []);
 
   const onPan = ([x, y]: Vec): void => {
