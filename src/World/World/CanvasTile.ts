@@ -23,7 +23,6 @@ export const renderTiles = (ctx: CanvasRenderingContext2D) => {
   const Y = Math.ceil(
     Math.min(game.map.bounds[3], camera.c.pos[1] + camera.c.size[1])
   );
-  console.log(x, y, X, Y);
   for (let j = y; j < Y; j++) {
     for (let i = x; i < X; i++) {
       const tileID =
