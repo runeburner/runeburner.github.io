@@ -20,8 +20,8 @@ export const World = (): React.ReactElement => {
     if (!isPanning.current) return;
     e.preventDefault();
     const v: Vec = [
-      Math.min(1, camera.c.pos[0] + e.movementX / camera.c.scale),
-      Math.min(1, camera.c.pos[1] + e.movementY / camera.c.scale),
+      camera.c.pos[0] - e.movementX / camera.c.scale,
+      camera.c.pos[1] - e.movementY / camera.c.scale,
     ];
     camera.c.pos = v;
   };
@@ -36,6 +36,15 @@ export const World = (): React.ReactElement => {
     } else {
       camera.c.scale /= 1.1;
     }
+    const ctx = getContext();
+    if (!ctx) return;
+
+    const size: Vec = [
+      Math.floor(ctx.canvas.width) / camera.c.scale + 1,
+      Math.floor(ctx.canvas.height) / camera.c.scale + 1,
+    ];
+    camera.setSize(size);
+    render(ctx);
   };
 
   const getContext = (): CanvasRenderingContext2D | undefined => {
@@ -49,14 +58,14 @@ export const World = (): React.ReactElement => {
 
   const render = (ctx: CanvasRenderingContext2D): void => {
     const transform = ctx.getTransform();
-    transform.e = camera.c.pos[0] * camera.c.scale;
-    transform.f = camera.c.pos[1] * camera.c.scale;
+    transform.e = -camera.c.pos[0] * camera.c.scale;
+    transform.f = -camera.c.pos[1] * camera.c.scale;
     transform.a = camera.c.scale;
     transform.d = camera.c.scale;
     ctx.setTransform(transform);
     ctx.clearRect(
-      -camera.c.pos[0],
-      -camera.c.pos[1],
+      camera.c.pos[0],
+      camera.c.pos[1],
       ctx.canvas.width,
       ctx.canvas.height
     );

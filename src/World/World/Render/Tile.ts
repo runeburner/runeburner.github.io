@@ -15,6 +15,7 @@ const colors = [
 ];
 
 export const renderTiles = (ctx: CanvasRenderingContext2D): void => {
+  console.log(camera.c);
   const x = Math.floor(Math.max(0, camera.c.pos[0] - 1));
   const y = Math.floor(Math.max(0, camera.c.pos[1] - 1));
   const X = Math.ceil(
@@ -34,7 +35,7 @@ export const renderTiles = (ctx: CanvasRenderingContext2D): void => {
           (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
         ] > 0;
       ctx.fillStyle = isVisible ? colors[tileID] : "#666666ff";
-      ctx.fillRect(i + 1 / 64, j + 1 / 64, 1 - 1 / 64, 1 - 1 / 64);
+      ctx.fillRect(i + 1 / 128, j + 1 / 128, 1 - 2 / 128, 1 - 2 / 128);
     }
   }
 };
