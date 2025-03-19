@@ -202,6 +202,7 @@ export const game = ((): Game => {
           (core?.pos[1] ?? 0) - Math.floor(cam.size[1] / 2),
         ],
         size: [...cam.size],
+        scale: cam.scale,
       };
     },
 

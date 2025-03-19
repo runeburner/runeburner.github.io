@@ -5,15 +5,9 @@ import { renderTiles } from "./Render/Tile";
 import { renderEntities } from "./Render/Entities";
 import { uiFPS } from "../uiFPS";
 
-let scale = 64;
 export const World = (): React.ReactElement => {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const pos = useRef<Vec>([0, 0]);
   const isPanning = useRef(false);
-
-  const onPan = ([x, y]: Vec): void => {
-    camera.setPos([-x, -y]);
-  };
 
   const onMouseDown = (e: React.MouseEvent): void => {
     if (e.button === 1) isPanning.current = true;
@@ -26,11 +20,10 @@ export const World = (): React.ReactElement => {
     if (!isPanning.current) return;
     e.preventDefault();
     const v: Vec = [
-      Math.min(1, pos.current[0] + e.movementX / scale),
-      Math.min(1, pos.current[1] + e.movementY / scale),
+      Math.min(1, camera.c.pos[0] + e.movementX / camera.c.scale),
+      Math.min(1, camera.c.pos[1] + e.movementY / camera.c.scale),
     ];
-    onPan(v);
-    pos.current = v;
+    camera.c.pos = v;
   };
 
   const onMouseLeave = (): void => {
@@ -39,9 +32,9 @@ export const World = (): React.ReactElement => {
 
   const onWheel = (ev: React.WheelEvent): void => {
     if (ev.deltaY > 0) {
-      scale *= 1.1;
+      camera.c.scale *= 1.1;
     } else {
-      scale /= 1.1;
+      camera.c.scale /= 1.1;
     }
   };
 
@@ -56,14 +49,14 @@ export const World = (): React.ReactElement => {
 
   const render = (ctx: CanvasRenderingContext2D): void => {
     const transform = ctx.getTransform();
-    transform.e = pos.current[0] * scale;
-    transform.f = pos.current[1] * scale;
-    transform.a = scale;
-    transform.d = scale;
+    transform.e = camera.c.pos[0] * camera.c.scale;
+    transform.f = camera.c.pos[1] * camera.c.scale;
+    transform.a = camera.c.scale;
+    transform.d = camera.c.scale;
     ctx.setTransform(transform);
     ctx.clearRect(
-      -pos.current[0],
-      -pos.current[1],
+      -camera.c.pos[0],
+      -camera.c.pos[1],
       ctx.canvas.width,
       ctx.canvas.height
     );
@@ -75,10 +68,11 @@ export const World = (): React.ReactElement => {
     const ctx = getContext();
     if (!ctx) return;
 
-    camera.setSize([
-      Math.floor(ctx.canvas.width) + 1,
-      Math.floor(ctx.canvas.height) + 1,
-    ]);
+    const size: Vec = [
+      Math.floor(ctx.canvas.width) / camera.c.scale + 1,
+      Math.floor(ctx.canvas.height) / camera.c.scale + 1,
+    ];
+    camera.setSize(size);
 
     const id = setInterval(() => render(ctx), 1000 / uiFPS);
     return (): void => clearInterval(id);
@@ -89,10 +83,12 @@ export const World = (): React.ReactElement => {
       const ctx = getContext();
       if (!ctx) return;
       render(ctx);
-      camera.setSize([
-        Math.floor(ctx.canvas.width),
-        Math.floor(ctx.canvas.height),
-      ]);
+
+      const size: Vec = [
+        Math.floor(ctx.canvas.width) / camera.c.scale + 1,
+        Math.floor(ctx.canvas.height) / camera.c.scale + 1,
+      ];
+      camera.setSize(size);
     };
 
     window.addEventListener("resize", onResize);

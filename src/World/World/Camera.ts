@@ -4,6 +4,7 @@ import { Vec } from "../../types/vec";
 export type Camera = {
   pos: Vec;
   size: Vec;
+  scale: number;
 };
 
 export const isInView = (camera: Camera, v: Vec): boolean => {
@@ -19,6 +20,7 @@ export const camera = {
   c: {
     pos: [0, 0],
     size: [24, 24],
+    scale: 64,
   } satisfies Camera,
   setPos(v: Vec): void {
     this.c.pos = v;
