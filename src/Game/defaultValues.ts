@@ -1,5 +1,4 @@
 import { Entity, EntityType } from "../types/entity";
-import { Rune } from "../types/rune";
 import { ID } from "./id";
 
 export const defaultMap: number[][] = [

@@ -25,7 +25,7 @@ export default tseslint.config(
       ],
       "@typescript-eslint/explicit-function-return-type": "error",
       // This rule is good but it has false positives rendering it useless.
-      "react-hooks/rules-of-hooks": false,
+      "react-hooks/rules-of-hooks": "off",
     },
   }
 );
