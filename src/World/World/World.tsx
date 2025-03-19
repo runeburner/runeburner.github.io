@@ -38,9 +38,14 @@ export const World = (): React.ReactElement => {
   };
 
   const render = (ctx: CanvasRenderingContext2D): void => {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     const transform = ctx.getTransform();
     ctx.translate(pos.current[0] - transform.e, pos.current[1] - transform.f);
+    ctx.clearRect(
+      -pos.current[0],
+      -pos.current[1],
+      ctx.canvas.width,
+      ctx.canvas.height
+    );
     renderTiles(ctx);
     renderEntities(ctx);
   };
