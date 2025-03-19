@@ -3,13 +3,10 @@ import { EhwazIcon, OthalanIcon, TiwazIcon } from "../../icons";
 import { Modal, ModalProps } from "../../Modal/Modal";
 import { RuneSlider } from "./RuneSlider/RuneSlider";
 import { Rune } from "../../types/rune";
-import { Golem } from "../Golem/Golem";
-import { UIMessageType } from "../../types/uiMessages";
 import { store } from "../../store/store";
-import { Channel } from "../channel";
-import { Vec } from "../../types/vec";
 import { useTranslation } from "react-i18next";
 import { useIncantationNames } from "../../store/incantations";
+import { game } from "../../Game/game";
 export const AddGolemModal = ({
   open,
   onClose,
@@ -26,11 +23,6 @@ export const AddGolemModal = ({
     incantationNames[0]
   );
 
-  const [health /*, setHealth*/] = useState<Vec>([50, 50]);
-  const [armor /*, setArmor*/] = useState<Vec>([50, 50]);
-  const [shield /*, setShield*/] = useState<Vec>([50, 50]);
-  const [mana /*, setMana*/] = useState<Vec>([50, 50]);
-
   const appliedRunes: [Rune, number][] = Object.entries(runes).filter(
     (r) => r[1] > 0
   ) as [Rune, number][];
@@ -40,13 +32,10 @@ export const AddGolemModal = ({
     for (let i = 0; i < 25; i++) {
       setTimeout(
         () =>
-          Channel.send({
-            __type: UIMessageType.ANIMATE,
-            data: {
-              runes: appliedRunes,
-              incantation: store.getState().incantations[selectedIncantation],
-            },
-          }),
+          game.animate(
+            appliedRunes,
+            store.getState().incantations[selectedIncantation]
+          ),
         i * 50
       );
     }
@@ -56,15 +45,6 @@ export const AddGolemModal = ({
   return (
     <Modal open={open} onClose={onClose}>
       <div>
-        <div style={{ height: "128px" }}>
-          <Golem
-            runes={appliedRunes}
-            health={health}
-            armor={armor}
-            shield={shield}
-            mana={mana}
-          />
-        </div>
         <p>
           {t("create_golem_modal.runes")}: {totalRunes}/6
         </p>

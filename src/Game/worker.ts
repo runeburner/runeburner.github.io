@@ -14,13 +14,6 @@ import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Offset } from "../types/map";
 import { Tile } from "../types/tile";
 import { dist, eq, Vec } from "../types/vec";
-import {
-  actionUpdateMap,
-  progressPosUpdateMap,
-  progressUpdateMap,
-} from "../World/Action/Progress";
-import { entityUpdateMap, entityUpdatePosMap } from "../World/Entity/Entity";
-import "./channel";
 import { game } from "./game";
 import { aStarPath } from "./path";
 
@@ -40,9 +33,6 @@ const process: {
         const newPath = aStarPath(golem.pos, mp.goal);
         if (!newPath) return true;
         newPath.pop();
-        if (!mp.path.every((v, i) => eq(v, newPath[i]))) {
-          actionUpdateMap[golem.id]?.(mp);
-        }
         mp.path = newPath;
       }
       mp.progress[0] -= mp.progress[1];
@@ -51,8 +41,6 @@ const process: {
       game.updateFoW(golem.pos, nextNode, golem.visionRange);
       golem.pos = [...nextNode];
       mp.pos = [...nextNode];
-      progressPosUpdateMap[golem.id]?.(mp.pos);
-      entityUpdatePosMap[golem.id]?.(golem.pos);
     }
     return mp.path.length === 1;
   },
@@ -152,7 +140,7 @@ const maker: {
     const old = game.actionM[a.id] as ActionProgress | undefined;
     const wasMoving = old && old.__type === ActionType.MOVE_NEXT_TO;
 
-    const path = (() => {
+    const path = ((): Vec[] | null => {
       if (wasMoving) {
         return old.path;
       }
@@ -261,7 +249,6 @@ const gameTick = (): void => {
       delete game.actionM[a.id];
     } else if (p !== true) {
       game.actionM[a.id] = p;
-      actionUpdateMap[a.id]?.(p);
     }
   }
 
@@ -273,12 +260,8 @@ const gameTick = (): void => {
 
       if (del) {
         delete game.actionM[e.id];
-      } else {
-        progressUpdateMap[e.id]?.(game.actionM[e.id].progress);
       }
     }
-
-    entityUpdateMap[e.id]?.({ entity: e, action: game.actionM[e.id] });
   }
 };
 

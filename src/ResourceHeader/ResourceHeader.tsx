@@ -1,23 +1,8 @@
-import { useEffect, useState } from "react";
 import { MagicIcon } from "../icons";
-import { Resources } from "../types/resources";
-import { Channel } from "../World/channel";
 import classes from "./ResourceHeader.module.css";
 
-const useResources = (): Resources => {
-  const [r, setR] = useState<Resources>({
-    attunement: 0,
-  });
-
-  useEffect(() => {
-    return Channel.subResources(setR);
-  }, [setR]);
-
-  return r;
-};
-
 export const ResourceHeader = (): React.ReactElement => {
-  const r = useResources();
+  const r = { attunement: 0 };
   return (
     <div className={"py-2 flex-center w-full " + classes.container}>
       <span>{r.attunement}</span>
