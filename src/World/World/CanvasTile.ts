@@ -14,7 +14,7 @@ const colors = [
   "#e3eaa7",
 ];
 
-export const renderTiles = (ctx: CanvasRenderingContext2D) => {
+export const renderTiles = (ctx: CanvasRenderingContext2D): void => {
   const x = Math.floor(Math.max(0, camera.c.pos[0] - 1));
   const y = Math.floor(Math.max(0, camera.c.pos[1] - 1));
   const X = Math.ceil(

@@ -12,7 +12,7 @@ export const Page = (): React.ReactElement => {
     i18n.changeLanguage(ev.target.value);
   };
 
-  const onSliderChange = (ev: ChangeEvent<HTMLInputElement>) => {
+  const onSliderChange = (ev: ChangeEvent<HTMLInputElement>): void => {
     const v = parseInt(ev.target.value);
     setUIFPS(fpsValues[v - 1]);
     setSliderIndex(v);
