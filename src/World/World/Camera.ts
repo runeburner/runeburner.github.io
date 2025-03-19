@@ -30,9 +30,9 @@ export const camera = {
   },
   isInView(v: Vec): boolean {
     return (
-      this.c.pos[0] <= v[0] &&
+      this.c.pos[0] - 1 <= v[0] &&
       v[0] < this.c.pos[0] + this.c.size[0] &&
-      this.c.pos[1] <= v[1] &&
+      this.c.pos[1] - 1 <= v[1] &&
       v[1] < this.c.pos[1] + this.c.size[1]
     );
   },
