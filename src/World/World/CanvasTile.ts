@@ -15,11 +15,15 @@ const colors = [
 ];
 
 export const renderTiles = (ctx: CanvasRenderingContext2D) => {
-  const x = Math.max(0, camera.c.pos[0] - 1);
-  const y = Math.max(0, camera.c.pos[1] - 1);
-  const X = Math.min(game.map.bounds[2], camera.c.pos[0] + camera.c.size[0]);
-  const Y = Math.min(game.map.bounds[3], camera.c.pos[1] + camera.c.size[1]);
-  console.log(x, X, y, Y);
+  const x = Math.floor(Math.max(0, camera.c.pos[0] - 1));
+  const y = Math.floor(Math.max(0, camera.c.pos[1] - 1));
+  const X = Math.ceil(
+    Math.min(game.map.bounds[2], camera.c.pos[0] + camera.c.size[0])
+  );
+  const Y = Math.ceil(
+    Math.min(game.map.bounds[3], camera.c.pos[1] + camera.c.size[1])
+  );
+  console.log(x, y, X, Y);
   for (let j = y; j < Y; j++) {
     for (let i = x; i < X; i++) {
       const tileID =
@@ -30,7 +34,7 @@ export const renderTiles = (ctx: CanvasRenderingContext2D) => {
         game.map.data[
           (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
         ] > 0;
-      ctx.fillStyle = isVisible ? colors[tileID] : "#111111ff";
+      ctx.fillStyle = isVisible ? colors[tileID] : "#222222ff";
       ctx.fillRect(i * 64 + 0.5, j * 64 + 0.5, 64 - 1, 64 - 1);
     }
   }
