@@ -4,8 +4,8 @@ import {
   ATTUNEProgress,
   MINEProgress,
   MOVE_NEXT_TOProgress,
-} from "../../types/actions";
-import { renderProgress } from "./CanvasProgress";
+} from "../../../types/actions";
+import { renderProgress } from "./Progress";
 
 const renderMoveNextTo = (
   ctx: CanvasRenderingContext2D,

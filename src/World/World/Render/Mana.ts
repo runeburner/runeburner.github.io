@@ -1,4 +1,4 @@
-import { GolemEntity } from "../../types/entity";
+import { GolemEntity } from "../../../types/entity";
 
 const manaColor = "#58c8f2";
 const emptyColor = "#00000022";

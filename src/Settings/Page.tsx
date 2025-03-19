@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { ChangeEvent, useState } from "react";
 import { Languages } from "../i18n";
-import { setUIFPS, uiFPS } from "../World/uiThrottler";
+import { setUIFPS, uiFPS } from "../World/uiFPS";
 
 const fpsValues = [1, 2, 3, 5, 10, 15, 20, 25, 30, 60, 100];
 export const Page = (): React.ReactElement => {

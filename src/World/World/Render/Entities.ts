@@ -1,10 +1,10 @@
-import { game } from "../../Game/game";
-import { EntityType, GolemEntity } from "../../types/entity";
-import { Rune } from "../../types/rune";
-import { camera } from "./Camera";
-import { renderAction } from "./CanvasAction";
-import { renderHealth } from "./CanvasHealth";
-import { renderMana } from "./CanvasMana";
+import { game } from "../../../Game/game";
+import { EntityType, GolemEntity } from "../../../types/entity";
+import { Rune } from "../../../types/rune";
+import { camera } from "../Camera";
+import { renderAction } from "./Action";
+import { renderHealth } from "./Health";
+import { renderMana } from "./Mana";
 
 const size = 12 / 64;
 const runeColors = {
