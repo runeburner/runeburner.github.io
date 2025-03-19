@@ -223,7 +223,6 @@ const maker: {
     } satisfies ATTUNEProgress;
   },
   [ActionType.DIE]: (a: DIE) => {
-    console.log("DIE CALLED");
     delete game.actionM[a.id];
     delete game.entityM[a.id];
     const i = game.workers.findIndex((w) => w.id === a.id);

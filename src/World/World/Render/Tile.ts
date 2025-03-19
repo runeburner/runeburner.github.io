@@ -15,7 +15,6 @@ const colors = [
 ];
 
 export const renderTiles = (ctx: CanvasRenderingContext2D): void => {
-  console.log(camera.c);
   const x = Math.floor(Math.max(0, camera.c.pos[0] - 1));
   const y = Math.floor(Math.max(0, camera.c.pos[1] - 1));
   const X = Math.ceil(
