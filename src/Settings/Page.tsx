@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from "react";
 import { Languages } from "../i18n";
 import { setUIFPS, uiFPS } from "../World/uiThrottler";
 
-const fpsValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30];
+const fpsValues = [1, 2, 3, 5, 10, 15, 20, 25, 30, 60, 100];
 export const Page = (): React.ReactElement => {
   const [sliderIndex, setSliderIndex] = useState(fpsValues.indexOf(uiFPS) + 1);
   const { t, i18n } = useTranslation();
@@ -17,6 +17,7 @@ export const Page = (): React.ReactElement => {
     setUIFPS(fpsValues[v - 1]);
     setSliderIndex(v);
   };
+
   return (
     <div className="m-4">
       <p>{t("settings.language")}:</p>

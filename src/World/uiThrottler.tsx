@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export let uiFPS = 3;
+export let uiFPS = 30;
 export const setUIFPS = (next: number) => (uiFPS = next);
 
 const throttle = (callback: () => void): (() => void) => {
