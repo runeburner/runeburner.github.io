@@ -6,7 +6,7 @@ import { renderAction } from "./CanvasAction";
 import { renderHealth } from "./CanvasHealth";
 import { renderMana } from "./CanvasMana";
 
-const size = 12;
+const size = 12 / 64;
 const runeColors = {
   [Rune.VOID]: "#ff000088",
   [Rune.LABOR]: "#0000ff88",
@@ -21,7 +21,7 @@ const renderRuneArcs = (
 
   let cummulative = 0;
   for (let i = 0; i < runes.length; i++) {
-    const c = [pos[0] * 64 + 32, pos[1] * 64 + 32];
+    const c = [pos[0] + 0.5, pos[1] + 0.5];
     const start = (cummulative / total) * Math.PI * 2;
     const end = ((cummulative + runes[i][1]) / total) * Math.PI * 2;
 

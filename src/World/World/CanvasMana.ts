@@ -28,7 +28,7 @@ export const renderMana = (
   golem: GolemEntity
 ): void => {
   const { mana } = golem;
-  const c: Vec = [golem.pos[0] * 64 + 32, golem.pos[1] * 64 + 32];
+  const c: Vec = [golem.pos[0] + 0.5, golem.pos[1] + 0.5];
   if (mana[1] === 0) return;
 
   const numChunks = Math.ceil(mana[1] / chunkSize);
