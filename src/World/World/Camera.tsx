@@ -56,8 +56,8 @@ let camSub: (() => void) | null = null;
 export const useCamera = (): Camera => {
   const [, setN] = useState(0);
   useEffect(() => {
-    camSub = () => setN((n) => n + 1);
-    return () => {
+    camSub = (): void => setN((n) => n + 1);
+    return (): void => {
       camSub = null;
     };
   }, [setN]);
@@ -70,8 +70,8 @@ export let visibleEntitiesSub: (() => void) | null = null;
 export const useVisibleEntities = (): Entity[] => {
   const [, setN] = useState(0);
   useEffect(() => {
-    visibleEntitiesSub = () => setN((n) => n + 1);
-    return () => {
+    visibleEntitiesSub = (): void => setN((n) => n + 1);
+    return (): void => {
       visibleEntitiesSub = null;
     };
   }, [setN]);

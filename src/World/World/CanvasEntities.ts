@@ -1,5 +1,5 @@
 import { game } from "../../Game/game";
-import { EntityType, GolemEntity, HealthEntity } from "../../types/entity";
+import { EntityType, GolemEntity } from "../../types/entity";
 import { Rune } from "../../types/rune";
 import { camera } from "./Camera";
 import { renderAction } from "./CanvasAction";
@@ -12,7 +12,10 @@ const runeColors = {
   [Rune.LABOR]: "#0000ff88",
   [Rune.WIND]: "#00ff0088",
 };
-const renderRuneArcs = (ctx: CanvasRenderingContext2D, golem: GolemEntity) => {
+const renderRuneArcs = (
+  ctx: CanvasRenderingContext2D,
+  golem: GolemEntity
+): void => {
   const { pos, runes } = golem;
   const total = runes.reduce((acc, c) => acc + c[1], 0);
 
@@ -35,7 +38,7 @@ const renderRuneArcs = (ctx: CanvasRenderingContext2D, golem: GolemEntity) => {
   }
 };
 
-export const renderEntities = (ctx: CanvasRenderingContext2D) => {
+export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
   for (const e of Object.values(game.entityM)) {
     if (!camera.isInView(e.pos)) continue;
     switch (e.__type) {

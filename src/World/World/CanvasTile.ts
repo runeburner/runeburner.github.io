@@ -1,6 +1,6 @@
 import { game } from "../../Game/game";
 import { Offset, ValuesPerTile } from "../../types/map";
-import { Camera } from "../../types/uiMessages";
+import { camera } from "./Camera";
 
 const colors = [
   "#a2b9bc",
@@ -14,22 +14,23 @@ const colors = [
   "#e3eaa7",
 ];
 
-export const renderTiles = (ctx: CanvasRenderingContext2D, camera: Camera) => {
-  const x = Math.max(0, camera.pos[0]);
-  const y = Math.max(0, camera.pos[1]);
-  const X = Math.min(game.map.bounds[2], camera.pos[0] + camera.size[0]);
-  const Y = Math.min(game.map.bounds[3], camera.pos[1] + camera.size[1]);
+export const renderTiles = (ctx: CanvasRenderingContext2D) => {
+  const x = Math.max(0, camera.c.pos[0] - 1);
+  const y = Math.max(0, camera.c.pos[1] - 1);
+  const X = Math.min(game.map.bounds[2], camera.c.pos[0] + camera.c.size[0]);
+  const Y = Math.min(game.map.bounds[3], camera.c.pos[1] + camera.c.size[1]);
+  console.log(x, X, y, Y);
   for (let j = y; j < Y; j++) {
     for (let i = x; i < X; i++) {
       const tileID =
         game.map.data[
           (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.TILE_ID
         ];
-      const fow =
+      const isVisible =
         game.map.data[
           (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
-        ];
-      ctx.fillStyle = fow ? colors[tileID] : "#00000000";
+        ] > 0;
+      ctx.fillStyle = isVisible ? colors[tileID] : "#111111ff";
       ctx.fillRect(i * 64 + 0.5, j * 64 + 0.5, 64 - 1, 64 - 1);
     }
   }

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { AddGolem } from "../AddGolem/AddGolem";
-import { camera, useCamera } from "./Camera";
+import { camera } from "./Camera";
 import { renderTiles } from "./CanvasTile";
 import { renderEntities } from "./CanvasEntities";
 import { useThrottledCallback } from "use-debounce";
@@ -8,7 +8,6 @@ import { uiFPS } from "../uiThrottler";
 
 export const World = (): React.ReactElement => {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const cam = useCamera();
   const pos = useRef<Vec>([0, 0]);
   const isPanning = useRef(false);
 
@@ -43,7 +42,7 @@ export const World = (): React.ReactElement => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     const transform = ctx.getTransform();
     ctx.translate(pos.current[0] - transform.e, pos.current[1] - transform.f);
-    renderTiles(ctx, cam);
+    renderTiles(ctx);
     renderEntities(ctx);
   };
 
@@ -60,6 +59,10 @@ export const World = (): React.ReactElement => {
       const ctx = getContext();
       if (!ctx) return;
       render(ctx);
+      camera.setSize([
+        Math.floor(ctx.canvas.width / 64) + 1,
+        Math.floor(ctx.canvas.height / 64) + 1,
+      ]);
     };
 
     window.addEventListener("resize", onResize);
