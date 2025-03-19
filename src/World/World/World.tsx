@@ -10,8 +10,12 @@ export const World = (): React.ReactElement => {
   const pos = useRef<Vec>([0, 0]);
   const isPanning = useRef(false);
 
+  const onPan = ([x, y]: Vec): void => {
+    camera.setPos([-x / 64, -y / 64]);
+  };
+
   const onMouseDown = (e: React.MouseEvent): void => {
-    if (e.button == 1) isPanning.current = true;
+    if (e.button === 1) isPanning.current = true;
   };
   const onMouseUp = (e: React.MouseEvent): void => {
     if (e.button === 1) isPanning.current = false;
@@ -20,8 +24,12 @@ export const World = (): React.ReactElement => {
   const onMouseMove = (e: React.MouseEvent): void => {
     if (!isPanning.current) return;
     e.preventDefault();
-    onPan([pos.current[0] + e.movementX, pos.current[1] + e.movementY]);
-    pos.current = [pos.current[0] + e.movementX, pos.current[1] + e.movementY];
+    const v: Vec = [
+      Math.min(64, pos.current[0] + e.movementX),
+      Math.min(64, pos.current[1] + e.movementY),
+    ];
+    onPan(v);
+    pos.current = v;
   };
 
   const onMouseLeave = (): void => {
@@ -78,10 +86,6 @@ export const World = (): React.ReactElement => {
 
     return (): void => window.removeEventListener("resize", onResize);
   }, []);
-
-  const onPan = ([x, y]: Vec): void => {
-    camera.setPos([-x / 64, -y / 64]);
-  };
 
   return (
     <>
