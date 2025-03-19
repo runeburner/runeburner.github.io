@@ -39,6 +39,9 @@ const renderRuneArcs = (
 };
 
 export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
+  // console.log(
+  //   Object.values(game.entityM).filter((e) => camera.isInView(e.pos)).length
+  // );
   for (const e of Object.values(game.entityM)) {
     if (!camera.isInView(e.pos)) continue;
     switch (e.__type) {

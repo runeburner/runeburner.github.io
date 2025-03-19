@@ -33,7 +33,7 @@ export const renderTiles = (ctx: CanvasRenderingContext2D): void => {
         game.map.data[
           (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
         ] > 0;
-      ctx.fillStyle = isVisible ? colors[tileID] : "#222222ff";
+      ctx.fillStyle = isVisible ? colors[tileID] : "#666666ff";
       ctx.fillRect(i + 1 / 64, j + 1 / 64, 1 - 1 / 64, 1 - 1 / 64);
     }
   }
