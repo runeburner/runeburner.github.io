@@ -23,13 +23,13 @@ const renderMoveNextTo = (
     if (Y < point[1]) Y = point[1];
   }
 
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 4 / 64;
   ctx.strokeStyle = "#00ff0044";
 
   ctx.beginPath();
-  ctx.moveTo(p[0][0] * 64 + 32, p[0][1] * 64 + 32);
+  ctx.moveTo(p[0][0] + 0.5, p[0][1] + 0.5);
   for (let i = 1; i < p.length; i++) {
-    ctx.lineTo(p[i][0] * 64 + 32, p[i][1] * 64 + 32);
+    ctx.lineTo(p[i][0] + 0.5, p[i][1] + 0.5);
   }
   ctx.stroke();
   renderProgress(ctx, p[0], action.progress, "#00ff0044");
@@ -39,11 +39,11 @@ const renderMine = (
   ctx: CanvasRenderingContext2D,
   action: MINEProgress
 ): void => {
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 4 / 64;
   ctx.strokeStyle = "#0000ff44";
   ctx.beginPath();
-  ctx.moveTo(action.pos[0] * 64 + 32, action.pos[1] * 64 + 32);
-  ctx.lineTo(action.tile[0] * 64 + 32, action.tile[1] * 64 + 32);
+  ctx.moveTo(action.pos[0] + 0.5, action.pos[1] + 0.5);
+  ctx.lineTo(action.tile[0] + 0.5, action.tile[1] + 0.5);
   ctx.stroke();
   renderProgress(ctx, action.pos, action.progress, "#0000ff44");
 };
@@ -52,11 +52,11 @@ const renderAttune = (
   ctx: CanvasRenderingContext2D,
   action: ATTUNEProgress
 ): void => {
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 4 / 64;
   ctx.strokeStyle = "#0000ff44";
   ctx.beginPath();
-  ctx.moveTo(action.pos[0] * 64 + 32, action.pos[1] * 64 + 32);
-  ctx.lineTo(action.heart[0] * 64 + 32, action.heart[1] * 64 + 32);
+  ctx.moveTo(action.pos[0] + 0.5, action.pos[1] + 0.5);
+  ctx.lineTo(action.heart[0] + 0.5, action.heart[1] + 0.5);
   ctx.stroke();
   renderProgress(ctx, action.pos, action.progress, "#0000ff44");
 };

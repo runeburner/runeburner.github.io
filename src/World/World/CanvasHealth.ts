@@ -5,8 +5,8 @@ const shieldColor = "#65c4fb";
 const emptyColor = "#00000022";
 const healthColors = [healthColor, armorColor, shieldColor, emptyColor];
 
-const outerDiameter = 31;
-const innerDiameter = 20;
+const outerDiameter = 31 / 64;
+const innerDiameter = 20 / 64;
 
 const renderEmptyHealth = (ctx: CanvasRenderingContext2D, c: Vec): void => {
   ctx.beginPath();
@@ -56,7 +56,7 @@ export const renderHealth = <T extends EntityType, V extends object>(
   const { health, armor, shield } = e;
 
   const totalHealth = health[1] + armor[1] + shield[1];
-  const c: Vec = [e.pos[0] * 64 + 32, e.pos[1] * 64 + 32];
+  const c: Vec = [e.pos[0] + 0.5, e.pos[1] + 0.5];
   if (totalHealth === 0) {
     renderEmptyHealth(ctx, c);
     return;
