@@ -9,8 +9,8 @@ export const AddGolem = (): React.ReactElement => {
   return (
     <>
       <div className={"m-4 fixed " + classes.container}>
-        <button className="cursor-pointer icon-button">
-          <PlusIcon onClick={onClick} />
+        <button className="cursor-pointer icon-button" onClick={onClick}>
+          <PlusIcon />
         </button>
       </div>
       <AddGolemModal open={open} onClose={() => setOpen(false)} />
