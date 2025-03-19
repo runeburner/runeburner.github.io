@@ -1,16 +1,15 @@
 import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
-import { Entity, EntityType } from "../types/entity";
+import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Map, Offset, ValuesPerTile } from "../types/map";
 import { Resources } from "../types/resources";
+import { Rune, RuneWeight } from "../types/rune";
 import { Tile } from "../types/tile";
-import { Camera, UIMessageType } from "../types/uiMessages";
 import { dist, Vec } from "../types/vec";
-import { tilesUpdate } from "../World/Tiles";
-import { camera } from "../World/World/Camera";
-import { channel } from "./channel";
+import { Camera } from "../World/World/Camera";
 import { defaultEntities, defaultMap } from "./defaultValues";
-import { EntityTicker } from "./launch_golem";
+import { ID } from "./id";
+import { EntityTicker, launchGolem } from "./launch_golem";
 
 type Game = {
   workers: EntityTicker[];
@@ -31,6 +30,7 @@ type Game = {
   addAttunement(n: number): void;
   determineInitialCameraPosition(cam: Camera): Camera;
   updateFoW(before: Vec | null, after: Vec, radius: number): void;
+  animate(runes: [Rune, number][], incantation: string): void;
 };
 
 export const game = ((): Game => {
@@ -42,14 +42,11 @@ export const game = ((): Game => {
     powers: {
       attune_power: 1,
     },
-    entityM: (() => {
+    entityM: ((): Record<string, Entity> => {
       const entities = defaultEntities.reduce(
         (m, e) => ({ ...m, [e.id]: e }),
         {}
       ) as Record<string, Entity>;
-      for (const e of Object.values(entities)) {
-        camera.onAddEntity(e);
-      }
       return entities;
     })(),
     actionM: {},
@@ -89,10 +86,8 @@ export const game = ((): Game => {
     setTileAt(v: Vec, t: Int32Array): void {
       const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
       this.map.data.set(t, start);
-      if (camera.isInView(v)) tilesUpdate?.();
     },
     updateFoW(before: Vec | null, after: Vec, radius: number): void {
-      let shouldUpdate = false;
       if (before !== null) {
         const bounds = BoundedAABB(this.map.bounds, before, radius);
 
@@ -103,7 +98,6 @@ export const game = ((): Game => {
             ]--;
           }
         }
-        shouldUpdate = shouldUpdate || camera.isAABBInView(bounds);
       }
 
       const bounds = BoundedAABB(this.map.bounds, after, radius);
@@ -115,8 +109,6 @@ export const game = ((): Game => {
           ]++;
         }
       }
-      shouldUpdate = shouldUpdate || camera.isAABBInView(bounds);
-      if (shouldUpdate) tilesUpdate?.();
     },
     entityAt(v: Vec): Entity | undefined {
       return Object.values(this.entityM).find(
@@ -195,10 +187,6 @@ export const game = ((): Game => {
         1.01,
         Math.sqrt(0.5 * this.resources.attunement)
       );
-      channel.postMessage({
-        __type: UIMessageType.RESOURCES,
-        data: this.resources,
-      });
     },
 
     determineInitialCameraPosition: (cam: Camera): Camera => {
@@ -212,6 +200,37 @@ export const game = ((): Game => {
         ],
         size: [...cam.size],
       };
+    },
+
+    animate: (runes: [Rune, number][], incantation: string): void => {
+      const id = ID.next();
+      const weight = runes.reduce(
+        (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
+        0
+      );
+      const coord = game.golemSpawnCoordinates();
+      if (!coord) return;
+      const golem = {
+        __type: EntityType.GOLEM,
+        pos: coord,
+        runes: runes,
+        id: id,
+        speed: runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
+        weight: Math.max(1, weight),
+        visionRange: 5,
+        minecapacity: [0, runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0],
+        mineSpeed: runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
+        health: [0, 0],
+        armor: [0, 0],
+        shield: [0, 0],
+        mana: [0, 0],
+      } satisfies GolemEntity;
+
+      launchGolem(id, incantation).then((success) => {
+        game.updateFoW(null, golem.pos, golem.visionRange);
+        if (!success) return;
+        game.entityM[id] = golem;
+      });
     },
   };
 })();
