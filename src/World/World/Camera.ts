@@ -21,7 +21,7 @@ export const camera = {
     pos: [0, 0],
     size: [24, 24],
     scale: 64,
-  } satisfies Camera,
+  },
   setPos(v: Vec): void {
     this.c.pos = v;
   },

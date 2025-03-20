@@ -57,14 +57,17 @@ export const game = ((): Game => {
       const height = defaultMap.length;
       const bounds = new Int32Array([0, 0, width, height]);
       const data = new Int32Array(width * height * ValuesPerTile);
-      for (let j = 0; j < bounds[2]; j++) {
-        for (let i = 0; i < bounds[3]; i++) {
+      for (let j = 0; j < bounds[3]; j++) {
+        for (let i = 0; i < bounds[2]; i++) {
           data[(j * width + i) * ValuesPerTile + Offset.TILE_ID] =
-            defaultMap[j][i];
+            defaultMap[j][i][Offset.TILE_ID];
 
           // fill mana crystal quantity
-          if (defaultMap[j][i] === Tile.MANA_CRYSTAL) {
-            data[(j * width + i) * ValuesPerTile + Offset.DATA_0] = 16;
+          if (defaultMap[j][i][Offset.TILE_ID] === Tile.MANA_CRYSTAL) {
+            data[(j * width + i) * ValuesPerTile + Offset.DATA_0] =
+              defaultMap[j][i][Offset.DATA_0];
+            data[(j * width + i) * ValuesPerTile + Offset.DATA_1] =
+              defaultMap[j][i][Offset.DATA_1];
           }
         }
       }
@@ -126,7 +129,7 @@ export const game = ((): Game => {
       let closestDist = 1e99;
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
-          const v = [i, j] satisfies Vec;
+          const v: Vec = [i, j];
           const tile = this.tileAt(v);
 
           if (tile[0] === wantTile && !this.entityAt(v)) {
@@ -149,7 +152,7 @@ export const game = ((): Game => {
       const tiles: Vec[] = [];
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
-          const v = [i, j] satisfies Vec;
+          const v: Vec = [i, j];
           const tile = this.tileAt(v);
 
           if (tile[0] === wantTile && !this.entityAt(v)) {
@@ -214,7 +217,7 @@ export const game = ((): Game => {
       );
       const coord = game.golemSpawnCoordinates();
       if (!coord) return;
-      const golem = {
+      const golem: GolemEntity = {
         __type: EntityType.GOLEM,
         pos: coord,
         runes: runes,
@@ -228,7 +231,7 @@ export const game = ((): Game => {
         armor: [0, 0],
         shield: [0, 0],
         mana: [0, 0],
-      } satisfies GolemEntity;
+      };
 
       launchGolem(id, incantation).then((success) => {
         game.updateFoW(null, golem.pos, golem.visionRange);

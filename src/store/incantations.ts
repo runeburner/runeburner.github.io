@@ -26,6 +26,7 @@ export const tick = (rs) => {
   }
   crystal = null;
   const heart = rs.findClosestEntity("HEART");
+  if(heart===null) return DIE();
   return rs.isInRange(heart) ? ATTUNE() : MOVE_NEXT_TO(heart);
 }`;
 
