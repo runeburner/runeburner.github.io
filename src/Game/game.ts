@@ -53,36 +53,16 @@ export const game = ((): Game => {
     })(),
     actionM: {},
     map: ((): Map => {
-      const width = defaultMap[0].length;
-      const height = defaultMap.length;
-      const bounds = new Int32Array([0, 0, width, height]);
-      const data = new Int32Array(width * height * ValuesPerTile);
-      for (let j = 0; j < bounds[3]; j++) {
-        for (let i = 0; i < bounds[2]; i++) {
-          data[(j * width + i) * ValuesPerTile + Offset.TILE_ID] =
-            defaultMap[j][i][Offset.TILE_ID];
-
-          // fill mana crystal quantity
-          if (defaultMap[j][i][Offset.TILE_ID] === Tile.MANA_CRYSTAL) {
-            data[(j * width + i) * ValuesPerTile + Offset.DATA_0] =
-              defaultMap[j][i][Offset.DATA_0];
-            data[(j * width + i) * ValuesPerTile + Offset.DATA_1] =
-              defaultMap[j][i][Offset.DATA_1];
-          }
-        }
-      }
+      const { bounds, data } = defaultMap;
       for (const e of defaultEntities) {
         const visionBounds = BoundedAABB(bounds, e.pos, e.visionRange);
         for (let i = visionBounds[0]; i < visionBounds[2]; i++) {
           for (let j = visionBounds[1]; j < visionBounds[3]; j++) {
-            data[(j * width + i) * ValuesPerTile + Offset.FOG_OF_WAR]++;
+            data[(j * bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR]++;
           }
         }
       }
-      return {
-        bounds,
-        data,
-      };
+      return defaultMap;
     })(),
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
