@@ -156,14 +156,14 @@ const maker: {
       return path;
     })();
     if (!path) return null;
-    const action = {
+    const action: MOVE_NEXT_TOProgress = {
       __type: ActionType.MOVE_NEXT_TO,
       goal: [...a.v],
       path: path,
       pos: path[0],
       // carry over progress
       progress: wasMoving ? [old.progress[0], golem.weight] : [0, golem.weight],
-    } satisfies MOVE_NEXT_TOProgress;
+    };
     if (
       wasMoving &&
       old.path.every((v, i) => path[i].length === v.length && eq(path[i], v))
@@ -185,19 +185,21 @@ const maker: {
     if (golem.minecapacity[0] === golem.minecapacity[1]) return null;
 
     // If we're trying to mine anything other than a mana crystal
-    if (game.tileAt(a.v)[Offset.TILE_ID] !== Tile.MANA_CRYSTAL) return null;
+    const tile = game.tileAt(a.v);
+    if (tile[Offset.TILE_ID] !== Tile.MANA_CRYSTAL) return null;
 
     // If we were already mining this tile.
     const wasMining = old && old.__type === ActionType.MINE;
     if (wasMining && eq(old.tile, a.v)) return true;
-
+    console.log(tile[Offset.DATA_1]);
     return {
       __type: ActionType.MINE,
       pos: [...golem.pos],
       // If we swap mining tile in the middle, carry over progress
-      progress: wasMining ? old.progress : [0, 2],
+
+      progress: wasMining ? old.progress : [0, tile[Offset.DATA_1]],
       tile: [...a.v],
-    } satisfies MINEProgress;
+    };
   },
   [ActionType.ATTUNE]: (a: ATTUNE) => {
     const old = game.actionM[a.id] as ActionProgress | undefined;
@@ -220,7 +222,7 @@ const maker: {
       progress: [0, 2],
       pos: [...golem.pos],
       heart: [...heart.pos],
-    } satisfies ATTUNEProgress;
+    };
   },
   [ActionType.DIE]: (a: DIE) => {
     delete game.actionM[a.id];
