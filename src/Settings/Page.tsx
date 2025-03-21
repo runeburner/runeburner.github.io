@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { ChangeEvent, useState } from "react";
 import { Languages } from "../i18n/i18n";
 import { setUIFPS, uiFPS } from "../World/uiFPS";
+import { CHOSEN_LANGUAGE_KEY } from "../i18n/I18NPicker";
 
 const fpsValues = [1, 2, 3, 5, 10, 15, 20, 25, 30, 60, 100];
 export const Page = (): React.ReactElement => {
@@ -10,6 +11,7 @@ export const Page = (): React.ReactElement => {
 
   const onLanguageChange = (ev: ChangeEvent<HTMLSelectElement>): void => {
     i18n.changeLanguage(ev.target.value);
+    localStorage.setItem(CHOSEN_LANGUAGE_KEY, ev.target.value);
   };
 
   const onSliderChange = (ev: ChangeEvent<HTMLInputElement>): void => {
