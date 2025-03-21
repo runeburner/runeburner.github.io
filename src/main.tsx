@@ -3,7 +3,7 @@ import { App } from "./App/App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import "./Game/worker";
-import "./i18n.ts";
+import "./i18n/i18n.ts";
 import "./styles/vars.css";
 import "./styles/cursor.css";
 import "./styles/layout/align-items.css";
@@ -18,6 +18,7 @@ import "./styles/layout/size.css";
 import "./styles/reset.css";
 import "./styles/user-select.css";
 import "./styles/theme.css";
+import { I18NPicker } from "./i18n/I18NPicker.tsx";
 
 ((): void => {
   const rootDiv = document.getElementById("root");
@@ -27,6 +28,7 @@ import "./styles/theme.css";
   }
   createRoot(rootDiv).render(
     <Provider store={store}>
+      <I18NPicker />
       <App />
     </Provider>
   );
