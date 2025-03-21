@@ -78,9 +78,9 @@ export const game = ((): Game => {
 
         for (let i = bounds[0]; i < bounds[2]; i++) {
           for (let j = bounds[1]; j < bounds[3]; j++) {
-            this.map.data[
-              (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
-            ]--;
+            const x =
+              (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR;
+            this.map.data[x]--;
           }
         }
       }
