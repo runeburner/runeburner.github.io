@@ -1,0 +1,11 @@
+.flag21 {
+  /* Flag with 2:1 ratio */
+  height: 100px;
+  width: 200px;
+}
+
+.flag32 {
+  /* Flag with 3:2 ratio */
+  height: 100px;
+  width: 150px;
+}

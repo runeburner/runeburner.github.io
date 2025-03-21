@@ -1,7 +1,8 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import en from "./locales/en.json";
-import fr from "./locales/fr.json";
+import en from "../locales/en.json";
+import fr from "../locales/fr.json";
+import { CHOSEN_LANGUAGE_KEY } from "./I18NPicker";
 
 export const Languages = Object.freeze({
   en: "en",
@@ -21,7 +22,7 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources: resources,
-  lng: "en",
+  lng: localStorage.getItem(CHOSEN_LANGUAGE_KEY) ?? "en",
   interpolation: {
     escapeValue: false,
   },
