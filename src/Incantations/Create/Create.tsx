@@ -24,7 +24,7 @@ export const Create = (): React.ReactElement => {
         placeholder={t("incantation_page.create_placeholder")}
         onChange={(e) => setName(e.target.value)}
       />
-      <button onClick={onClick} disabled={name === ""}>
+      <button className="btn" onClick={onClick} disabled={name === ""}>
         {t("incantation_page.create_incantation_button")}
       </button>
     </>

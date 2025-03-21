@@ -12,7 +12,7 @@
   background-color: var(--container-dark);
   color: var(--primary);
 
-  button {
+  .btn {
     border-radius: 100px;
     padding: var(--spacing);
     background-color: var(--primary-dark);
@@ -21,6 +21,7 @@
     border-color: var(--primary-light);
     color: #444;
   }
+
   button:hover {
     background-color: var(--primary-light);
   }
