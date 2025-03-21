@@ -81,7 +81,7 @@ export const AddGolemModal = ({
           ))}
         </select>
         <br />
-        <button className="w-full my-2" onClick={onAnimate}>
+        <button className="btn w-full my-2" onClick={onAnimate}>
           {t("create_golem_modal.animate")}
         </button>
       </div>
