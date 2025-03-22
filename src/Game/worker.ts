@@ -191,7 +191,6 @@ const maker: {
     // If we were already mining this tile.
     const wasMining = old && old.__type === ActionType.MINE;
     if (wasMining && eq(old.tile, a.v)) return true;
-    console.log(tile[Offset.DATA_1]);
     return {
       __type: ActionType.MINE,
       pos: [...golem.pos],
