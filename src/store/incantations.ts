@@ -30,10 +30,17 @@ export const tick = (rs) => {
   return rs.isInRange(heart) ? ATTUNE() : MOVE_NEXT_TO(heart);
 }`;
 
+export const defaultFight = `export const tick = (rs) => {
+  const dummy = rs.findClosestEntity("DUMMY");
+  if (dummy === null) return DIE();
+  return rs.isInRange(dummy) ? SMASH(1) : MOVE_NEXT_TO(dummy);
+}`;
+
 const initialState: IncantationsState = {
-  basic: defaultIncantation,
+  basic: defaultFight,
   other: `function HelloWorld() {
 }`,
+  fight: defaultIncantation,
 };
 
 export type Incantation = {

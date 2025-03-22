@@ -10,6 +10,8 @@ import {
   MOVE_NEXT_TOProgress,
   ActionProgress,
   DIE,
+  SMASH,
+  SMASHProgress,
 } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Offset } from "../types/map";
@@ -94,6 +96,20 @@ const process: {
     return golem.minecapacity[0] === 0;
   },
   [ActionType.DIE]: () => true,
+  [ActionType.SMASH]: (rate: number, e: Entity, p: ActionProgress): boolean => {
+    const action = p as SMASHProgress;
+    const target = game.entityM[action.target];
+    if (!target) return false;
+    action.progress[0] += rate * game.powers.attune_power;
+
+    while (action.progress[0] >= action.progress[1]) {
+      action.progress[0] -= action.progress[1];
+      const died = game.damage(target, 1);
+      if (died) return true;
+    }
+
+    return false;
+  },
 };
 
 const isVec = (v: unknown): v is Vec =>
@@ -231,6 +247,21 @@ const maker: {
     game.workers.splice(i, 1);
 
     return null;
+  },
+  [ActionType.SMASH]: (a: SMASH) => {
+    const old = game.actionM[a.id] as ActionProgress | undefined;
+    if (old && old.__type === ActionType.SMASH) return true;
+    const golem = game.entityM[a.id] as GolemEntity;
+    const target = game.entityM[a.target];
+
+    if (dist(golem.pos, target.pos) > 1) return null;
+
+    return {
+      __type: ActionType.SMASH,
+      pos: [...golem.pos],
+      target: a.target,
+      progress: [0, 2],
+    };
   },
 } as const;
 

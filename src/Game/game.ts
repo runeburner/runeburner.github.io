@@ -2,7 +2,7 @@ import { setAttunement } from "../store/resources";
 import { store } from "../store/store";
 import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
-import { Entity, EntityType, GolemEntity } from "../types/entity";
+import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
 import { Map, Offset, ValuesPerTile } from "../types/map";
 import { Resources } from "../types/resources";
 import { Rune, RuneWeight } from "../types/rune";
@@ -34,6 +34,11 @@ type Game = {
   updateFoW(before: Vec | null, after: Vec, radius: number): void;
   animate(runes: [Rune, number][], incantation: string): void;
   loadMap(entities: Entity[], map: Map): void;
+  damage<T extends EntityType, V extends object>(
+    entity: HealthEntity<T, V>,
+    damage: number
+  ): boolean;
+  removeEntity(id: number): void;
 };
 
 export const game = ((): Game => {
@@ -52,54 +57,54 @@ export const game = ((): Game => {
       data: new Int32Array(),
     },
     tileAt(v: Vec): Int32Array {
-      const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
-      return this.map.data.slice(start, start + ValuesPerTile);
+      const start = (v[1] * game.map.bounds[2] + v[0]) * ValuesPerTile;
+      return game.map.data.slice(start, start + ValuesPerTile);
     },
     setTileAt(v: Vec, t: Int32Array): void {
-      const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
-      this.map.data.set(t, start);
+      const start = (v[1] * game.map.bounds[2] + v[0]) * ValuesPerTile;
+      game.map.data.set(t, start);
     },
     updateFoW(before: Vec | null, after: Vec, radius: number): void {
       if (before !== null) {
-        const bounds = BoundedAABB(this.map.bounds, before, radius);
+        const bounds = BoundedAABB(game.map.bounds, before, radius);
 
         for (let i = bounds[0]; i <= bounds[2]; i++) {
           for (let j = bounds[1]; j <= bounds[3]; j++) {
             const x =
-              (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR;
-            this.map.data[x]--;
+              (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR;
+            game.map.data[x]--;
           }
         }
       }
 
-      const bounds = BoundedAABB(this.map.bounds, after, radius);
+      const bounds = BoundedAABB(game.map.bounds, after, radius);
 
       for (let i = bounds[0]; i <= bounds[2]; i++) {
         for (let j = bounds[1]; j <= bounds[3]; j++) {
-          this.map.data[
-            (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
+          game.map.data[
+            (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
           ]++;
         }
       }
     },
     entityAt(v: Vec): Entity | undefined {
-      return Object.values(this.entityM).find(
+      return Object.values(game.entityM).find(
         (e) => e.pos[0] === v[0] && e.pos[1] === v[1]
       );
     },
     findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null {
       const x = Math.max(0, pos[0] - Math.floor(radius));
-      const X = Math.min(this.map.bounds[2], pos[0] + Math.ceil(radius));
+      const X = Math.min(game.map.bounds[2], pos[0] + Math.ceil(radius));
       const y = Math.max(0, pos[1] - Math.floor(radius));
-      const Y = Math.min(this.map.bounds[3], pos[1] + Math.ceil(radius));
+      const Y = Math.min(game.map.bounds[3], pos[1] + Math.ceil(radius));
       let closestTile: Vec | null = null;
       let closestDist = 1e99;
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
           const v: Vec = [i, j];
-          const tile = this.tileAt(v);
+          const tile = game.tileAt(v);
 
-          if (tile[0] === wantTile && !this.entityAt(v)) {
+          if (tile[0] === wantTile && !game.entityAt(v)) {
             const dist = Math.abs(pos[0] - i) + Math.abs(pos[1] - j);
             if (dist < closestDist) {
               closestTile = v;
@@ -112,17 +117,17 @@ export const game = ((): Game => {
     },
     findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[] {
       const x = Math.max(0, pos[0] - Math.floor(radius));
-      const X = Math.min(this.map.bounds[2], pos[0] + Math.ceil(radius));
+      const X = Math.min(game.map.bounds[2], pos[0] + Math.ceil(radius));
       const y = Math.max(0, pos[1] - Math.floor(radius));
-      const Y = Math.min(this.map.bounds[3], pos[1] + Math.ceil(radius));
+      const Y = Math.min(game.map.bounds[3], pos[1] + Math.ceil(radius));
 
       const tiles: Vec[] = [];
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
           const v: Vec = [i, j];
-          const tile = this.tileAt(v);
+          const tile = game.tileAt(v);
 
-          if (tile[0] === wantTile && !this.entityAt(v)) {
+          if (tile[0] === wantTile && !game.entityAt(v)) {
             tiles.push(v);
           }
         }
@@ -147,19 +152,19 @@ export const game = ((): Game => {
       return v[1];
     },
     golemSpawnCoordinates(): Vec | null {
-      const heart = Object.values(this.entityM).find(
+      const heart = Object.values(game.entityM).find(
         (e) => e.__type === EntityType.HEART
       );
       if (!heart) return null;
-      return this.findClosestTile(heart.pos, Tile.EMPTY, 3);
+      return game.findClosestTile(heart.pos, Tile.EMPTY, 3);
     },
     addAttunement(n: number): void {
-      this.resources.attunement += n;
-      this.powers.attune_power = Math.pow(
+      game.resources.attunement += n;
+      game.powers.attune_power = Math.pow(
         1.01,
-        Math.sqrt(0.5 * this.resources.attunement)
+        Math.sqrt(0.5 * game.resources.attunement)
       );
-      store.dispatch(setAttunement(this.resources.attunement));
+      store.dispatch(setAttunement(game.resources.attunement));
     },
 
     determineInitialCameraPosition(cam: Camera): Camera {
@@ -207,22 +212,57 @@ export const game = ((): Game => {
       });
     },
     loadMap(entities: Entity[], map: Map): void {
-      this.resources = {
+      game.resources = {
         attunement: 0,
       };
-      this.powers = {
+      game.powers = {
         attune_power: 1,
       };
-      this.entityM = entities.reduce(
+      game.entityM = entities.reduce(
         (m, e) => ({ ...m, [e.id]: e }),
         {}
       ) as Record<string, Entity>;
 
-      this.actionM = {};
-      this.map = map;
+      game.actionM = {};
+      game.map = map;
       for (const e of entities) {
-        this.updateFoW(null, e.pos, e.visionRange);
+        game.updateFoW(null, e.pos, e.visionRange);
       }
+    },
+    damage<T extends EntityType, V extends object>(
+      entity: HealthEntity<T, V>,
+      damage: number
+    ): boolean {
+      if (entity.health[0] > 0) {
+        const dmg = Math.min(entity.health[0], damage);
+        entity.health[0] -= dmg;
+        damage -= dmg;
+      }
+      if (entity.armor[0] > 0) {
+        const dmg = Math.min(entity.armor[0], damage);
+        entity.armor[0] -= dmg;
+        damage -= dmg;
+      }
+      if (entity.shield[0] > 0) {
+        const dmg = Math.min(entity.shield[0], damage);
+        entity.shield[0] -= dmg;
+        damage -= dmg;
+      }
+
+      const die =
+        entity.health[0] === 0 &&
+        entity.armor[0] === 0 &&
+        entity.shield[0] === 0;
+
+      return die;
+    },
+    removeEntity(id: number): void {
+      delete game.actionM[id];
+      delete game.entityM[id];
+      const i = game.workers.findIndex((w) => w.id === id);
+      if (i === -1) return;
+      game.workers.splice(i, 1);
+      return;
     },
   };
 })();
