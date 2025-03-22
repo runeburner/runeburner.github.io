@@ -162,7 +162,7 @@ export const game = ((): Game => {
       store.dispatch(setAttunement(this.resources.attunement));
     },
 
-    determineInitialCameraPosition: (cam: Camera): Camera => {
+    determineInitialCameraPosition(cam: Camera): Camera {
       const core = Object.values(game.entityM).find(
         (e) => e.__type === EntityType.HEART
       );
@@ -176,7 +176,7 @@ export const game = ((): Game => {
       };
     },
 
-    animate: (runes: [Rune, number][], incantation: string): void => {
+    animate(runes: [Rune, number][], incantation: string): void {
       const id = ID.next();
       const weight = runes.reduce(
         (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
