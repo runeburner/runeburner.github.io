@@ -33,6 +33,7 @@ type Game = {
   determineInitialCameraPosition(cam: Camera): Camera;
   updateFoW(before: Vec | null, after: Vec, radius: number): void;
   animate(runes: [Rune, number][], incantation: string): void;
+  loadMap(entities: Entity[], map: Map): void;
 };
 
 export const game = ((): Game => {
@@ -44,26 +45,12 @@ export const game = ((): Game => {
     powers: {
       attune_power: 1,
     },
-    entityM: ((): Record<string, Entity> => {
-      const entities = defaultEntities.reduce(
-        (m, e) => ({ ...m, [e.id]: e }),
-        {}
-      ) as Record<string, Entity>;
-      return entities;
-    })(),
+    entityM: {},
     actionM: {},
-    map: ((): Map => {
-      const { bounds, data } = defaultMap;
-      for (const e of defaultEntities) {
-        const visionBounds = BoundedAABB(bounds, e.pos, e.visionRange);
-        for (let i = visionBounds[0]; i <= visionBounds[2]; i++) {
-          for (let j = visionBounds[1]; j <= visionBounds[3]; j++) {
-            data[(j * bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR]++;
-          }
-        }
-      }
-      return defaultMap;
-    })(),
+    map: {
+      bounds: new Int32Array(),
+      data: new Int32Array(),
+    },
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * this.map.bounds[2] + v[0]) * ValuesPerTile;
       return this.map.data.slice(start, start + ValuesPerTile);
@@ -219,5 +206,25 @@ export const game = ((): Game => {
         game.entityM[id] = golem;
       });
     },
+    loadMap(entities: Entity[], map: Map): void {
+      this.resources = {
+        attunement: 0,
+      };
+      this.powers = {
+        attune_power: 1,
+      };
+      this.entityM = entities.reduce(
+        (m, e) => ({ ...m, [e.id]: e }),
+        {}
+      ) as Record<string, Entity>;
+
+      this.actionM = {};
+      this.map = map;
+      for (const e of entities) {
+        this.updateFoW(null, e.pos, e.visionRange);
+      }
+    },
   };
 })();
+
+game.loadMap(defaultEntities, defaultMap);
