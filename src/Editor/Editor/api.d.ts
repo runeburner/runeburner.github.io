@@ -10,3 +10,5 @@ type RS = {
 declare const MOVE_NEXT_TO: (v: Vec) => unknown;
 declare const MINE: (v: Vec) => unknown;
 declare const ATTUNE: () => unknown;
+declare const DIE: () => unknown;
+declare const SMASH: (id: number) => unknown;

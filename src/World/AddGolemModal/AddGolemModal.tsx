@@ -29,16 +29,10 @@ export const AddGolemModal = ({
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
 
   const onAnimate = (): void => {
-    for (let i = 0; i < 25; i++) {
-      setTimeout(
-        () =>
-          game.animate(
-            appliedRunes,
-            store.getState().incantations[selectedIncantation]
-          ),
-        i * 50
-      );
-    }
+    game.animate(
+      appliedRunes,
+      store.getState().incantations[selectedIncantation]
+    );
     onClose();
   };
 
