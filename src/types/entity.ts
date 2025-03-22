@@ -5,6 +5,7 @@ import { Vec } from "./vec";
 export const EntityType = Object.freeze({
   HEART: "HEART",
   GOLEM: "GOLEM",
+  DUMMY: "DUMMY",
 } as const);
 
 export type EntityType = (typeof EntityType)[keyof typeof EntityType];
@@ -46,4 +47,6 @@ export type GolemEntity = HealthEntity<
   }
 >;
 
-export type Entity = HeartEntity | GolemEntity;
+export type DummyEntity = HealthEntity<typeof EntityType.DUMMY, object>;
+
+export type Entity = HeartEntity | GolemEntity | DummyEntity;

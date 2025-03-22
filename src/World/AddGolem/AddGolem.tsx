@@ -9,7 +9,7 @@ export const AddGolem = (): React.ReactElement => {
   return (
     <>
       <div className={"m-4 fixed " + classes.container}>
-        <button className="cursor-pointer icon-button" onClick={onClick}>
+        <button className="cursor-pointer btn icon-button" onClick={onClick}>
           <PlusIcon />
         </button>
       </div>

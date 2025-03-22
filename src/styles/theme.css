@@ -22,7 +22,7 @@
     color: #444;
   }
 
-  button:hover {
+  .btn:hover {
     background-color: var(--primary-light);
   }
 

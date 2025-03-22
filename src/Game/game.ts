@@ -56,8 +56,8 @@ export const game = ((): Game => {
       const { bounds, data } = defaultMap;
       for (const e of defaultEntities) {
         const visionBounds = BoundedAABB(bounds, e.pos, e.visionRange);
-        for (let i = visionBounds[0]; i < visionBounds[2]; i++) {
-          for (let j = visionBounds[1]; j < visionBounds[3]; j++) {
+        for (let i = visionBounds[0]; i <= visionBounds[2]; i++) {
+          for (let j = visionBounds[1]; j <= visionBounds[3]; j++) {
             data[(j * bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR]++;
           }
         }
@@ -76,8 +76,8 @@ export const game = ((): Game => {
       if (before !== null) {
         const bounds = BoundedAABB(this.map.bounds, before, radius);
 
-        for (let i = bounds[0]; i < bounds[2]; i++) {
-          for (let j = bounds[1]; j < bounds[3]; j++) {
+        for (let i = bounds[0]; i <= bounds[2]; i++) {
+          for (let j = bounds[1]; j <= bounds[3]; j++) {
             const x =
               (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR;
             this.map.data[x]--;
@@ -87,8 +87,8 @@ export const game = ((): Game => {
 
       const bounds = BoundedAABB(this.map.bounds, after, radius);
 
-      for (let i = bounds[0]; i < bounds[2]; i++) {
-        for (let j = bounds[1]; j < bounds[3]; j++) {
+      for (let i = bounds[0]; i <= bounds[2]; i++) {
+        for (let j = bounds[1]; j <= bounds[3]; j++) {
           this.map.data[
             (j * this.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
           ]++;
