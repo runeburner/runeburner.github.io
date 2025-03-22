@@ -52,4 +52,13 @@ export const defaultEntities: Entity[] = [
     armor: [0, 0],
     shield: [0, 0],
   },
+  {
+    __type: EntityType.DUMMY,
+    id: ID.next(),
+    pos: [8, 8],
+    visionRange: 3,
+    health: [20, 20],
+    armor: [20, 20],
+    shield: [20, 20],
+  },
 ];

@@ -72,6 +72,10 @@ export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
         ctx.setTransform(transform);
         break;
       }
+      case EntityType.DUMMY: {
+        renderHealth(ctx, e);
+        break;
+      }
     }
   }
 };
