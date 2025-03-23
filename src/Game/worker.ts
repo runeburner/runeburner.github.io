@@ -13,8 +13,9 @@ const gameTick = (): void => {
   for (let i = 0; i < game.workers.length; i++) {
     const a = game.workers[i].lastAction;
     if (!a) continue;
+    const f = maker[a.__type];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const p = maker[a.__type](a as any);
+    const p = f(a as any);
     if (p === null) {
       game.actionM.delete(a.id);
     } else if (p !== true) {
