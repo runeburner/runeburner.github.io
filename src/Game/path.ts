@@ -75,9 +75,7 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
       ) {
         continue;
       }
-      const isOccupied = Object.values(game.entityM).some((e) =>
-        eq(e.pos, neighbor)
-      );
+      const isOccupied = game.entityM.values().some((e) => eq(e.pos, neighbor));
       const singleNeighbor = hashVec(neighbor);
       const tile = game.tileAt(neighbor);
       const moveWeight =

@@ -19,8 +19,8 @@ type Game = {
   powers: {
     attune_power: number;
   };
-  entityM: Record<number, Entity>;
-  actionM: Record<number, ActionProgress>;
+  entityM: Map<number, Entity>;
+  actionM: Map<number, ActionProgress>;
   map: Plane;
   tileAt(v: Vec): Int32Array;
   setTileAt(v: Vec, t: Int32Array): void;
@@ -50,8 +50,8 @@ export const game = ((): Game => {
     powers: {
       attune_power: 1,
     },
-    entityM: {},
-    actionM: {},
+    entityM: new Map(),
+    actionM: new Map(),
     map: {
       bounds: new Int32Array(),
       data: new Int32Array(),
@@ -90,9 +90,9 @@ export const game = ((): Game => {
       }
     },
     entityAt(v: Vec): Entity | undefined {
-      return Object.values(game.entityM).find(
-        (e) => e.pos[0] === v[0] && e.pos[1] === v[1]
-      );
+      return game.entityM
+        .values()
+        .find((e) => e.pos[0] === v[0] && e.pos[1] === v[1]);
     },
     findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null {
       const x = Math.max(0, pos[0] - Math.floor(radius));
@@ -137,10 +137,9 @@ export const game = ((): Game => {
       return tiles;
     },
     findClosestEntity(pos: Vec, entityType: EntityType): Entity | null {
-      const entities = Object.values(game.entityM).filter(
-        (e) => e.__type === entityType
-      );
-      if (entities.length === 0) return null;
+      const entities = game.entityM
+        .values()
+        .filter((e) => e.__type === entityType);
       const v = entities.reduce(
         (res: [number, Entity | null], e): [number, Entity | null] => {
           const d = dist(e.pos, pos);
@@ -154,9 +153,9 @@ export const game = ((): Game => {
       return v[1];
     },
     golemSpawnCoordinates(): Vec | null {
-      const heart = Object.values(game.entityM).find(
-        (e) => e.__type === EntityType.HEART
-      );
+      const heart = game.entityM
+        .values()
+        .find((e) => e.__type === EntityType.HEART);
       if (!heart) return null;
       return game.findClosestTile(heart.pos, Tile.EMPTY, 3);
     },
@@ -170,9 +169,9 @@ export const game = ((): Game => {
     },
 
     determineInitialCameraPosition(cam: Camera): Camera {
-      const core = Object.values(game.entityM).find(
-        (e) => e.__type === EntityType.HEART
-      );
+      const core = game.entityM
+        .values()
+        .find((e) => e.__type === EntityType.HEART);
       return {
         pos: [
           (core?.pos[0] ?? 0) - Math.floor(cam.size[0] / 2),
@@ -210,7 +209,7 @@ export const game = ((): Game => {
       launchGolem(id, incantation).then((success) => {
         game.updateFoW(null, golem.pos, golem.visionRange);
         if (!success) return;
-        game.entityM[id] = golem;
+        game.entityM.set(id, golem);
       });
     },
     loadMap(entities: Entity[], map: Plane): void {
@@ -220,12 +219,13 @@ export const game = ((): Game => {
       game.powers = {
         attune_power: 1,
       };
-      game.entityM = entities.reduce(
-        (m, e) => ({ ...m, [e.id]: e }),
-        {}
-      ) as Record<string, Entity>;
+      game.entityM.clear();
+      game.entityM.clear();
+      for (const entity of entities) {
+        game.entityM.set(entity.id, entity);
+      }
 
-      game.actionM = {};
+      game.actionM.clear();
       game.map = map;
       for (const e of entities) {
         game.updateFoW(null, e.pos, e.visionRange);
@@ -260,16 +260,16 @@ export const game = ((): Game => {
       return die;
     },
     removeEntity(id: number): void {
-      const entity = game.entityM[id];
+      const entity = game.entityM.get(id);
+      if (!entity) return;
       game.updateFoW(entity.pos, null, entity.visionRange);
-      delete game.actionM[id];
-      delete game.entityM[id];
+      game.actionM.delete(id);
+      game.entityM.delete(id);
 
       // delete actions targetting directly this entity.
-      for (const aid of Object.keys(game.actionM)) {
-        const action = game.actionM[parseInt(aid)];
-        if ("target" in action && action.target === id) {
-          delete game.actionM[parseInt(aid)];
+      for (const [aid, action] of game.actionM.entries()) {
+        if (action && "target" in action && action.target === id) {
+          game.actionM.delete(aid);
         }
       }
 
