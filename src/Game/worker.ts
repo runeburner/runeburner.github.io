@@ -98,7 +98,7 @@ const process: {
   [ActionType.DIE]: () => true,
   [ActionType.SMASH]: (rate: number, e: Entity, p: ActionProgress): boolean => {
     const action = p as SMASHProgress;
-    const target = game.entityM[action.target];
+    const target = game.entityM.get(action.target);
     if (!target) return true;
     action.progress[0] += rate * game.powers.attune_power;
 
@@ -133,7 +133,7 @@ const rsObject = {
     return game.findAllTiles(e.pos, Tile[tile], radius);
   },
   me(e: Entity): Entity {
-    return e;
+    return structuredClone(e);
   },
   at(e: Entity, v: Vec): Int32Array {
     if (!isArgs([v], isVec)) return new Int32Array();
@@ -154,12 +154,12 @@ const maker: {
 } = {
   [ActionType.MOVE_NEXT_TO]: (a: MOVE_NEXT_TO) => {
     if (!isArgs([a.v], isVec)) return null;
-    const golem = game.entityM[a.id] as GolemEntity;
+    const golem = game.entityM.get(a.id) as GolemEntity;
     // If we're already there, do nothing.
     if (dist(golem.pos, a.v) <= 1) return null;
 
     // Calculate new path
-    const old = game.actionM[a.id] as ActionProgress | undefined;
+    const old = game.actionM.get(a.id) as ActionProgress | undefined;
     const wasMoving = old && old.__type === ActionType.MOVE_NEXT_TO;
 
     const path = ((): Vec[] | null => {
@@ -191,8 +191,8 @@ const maker: {
   },
   [ActionType.MINE]: (a: MINE) => {
     if (!isArgs([a.v], isVec)) return null;
-    const old = game.actionM[a.id] as ActionProgress | undefined;
-    const golem = game.entityM[a.id] as GolemEntity;
+    const old = game.actionM.get(a.id) as ActionProgress | undefined;
+    const golem = game.entityM.get(a.id) as GolemEntity;
 
     // If it's too far.
     if (dist(golem.pos, a.v) > 1) return null;
@@ -217,11 +217,15 @@ const maker: {
     };
   },
   [ActionType.ATTUNE]: (a: ATTUNE) => {
-    const old = game.actionM[a.id] as ActionProgress | undefined;
-    const golem = game.entityM[a.id] as GolemEntity;
-    const heart = Object.values(game.entityM).find(
-      (e) => e.__type === EntityType.HEART
-    )!;
+    const old = game.actionM.get(a.id) as ActionProgress | undefined;
+    const golem = game.entityM.get(a.id) as GolemEntity;
+    const heart = ((): Entity | undefined => {
+      for (const e of game.entityM.values()) {
+        if (e.__type === EntityType.HEART) return e;
+      }
+      return undefined;
+    })();
+    if (!heart) return null;
 
     // If it's too far.
     if (dist(golem.pos, heart.pos) > 1) return null;
@@ -244,10 +248,10 @@ const maker: {
     return null;
   },
   [ActionType.SMASH]: (a: SMASH) => {
-    const old = game.actionM[a.id] as ActionProgress | undefined;
+    const old = game.actionM.get(a.id) as ActionProgress | undefined;
     if (old && old.__type === ActionType.SMASH) return true;
-    const golem = game.entityM[a.id] as GolemEntity;
-    const target = game.entityM[a.target];
+    const golem = game.entityM.get(a.id) as GolemEntity;
+    const target = game.entityM.get(a.target);
     if (!target) return null;
 
     if (dist(golem.pos, target.pos) > 1) return null;
@@ -267,11 +271,7 @@ const gameTick = (): void => {
   // First, gather the action of all entities.
   const actions: Action[] = new Array(game.workers.length);
   for (let i = 0; i < game.workers.length; i++) {
-    const e = JSON.parse(
-      JSON.stringify(
-        Object.values(game.entityM).find((e) => e.id === game.workers[i].id)
-      )
-    );
+    const e = game.entityM.get(game.workers[i].id);
     const rs = new Proxy(rsObject, {
       get(_, prop) {
         return (...args: unknown[]): unknown =>
@@ -289,19 +289,19 @@ const gameTick = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const p = maker[a.__type](a as any);
     if (p === null) {
-      delete game.actionM[a.id];
+      game.actionM.delete(a.id);
     } else if (p !== true) {
-      game.actionM[a.id] = p;
+      game.actionM.set(a.id, p);
     }
   }
 
   const rate = 1 / fps;
-  for (const e of Object.values(game.entityM)) {
-    const p = game.actionM[e.id];
+  for (const e of game.entityM.values()) {
+    const p = game.actionM.get(e.id);
     if (p) {
       const del = process[p.__type](rate, e, p);
       if (del) {
-        delete game.actionM[e.id];
+        game.actionM.delete(e.id);
       }
     }
   }
