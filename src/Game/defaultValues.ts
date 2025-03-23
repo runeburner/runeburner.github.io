@@ -48,9 +48,9 @@ export const defaultEntities: Entity[] = [
     pos: [5, 5],
     attunement: 0,
     visionRange: 5,
-    health: [50, 50],
-    armor: [0, 0],
-    shield: [0, 0],
+    health: [2, 10],
+    armor: [10, 10],
+    shield: [10, 10],
   },
   {
     __type: EntityType.DUMMY,
@@ -87,5 +87,14 @@ export const defaultEntities: Entity[] = [
     health: [2, 5],
     armor: [5, 5],
     shield: [5, 5],
+  },
+  {
+    __type: EntityType.DUMMY,
+    id: ID.next(),
+    pos: [12, 8],
+    visionRange: 3,
+    health: [2, 5],
+    armor: [2, 5],
+    shield: [2, 5],
   },
 ];
