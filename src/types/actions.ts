@@ -34,6 +34,11 @@ type BaseActionProgress<
   V extends object = object
 > = Typed<T, { pos: Vec; progress: Vec } & V>;
 
+export type TargettedProgress<
+  T extends ActionType = ActionType,
+  V extends object = object
+> = BaseActionProgress<T, { target: number } & V>;
+
 export type MOVE_NEXT_TOProgress = BaseActionProgress<
   typeof ActionType.MOVE_NEXT_TO,
   {
@@ -56,11 +61,6 @@ export type ATTUNEProgress = BaseActionProgress<
   }
 >;
 
-export type TargettedProgress<
-  T extends ActionType = ActionType,
-  V extends object = object
-> = BaseActionProgress<T, { target: number } & V>;
-
 export type SMASHProgress = TargettedProgress<typeof ActionType.SMASH>;
 
 export type ActionProgress =
@@ -69,7 +69,7 @@ export type ActionProgress =
   | ATTUNEProgress
   | SMASHProgress;
 
-export type ActionTypeMap = {
+export type ActionHandler = {
   [ActionType.IDLE]: [IDLE, void];
   [ActionType.MOVE_NEXT_TO]: [MOVE_NEXT_TO, MOVE_NEXT_TOProgress];
   [ActionType.MINE]: [MINE, MINEProgress];
