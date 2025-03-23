@@ -254,6 +254,7 @@ export const game = ((): Game => {
         entity.armor[0] === 0 &&
         entity.shield[0] === 0;
 
+      if (die) game.removeEntity(entity.id);
       return die;
     },
     removeEntity(id: number): void {
