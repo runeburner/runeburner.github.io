@@ -12,7 +12,7 @@ export const Offset = Object.freeze({
 
 export type Offset = (typeof Offset)[keyof typeof Offset];
 
-export type Map = {
+export type Plane = {
   bounds: AABB;
   data: Int32Array;
 };

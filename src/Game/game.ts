@@ -3,7 +3,7 @@ import { store } from "../store/store";
 import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
 import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
-import { Map, Offset, ValuesPerTile } from "../types/map";
+import { Plane, Offset, ValuesPerTile } from "../types/map";
 import { Resources } from "../types/resources";
 import { Rune, RuneWeight } from "../types/rune";
 import { Tile } from "../types/tile";
@@ -21,19 +21,19 @@ type Game = {
   };
   entityM: Record<number, Entity>;
   actionM: Record<number, ActionProgress>;
-  map: Map;
+  map: Plane;
   tileAt(v: Vec): Int32Array;
   setTileAt(v: Vec, t: Int32Array): void;
   entityAt(v: Vec): Entity | undefined;
   findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null;
   findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[];
-  findClosestEntity(pos: Vec, entityType: EntityType): Vec | null;
+  findClosestEntity(pos: Vec, entityType: EntityType): Entity | null;
   golemSpawnCoordinates(): Vec | null;
   addAttunement(n: number): void;
   determineInitialCameraPosition(cam: Camera): Camera;
-  updateFoW(before: Vec | null, after: Vec, radius: number): void;
+  updateFoW(before: Vec | null, after: Vec | null, radius: number): void;
   animate(runes: [Rune, number][], incantation: string): void;
-  loadMap(entities: Entity[], map: Map): void;
+  loadMap(entities: Entity[], map: Plane): void;
   damage<T extends EntityType, V extends object>(
     entity: HealthEntity<T, V>,
     damage: number
@@ -64,7 +64,7 @@ export const game = ((): Game => {
       const start = (v[1] * game.map.bounds[2] + v[0]) * ValuesPerTile;
       game.map.data.set(t, start);
     },
-    updateFoW(before: Vec | null, after: Vec, radius: number): void {
+    updateFoW(before: Vec | null, after: Vec | null, radius: number): void {
       if (before !== null) {
         const bounds = BoundedAABB(game.map.bounds, before, radius);
 
@@ -77,13 +77,15 @@ export const game = ((): Game => {
         }
       }
 
-      const bounds = BoundedAABB(game.map.bounds, after, radius);
+      if (after !== null) {
+        const bounds = BoundedAABB(game.map.bounds, after, radius);
 
-      for (let i = bounds[0]; i <= bounds[2]; i++) {
-        for (let j = bounds[1]; j <= bounds[3]; j++) {
-          game.map.data[
-            (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
-          ]++;
+        for (let i = bounds[0]; i <= bounds[2]; i++) {
+          for (let j = bounds[1]; j <= bounds[3]; j++) {
+            game.map.data[
+              (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
+            ]++;
+          }
         }
       }
     },
@@ -134,20 +136,20 @@ export const game = ((): Game => {
       }
       return tiles;
     },
-    findClosestEntity(pos: Vec, entityType: EntityType): Vec | null {
+    findClosestEntity(pos: Vec, entityType: EntityType): Entity | null {
       const entities = Object.values(game.entityM).filter(
         (e) => e.__type === entityType
       );
       if (entities.length === 0) return null;
       const v = entities.reduce(
-        (res: [number, Vec], e): [number, Vec] => {
+        (res: [number, Entity | null], e): [number, Entity | null] => {
           const d = dist(e.pos, pos);
           if (d < res[0]) {
-            return [d, [...e.pos]];
+            return [d, e];
           }
           return res;
         },
-        [1e99, entities[0].pos]
+        [1e99, null]
       );
       return v[1];
     },
@@ -211,7 +213,7 @@ export const game = ((): Game => {
         game.entityM[id] = golem;
       });
     },
-    loadMap(entities: Entity[], map: Map): void {
+    loadMap(entities: Entity[], map: Plane): void {
       game.resources = {
         attunement: 0,
       };
@@ -258,11 +260,22 @@ export const game = ((): Game => {
       return die;
     },
     removeEntity(id: number): void {
+      const entity = game.entityM[id];
+      game.updateFoW(entity.pos, null, entity.visionRange);
       delete game.actionM[id];
       delete game.entityM[id];
+
+      // delete actions targetting directly this entity.
+      for (const aid of Object.keys(game.actionM)) {
+        const action = game.actionM[parseInt(aid)];
+        if ("target" in action && action.target === id) {
+          delete game.actionM[parseInt(aid)];
+        }
+      }
+
       const i = game.workers.findIndex((w) => w.id === id);
-      if (i === -1) return;
-      game.workers.splice(i, 1);
+      if (i !== -1) game.workers.splice(i, 1);
+
       return;
     },
   };

@@ -1,9 +1,11 @@
+import { game } from "../../../Game/game";
 import {
   ActionProgress,
   ActionType,
   ATTUNEProgress,
   MINEProgress,
   MOVE_NEXT_TOProgress,
+  SMASHProgress,
 } from "../../../types/actions";
 import { renderProgress } from "./Progress";
 
@@ -61,6 +63,26 @@ const renderAttune = (
   renderProgress(ctx, action.pos, action.progress, "#0000ff44");
 };
 
+const renderSmash = (
+  ctx: CanvasRenderingContext2D,
+  action: SMASHProgress
+): void => {
+  try {
+    ctx.lineWidth = 4 / 64;
+    ctx.strokeStyle = "#88ffff44";
+    ctx.beginPath();
+    ctx.moveTo(action.pos[0] + 0.5, action.pos[1] + 0.5);
+    ctx.lineTo(
+      game.entityM[action.target].pos[0] + 0.5,
+      game.entityM[action.target].pos[1] + 0.5
+    );
+    ctx.stroke();
+    renderProgress(ctx, action.pos, action.progress, "#88ffff44");
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const renderAction = (
   ctx: CanvasRenderingContext2D,
   p: ActionProgress
@@ -74,6 +96,9 @@ export const renderAction = (
       break;
     case ActionType.ATTUNE:
       renderAttune(ctx, p);
+      break;
+    case ActionType.SMASH:
+      renderSmash(ctx, p);
       break;
   }
 };
