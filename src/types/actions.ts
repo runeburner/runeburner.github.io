@@ -30,13 +30,12 @@ export type SMASH = Action<typeof ActionType.SMASH, { target: number }>;
 type BaseActionProgress<
   T extends ActionType = ActionType,
   V extends object = object
-> = Typed<T, { pos: Vec } & V>;
+> = Typed<T, { pos: Vec; progress: Vec } & V>;
 
 export type MOVE_NEXT_TOProgress = BaseActionProgress<
   typeof ActionType.MOVE_NEXT_TO,
   {
     goal: Vec;
-    progress: Vec;
     path: Vec[];
   }
 >;
@@ -44,7 +43,6 @@ export type MOVE_NEXT_TOProgress = BaseActionProgress<
 export type MINEProgress = BaseActionProgress<
   typeof ActionType.MINE,
   {
-    progress: Vec;
     tile: Vec;
   }
 >;
@@ -52,18 +50,16 @@ export type MINEProgress = BaseActionProgress<
 export type ATTUNEProgress = BaseActionProgress<
   typeof ActionType.ATTUNE,
   {
-    progress: Vec;
     heart: Vec;
   }
 >;
 
-export type SMASHProgress = BaseActionProgress<
-  typeof ActionType.SMASH,
-  {
-    progress: Vec;
-    target: number;
-  }
->;
+export type TargettedProgress<
+  T extends ActionType = ActionType,
+  V extends object = object
+> = BaseActionProgress<T, { target: number } & V>;
+
+export type SMASHProgress = TargettedProgress<typeof ActionType.SMASH>;
 
 export type ActionProgress =
   | MOVE_NEXT_TOProgress

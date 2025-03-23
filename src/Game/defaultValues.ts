@@ -1,10 +1,10 @@
 import { Entity, EntityType } from "../types/entity";
 import { ID } from "./id";
 import defaultMapData from "./defaultMap.txt?raw";
-import { Map, Offset, ValuesPerTile } from "../types/map";
+import { Plane, Offset, ValuesPerTile } from "../types/map";
 import { Tile } from "../types/tile";
 
-export const parseMap = (s: string): Map => {
+export const parseMap = (s: string): Plane => {
   const mapData: number[][][] = [];
   for (const line of s.split("\n")) {
     const row: number[][] = [];
@@ -55,46 +55,46 @@ export const defaultEntities: Entity[] = [
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [8, 8],
+    pos: [8, 5],
     visionRange: 3,
-    health: [5, 5],
-    armor: [5, 5],
-    shield: [5, 5],
+    health: [3, 3],
+    armor: [0, 0],
+    shield: [0, 0],
   },
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [9, 8],
+    pos: [9, 5],
     visionRange: 3,
-    health: [4, 5],
-    armor: [5, 5],
-    shield: [5, 5],
+    health: [3, 3],
+    armor: [0, 0],
+    shield: [0, 0],
   },
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [10, 8],
+    pos: [10, 5],
     visionRange: 3,
-    health: [3, 5],
-    armor: [5, 5],
-    shield: [5, 5],
+    health: [3, 3],
+    armor: [0, 0],
+    shield: [0, 0],
   },
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [11, 8],
+    pos: [11, 5],
     visionRange: 3,
-    health: [2, 5],
-    armor: [5, 5],
-    shield: [5, 5],
+    health: [3, 3],
+    armor: [0, 0],
+    shield: [0, 0],
   },
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [12, 8],
+    pos: [12, 5],
     visionRange: 3,
-    health: [2, 5],
-    armor: [2, 5],
-    shield: [2, 5],
+    health: [3, 3],
+    armor: [0, 0],
+    shield: [0, 0],
   },
 ];

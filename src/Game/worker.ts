@@ -99,7 +99,7 @@ const process: {
   [ActionType.SMASH]: (rate: number, e: Entity, p: ActionProgress): boolean => {
     const action = p as SMASHProgress;
     const target = game.entityM[action.target];
-    if (!target) return false;
+    if (!target) return true;
     action.progress[0] += rate * game.powers.attune_power;
 
     while (action.progress[0] >= action.progress[1]) {
@@ -143,7 +143,7 @@ const rsObject = {
     if (!isArgs([v], isVec)) return false;
     return dist(e.pos, v) <= 1;
   },
-  findClosestEntity(e: Entity, entityType: EntityType): Vec | null {
+  findClosestEntity(e: Entity, entityType: EntityType): Entity | null {
     if (!isArgs([entityType], isString)) return null;
     return game.findClosestEntity(e.pos, entityType);
   },
@@ -240,12 +240,7 @@ const maker: {
     };
   },
   [ActionType.DIE]: (a: DIE) => {
-    delete game.actionM[a.id];
-    delete game.entityM[a.id];
-    const i = game.workers.findIndex((w) => w.id === a.id);
-    if (i === -1) return null;
-    game.workers.splice(i, 1);
-
+    game.removeEntity(a.id);
     return null;
   },
   [ActionType.SMASH]: (a: SMASH) => {
@@ -253,6 +248,7 @@ const maker: {
     if (old && old.__type === ActionType.SMASH) return true;
     const golem = game.entityM[a.id] as GolemEntity;
     const target = game.entityM[a.target];
+    if (!target) return null;
 
     if (dist(golem.pos, target.pos) > 1) return null;
 
@@ -304,7 +300,6 @@ const gameTick = (): void => {
     const p = game.actionM[e.id];
     if (p) {
       const del = process[p.__type](rate, e, p);
-
       if (del) {
         delete game.actionM[e.id];
       }

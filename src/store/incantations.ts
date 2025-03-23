@@ -33,7 +33,7 @@ export const tick = (rs) => {
 export const defaultFight = `export const tick = (rs) => {
   const dummy = rs.findClosestEntity("DUMMY");
   if (dummy === null) return DIE();
-  return rs.isInRange(dummy) ? SMASH(1) : MOVE_NEXT_TO(dummy);
+  return rs.isInRange(dummy.pos) ? SMASH(dummy.id) : MOVE_NEXT_TO(dummy.pos);
 }`;
 
 const initialState: IncantationsState = {
