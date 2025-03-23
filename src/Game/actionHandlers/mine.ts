@@ -4,7 +4,7 @@ import {
   MINE,
   MINEProgress,
 } from "../../types/actions";
-import { Entity, GolemEntity } from "../../types/entity";
+import { Entity, EntityType } from "../../types/entity";
 import { Offset } from "../../types/map";
 import { Tile } from "../../types/tile";
 import { dist, eq } from "../../types/vec";
@@ -13,8 +13,10 @@ import { isArgs, isVec } from "../validation";
 
 const maker = (a: MINE): ActionProgress | true | null => {
   if (!isArgs([a.v], isVec)) return null;
-  const old = game.actionM.get(a.id) as ActionProgress | undefined;
-  const golem = game.entityM.get(a.id) as GolemEntity;
+  const old = game.actionM.get(a.id);
+  const golem = game.entityM.get(a.id);
+
+  if (golem?.__type !== EntityType.GOLEM) return null;
 
   // If it's too far.
   if (dist(golem.pos, a.v) > 1) return null;
@@ -39,8 +41,12 @@ const maker = (a: MINE): ActionProgress | true | null => {
   };
 };
 
-const processor = (rate: number, e: Entity, action: MINEProgress): boolean => {
-  const golem = e as GolemEntity;
+const processor = (
+  rate: number,
+  golem: Entity,
+  action: MINEProgress
+): boolean => {
+  if (golem.__type !== EntityType.GOLEM) return true;
   if (game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.MANA_CRYSTAL)
     return true;
 

@@ -4,7 +4,7 @@ import {
   MOVE_NEXT_TO,
   MOVE_NEXT_TOProgress,
 } from "../../types/actions";
-import { Entity, GolemEntity } from "../../types/entity";
+import { Entity, EntityType } from "../../types/entity";
 import { dist, eq } from "../../types/vec";
 import { game } from "../game";
 import { aStarPath } from "../path";
@@ -12,12 +12,13 @@ import { isArgs, isVec } from "../validation";
 
 const maker = (a: MOVE_NEXT_TO): ActionProgress | true | null => {
   if (!isArgs([a.v], isVec)) return null;
-  const golem = game.entityM.get(a.id) as GolemEntity;
+  const golem = game.entityM.get(a.id);
+  if (golem?.__type !== EntityType.GOLEM) return null;
   // If we're already there, do nothing.
   if (dist(golem.pos, a.v) <= 1) return null;
 
   // Calculate new path
-  const old = game.actionM.get(a.id) as ActionProgress | undefined;
+  const old = game.actionM.get(a.id);
   const wasMoving = old && old.__type === ActionType.MOVE_NEXT_TO;
 
   const path = ((): Vec[] | null => {
@@ -50,10 +51,10 @@ const maker = (a: MOVE_NEXT_TO): ActionProgress | true | null => {
 
 const processor = (
   rate: number,
-  e: Entity,
+  golem: Entity,
   mp: MOVE_NEXT_TOProgress
 ): boolean => {
-  const golem = e as GolemEntity;
+  if (golem.__type !== EntityType.GOLEM) return true;
   mp.progress[0] += golem.speed * rate * game.powers.attune_power;
   while (mp.progress[0] >= mp.progress[1]) {
     if (game.entityAt(mp.path[1])) {

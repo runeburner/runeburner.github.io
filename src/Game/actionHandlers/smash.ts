@@ -4,16 +4,17 @@ import {
   SMASH,
   SMASHProgress,
 } from "../../types/actions";
-import { Entity, GolemEntity } from "../../types/entity";
+import { Entity, EntityType } from "../../types/entity";
 import { dist } from "../../types/vec";
 import { game } from "../game";
 import { isArgs, isNumber } from "../validation";
 
 const maker = (a: SMASH): ActionProgress | true | null => {
   if (!isArgs([a.target], isNumber)) return null;
-  const old = game.actionM.get(a.id) as ActionProgress | undefined;
+  const old = game.actionM.get(a.id);
   if (old && old.__type === ActionType.SMASH) return true;
-  const golem = game.entityM.get(a.id) as GolemEntity;
+  const golem = game.entityM.get(a.id);
+  if (golem?.__type !== EntityType.GOLEM) return true;
   const target = game.entityM.get(a.target);
   if (!target) return null;
 

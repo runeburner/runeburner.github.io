@@ -23,9 +23,10 @@ export const AddGolemModal = ({
     incantationNames[0]
   );
 
-  const appliedRunes: [Rune, number][] = Object.entries(runes).filter(
-    (r) => r[1] > 0
-  ) as [Rune, number][];
+  const appliedRunes = Object.entries(runes).filter((r) => r[1] > 0) as [
+    Rune,
+    number
+  ][];
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
 
   const onAnimate = (): void => {

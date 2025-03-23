@@ -25,7 +25,7 @@ const renderRuneArcs = (
     const start = (cummulative / total) * Math.PI * 2;
     const end = ((cummulative + runes[i][1]) / total) * Math.PI * 2;
 
-    const color = runeColors[runes[i][0] as Rune];
+    const color = runeColors[runes[i][0]];
     ctx.fillStyle = color;
 
     ctx.beginPath();
