@@ -206,7 +206,7 @@ export const game = ((): Game => {
         mana: [0, 0],
       };
 
-      launchGolem(id, incantation).then((success) => {
+      launchGolem(golem, incantation).then((success) => {
         game.updateFoW(null, golem.pos, golem.visionRange);
         if (!success) return;
         game.entityM.set(id, golem);

@@ -2,6 +2,7 @@ import { Typed } from "./typed_object";
 import { Vec } from "./vec";
 
 export const ActionType = Object.freeze({
+  IDLE: "IDLE",
   MOVE_NEXT_TO: "MOVE_NEXT_TO",
   MINE: "MINE",
   ATTUNE: "ATTUNE",
@@ -26,6 +27,7 @@ export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
 export type ATTUNE = Action<typeof ActionType.ATTUNE>;
 export type DIE = Action<typeof ActionType.DIE>;
 export type SMASH = Action<typeof ActionType.SMASH, { target: number }>;
+export type IDLE = Action<typeof ActionType.IDLE>;
 
 type BaseActionProgress<
   T extends ActionType = ActionType,
@@ -68,6 +70,7 @@ export type ActionProgress =
   | SMASHProgress;
 
 export type ActionTypeMap = {
+  [ActionType.IDLE]: [IDLE, void];
   [ActionType.MOVE_NEXT_TO]: [MOVE_NEXT_TO, MOVE_NEXT_TOProgress];
   [ActionType.MINE]: [MINE, MINEProgress];
   [ActionType.ATTUNE]: [ATTUNE, ATTUNEProgress];
