@@ -4,7 +4,7 @@ import { dist } from "../types/vec";
 import { game } from "./game";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
-export const RS = {
+export const rs = {
   findNearest(e: Entity, tile: keyof typeof Tile, radius: number): Vec | null {
     if (!isArgs([tile, radius], isString, isNumber)) return null;
     return game.findClosestTile(e.pos, Tile[tile], radius);

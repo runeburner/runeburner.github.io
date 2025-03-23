@@ -2,13 +2,13 @@ import { game } from "./game";
 import workerHeader from "./workerScriptHeader.js?raw";
 import { Action, ActionType } from "../types/actions";
 import { Entity } from "../types/entity";
-import { RS } from "./RS";
+import { rs } from "./RS";
 // Declare a type to encompass a proxy call to any of the function
 type ProxyRS = {
-  [K in keyof typeof RS]: (
+  [K in keyof typeof rs]: (
     e: Entity,
     ...args: unknown[]
-  ) => ReturnType<(typeof RS)[K]>;
+  ) => ReturnType<(typeof rs)[K]>;
 };
 
 export type EntityTicker = {
@@ -42,10 +42,10 @@ export const launchGolem = async (
       return false;
     }
 
-    const typed = RS as ProxyRS;
-    const rs = new Proxy(typed, {
+    const typed = rs as ProxyRS;
+    const proxy = new Proxy(typed, {
       get(_, prop: keyof typeof typed) {
-        return (...args: unknown[]): ReturnType<(typeof RS)[typeof prop]> =>
+        return (...args: unknown[]): ReturnType<(typeof rs)[typeof prop]> =>
           typed[prop](entity, ...args);
       },
     });
@@ -53,7 +53,7 @@ export const launchGolem = async (
       id: entity.id,
       tick: m.tick,
       objectURL: o,
-      proxy: rs,
+      proxy: proxy,
       lastAction: { __type: ActionType.IDLE, id: entity.id },
     });
     return true;
