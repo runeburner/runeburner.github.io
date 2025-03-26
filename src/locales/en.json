@@ -16,6 +16,11 @@
   "settings": {
     "language": "language"
   },
+  "inspection": {
+    "title": "Inspection",
+    "quantity": "Quantity",
+    "hardness": "Hardness"
+  },
   "runes": {
     "WIND": {
       "name": "Wind",

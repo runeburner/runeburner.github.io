@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { PlusIcon } from "../../icons";
-import classes from "./AddGolem.module.css";
 import { AddGolemModal } from "../AddGolemModal/AddGolemModal";
 
 export const AddGolem = (): React.ReactElement => {
@@ -8,11 +7,9 @@ export const AddGolem = (): React.ReactElement => {
   const onClick = (): void => setOpen(true);
   return (
     <>
-      <div className={"m-4 fixed " + classes.container}>
-        <button className="cursor-pointer btn icon-button" onClick={onClick}>
-          <PlusIcon />
-        </button>
-      </div>
+      <button className="cursor-pointer btn icon-button" onClick={onClick}>
+        <PlusIcon />
+      </button>
       <AddGolemModal open={open} onClose={() => setOpen(false)} />
     </>
   );
