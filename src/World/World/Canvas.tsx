@@ -36,7 +36,7 @@ export const Canvas = (
       e.clientX - canvas.current.offsetLeft,
       e.clientY - canvas.current.offsetTop,
     ];
-    camera.zoom(e.deltaY > 0, pos);
+    camera.zoom(e.deltaY < 0, pos);
     camera.fitToContext(ctx);
     renderWorld(ctx);
   };
