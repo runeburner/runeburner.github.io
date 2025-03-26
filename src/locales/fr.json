@@ -21,6 +21,11 @@
     "quantity": "Quantité",
     "hardness": "Dureté"
   },
+  "tile": {
+    "0": "Vide",
+    "1": "Crystal Runique",
+    "2": "Roche"
+  },
   "runes": {
     "WIND": {
       "name": "Vent",
