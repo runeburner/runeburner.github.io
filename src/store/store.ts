@@ -3,6 +3,7 @@ import { sidebarReducer } from "./sidebar";
 import { incantationReducer } from "./incantations";
 import { monacoModelsReducer } from "./monacoModels";
 import { resourcesReducer } from "./resources";
+import { inspectionReducer } from "./inspection";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     incantations: incantationReducer,
     monacoModels: monacoModelsReducer,
     resources: resourcesReducer,
+    inspection: inspectionReducer,
   },
 });
 

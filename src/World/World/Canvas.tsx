@@ -4,10 +4,13 @@ import { camera } from "./Camera";
 import { renderWorld } from "./Render/Main";
 import { useAtInterval } from "./useAtInterval";
 import { useWindowResize } from "./useWindowResize";
+import { useAppDispatch } from "../../store/hooks";
+import { setInspectionTile } from "../../store/inspection";
 
 export const Canvas = (
   props: HTMLProps<HTMLCanvasElement>
 ): React.ReactElement => {
+  const dispatch = useAppDispatch();
   const canvas = useRef<HTMLCanvasElement>(null);
   const isPanning = useRef(false);
 
@@ -20,12 +23,17 @@ export const Canvas = (
   const onMouseLeave = (): boolean => (isPanning.current = false);
 
   const onMouseMove = (e: React.MouseEvent): void => {
+    const ctx = getContext(false);
+    if (!ctx || !canvas.current) return;
+    const pos: Vec = [
+      Math.floor((e.clientX - canvas.current.offsetLeft) / camera.c.scale),
+      Math.floor((e.clientY - canvas.current.offsetTop) / camera.c.scale),
+    ];
+    dispatch(setInspectionTile(pos));
     if (!isPanning.current) return;
     e.preventDefault();
     camera.c.pos[0] -= e.movementX / camera.c.scale;
     camera.c.pos[1] -= e.movementY / camera.c.scale;
-    const ctx = getContext(false);
-    if (!ctx) return;
     renderWorld(ctx);
   };
 

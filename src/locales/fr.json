@@ -5,7 +5,7 @@
     "edit": "Modifier",
     "delete": "Effacer",
     "create_placeholder": "Nom de la nouvelle incantation",
-    "create_incantation_button": "Cree l'Incantation"
+    "create_incantation_button": "Crée l'Incantation"
   },
   "create_golem_modal": {
     "runes": "Runes",
@@ -15,6 +15,11 @@
   },
   "settings": {
     "language": "langue"
+  },
+  "inspection": {
+    "title": "Inspection",
+    "quantity": "Quantité",
+    "hardness": "Dureté"
   },
   "runes": {
     "WIND": {
