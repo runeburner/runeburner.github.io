@@ -16,18 +16,17 @@ export const tick = (rs) => {
     me.minecapacity[0] === 0;
   if (mining) {
     if(crystal == null || rs.at(crystal)[0] !== 1) {
-      const crystals = rs.findAll("MANA_CRYSTAL", 19);
+      const crystals = rs.findAll("RUNE_CRYSTAL", 3);
       if(crystals.length === 0) return DIE();
       crystal = crystals[Math.floor(Math.random()*crystals.length)];
     }
 
-    // const crystal = rs.findNearest("MANA_CRYSTAL", 19);
     return rs.isInRange(crystal) ? MINE(crystal) : MOVE_NEXT_TO(crystal);
   }
   crystal = null;
   const heart = rs.findClosestEntity("HEART");
   if(heart===null) return DIE();
-  return rs.isInRange(heart) ? ATTUNE() : MOVE_NEXT_TO(heart);
+  return rs.isInRange(heart.pos) ? ATTUNE() : MOVE_NEXT_TO(heart.pos);
 }`;
 
 export const defaultFight = `export const tick = (rs) => {
@@ -37,7 +36,7 @@ export const defaultFight = `export const tick = (rs) => {
 }`;
 
 const initialState: IncantationsState = {
-  basic: defaultFight,
+  basic: defaultIncantation,
   other: `function HelloWorld() {
 }`,
   fight: defaultIncantation,

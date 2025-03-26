@@ -6,7 +6,8 @@ export const useAtInterval = (
 ): void => {
   useEffect(() => {
     const f = fn();
-    const id = setInterval(() => f, rate);
+    if (!f) return;
+    const id = setInterval(f, rate);
     return (): void => clearInterval(id);
   }, [fn, rate]);
 };
