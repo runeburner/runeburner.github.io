@@ -26,7 +26,11 @@ const maker = (a: MINE): ActionProgress | true | null => {
 
   // If we're trying to mine anything other than a mana crystal
   const tile = game.tileAt(a.v);
-  if (tile[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL) return null;
+  if (
+    tile[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL &&
+    tile[Offset.TILE_ID] !== Tile.ROCK
+  )
+    return null;
 
   // If we were already mining this tile.
   const wasMining = old && old.__type === ActionType.MINE;
@@ -41,23 +45,29 @@ const maker = (a: MINE): ActionProgress | true | null => {
   };
 };
 
+const Mineables: Tile[] = [Tile.ROCK, Tile.RUNE_CRYSTAL];
+
+const isMinable = (v: Vec): boolean => {
+  return Mineables.includes(game.tileAt(v)[Offset.TILE_ID] as Tile);
+};
+
 const processor = (
   rate: number,
   golem: Entity,
   action: MINEProgress
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
-  if (game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL)
-    return true;
+  if (!isMinable(action.tile)) return true;
 
   action.progress[0] += golem.mineSpeed * rate * game.powers.attune_power;
   while (
     action.progress[0] >= action.progress[1] &&
     golem.minecapacity[0] < golem.minecapacity[1] &&
-    game.tileAt(action.tile)[Offset.DATA_0] > 0
+    isMinable(action.tile)
   ) {
     action.progress[0] -= action.progress[1];
-    golem.minecapacity[0]++;
+    if (game.tileAt(action.tile)[Offset.DATA_0] === Tile.RUNE_CRYSTAL)
+      golem.minecapacity[0]++;
 
     // reduce resources
     const t = game.tileAt(action.tile);
@@ -69,8 +79,7 @@ const processor = (
   }
 
   return (
-    golem.minecapacity[0] === golem.minecapacity[1] ||
-    game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL
+    golem.minecapacity[0] === golem.minecapacity[1] || !isMinable(action.tile)
   );
 };
 
