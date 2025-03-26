@@ -29,7 +29,7 @@ const handler = {
   [ActionType.ATTUNE]: attuneHandler,
   [ActionType.DIE]: dieHandler,
   [ActionType.SMASH]: smashHandler,
-} satisfies Handler;
+} as const satisfies Handler;
 
 const fps = 30;
 const rate = 1 / fps;

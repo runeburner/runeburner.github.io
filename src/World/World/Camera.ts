@@ -16,6 +16,7 @@ export const isInView = (camera: Camera, v: Vec): boolean => {
   );
 };
 
+const scaleFactor = 1.1;
 export const camera = {
   c: {
     pos: [0, 0],
@@ -23,25 +24,39 @@ export const camera = {
     scale: 64,
   },
   setPos(v: Vec): void {
-    this.c.pos = v;
+    camera.c.pos = v;
   },
   setSize(v: Vec): void {
-    this.c.size = v;
+    camera.c.size = v;
+  },
+  fitToContext(ctx: CanvasRenderingContext2D): void {
+    camera.c.size[0] = Math.floor(ctx.canvas.width) / camera.c.scale + 1;
+    camera.c.size[1] = Math.floor(ctx.canvas.height) / camera.c.scale + 1;
+  },
+  zoom(iin: boolean, pos: Vec): void {
+    const oldScale = camera.c.scale;
+    camera.c.scale *= iin ? scaleFactor : 1 / scaleFactor;
+    const b0 = pos[0] / oldScale;
+    const b1 = pos[1] / oldScale;
+    const a0 = pos[0] / camera.c.scale;
+    const a1 = pos[1] / camera.c.scale;
+    camera.c.pos[0] += b0 - a0;
+    camera.c.pos[1] += b1 - a1;
   },
   isInView(v: Vec): boolean {
     return (
-      this.c.pos[0] - 1 <= v[0] &&
-      v[0] < this.c.pos[0] + this.c.size[0] &&
-      this.c.pos[1] - 1 <= v[1] &&
-      v[1] < this.c.pos[1] + this.c.size[1]
+      camera.c.pos[0] - 1 <= v[0] &&
+      v[0] < camera.c.pos[0] + camera.c.size[0] &&
+      camera.c.pos[1] - 1 <= v[1] &&
+      v[1] < camera.c.pos[1] + camera.c.size[1]
     );
   },
   isAABBInView(v: AABB): boolean {
     return (
-      this.c.pos[0] <= v[0] &&
-      v[0] + v[2] < this.c.pos[0] + this.c.size[0] &&
-      this.c.pos[1] <= v[1] &&
-      v[1] + v[3] < this.c.pos[1] + this.c.size[1]
+      camera.c.pos[0] <= v[0] &&
+      v[0] + v[2] < camera.c.pos[0] + camera.c.size[0] &&
+      camera.c.pos[1] <= v[1] &&
+      v[1] + v[3] < camera.c.pos[1] + camera.c.size[1]
     );
   },
 };
