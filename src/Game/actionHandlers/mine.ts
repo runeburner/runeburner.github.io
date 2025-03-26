@@ -26,7 +26,7 @@ const maker = (a: MINE): ActionProgress | true | null => {
 
   // If we're trying to mine anything other than a mana crystal
   const tile = game.tileAt(a.v);
-  if (tile[Offset.TILE_ID] !== Tile.MANA_CRYSTAL) return null;
+  if (tile[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL) return null;
 
   // If we were already mining this tile.
   const wasMining = old && old.__type === ActionType.MINE;
@@ -47,7 +47,7 @@ const processor = (
   action: MINEProgress
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
-  if (game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.MANA_CRYSTAL)
+  if (game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL)
     return true;
 
   action.progress[0] += golem.mineSpeed * rate * game.powers.attune_power;
@@ -70,7 +70,7 @@ const processor = (
 
   return (
     golem.minecapacity[0] === golem.minecapacity[1] ||
-    game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.MANA_CRYSTAL
+    game.tileAt(action.tile)[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL
   );
 };
 

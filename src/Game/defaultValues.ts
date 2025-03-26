@@ -24,7 +24,7 @@ export const parseMap = (s: string): Plane => {
       data[(j * width + i) * ValuesPerTile + Offset.TILE_ID] =
         mapData[j][i][Offset.TILE_ID];
 
-      if (mapData[j][i][Offset.TILE_ID] === Tile.MANA_CRYSTAL) {
+      if (mapData[j][i][Offset.TILE_ID] === Tile.RUNE_CRYSTAL) {
         data[(j * width + i) * ValuesPerTile + Offset.DATA_0] =
           mapData[j][i][Offset.DATA_0];
         data[(j * width + i) * ValuesPerTile + Offset.DATA_1] =
@@ -47,7 +47,7 @@ export const defaultEntities: Entity[] = [
     id: ID.next(),
     pos: [5, 5],
     attunement: 0,
-    visionRange: 5,
+    visionRange: 10,
     health: [2, 10],
     armor: [10, 10],
     shield: [10, 10],
@@ -55,7 +55,7 @@ export const defaultEntities: Entity[] = [
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [8, 5],
+    pos: [12, 2],
     visionRange: 3,
     health: [3, 3],
     armor: [0, 0],
@@ -64,7 +64,7 @@ export const defaultEntities: Entity[] = [
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [9, 5],
+    pos: [12, 3],
     visionRange: 3,
     health: [3, 3],
     armor: [0, 0],
@@ -73,16 +73,7 @@ export const defaultEntities: Entity[] = [
   {
     __type: EntityType.DUMMY,
     id: ID.next(),
-    pos: [10, 5],
-    visionRange: 3,
-    health: [3, 3],
-    armor: [0, 0],
-    shield: [0, 0],
-  },
-  {
-    __type: EntityType.DUMMY,
-    id: ID.next(),
-    pos: [11, 5],
+    pos: [12, 4],
     visionRange: 3,
     health: [3, 3],
     armor: [0, 0],
@@ -92,6 +83,15 @@ export const defaultEntities: Entity[] = [
     __type: EntityType.DUMMY,
     id: ID.next(),
     pos: [12, 5],
+    visionRange: 3,
+    health: [3, 3],
+    armor: [0, 0],
+    shield: [0, 0],
+  },
+  {
+    __type: EntityType.DUMMY,
+    id: ID.next(),
+    pos: [12, 6],
     visionRange: 3,
     health: [3, 3],
     armor: [0, 0],

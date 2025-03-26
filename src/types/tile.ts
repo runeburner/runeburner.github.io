@@ -1,11 +1,11 @@
 export const Tile = Object.freeze({
   EMPTY: 0,
-  MANA_CRYSTAL: 1,
+  RUNE_CRYSTAL: 1,
 } as const);
 
 export type Tile = (typeof Tile)[keyof typeof Tile];
 
 export const EnterWeight: { [T in Tile]: number } = {
   [Tile.EMPTY]: 1,
-  [Tile.MANA_CRYSTAL]: Infinity,
+  [Tile.RUNE_CRYSTAL]: Infinity,
 };
