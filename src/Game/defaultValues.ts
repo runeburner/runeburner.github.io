@@ -24,7 +24,10 @@ export const parseMap = (s: string): Plane => {
       data[(j * width + i) * ValuesPerTile + Offset.TILE_ID] =
         mapData[j][i][Offset.TILE_ID];
 
-      if (mapData[j][i][Offset.TILE_ID] === Tile.RUNE_CRYSTAL) {
+      if (
+        mapData[j][i][Offset.TILE_ID] === Tile.RUNE_CRYSTAL ||
+        mapData[j][i][Offset.TILE_ID] === Tile.ROCK
+      ) {
         data[(j * width + i) * ValuesPerTile + Offset.DATA_0] =
           mapData[j][i][Offset.DATA_0];
         data[(j * width + i) * ValuesPerTile + Offset.DATA_1] =
@@ -48,9 +51,9 @@ export const defaultEntities: Entity[] = [
     pos: [5, 5],
     attunement: 0,
     visionRange: 10,
-    health: [2, 10],
-    armor: [10, 10],
-    shield: [10, 10],
+    health: [25, 25],
+    armor: [0, 0],
+    shield: [0, 0],
   },
   {
     __type: EntityType.DUMMY,

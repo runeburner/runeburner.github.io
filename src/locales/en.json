@@ -21,6 +21,11 @@
     "quantity": "Quantity",
     "hardness": "Hardness"
   },
+  "tile": {
+    "0": "Empty",
+    "1": "Rune Crystal",
+    "2": "Rock"
+  },
   "runes": {
     "WIND": {
       "name": "Wind",

@@ -13,10 +13,11 @@ const Details = ({ pos }: TileProps): React.ReactElement => {
   const { t } = useTranslation();
   if (pos[0] < 0) return <></>;
   const data = game.tileAt(pos);
+  if (data[Offset.TILE_ID] === Tile.EMPTY) return <></>;
   return (
     <>
       <p>{t("inspection.title")}:</p>
-      <p>{data[Offset.TILE_ID] === Tile.RUNE_CRYSTAL ? "RUNE_CRYSTAL" : ""}</p>
+      <p>{t("tile." + data[Offset.TILE_ID])}</p>
       <p>
         {t("inspection.quantity")}: {data[Offset.DATA_0]}
       </p>
