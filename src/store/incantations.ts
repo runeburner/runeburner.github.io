@@ -35,11 +35,18 @@ export const defaultFight = `export const tick = (rs) => {
   return rs.isInRange(dummy.pos) ? SMASH(dummy.id) : MOVE_NEXT_TO(dummy.pos);
 }`;
 
+export const defaultRock = `export const tick = (rs) => {
+  const rock = rs.findNearest("ROCK", 3);
+  if (rock === null) return DIE();
+  return rs.isInRange(rock) ? MINE(rock) : MOVE_NEXT_TO(rock);
+}`;
+
 const initialState: IncantationsState = {
   basic: defaultIncantation,
   other: `function HelloWorld() {
 }`,
   fight: defaultIncantation,
+  rock: defaultRock,
 };
 
 export type Incantation = {

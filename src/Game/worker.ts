@@ -63,6 +63,7 @@ const gameTick = (): void => {
     if (!p) continue;
     const f = handler[p.__type][1] as ProcessorFn<ActionType>;
     const del = f(rate, e, p);
+    console.log(del);
     if (del) game.actionM.delete(e.id);
   }
 };
