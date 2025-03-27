@@ -4,8 +4,6 @@ type RS = {
   game: {
     findNearest(e: Entity, tile: Tile, radius: number): Vec | null;
     findAll(e: Entity, tile: Tile, radius: number): Vec[];
-    me(e: Entity): Entity;
-    isInRange(e: Entity, v: Vec): boolean;
     findClosestEntity(e: Entity, entityType: EntityType): Entity | null;
   };
   act: {
@@ -14,6 +12,11 @@ type RS = {
     ATTUNE: () => unknown;
     DIE: () => unknown;
     SMASH: (id: number) => unknown;
+  };
+  me: {
+    runeCrystals: () => number;
+    runeCrystalCapacity: () => number;
+    isInRange(e: Entity, v: Vec): boolean;
   };
 };
 

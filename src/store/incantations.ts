@@ -5,15 +5,12 @@ import { RootState } from "./store";
 type IncantationsState = Record<string, string>;
 
 export const defaultIncantation = `let mining = true;
-
 let crystal = null;
 
-/** @param {RS} rs */
-export const tick = ({game, act}) => {
-  const me = game.me();
+export const tick = ({game, me, act}) => {
   mining = mining ?
-    me.minecapacity[0] < me.minecapacity[1] :
-    me.minecapacity[0] === 0;
+    me.runeCrystals() < me.runeCrystalCapacity() :
+    me.runeCrystals() === 0;
   if (mining) {
     if (crystal == null || game.at(crystal)[0] !== 1) {
       const crystals = game.findAll(Tile.RUNE_CRYSTAL, 3);
@@ -21,24 +18,24 @@ export const tick = ({game, act}) => {
       crystal = crystals[Math.floor(Math.random() * crystals.length)];
     }
 
-    return game.isInRange(crystal) ? act.MINE(crystal) : act.MOVE_NEXT_TO(crystal);
+    return me.isInRange(crystal) ? act.MINE(crystal) : act.MOVE_NEXT_TO(crystal);
   }
   crystal = null;
   const heart = game.findClosestEntity(EntityType.HEART);
   if (heart === null) return act.DIE();
-  return game.isInRange(heart.pos) ? act.ATTUNE() : act.MOVE_NEXT_TO(heart.pos);
+  return me.isInRange(heart.pos) ? act.ATTUNE() : act.MOVE_NEXT_TO(heart.pos);
 }`;
 
-export const defaultFight = `export const tick = ({game, act}) => {
+export const defaultFight = `export const tick = ({game, me, act}) => {
   const dummy = game.findClosestEntity(EntityType.DUMMY);
   if (dummy === null) return act.DIE();
-  return game.isInRange(dummy.pos) ? act.SMASH(dummy.id) : act.MOVE_NEXT_TO(dummy.pos);
+  return me.isInRange(dummy.pos) ? act.SMASH(dummy.id) : act.MOVE_NEXT_TO(dummy.pos);
 }`;
 
-export const defaultRock = `export const tick = ({game, act}) => {
+export const defaultRock = `export const tick = ({game, me, act}) => {
   const rock = game.findNearest(Tile.ROCK, 3);
   if (rock === null) return act.DIE();
-  return game.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
+  return me.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
 }`;
 
 const initialState: IncantationsState = {

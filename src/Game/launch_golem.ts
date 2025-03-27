@@ -54,6 +54,14 @@ export const launchGolem = async (
             (rs.act[prop] as any)(entity, ...args);
         },
       }),
+      me: new Proxy(rs.me, {
+        get(_, prop: keyof typeof rs.me) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (...args: unknown[]): any =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (rs.me[prop] as any)(entity, ...args);
+        },
+      }),
     };
     game.workers.push({
       id: entity.id,

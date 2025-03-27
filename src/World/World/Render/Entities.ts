@@ -16,7 +16,8 @@ const renderRuneArcs = (
   ctx: CanvasRenderingContext2D,
   golem: GolemEntity
 ): void => {
-  const { pos, runes } = golem;
+  const { pos, runes: runesRec } = golem;
+  const runes = Object.entries(runesRec) as [Rune, number][];
   const total = runes.reduce((acc, c) => acc + c[1], 0);
 
   let cummulative = 0;

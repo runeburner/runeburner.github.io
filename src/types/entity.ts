@@ -38,11 +38,8 @@ export type HeartEntity = HealthEntity<
 export type GolemEntity = HealthEntity<
   typeof EntityType.GOLEM,
   {
-    speed: number;
-    weight: number;
-    mineSpeed: number;
-    minecapacity: Vec;
-    runes: [Rune, number][];
+    runeCrystals: number;
+    runes: Record<Rune, number>;
     mana: Vec;
   }
 >;

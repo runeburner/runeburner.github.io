@@ -5,7 +5,7 @@ import { ActionProgress } from "../types/actions";
 import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
 import { Plane, Offset, ValuesPerTile } from "../types/map";
 import { Resources } from "../types/resources";
-import { Rune, RuneWeight } from "../types/rune";
+import { Rune } from "../types/rune";
 import { Tile } from "../types/tile";
 import { dist, Vec } from "../types/vec";
 import { Camera } from "../World/World/Camera";
@@ -17,7 +17,10 @@ type Game = {
   workers: EntityTicker[];
   resources: Resources;
   powers: {
-    attune_power: number;
+    attuneStrength: number;
+    movePerRune: number;
+    capacityPerRune: number;
+    workPerRune: number;
   };
   entityM: Map<number, Entity>;
   actionM: Map<number, ActionProgress>;
@@ -32,7 +35,7 @@ type Game = {
   addAttunement(n: number): void;
   determineInitialCameraPosition(cam: Camera): Camera;
   updateFoW(before: Vec | null, after: Vec | null, radius: number): void;
-  animate(runes: [Rune, number][], incantation: string): void;
+  animate(runes: Record<Rune, number>, incantation: string): void;
   loadMap(entities: Entity[], map: Plane): void;
   damage<T extends EntityType, V extends object>(
     entity: HealthEntity<T, V>,
@@ -48,7 +51,10 @@ export const game = ((): Game => {
       attunement: 0,
     },
     powers: {
-      attune_power: 1,
+      attuneStrength: 1,
+      movePerRune: 2,
+      capacityPerRune: 1,
+      workPerRune: 1,
     },
     entityM: new Map(),
     actionM: new Map(),
@@ -161,7 +167,7 @@ export const game = ((): Game => {
     },
     addAttunement(n: number): void {
       game.resources.attunement += n;
-      game.powers.attune_power = Math.pow(
+      game.powers.attuneStrength = Math.pow(
         1.01,
         Math.sqrt(0.5 * game.resources.attunement)
       );
@@ -182,12 +188,8 @@ export const game = ((): Game => {
       };
     },
 
-    animate(runes: [Rune, number][], incantation: string): void {
+    animate(runes: Record<Rune, number>, incantation: string): void {
       const id = ID.next();
-      const weight = runes.reduce(
-        (weight, rune) => weight + RuneWeight[rune[0]] * rune[1],
-        0
-      );
       const coord = game.golemSpawnCoordinates();
       if (!coord) return;
       const golem: GolemEntity = {
@@ -195,11 +197,8 @@ export const game = ((): Game => {
         pos: coord,
         runes: runes,
         id: id,
-        speed: runes.find((r) => r[0] === Rune.WIND)?.[1] ?? 0,
-        weight: Math.max(1, weight),
         visionRange: 5,
-        minecapacity: [0, runes.find((r) => r[0] === Rune.VOID)?.[1] ?? 0],
-        mineSpeed: runes.find((r) => r[0] === Rune.LABOR)?.[1] ?? 0,
+        runeCrystals: 0,
         health: [0, 0],
         armor: [0, 0],
         shield: [0, 0],
@@ -217,7 +216,10 @@ export const game = ((): Game => {
         attunement: 0,
       };
       game.powers = {
-        attune_power: 1,
+        attuneStrength: 1,
+        movePerRune: 2,
+        capacityPerRune: 1,
+        workPerRune: 1,
       };
       game.entityM.clear();
       game.entityM.clear();

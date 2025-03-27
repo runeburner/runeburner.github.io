@@ -34,7 +34,7 @@ const processor = (
 ): boolean => {
   const target = game.entityM.get(action.target);
   if (!target) return true;
-  action.progress[0] += rate * game.powers.attune_power;
+  action.progress[0] += rate * game.powers.attuneStrength;
 
   while (action.progress[0] >= action.progress[1]) {
     action.progress[0] -= action.progress[1];

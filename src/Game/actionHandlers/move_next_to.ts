@@ -5,6 +5,7 @@ import {
   MOVE_NEXT_TOProgress,
 } from "../../types/actions";
 import { Entity, EntityType } from "../../types/entity";
+import { Rune, RuneWeight } from "../../types/rune";
 import { dist, eq } from "../../types/vec";
 import { game } from "../game";
 import { aStarPath } from "../path";
@@ -17,6 +18,10 @@ const maker = (a: MOVE_NEXT_TO): ActionProgress | true | null => {
   // If we're already there, do nothing.
   if (dist(golem.pos, a.v) <= 1) return null;
 
+  const weight = Object.entries(golem.runes).reduce(
+    (weight, [rune, amt]) => RuneWeight[rune as Rune] * amt + weight,
+    0
+  );
   // Calculate new path
   const old = game.actionM.get(a.id);
   const wasMoving = old && old.__type === ActionType.MOVE_NEXT_TO;
@@ -37,7 +42,7 @@ const maker = (a: MOVE_NEXT_TO): ActionProgress | true | null => {
     path: path,
     pos: path[0],
     // carry over progress
-    progress: wasMoving ? [old.progress[0], golem.weight] : [0, golem.weight],
+    progress: wasMoving ? [old.progress[0], weight] : [0, weight],
   };
   if (
     wasMoving &&
@@ -55,7 +60,11 @@ const processor = (
   mp: MOVE_NEXT_TOProgress
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
-  mp.progress[0] += golem.speed * rate * game.powers.attune_power;
+  mp.progress[0] +=
+    golem.runes[Rune.WIND] *
+    game.powers.movePerRune *
+    rate *
+    game.powers.attuneStrength;
   while (mp.progress[0] >= mp.progress[1]) {
     if (game.entityAt(mp.path[1])) {
       const newPath = aStarPath(golem.pos, mp.goal);
