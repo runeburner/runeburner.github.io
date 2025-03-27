@@ -2,9 +2,9 @@ type Vec = [number, number];
 
 type RS = {
   game: {
-    findNearest(e: Entity, tile: Tile, radius: number): Vec | null;
-    findAll(e: Entity, tile: Tile, radius: number): Vec[];
-    findClosestEntity(e: Entity, entityType: EntityType): Entity | null;
+    findNearest(tile: Tile, radius: number): Vec | null;
+    findAll(tile: Tile, radius: number): Vec[];
+    findClosestEntity(entityType: EntityType): Entity | null;
   };
   act: {
     MOVE_NEXT_TO: (v: Vec) => unknown;
