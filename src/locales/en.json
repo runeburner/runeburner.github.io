@@ -11,7 +11,10 @@
     "runes": "Runes",
     "rune_types": "Rune types",
     "animate": "Animate",
-    "incantation": "Incantation"
+    "incantation": "Incantation",
+    "wind_description": "Tiles per second: {{speed}}",
+    "labor_description": "Work speed: {{speed}}",
+    "void_description": "Capacity: {{cap}}"
   },
   "settings": {
     "language": "language"
