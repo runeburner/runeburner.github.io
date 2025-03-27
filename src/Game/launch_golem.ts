@@ -1,8 +1,10 @@
 import { game } from "./game";
 import workerHeader from "./workerScriptHeader.js?raw";
 import { Action, ActionType } from "../types/actions";
-import { Entity } from "../types/entity";
+import { Entity, EntityType } from "../types/entity";
 import { rs } from "./RS";
+import { Tile } from "../types/tile";
+
 // Declare a type to encompass a proxy call to any of the function
 type ProxyRS = {
   [K in keyof typeof rs]: (
@@ -22,6 +24,9 @@ export type EntityTicker = {
 type Module = {
   tick?: (rb: unknown) => Action;
 };
+
+window.Tile = Tile;
+window.EntityType = EntityType;
 
 export const launchGolem = async (
   entity: Entity,
