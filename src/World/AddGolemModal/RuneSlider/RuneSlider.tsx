@@ -20,8 +20,9 @@ export const RuneSlider = ({
   const { t } = useTranslation();
   return (
     <>
-      <p>{t(`runes.${rune}.name`)}</p>
-      <div className={"m-2"} style={{ display: "flex", alignItems: "center" }}>
+      <h1 style={{ fontSize: "2em" }}>{t(`runes.${rune}.name`)}</h1>
+      <p>{t(`runes.${rune}.effect`)}</p>
+      <div className={"m-2 flex items-center"}>
         <Icon style={{ width: "24px", height: "24px" }} />
         <MinusIcon
           onClick={() =>
@@ -42,7 +43,6 @@ export const RuneSlider = ({
           }
         />
       </div>
-      <p>{t(`runes.${rune}.effect`)}</p>
     </>
   );
 };

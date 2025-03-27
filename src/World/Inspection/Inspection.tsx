@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { game } from "../../Game/game";
 import { useInspectedTile } from "../../store/inspection";
 import { Offset } from "../../types/map";
-import { Tile } from "../../types/tile";
 import { AddGolem } from "../AddGolem/AddGolem";
 import classes from "./Inspection.module.css";
 
@@ -11,12 +10,12 @@ type TileProps = {
 };
 const Details = ({ pos }: TileProps): React.ReactElement => {
   const { t } = useTranslation();
-  if (pos[0] < 0) return <></>;
   const data = game.tileAt(pos);
-  if (data[Offset.TILE_ID] === Tile.EMPTY) return <></>;
   return (
     <>
-      <p>{t("inspection.title")}:</p>
+      <p>
+        ({pos[0]}, {pos[1]})
+      </p>
       <p>{t("tile." + data[Offset.TILE_ID])}</p>
       <p>
         {t("inspection.quantity")}: {data[Offset.DATA_0]}
@@ -33,7 +32,9 @@ export const Inspection = (): React.ReactElement => {
   return (
     <div className={"m-4 p-2 fixed " + classes.container}>
       <Details pos={tile} />
-      <AddGolem />
+      <div className="w-full flex justify-end">
+        <AddGolem />
+      </div>
     </div>
   );
 };
