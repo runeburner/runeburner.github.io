@@ -5,13 +5,13 @@ import { game } from "./game";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
 export const rs = {
-  findNearest(e: Entity, tile: keyof typeof Tile, radius: number): Vec | null {
-    if (!isArgs([tile, radius], isString, isNumber)) return null;
-    return game.findClosestTile(e.pos, Tile[tile], radius);
+  findNearest(e: Entity, tile: Tile, radius: number): Vec | null {
+    if (!isArgs([tile, radius], isNumber, isNumber)) return null;
+    return game.findClosestTile(e.pos, tile, radius);
   },
-  findAll(e: Entity, tile: keyof typeof Tile, radius: number): Vec[] {
-    if (!isArgs([tile, radius], isString, isNumber)) return [];
-    return game.findAllTiles(e.pos, Tile[tile], radius);
+  findAll(e: Entity, tile: Tile, radius: number): Vec[] {
+    if (!isArgs([tile, radius], isNumber, isNumber)) return [];
+    return game.findAllTiles(e.pos, tile, radius);
   },
   me(e: Entity): Entity {
     return structuredClone(e);

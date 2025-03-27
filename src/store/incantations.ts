@@ -16,7 +16,7 @@ export const tick = (rs) => {
     me.minecapacity[0] === 0;
   if (mining) {
     if(crystal == null || rs.at(crystal)[0] !== 1) {
-      const crystals = rs.findAll("RUNE_CRYSTAL", 3);
+      const crystals = rs.findAll(Tile.RUNE_CRYSTAL, 3);
       if(crystals.length === 0) return DIE();
       crystal = crystals[Math.floor(Math.random()*crystals.length)];
     }
@@ -24,28 +24,26 @@ export const tick = (rs) => {
     return rs.isInRange(crystal) ? MINE(crystal) : MOVE_NEXT_TO(crystal);
   }
   crystal = null;
-  const heart = rs.findClosestEntity("HEART");
+  const heart = rs.findClosestEntity(EntityType.HEART);
   if(heart===null) return DIE();
   return rs.isInRange(heart.pos) ? ATTUNE() : MOVE_NEXT_TO(heart.pos);
 }`;
 
 export const defaultFight = `export const tick = (rs) => {
-  const dummy = rs.findClosestEntity("DUMMY");
+  const dummy = rs.findClosestEntity(EntityType.DUMMY);
   if (dummy === null) return DIE();
   return rs.isInRange(dummy.pos) ? SMASH(dummy.id) : MOVE_NEXT_TO(dummy.pos);
 }`;
 
 export const defaultRock = `export const tick = (rs) => {
-  const rock = rs.findNearest("ROCK", 3);
+  const rock = rs.findNearest(Tile.ROCK, 3);
   if (rock === null) return DIE();
   return rs.isInRange(rock) ? MINE(rock) : MOVE_NEXT_TO(rock);
 }`;
 
 const initialState: IncantationsState = {
   basic: defaultIncantation,
-  other: `function HelloWorld() {
-}`,
-  fight: defaultIncantation,
+  fight: defaultFight,
   rock: defaultRock,
 };
 
