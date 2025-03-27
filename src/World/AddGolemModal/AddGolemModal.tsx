@@ -2,9 +2,9 @@ import { useState } from "react";
 import { EhwazIcon, OthalanIcon, TiwazIcon } from "../../icons";
 import { Modal, ModalProps } from "../../Modal/Modal";
 import { RuneSlider } from "./RuneSlider/RuneSlider";
-import { Rune } from "../../types/rune";
+import { Rune, RuneWeight } from "../../types/rune";
 import { store } from "../../store/store";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useIncantationNames } from "../../store/incantations";
 import { game } from "../../Game/game";
 
@@ -32,6 +32,10 @@ export const AddGolemModal = ({
   ][];
   const totalRunes = appliedRunes.reduce((acc, c) => acc + c[1], 0);
   const disabled = totalRunes >= maxRunes;
+  const weight = appliedRunes.reduce(
+    (w, [rune, amt]) => w + RuneWeight[rune as Rune] * amt,
+    0
+  );
 
   const onAnimate = (): void => {
     game.animate(runes, store.getState().incantations[selectedIncantation]);
@@ -51,6 +55,17 @@ export const AddGolemModal = ({
           amount={runes[Rune.WIND]}
           disabled={disabled}
         />
+        <p>
+          <Trans
+            i18nKey="create_golem_modal.wind_description"
+            values={{
+              speed: (
+                (runes[Rune.WIND] * game.powers.movePerRune) /
+                weight
+              ).toFixed(2),
+            }}
+          />
+        </p>
         <RuneSlider
           onUpdate={setRunes}
           rune={Rune.LABOR}
@@ -58,6 +73,14 @@ export const AddGolemModal = ({
           amount={runes[Rune.LABOR]}
           disabled={disabled}
         />
+        <p>
+          <Trans
+            i18nKey="create_golem_modal.labor_description"
+            values={{
+              speed: runes[Rune.LABOR] * game.powers.workPerRune,
+            }}
+          />
+        </p>
         <RuneSlider
           onUpdate={setRunes}
           rune={Rune.VOID}
@@ -65,6 +88,14 @@ export const AddGolemModal = ({
           amount={runes[Rune.VOID]}
           disabled={disabled}
         />
+        <p>
+          <Trans
+            i18nKey="create_golem_modal.void_description"
+            values={{
+              cap: runes[Rune.VOID] * game.powers.capacityPerRune,
+            }}
+          />
+        </p>
         <div className="my-2">
           {t("create_golem_modal.incantation")}:{" "}
           <select

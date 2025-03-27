@@ -11,7 +11,10 @@
     "runes": "Runes",
     "rune_types": "Types de runes",
     "animate": "Anime",
-    "incantation": "Incantation"
+    "incantation": "Incantation",
+    "wind_description": "Tuiles par seconde: {{speed}}",
+    "labor_description": "Vitesse de travail: {{speed}}",
+    "void_description": "Capacité: {{cap}}"
   },
   "settings": {
     "language": "langue"
