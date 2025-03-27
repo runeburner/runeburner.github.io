@@ -14,6 +14,11 @@ export const Canvas = (
   const canvas = useRef<HTMLCanvasElement>(null);
   const isPanning = useRef(false);
 
+  const reframe = ({ canvas }: CanvasRenderingContext2D): void => {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+  };
+
   const onMouseDown = ({ button }: React.MouseEvent): boolean =>
     (isPanning.current ||= button === 1);
 
@@ -23,57 +28,49 @@ export const Canvas = (
   const onMouseLeave = (): boolean => (isPanning.current = false);
 
   const onMouseMove = (e: React.MouseEvent): void => {
-    const ctx = getContext(false);
-    if (!ctx || !canvas.current) return;
-    const pos: Vec = [
-      Math.floor((e.clientX - canvas.current.offsetLeft) / camera.c.scale),
-      Math.floor((e.clientY - canvas.current.offsetTop) / camera.c.scale),
+    const ctx = canvas.current?.getContext("2d");
+    if (!ctx) return;
+
+    const p0 = camera.c.pos[0] - e.movementX / camera.c.scale;
+    const p1 = camera.c.pos[1] - e.movementY / camera.c.scale;
+
+    const mouseTileCoord: Vec = [
+      Math.floor((e.clientX - ctx.canvas.offsetLeft) / camera.c.scale + p0),
+      Math.floor((e.clientY - ctx.canvas.offsetTop) / camera.c.scale + p1),
     ];
-    dispatch(setInspectionTile(pos));
+    dispatch(setInspectionTile(mouseTileCoord));
+
     if (!isPanning.current) return;
-    e.preventDefault();
-    camera.c.pos[0] -= e.movementX / camera.c.scale;
-    camera.c.pos[1] -= e.movementY / camera.c.scale;
+    camera.c.pos[0] = p0;
+    camera.c.pos[1] = p1;
     renderWorld(ctx);
   };
 
   const onWheel = (e: React.WheelEvent): void => {
-    const ctx = getContext(true);
-    if (!ctx || !canvas.current) return;
+    const ctx = canvas.current?.getContext("2d");
+    if (!ctx) return;
+    reframe(ctx);
     const pos: Vec = [
-      e.clientX - canvas.current.offsetLeft,
-      e.clientY - canvas.current.offsetTop,
+      (e.clientX - ctx.canvas.offsetLeft) / camera.c.scale,
+      (e.clientY - ctx.canvas.offsetTop) / camera.c.scale,
     ];
     camera.zoom(e.deltaY < 0, pos);
     camera.fitToContext(ctx);
     renderWorld(ctx);
   };
 
-  const getContext = (
-    reframe: boolean
-  ): CanvasRenderingContext2D | undefined => {
-    if (!canvas.current) return;
-    const ctx = canvas.current.getContext("2d");
-    if (!ctx) return;
-    if (reframe) {
-      ctx.canvas.width = canvas.current.clientWidth;
-      ctx.canvas.height = canvas.current.clientHeight;
-    }
-    return ctx;
-  };
-
   const onTick = (): (() => void) | undefined => {
-    const ctx = getContext(true);
+    const ctx = canvas.current?.getContext("2d");
     if (!ctx) return;
-    camera.fitToContext(ctx);
-    renderWorld(ctx);
+    reframe(ctx);
     return () => renderWorld(ctx);
   };
   useAtInterval(onTick, 1000 / uiFPS);
 
   const onResize = (): void => {
-    const ctx = getContext(true);
+    const ctx = canvas.current?.getContext("2d");
     if (!ctx) return;
+    reframe(ctx);
     camera.fitToContext(ctx);
     renderWorld(ctx);
   };
