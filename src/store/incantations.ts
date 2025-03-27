@@ -31,14 +31,14 @@ export const tick = ({game, act}) => {
 
 export const defaultFight = `export const tick = ({game, act}) => {
   const dummy = game.findClosestEntity(EntityType.DUMMY);
-  if (dummy === null) return DIE();
-  return game.isInRange(dummy.pos) ? SMASH(dummy.id) : MOVE_NEXT_TO(dummy.pos);
+  if (dummy === null) return act.DIE();
+  return game.isInRange(dummy.pos) ? act.SMASH(dummy.id) : act.MOVE_NEXT_TO(dummy.pos);
 }`;
 
 export const defaultRock = `export const tick = ({game, act}) => {
   const rock = game.findNearest(Tile.ROCK, 3);
-  if (rock === null) return DIE();
-  return game.isInRange(rock) ? MINE(rock) : MOVE_NEXT_TO(rock);
+  if (rock === null) return act.DIE();
+  return game.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
 }`;
 
 const initialState: IncantationsState = {
