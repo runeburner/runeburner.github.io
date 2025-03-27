@@ -5,6 +5,7 @@ import {
   ATTUNEProgress,
 } from "../../types/actions";
 import { Entity, EntityType } from "../../types/entity";
+import { Rune } from "../../types/rune";
 import { dist } from "../../types/vec";
 import { game } from "../game";
 
@@ -23,8 +24,8 @@ const maker = (a: ATTUNE): ActionProgress | true | null => {
   // If it's too far.
   if (dist(golem.pos, heart.pos) > 1) return null;
 
-  // If we have no mana crystals
-  if (golem.minecapacity[0] === 0) return null;
+  // If we have no rune crystals
+  if (golem.runeCrystals === 0) return null;
 
   // If we were already attuning
   if (old && old.__type === ActionType.ATTUNE) return true;
@@ -42,17 +43,18 @@ const processor = (
   action: ATTUNEProgress
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
-  action.progress[0] += golem.mineSpeed * rate * game.powers.attune_power;
-  while (
-    action.progress[0] >= action.progress[1] &&
-    golem.minecapacity[0] > 0
-  ) {
+  action.progress[0] +=
+    golem.runes[Rune.LABOR] *
+    game.powers.workPerRune *
+    rate *
+    game.powers.attuneStrength;
+  while (action.progress[0] >= action.progress[1] && golem.runeCrystals > 0) {
     action.progress[0] -= action.progress[1];
-    golem.minecapacity[0]--;
+    golem.runeCrystals--;
     game.addAttunement(1);
   }
 
-  return golem.minecapacity[0] === 0;
+  return golem.runeCrystals === 0;
 };
 
 export const attuneHandler = [maker, processor] as const;

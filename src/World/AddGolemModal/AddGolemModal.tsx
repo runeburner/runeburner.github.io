@@ -34,10 +34,7 @@ export const AddGolemModal = ({
   const disabled = totalRunes >= maxRunes;
 
   const onAnimate = (): void => {
-    game.animate(
-      appliedRunes,
-      store.getState().incantations[selectedIncantation]
-    );
+    game.animate(runes, store.getState().incantations[selectedIncantation]);
     onClose();
   };
 

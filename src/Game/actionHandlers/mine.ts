@@ -6,6 +6,7 @@ import {
 } from "../../types/actions";
 import { Entity, EntityType } from "../../types/entity";
 import { Offset } from "../../types/map";
+import { Rune } from "../../types/rune";
 import { Tile } from "../../types/tile";
 import { dist, eq } from "../../types/vec";
 import { game } from "../game";
@@ -22,7 +23,8 @@ const maker = (a: MINE): ActionProgress | true | null => {
   if (dist(golem.pos, a.v) > 1) return null;
 
   // If the golem is full.
-  if (golem.minecapacity[0] === golem.minecapacity[1]) return null;
+  const capacity = golem.runes[Rune.VOID] * game.powers.capacityPerRune;
+  if (golem.runeCrystals === capacity) return null;
 
   // If we're trying to mine anything other than a mana crystal
   const tile = game.tileAt(a.v);
@@ -39,7 +41,6 @@ const maker = (a: MINE): ActionProgress | true | null => {
     __type: ActionType.MINE,
     pos: [...golem.pos],
     // If we swap mining tile in the middle, carry over progress
-
     progress: wasMining ? old.progress : [0, tile[Offset.DATA_1]],
     tile: [...a.v],
   };
@@ -58,16 +59,20 @@ const processor = (
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
   if (!isMinable(action.tile)) return true;
-
-  action.progress[0] += golem.mineSpeed * rate * game.powers.attune_power;
+  const capacity = golem.runes[Rune.VOID] * game.powers.capacityPerRune;
+  action.progress[0] +=
+    golem.runes[Rune.LABOR] *
+    game.powers.workPerRune *
+    rate *
+    game.powers.attuneStrength;
   while (
     action.progress[0] >= action.progress[1] &&
-    golem.minecapacity[0] < golem.minecapacity[1] &&
+    golem.runeCrystals < capacity &&
     isMinable(action.tile)
   ) {
     action.progress[0] -= action.progress[1];
-    if (game.tileAt(action.tile)[Offset.DATA_0] === Tile.RUNE_CRYSTAL)
-      golem.minecapacity[0]++;
+    if (game.tileAt(action.tile)[Offset.TILE_ID] === Tile.RUNE_CRYSTAL)
+      golem.runeCrystals++;
 
     // reduce resources
     const t = game.tileAt(action.tile);
@@ -78,9 +83,7 @@ const processor = (
     game.setTileAt(action.tile, t);
   }
 
-  return (
-    golem.minecapacity[0] === golem.minecapacity[1] || !isMinable(action.tile)
-  );
+  return golem.runeCrystals === capacity || !isMinable(action.tile);
 };
 
 export const mineHandler = [maker, processor] as const;
