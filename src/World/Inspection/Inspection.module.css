@@ -4,4 +4,5 @@
   background-color: var(--primary-dark);
   border-radius: 10px;
   box-shadow: 0 0 3px black;
+  min-width: 125px;
 }
