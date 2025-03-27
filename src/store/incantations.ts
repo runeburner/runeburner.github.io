@@ -9,36 +9,36 @@ export const defaultIncantation = `let mining = true;
 let crystal = null;
 
 /** @param {RS} rs */
-export const tick = (rs) => {
-  const me = rs.me();
+export const tick = ({game, act}) => {
+  const me = game.me();
   mining = mining ?
     me.minecapacity[0] < me.minecapacity[1] :
     me.minecapacity[0] === 0;
   if (mining) {
-    if(crystal == null || rs.at(crystal)[0] !== 1) {
-      const crystals = rs.findAll(Tile.RUNE_CRYSTAL, 3);
-      if(crystals.length === 0) return DIE();
-      crystal = crystals[Math.floor(Math.random()*crystals.length)];
+    if (crystal == null || game.at(crystal)[0] !== 1) {
+      const crystals = game.findAll(Tile.RUNE_CRYSTAL, 3);
+      if (crystals.length === 0) return act.DIE();
+      crystal = crystals[Math.floor(Math.random() * crystals.length)];
     }
 
-    return rs.isInRange(crystal) ? MINE(crystal) : MOVE_NEXT_TO(crystal);
+    return game.isInRange(crystal) ? act.MINE(crystal) : act.MOVE_NEXT_TO(crystal);
   }
   crystal = null;
-  const heart = rs.findClosestEntity(EntityType.HEART);
-  if(heart===null) return DIE();
-  return rs.isInRange(heart.pos) ? ATTUNE() : MOVE_NEXT_TO(heart.pos);
+  const heart = game.findClosestEntity(EntityType.HEART);
+  if (heart === null) return act.DIE();
+  return game.isInRange(heart.pos) ? act.ATTUNE() : act.MOVE_NEXT_TO(heart.pos);
 }`;
 
-export const defaultFight = `export const tick = (rs) => {
-  const dummy = rs.findClosestEntity(EntityType.DUMMY);
+export const defaultFight = `export const tick = ({game, act}) => {
+  const dummy = game.findClosestEntity(EntityType.DUMMY);
   if (dummy === null) return DIE();
-  return rs.isInRange(dummy.pos) ? SMASH(dummy.id) : MOVE_NEXT_TO(dummy.pos);
+  return game.isInRange(dummy.pos) ? SMASH(dummy.id) : MOVE_NEXT_TO(dummy.pos);
 }`;
 
-export const defaultRock = `export const tick = (rs) => {
-  const rock = rs.findNearest(Tile.ROCK, 3);
+export const defaultRock = `export const tick = ({game, act}) => {
+  const rock = game.findNearest(Tile.ROCK, 3);
   if (rock === null) return DIE();
-  return rs.isInRange(rock) ? MINE(rock) : MOVE_NEXT_TO(rock);
+  return game.isInRange(rock) ? MINE(rock) : MOVE_NEXT_TO(rock);
 }`;
 
 const initialState: IncantationsState = {

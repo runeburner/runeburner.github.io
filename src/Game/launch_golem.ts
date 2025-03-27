@@ -1,23 +1,15 @@
 import { game } from "./game";
-import workerHeader from "./workerScriptHeader.js?raw";
 import { Action, ActionType } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { rs } from "./RS";
 import { Tile } from "../types/tile";
 
-// Declare a type to encompass a proxy call to any of the function
-type ProxyRS = {
-  [K in keyof typeof rs]: (
-    e: Entity,
-    ...args: unknown[]
-  ) => ReturnType<(typeof rs)[K]>;
-};
-
 export type EntityTicker = {
   id: number;
   tick: (rb: unknown) => Action;
   objectURL: string;
-  proxy: ProxyRS;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  proxy: any;
   lastAction: Action;
 };
 
@@ -32,10 +24,8 @@ export const launchGolem = async (
   entity: Entity,
   incantation: string
 ): Promise<boolean> => {
-  const idScript = `const ENTITY_ID = ${entity.id};\n`;
-
   const o = URL.createObjectURL(
-    new Blob([idScript + workerHeader + incantation], {
+    new Blob([incantation], {
       type: "application/javascript",
     })
   );
@@ -47,13 +37,24 @@ export const launchGolem = async (
       return false;
     }
 
-    const typed = rs as ProxyRS;
-    const proxy = new Proxy(typed, {
-      get(_, prop: keyof typeof typed) {
-        return (...args: unknown[]): ReturnType<(typeof rs)[typeof prop]> =>
-          typed[prop](entity, ...args);
-      },
-    });
+    const proxy = {
+      game: new Proxy(rs.game, {
+        get(_, prop: keyof typeof rs.game) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (...args: unknown[]): any =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (rs.game[prop] as any)(entity, ...args);
+        },
+      }),
+      act: new Proxy(rs.act, {
+        get(_, prop: keyof typeof rs.act) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (...args: unknown[]): any =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (rs.act[prop] as any)(entity, ...args);
+        },
+      }),
+    };
     game.workers.push({
       id: entity.id,
       tick: m.tick,
