@@ -5,6 +5,7 @@ type RS = {
     findNearest(tile: Tile, radius: number): Vec | null;
     findAll(tile: Tile, radius: number): Vec[];
     findClosestEntity(entityType: EntityType): Entity | null;
+    at(v: Vec): Int32Array;
   };
   act: {
     MOVE_NEXT_TO: (v: Vec) => unknown;
@@ -16,7 +17,7 @@ type RS = {
   me: {
     runeCrystals: () => number;
     runeCrystalCapacity: () => number;
-    isInRange(e: Entity, v: Vec): boolean;
+    isInRange(v: Vec): boolean;
   };
 };
 
