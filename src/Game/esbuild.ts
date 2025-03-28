@@ -8,7 +8,7 @@ export const esbuildIsInit: Promise<void> = new Promise(
 export const esbuildInit = async (): Promise<void> => {
   return esbuild
     .initialize({
-      wasmURL: "./node_modules/esbuild-wasm/esbuild.wasm",
+      wasmURL: "/esbuild.wasm",
     })
     .then(onDone);
 };
