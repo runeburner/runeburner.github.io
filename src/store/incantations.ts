@@ -7,7 +7,7 @@ type IncantationsState = Record<string, string>;
 export const defaultIncantation = `let mining = true;
 let crystal = null;
 
-export const tick = ({game, me, act}: RS) => {
+export const tick: Ticker = ({game, me, act}: RS) => {
   mining = mining ?
     me.runeCrystals() < me.runeCrystalCapacity() :
     me.runeCrystals() === 0;
@@ -26,13 +26,13 @@ export const tick = ({game, me, act}: RS) => {
   return me.isInRange(heart.pos) ? act.ATTUNE() : act.MOVE_NEXT_TO(heart.pos);
 }`;
 
-export const defaultFight = `export const tick = ({ game, me, act }: RS) => {
+export const defaultFight = `export const tick: Ticker = ({ game, me, act }: RS) => {
   const dummy = game.findClosestEntity(EntityType.DUMMY);
   if (dummy === null) return act.DIE();
   return me.isInRange(dummy.pos) ? act.SMASH(dummy.id) : act.MOVE_NEXT_TO(dummy.pos);
 }`;
 
-export const defaultRock = `export const tick = ({ game, me, act }: RS) => {
+export const defaultRock = `export const tick: Ticker = ({ game, me, act }: RS) => {
   const rock = game.findNearest(Tile.ROCK, 3);
   if (rock === null) return act.DIE();
   return me.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
