@@ -1,5 +1,7 @@
 type Vec = [number, number];
 
+type Action = unknown;
+
 type RS = {
   game: {
     findNearest(tile: Tile, radius: number): Vec | null;
@@ -8,18 +10,20 @@ type RS = {
     at(v: Vec): Int32Array;
   };
   act: {
-    MOVE_NEXT_TO: (v: Vec) => unknown;
-    MINE: (v: Vec) => unknown;
-    ATTUNE: () => unknown;
-    DIE: () => unknown;
-    SMASH: (id: number) => unknown;
+    MOVE_NEXT_TO(v: Vec): Action;
+    MINE(v: Vec): Action;
+    ATTUNE(): Action;
+    DIE(): Action;
+    SMASH(id: number): Action;
   };
   me: {
-    runeCrystals: () => number;
-    runeCrystalCapacity: () => number;
+    runeCrystals(): number;
+    runeCrystalCapacity(): number;
     isInRange(v: Vec): boolean;
   };
 };
+
+type Ticker = (rs: RS) => Action;
 
 declare const Tile: Readonly<{
   readonly EMPTY: 0;
