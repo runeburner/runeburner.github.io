@@ -3,6 +3,7 @@ import { Action, ActionType } from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { rs } from "./RS";
 import { Tile } from "../types/tile";
+import { esbuildIsInit, transpile } from "./esbuild";
 
 export type EntityTicker = {
   id: number;
@@ -24,8 +25,12 @@ export const launchGolem = async (
   entity: Entity,
   incantation: string
 ): Promise<boolean> => {
+  await esbuildIsInit;
+
+  const ret = await transpile(incantation);
+
   const o = URL.createObjectURL(
-    new Blob([incantation], {
+    new Blob([ret.code], {
       type: "application/javascript",
     })
   );

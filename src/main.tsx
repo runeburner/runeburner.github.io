@@ -6,6 +6,7 @@ import "./Game/worker";
 import "./i18n/i18n.ts";
 import "./styles";
 import { I18NPicker } from "./i18n/I18NPicker.tsx";
+import { esbuildInit } from "./Game/esbuild.ts";
 
 ((): void => {
   const rootDiv = document.getElementById("root");
@@ -20,3 +21,5 @@ import { I18NPicker } from "./i18n/I18NPicker.tsx";
     </Provider>
   );
 })();
+
+esbuildInit();
