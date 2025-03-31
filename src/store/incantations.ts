@@ -2,6 +2,8 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "./hooks";
 import { RootState } from "./store";
 
+const INCANTATION_KEY = "RUNEBURNER_INCANTATIONS";
+
 type IncantationsState = Record<string, string>;
 
 export const defaultIncantation = `let mining = true;
@@ -38,11 +40,15 @@ export const defaultRock = `export const tick: Ticker = ({ game, me, act }: RS) 
   return me.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
 }`;
 
-const initialState: IncantationsState = {
-  basic: defaultIncantation,
-  fight: defaultFight,
-  rock: defaultRock,
-};
+const initialState: IncantationsState = ((): IncantationsState => {
+  const localState = localStorage.getItem(INCANTATION_KEY);
+  if (localState !== null) return JSON.parse(localState);
+  return {
+    basic: defaultIncantation,
+    fight: defaultFight,
+    rock: defaultRock,
+  };
+})();
 
 export type Incantation = {
   name: string;
@@ -55,6 +61,7 @@ const incantationsSlice = createSlice({
   reducers: {
     saveIncantation: (state, action: PayloadAction<Incantation>) => {
       state[action.payload.name] = action.payload.content;
+      localStorage.setItem(INCANTATION_KEY, JSON.stringify(state));
     },
     renameIncantation: (state, action: PayloadAction<[string, string]>) => {
       const [old, next] = action.payload;
