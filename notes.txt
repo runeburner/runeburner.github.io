@@ -1,0 +1,20 @@
+healing plants
+escort mission
+
+aspects:
+	speed
+	carry
+	health
+	armor
+	shield
+	healer
+	small attack
+	big attack
+	mana
+	status effect resist
+	weather effects
+	flower
+
+aspect type limit per golem
+
+skill tree
