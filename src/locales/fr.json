@@ -7,6 +7,9 @@
     "create_placeholder": "Nom de la nouvelle incantation",
     "create_incantation_button": "Crée l'Incantation"
   },
+  "editor": {
+    "choose_incantation": "Sélectionnez une incantation à modifier:"
+  },
   "create_golem_modal": {
     "runes": "Runes",
     "rune_types": "Types de runes",
