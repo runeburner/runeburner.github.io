@@ -47,6 +47,7 @@ export const Canvas = (
   };
 
   const onWheel = (e: React.WheelEvent): void => {
+    console.log(e.deltaX, e.deltaY, e.deltaZ, e.deltaMode);
     const ctx = canvas.current?.getContext("2d");
     if (!ctx) return;
     reframe(ctx);
