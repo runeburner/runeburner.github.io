@@ -12,7 +12,7 @@ const Details = ({ pos }: TileProps): React.ReactElement => {
   const { t } = useTranslation();
   const data = game.tileAt(pos);
   return (
-    <>
+    <div style={{ color: "var(--container-primary)" }}>
       <p>
         ({pos[0]}, {pos[1]})
       </p>
@@ -23,7 +23,7 @@ const Details = ({ pos }: TileProps): React.ReactElement => {
       <p>
         {t("inspection.hardness")}: {data[Offset.DATA_1]}
       </p>
-    </>
+    </div>
   );
 };
 
