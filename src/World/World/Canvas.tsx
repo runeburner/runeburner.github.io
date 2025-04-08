@@ -49,11 +49,11 @@ export const Canvas = (
   const onWheel = (e: React.WheelEvent): void => {
     if (e.deltaY === 0) return;
     const ctx = canvas.current?.getContext("2d");
-    if (!ctx) return;
+    if (!ctx || !canvas.current) return;
     reframe(ctx);
     const pos: Vec = [
-      (e.clientX - ctx.canvas.offsetLeft) / camera.c.scale,
-      (e.clientY - ctx.canvas.offsetTop) / camera.c.scale,
+      e.clientX - canvas.current.offsetLeft,
+      e.clientY - canvas.current.offsetTop,
     ];
     camera.zoom(e.deltaY < 0, pos);
     camera.fitToContext(ctx);
