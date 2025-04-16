@@ -1,24 +1,15 @@
-import { useAppSelector } from "../../store/hooks";
 import { Editor } from "../Editor/Editor";
+import { FileExplorer } from "../FileExplorer/FileExplorer";
 import { Header } from "../Header/Header";
-import { Picker } from "../Picker/Picker";
 
 export const Page = (): React.ReactElement => {
-  const hasIncantationOpen = useAppSelector(
-    (s) => s.monacoModels.selected !== -1
-  );
-
   return (
-    <div className={"h-full flex flex-col"}>
-      <Header />
-
-      {hasIncantationOpen ? (
-        <div style={{ height: "100%", width: "100%" }}>
-          <Editor />
-        </div>
-      ) : (
-        <Picker />
-      )}
+    <div className="h-full flex">
+      <FileExplorer />
+      <div className={"w-full flex flex-col"}>
+        <Header />
+        <Editor />
+      </div>
     </div>
   );
 };

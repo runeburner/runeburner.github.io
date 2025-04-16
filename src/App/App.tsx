@@ -1,5 +1,4 @@
 import { Page as EditorPage } from "../Editor/Page/Page";
-import { Page as IncantationsPage } from "../Incantations/Page/Page";
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Page as WorldPage } from "../World/Page/Page";
 import { useEffect } from "react";
@@ -29,9 +28,6 @@ export const App = (): React.ReactElement => {
         <div className={"w-full h-full"}>
           <PageWrapper page={Page.EDITOR}>
             <EditorPage />
-          </PageWrapper>
-          <PageWrapper page={Page.INCANTATIONS}>
-            <IncantationsPage />
           </PageWrapper>
           <PageWrapper page={Page.WORLD}>
             <WorldPage />

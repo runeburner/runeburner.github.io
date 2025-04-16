@@ -1,0 +1,13 @@
+.item:hover {
+  background-color: var(--container-primary-light);
+  cursor: pointer;
+}
+
+.settings {
+  opacity: 0;
+  width: 32px;
+}
+
+.item:hover .settings {
+  opacity: 1;
+}
