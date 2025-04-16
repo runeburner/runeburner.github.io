@@ -47,6 +47,25 @@ const monacoModelsSlice = createSlice({
     setCurrentModelClean: (state) => {
       state.incantations[state.selected].isDirty = false;
     },
+    closeModalByName: (state, action: PayloadAction<string>) => {
+      const ind = state.incantations.findIndex(
+        (i) => i.name === action.payload
+      );
+      if (ind === -1) return;
+      state.incantations.splice(ind, 1);
+      if (state.selected >= state.incantations.length) {
+        state.selected = state.incantations.length - 1;
+      }
+    },
+    renameModel: (state, action: PayloadAction<[string, string]>) => {
+      const [old, next] = action.payload;
+      for (let i = 0; i < state.incantations.length; i++) {
+        if (state.incantations[i].name === old) {
+          state.incantations[i].name = next;
+          break;
+        }
+      }
+    },
   },
 });
 
@@ -56,5 +75,7 @@ export const {
   selectModel,
   setCurrentModelDirty,
   setCurrentModelClean,
+  renameModel,
+  closeModalByName,
 } = monacoModelsSlice.actions;
 export const monacoModelsReducer = monacoModelsSlice.reducer;

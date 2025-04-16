@@ -40,6 +40,9 @@ export const defaultRock = `export const tick: Ticker = ({ game, me, act }: RS) 
   return me.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
 }`;
 
+export const emptyFile = `export const tick: Ticker = (rs: RS) => {
+};`;
+
 const initialState: IncantationsState = ((): IncantationsState => {
   const localState = localStorage.getItem(INCANTATION_KEY);
   if (localState !== null) return JSON.parse(localState);
@@ -67,11 +70,17 @@ const incantationsSlice = createSlice({
       const [old, next] = action.payload;
       state[next] = state[old];
       delete state[old];
+      localStorage.setItem(INCANTATION_KEY, JSON.stringify(state));
+    },
+    removeIncantation: (state, action: PayloadAction<string>) => {
+      delete state[action.payload];
+      localStorage.setItem(INCANTATION_KEY, JSON.stringify(state));
     },
   },
 });
 
-export const { saveIncantation, renameIncantation } = incantationsSlice.actions;
+export const { saveIncantation, renameIncantation, removeIncantation } =
+  incantationsSlice.actions;
 export const incantationReducer = incantationsSlice.reducer;
 
 export const selectIncantationNames = createSelector(

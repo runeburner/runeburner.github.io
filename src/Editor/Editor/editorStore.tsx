@@ -9,6 +9,7 @@ type ITextModelStore = {
   add(name: string, model: monaco.editor.ITextModel): void;
   remove(name: string): void;
   get(name: string): monaco.editor.ITextModel | undefined;
+  rename(oldName: string, newName: string): void;
 };
 
 export const iTextModelStore = ((): ITextModelStore => {
@@ -23,6 +24,10 @@ export const iTextModelStore = ((): ITextModelStore => {
     get(name: string): monaco.editor.ITextModel | undefined {
       return models[name];
     },
+    rename(oldName: string, newName: string): void {
+      models[newName] = models[oldName];
+      delete models[oldName];
+    },
   };
 })();
 
@@ -36,6 +41,9 @@ export const useSubscribeModelChange = (
 
   useEffect(() => {
     if (!editor) return;
+    if (selectedModelName === "") {
+      editor.setModel(null);
+    }
     if (loadedModelName.current === selectedModelName) return;
     const storedModel = iTextModelStore.get(selectedModelName);
     if (storedModel) {

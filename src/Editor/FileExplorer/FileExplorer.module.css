@@ -1,0 +1,4 @@
+.item:hover {
+  background-color: var(--container-primary-light);
+  cursor: pointer;
+}

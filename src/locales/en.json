@@ -8,7 +8,10 @@
     "create_incantation_button": "Create Incantation"
   },
   "editor": {
-    "choose_incantation": "Select an Incantation to edit:"
+    "save": "Save",
+    "delete": "Delete",
+    "defaultFileName": "untitled",
+    "create": "Create"
   },
   "create_golem_modal": {
     "runes": "Runes",

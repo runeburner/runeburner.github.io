@@ -12,7 +12,7 @@ export const createNewEditor = (
   ref: React.MutableRefObject<HTMLDivElement | null>
 ): monaco.editor.IStandaloneCodeEditor => {
   const editor = monaco.editor.create(ref.current!, {
-    model: monaco.editor.createModel("", "typescript"),
+    model: null,
     language: "typescript",
     theme: "vs-dark",
     automaticLayout: true,

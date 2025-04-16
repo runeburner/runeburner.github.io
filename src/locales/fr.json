@@ -8,7 +8,10 @@
     "create_incantation_button": "Crée l'Incantation"
   },
   "editor": {
-    "choose_incantation": "Sélectionnez une incantation à modifier:"
+    "save": "Sauver",
+    "delete": "Effacer",
+    "defaultFileName": "sanstitre",
+    "create": "Créer"
   },
   "create_golem_modal": {
     "runes": "Runes",
