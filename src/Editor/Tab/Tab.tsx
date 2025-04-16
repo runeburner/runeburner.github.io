@@ -16,7 +16,7 @@ export const Tab = ({ i }: TabProps): React.ReactElement => {
 
   const onClose = (e: React.MouseEvent<HTMLImageElement>): void => {
     const state = store.getState().monacoModels;
-    iTextModelStore.remove(state.incantations[state.selected].name);
+    iTextModelStore.remove(state.incantations[i].name);
     dispatch(closeModel(i));
     e.stopPropagation();
   };

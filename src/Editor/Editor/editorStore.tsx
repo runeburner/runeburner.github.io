@@ -10,23 +10,29 @@ type ITextModelStore = {
   remove(name: string): void;
   get(name: string): monaco.editor.ITextModel | undefined;
   rename(oldName: string, newName: string): void;
+  size(): number;
 };
 
 export const iTextModelStore = ((): ITextModelStore => {
-  const models: Record<string, monaco.editor.ITextModel> = {};
+  const models: Map<string, monaco.editor.ITextModel> = new Map();
   return {
+    size(): number {
+      return models.size;
+    },
     add(name: string, model: monaco.editor.ITextModel): void {
-      models[name] = model;
+      models.set(name, model);
     },
     remove(name: string): void {
-      delete models[name];
+      models.delete(name);
     },
     get(name: string): monaco.editor.ITextModel | undefined {
-      return models[name];
+      return models.get(name);
     },
     rename(oldName: string, newName: string): void {
-      models[newName] = models[oldName];
-      delete models[oldName];
+      const oldModel = models.get(oldName);
+      if (!oldModel) return;
+      models.set(newName, oldModel);
+      models.delete(oldName);
     },
   };
 })();
@@ -41,6 +47,7 @@ export const useSubscribeModelChange = (
 
   useEffect(() => {
     if (!editor) return;
+    const forceLayout = iTextModelStore.size() === 0;
     if (selectedModelName === "") {
       editor.setModel(null);
     }
@@ -53,6 +60,13 @@ export const useSubscribeModelChange = (
       const newModel = monaco.editor.createModel(content, "typescript");
       iTextModelStore.add(selectedModelName, newModel);
       editor.setModel(newModel);
+    }
+
+    if (forceLayout) {
+      editor.layout({
+        width: 0,
+        height: 0,
+      });
     }
   }, [editor, selectedModelName]);
 };
