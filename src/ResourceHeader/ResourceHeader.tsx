@@ -1,9 +1,12 @@
+import { Game } from "../Game/game";
 import { MagicIcon } from "../icons";
-import { useAttunement } from "../store/resources";
+import { useGameSelector } from "../store/gameRedux";
 import classes from "./ResourceHeader.module.css";
 
+const selectAttunement = (g: Game): number => g.resources.attunement;
+
 export const ResourceHeader = (): React.ReactElement => {
-  const attunement = useAttunement();
+  const attunement = 0; //useGameSelector(selectAttunement);
   return (
     <div className={"py-2 flex-center w-full " + classes.container}>
       <span>{attunement}</span>

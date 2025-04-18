@@ -14,8 +14,8 @@ import { isArgs, isVec } from "../validation";
 
 const maker = (a: MINE): ActionProgress | true | null => {
   if (!isArgs([a.v], isVec)) return null;
-  const old = game.actionM.get(a.id);
-  const golem = game.entityM.get(a.id);
+  const old = game.actions.get(a.id);
+  const golem = game.entities.get(a.id);
 
   if (golem?.__type !== EntityType.GOLEM) return null;
 

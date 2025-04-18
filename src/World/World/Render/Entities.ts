@@ -40,7 +40,7 @@ const renderRuneArcs = (
 };
 
 export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
-  for (const e of game.entityM.values()) {
+  for (const e of game.entities.values()) {
     if (!camera.isInView(e.pos)) continue;
     switch (e.__type) {
       case EntityType.GOLEM: {
@@ -48,7 +48,7 @@ export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
         renderRuneArcs(ctx, e);
         renderMana(ctx, e);
 
-        const action = game.actionM.get(e.id);
+        const action = game.actions.get(e.id);
         if (action) {
           renderAction(ctx, action);
         }

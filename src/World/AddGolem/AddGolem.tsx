@@ -10,7 +10,7 @@ export const AddGolem = (): React.ReactElement => {
       <button className="cursor-pointer btn icon-button" onClick={onClick}>
         <PlusIcon />
       </button>
-      <AddGolemModal open={open} onClose={() => setOpen(false)} />
+      {open && <AddGolemModal open={open} onClose={() => setOpen(false)} />}
     </>
   );
 };
