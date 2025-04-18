@@ -13,7 +13,11 @@ import { defaultEntities, defaultMap } from "./defaultValues";
 import { ID } from "./id";
 import { EntityTicker, launchGolem } from "./launch_golem";
 
-type Game = {
+export type UI = {
+  inspectedTile: Vec;
+};
+
+export type Game = {
   workers: EntityTicker[];
   resources: Resources;
   powers: {
@@ -22,9 +26,10 @@ type Game = {
     capacityPerRune: number;
     workPerRune: number;
   };
-  entityM: Map<number, Entity>;
-  actionM: Map<number, ActionProgress>;
-  map: Plane;
+  entities: Map<number, Entity>;
+  actions: Map<number, ActionProgress>;
+  plane: Plane;
+  ui: UI;
   tileAt(v: Vec): Int32Array;
   setTileAt(v: Vec, t: Int32Array): void;
   entityAt(v: Vec): Entity | undefined;
@@ -56,55 +61,59 @@ export const game = ((): Game => {
       capacityPerRune: 1,
       workPerRune: 1,
     },
-    entityM: new Map(),
-    actionM: new Map(),
-    map: {
+    entities: new Map(),
+    actions: new Map(),
+    plane: {
       bounds: new Int32Array(),
       data: new Int32Array(),
     },
+    ui: {
+      inspectedTile: [0, 0],
+    },
     tileAt(v: Vec): Int32Array {
-      const start = (v[1] * game.map.bounds[2] + v[0]) * ValuesPerTile;
-      return game.map.data.slice(start, start + ValuesPerTile);
+      const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
+      return game.plane.data.slice(start, start + ValuesPerTile);
     },
     setTileAt(v: Vec, t: Int32Array): void {
-      const start = (v[1] * game.map.bounds[2] + v[0]) * ValuesPerTile;
-      game.map.data.set(t, start);
+      const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
+      game.plane.data.set(t, start);
     },
     updateFoW(before: Vec | null, after: Vec | null, radius: number): void {
       if (before !== null) {
-        const bounds = BoundedAABB(game.map.bounds, before, radius);
+        const bounds = BoundedAABB(game.plane.bounds, before, radius);
 
         for (let i = bounds[0]; i <= bounds[2]; i++) {
           for (let j = bounds[1]; j <= bounds[3]; j++) {
             const x =
-              (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR;
-            game.map.data[x]--;
+              (j * game.plane.bounds[2] + i) * ValuesPerTile +
+              Offset.FOG_OF_WAR;
+            game.plane.data[x]--;
           }
         }
       }
 
       if (after !== null) {
-        const bounds = BoundedAABB(game.map.bounds, after, radius);
+        const bounds = BoundedAABB(game.plane.bounds, after, radius);
 
         for (let i = bounds[0]; i <= bounds[2]; i++) {
           for (let j = bounds[1]; j <= bounds[3]; j++) {
-            game.map.data[
-              (j * game.map.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
+            game.plane.data[
+              (j * game.plane.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
             ]++;
           }
         }
       }
     },
     entityAt(v: Vec): Entity | undefined {
-      return game.entityM
+      return game.entities
         .values()
         .find((e) => e.pos[0] === v[0] && e.pos[1] === v[1]);
     },
     findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null {
       const x = Math.max(0, pos[0] - Math.floor(radius));
-      const X = Math.min(game.map.bounds[2], pos[0] + Math.ceil(radius));
+      const X = Math.min(game.plane.bounds[2], pos[0] + Math.ceil(radius));
       const y = Math.max(0, pos[1] - Math.floor(radius));
-      const Y = Math.min(game.map.bounds[3], pos[1] + Math.ceil(radius));
+      const Y = Math.min(game.plane.bounds[3], pos[1] + Math.ceil(radius));
       let closestTile: Vec | null = null;
       let closestDist = 1e99;
       for (let j = y; j < Y; j++) {
@@ -125,9 +134,9 @@ export const game = ((): Game => {
     },
     findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[] {
       const x = Math.max(0, pos[0] - Math.floor(radius));
-      const X = Math.min(game.map.bounds[2], pos[0] + Math.ceil(radius));
+      const X = Math.min(game.plane.bounds[2], pos[0] + Math.ceil(radius));
       const y = Math.max(0, pos[1] - Math.floor(radius));
-      const Y = Math.min(game.map.bounds[3], pos[1] + Math.ceil(radius));
+      const Y = Math.min(game.plane.bounds[3], pos[1] + Math.ceil(radius));
 
       const tiles: Vec[] = [];
       for (let j = y; j < Y; j++) {
@@ -143,7 +152,7 @@ export const game = ((): Game => {
       return tiles;
     },
     findClosestEntity(pos: Vec, entityType: EntityType): Entity | null {
-      const entities = game.entityM
+      const entities = game.entities
         .values()
         .filter((e) => e.__type === entityType);
       const v = entities.reduce(
@@ -159,7 +168,7 @@ export const game = ((): Game => {
       return v[1];
     },
     golemSpawnCoordinates(): Vec | null {
-      const heart = game.entityM
+      const heart = game.entities
         .values()
         .find((e) => e.__type === EntityType.HEART);
       if (!heart) return null;
@@ -175,7 +184,7 @@ export const game = ((): Game => {
     },
 
     determineInitialCameraPosition(cam: Camera): Camera {
-      const core = game.entityM
+      const core = game.entities
         .values()
         .find((e) => e.__type === EntityType.HEART);
       return {
@@ -208,7 +217,7 @@ export const game = ((): Game => {
       launchGolem(golem, incantation).then((success) => {
         game.updateFoW(null, golem.pos, golem.visionRange);
         if (!success) return;
-        game.entityM.set(id, golem);
+        game.entities.set(id, golem);
       });
     },
     loadMap(entities: Entity[], map: Plane): void {
@@ -221,14 +230,14 @@ export const game = ((): Game => {
         capacityPerRune: 1,
         workPerRune: 1,
       };
-      game.entityM.clear();
-      game.entityM.clear();
+      game.entities.clear();
+      game.entities.clear();
       for (const entity of entities) {
-        game.entityM.set(entity.id, entity);
+        game.entities.set(entity.id, entity);
       }
 
-      game.actionM.clear();
-      game.map = map;
+      game.actions.clear();
+      game.plane = map;
       for (const e of entities) {
         game.updateFoW(null, e.pos, e.visionRange);
       }
@@ -262,16 +271,16 @@ export const game = ((): Game => {
       return die;
     },
     removeEntity(id: number): void {
-      const entity = game.entityM.get(id);
+      const entity = game.entities.get(id);
       if (!entity) return;
       game.updateFoW(entity.pos, null, entity.visionRange);
-      game.actionM.delete(id);
-      game.entityM.delete(id);
+      game.actions.delete(id);
+      game.entities.delete(id);
 
       // delete actions targetting directly this entity.
-      for (const [aid, action] of game.actionM.entries()) {
+      for (const [aid, action] of game.actions.entries()) {
         if (action && "target" in action && action.target === id) {
-          game.actionM.delete(aid);
+          game.actions.delete(aid);
         }
       }
 

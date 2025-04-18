@@ -13,7 +13,7 @@ import { isArgs, isVec } from "../validation";
 
 const maker = (a: MOVE_NEXT_TO): ActionProgress | true | null => {
   if (!isArgs([a.v], isVec)) return null;
-  const golem = game.entityM.get(a.id);
+  const golem = game.entities.get(a.id);
   if (golem?.__type !== EntityType.GOLEM) return null;
   // If we're already there, do nothing.
   if (dist(golem.pos, a.v) <= 1) return null;
@@ -23,7 +23,7 @@ const maker = (a: MOVE_NEXT_TO): ActionProgress | true | null => {
     0
   );
   // Calculate new path
-  const old = game.actionM.get(a.id);
+  const old = game.actions.get(a.id);
   const wasMoving = old && old.__type === ActionType.MOVE_NEXT_TO;
 
   const path = ((): Vec[] | null => {

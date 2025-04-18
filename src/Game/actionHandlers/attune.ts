@@ -10,11 +10,11 @@ import { dist } from "../../types/vec";
 import { game } from "../game";
 
 const maker = (a: ATTUNE): ActionProgress | true | null => {
-  const old = game.actionM.get(a.id);
-  const golem = game.entityM.get(a.id);
+  const old = game.actions.get(a.id);
+  const golem = game.entities.get(a.id);
   if (golem?.__type !== EntityType.GOLEM) return null;
   const heart = ((): Entity | undefined => {
-    for (const e of game.entityM.values()) {
+    for (const e of game.entities.values()) {
       if (e.__type === EntityType.HEART) return e;
     }
     return undefined;

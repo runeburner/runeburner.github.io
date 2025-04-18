@@ -11,11 +11,11 @@ import { isArgs, isNumber } from "../validation";
 
 const maker = (a: SMASH): ActionProgress | true | null => {
   if (!isArgs([a.target], isNumber)) return null;
-  const old = game.actionM.get(a.id);
+  const old = game.actions.get(a.id);
   if (old && old.__type === ActionType.SMASH) return true;
-  const golem = game.entityM.get(a.id);
+  const golem = game.entities.get(a.id);
   if (golem?.__type !== EntityType.GOLEM) return true;
-  const target = game.entityM.get(a.target);
+  const target = game.entities.get(a.target);
   if (!target) return null;
 
   if (dist(golem.pos, target.pos) > 1) return null;
@@ -32,7 +32,7 @@ const processor = (
   _e: Entity,
   action: SMASHProgress
 ): boolean => {
-  const target = game.entityM.get(action.target);
+  const target = game.entities.get(action.target);
   if (!target) return true;
   action.progress[0] += rate * game.powers.attuneStrength;
 

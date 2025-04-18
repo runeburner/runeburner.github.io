@@ -70,12 +70,14 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
       if (
         neighbor[0] < 0 ||
         neighbor[1] < 0 ||
-        neighbor[0] > game.map.bounds[2] ||
-        neighbor[1] > game.map.bounds[3]
+        neighbor[0] > game.plane.bounds[2] ||
+        neighbor[1] > game.plane.bounds[3]
       ) {
         continue;
       }
-      const isOccupied = game.entityM.values().some((e) => eq(e.pos, neighbor));
+      const isOccupied = game.entities
+        .values()
+        .some((e) => eq(e.pos, neighbor));
       const singleNeighbor = hashVec(neighbor);
       const tile = game.tileAt(neighbor);
       const moveWeight =

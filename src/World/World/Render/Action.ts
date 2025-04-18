@@ -73,8 +73,8 @@ const renderSmash = (
     ctx.beginPath();
     ctx.moveTo(action.pos[0] + 0.5, action.pos[1] + 0.5);
     ctx.lineTo(
-      game.entityM.get(action.target)!.pos[0] + 0.5,
-      game.entityM.get(action.target)!.pos[1] + 0.5
+      game.entities.get(action.target)!.pos[0] + 0.5,
+      game.entities.get(action.target)!.pos[1] + 0.5
     );
     ctx.stroke();
     renderProgress(ctx, action.pos, action.progress, "#88ffff44");

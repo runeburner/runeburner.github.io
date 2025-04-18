@@ -15,7 +15,7 @@ type SidebarState = {
 };
 
 const initialState: SidebarState = {
-  selected: Page.EDITOR,
+  selected: Page.WORLD,
 };
 
 const sidebarSlice = createSlice({

@@ -1,3 +1,4 @@
+import { runGameSelectors } from "../store/gameRedux";
 import { ActionHandler, ActionProgress, ActionType } from "../types/actions";
 import { Entity } from "../types/entity";
 import { attuneHandler } from "./actionHandlers/attune";
@@ -31,7 +32,7 @@ const handler = {
   [ActionType.SMASH]: smashHandler,
 } as const satisfies Handler;
 
-const fps = 30;
+const fps = 0.2;
 const rate = 1 / fps;
 
 const gameTick = (): void => {
@@ -51,20 +52,22 @@ const gameTick = (): void => {
     const p = f(a);
 
     if (p === null) {
-      game.actionM.delete(a.id);
+      game.actions.delete(a.id);
     } else if (p !== true) {
-      game.actionM.set(a.id, p);
+      game.actions.set(a.id, p);
     }
   }
 
   // process actions
-  for (const e of game.entityM.values()) {
-    const p = game.actionM.get(e.id);
+  for (const e of game.entities.values()) {
+    const p = game.actions.get(e.id);
     if (!p) continue;
     const f = handler[p.__type][1] as ProcessorFn<ActionType>;
     const del = f(rate, e, p);
-    if (del) game.actionM.delete(e.id);
+    if (del) game.actions.delete(e.id);
   }
+
+  runGameSelectors();
 };
 
 setInterval(gameTick, 1000 / fps);

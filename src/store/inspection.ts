@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useAppSelector } from "./hooks";
 import { eq, Vec } from "../types/vec";
+import { RootState } from "./store";
 
 type InspectionState = {
   pos: Vec;
@@ -24,5 +24,4 @@ const slice = createSlice({
 export const { setInspectionTile } = slice.actions;
 export const inspectionReducer = slice.reducer;
 
-export const useInspectedTile = (): Vec =>
-  useAppSelector((s) => s.inspection.pos);
+export const useInspectedTile = (s: RootState): Vec => s.inspection.pos;
