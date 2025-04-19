@@ -5,8 +5,6 @@ export const runGameSelectors = (): void => {
   subscriptions.forEach((f) => f(game));
 };
 
-const subscriptions: ((g: Game) => void)[] = [];
-
 const createUpdateFunction = <T>(
   f: (g: Game) => T,
   eq: ((a: T, b: T) => boolean) | undefined,
@@ -23,6 +21,8 @@ const createUpdateFunction = <T>(
     });
   };
 };
+
+const subscriptions: ((g: Game) => void)[] = [];
 
 const subscribe = (check: (g: Game) => void): void => {
   subscriptions.push(check);

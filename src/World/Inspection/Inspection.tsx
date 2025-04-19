@@ -20,12 +20,9 @@ const selectTile = (g: Game): Int32Array => g.tileAt(g.ui.inspectedTile);
 
 const Details = (): React.ReactElement => {
   const { t } = useTranslation();
-  // const tileData = useGameSelector(selectTile, tileEq);
-  const tileData = [0, 0, 0, 0];
-
   const pos = useGameSelector(selectInspectedTile, eq);
+  const tileData = useGameSelector(selectTile, tileEq);
 
-  console.log(pos, tileData);
   return (
     <div style={{ color: "var(--container-primary)" }}>
       <p>
