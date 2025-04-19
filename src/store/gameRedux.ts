@@ -1,25 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { game, Game } from "../Game/game";
+
+const trieq = <T>(a: T, b: T): boolean => a === b;
 
 export const runGameSelectors = (): void => {
   subscriptions.forEach((f) => f(game));
-};
-
-const createUpdateFunction = <T>(
-  f: (g: Game) => T,
-  eq: ((a: T, b: T) => boolean) | undefined,
-  setValue: Dispatch<SetStateAction<T>>
-): ((g: Game) => void) => {
-  if (eq === undefined) {
-    return (g: Game): void => setValue(f(g));
-  }
-
-  return (g: Game): void => {
-    setValue((previous) => {
-      const next = f(g);
-      return eq(previous, next) ? previous : next;
-    });
-  };
 };
 
 const subscriptions: ((g: Game) => void)[] = [];
@@ -38,11 +23,18 @@ const unsubscribe = (check: (g: Game) => void) => {
 
 export const useGameSelector = <T>(
   f: (g: Game) => T,
-  eq?: (a: T, b: T) => boolean
+  eq: (a: T, b: T) => boolean = trieq
 ): T => {
-  const [value, setValue] = useState(f(game));
+  const initial = f(game);
+  const [value, setValue] = useState(initial);
+  const ref = useRef(initial);
   useEffect(() => {
-    const check = createUpdateFunction(f, eq, setValue);
+    const check = (g: Game): void => {
+      const next = f(g);
+      if (eq(ref.current, next)) return;
+      ref.current = next;
+      setValue(next);
+    };
     subscribe(check);
     return unsubscribe(check);
   }, [f, eq]);
