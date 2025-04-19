@@ -32,7 +32,7 @@ const handler = {
   [ActionType.SMASH]: smashHandler,
 } as const satisfies Handler;
 
-const fps = 0.2;
+const fps = 30;
 const rate = 1 / fps;
 
 const gameTick = (): void => {
