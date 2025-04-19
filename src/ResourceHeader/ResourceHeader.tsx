@@ -6,7 +6,7 @@ import classes from "./ResourceHeader.module.css";
 const selectAttunement = (g: Game): number => g.resources.attunement;
 
 export const ResourceHeader = (): React.ReactElement => {
-  const attunement = 0; //useGameSelector(selectAttunement);
+  const attunement = useGameSelector(selectAttunement);
   return (
     <div className={"py-2 flex-center w-full " + classes.container}>
       <span>{attunement}</span>
