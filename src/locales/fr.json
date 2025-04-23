@@ -34,6 +34,11 @@
     "1": "Cristal Runique",
     "2": "Roche"
   },
+  "entity": {
+    "HEART": "Coeur",
+    "GOLEM": "Golem",
+    "DUMMY": "Mannequin"
+  },
   "runes": {
     "WIND": {
       "name": "Vent",

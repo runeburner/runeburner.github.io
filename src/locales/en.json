@@ -34,6 +34,11 @@
     "1": "Rune Crystal",
     "2": "Rock"
   },
+  "entity": {
+    "HEART": "Heart",
+    "GOLEM": "Golem",
+    "DUMMY": "Dummy"
+  },
   "runes": {
     "WIND": {
       "name": "Wind",

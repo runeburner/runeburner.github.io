@@ -1,6 +1,7 @@
 .container {
   bottom: 0;
   right: 0;
+  color: var(--container-primary);
   background-color: var(--primary-dark);
   border-radius: 10px;
   box-shadow: 0 0 3px black;
