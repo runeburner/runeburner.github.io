@@ -3,6 +3,11 @@ import { game, Game } from "../Game/game";
 
 const trieq = <T>(a: T, b: T): boolean => a === b;
 
+export const arrayShallowEquals = <T>(a: T[], b: T[]): boolean => {
+  if (a.length != b.length) return false;
+  return a.every((v, i) => b[i] === v);
+};
+
 export const runGameSelectors = (): void => {
   for (const sub of subscriptions) sub(game);
 };
