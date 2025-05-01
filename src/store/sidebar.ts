@@ -5,6 +5,7 @@ export const Page = Object.freeze({
   EDITOR: "EDITOR",
   WORLD: "WORLD",
   PERKS: "PERKS",
+  HELP: "HELP",
   SETTINGS: "SETTINGS",
 } as const);
 
@@ -15,7 +16,7 @@ type SidebarState = {
 };
 
 const initialState: SidebarState = {
-  selected: Page.WORLD,
+  selected: Page.HELP,
 };
 
 const sidebarSlice = createSlice({
