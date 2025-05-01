@@ -6,6 +6,7 @@ import Edit from "./edit.svg";
 import Feather from "./feather.svg";
 import File from "./file.svg";
 import Heart from "./heart.svg";
+import Help from "./help-circle.svg";
 import Hexagon from "./hexagon.svg";
 import Italic from "./italic.svg";
 import List from "./list.svg";
@@ -85,6 +86,7 @@ export const LockIcon = makeIcon(Lock);
 export const PlusSquareIcon = makeIcon(PlusSquare);
 export const PlusIcon = makeIcon(Plus);
 export const MinusIcon = makeIcon(Minus);
+export const HelpIcon = makeIcon(Help);
 
 export const AidoIcon = makeIcon(Aido);
 export const AlgizIcon = makeIcon(Algiz);

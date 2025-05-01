@@ -2,7 +2,12 @@ import { ReactElement } from "react";
 import { changePage, Page, useIsPageSelected } from "../store/sidebar";
 import classes from "./Sidebar.module.css";
 import { useAppDispatch } from "../store/hooks";
-import { EditIcon, MapIcon, SettingsIcon /* ShareIcon */ } from "../icons";
+import {
+  EditIcon,
+  HelpIcon,
+  MapIcon,
+  SettingsIcon /* ShareIcon */,
+} from "../icons";
 
 type SidebarTabProps = {
   page: Page;
@@ -38,6 +43,7 @@ export const Sidebar = (): React.ReactElement => {
     <ul className={"p-0 " + classes.ul}>
       <SidebarTab page={Page.EDITOR} icon={EditIcon} />
       <SidebarTab page={Page.WORLD} icon={MapIcon} />
+      <SidebarTab page={Page.HELP} icon={HelpIcon} />
       {/* <SidebarTab page={Page.PERKS} icon={ShareIcon} /> */}
       <SidebarTab page={Page.SETTINGS} icon={SettingsIcon} />
     </ul>

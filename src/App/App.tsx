@@ -7,6 +7,7 @@ import { Page as SettingsPage } from "../Settings/Page";
 import { PageWrapper } from "../PageWrapper/PageWrapper";
 import { Page } from "../store/sidebar";
 import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
+import { HelpPage } from "../Help/Page";
 
 export const App = (): React.ReactElement => {
   useEffect(() => {
@@ -34,6 +35,9 @@ export const App = (): React.ReactElement => {
           </PageWrapper>
           <PageWrapper page={Page.PERKS}>
             <PerksPage />
+          </PageWrapper>
+          <PageWrapper page={Page.HELP}>
+            <HelpPage />
           </PageWrapper>
           <PageWrapper page={Page.SETTINGS}>
             <SettingsPage />

@@ -4,6 +4,7 @@ import { incantationReducer } from "./incantations";
 import { monacoModelsReducer } from "./monacoModels";
 import { resourcesReducer } from "./resources";
 import { inspectionReducer } from "./inspection";
+import { manualReducer } from "./manual";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     monacoModels: monacoModelsReducer,
     resources: resourcesReducer,
     inspection: inspectionReducer,
+    manual: manualReducer,
   },
 });
 
