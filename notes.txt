@@ -18,3 +18,9 @@ aspects:
 aspect type limit per golem
 
 skill tree
+
+global mana
+
+super long recharging attacks
+
+fishing
