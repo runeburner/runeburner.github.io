@@ -8,14 +8,10 @@ type LineProps = {
   hasMore: boolean;
 };
 
-export const Line = ({
-  path,
-  topic,
-  hasMore,
-}: LineProps): React.ReactElement => {
+export const Line = ({ topic }: LineProps): React.ReactElement => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const str = t(path + (hasMore ? ".title" : ""));
+  const str = t("manual." + topic);
 
   const onClick = (): void => {
     dispatch(appendBreadcrumbs(topic));

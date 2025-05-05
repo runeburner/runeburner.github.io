@@ -53,37 +53,16 @@
       "effect": "Increase work speed"
     }
   },
-  "help": {
-    "a": {
-      "title": "A",
-      "b": {
-        "title": "B",
-        "c": {
-          "title": "C",
-          "d": {
-            "title": "A page about D",
-            "content": "# Header 1Hello World"
-          }
-        }
-      }
-    },
-    "general": {
-      "title": "General"
-    },
-    "tiles": {
-      "title": "Tiles"
-    },
-    "tabs": {
-      "title": "Tabs"
-    },
-    "actions": {
-      "title": "Actions"
-    },
-    "runes": {
-      "title": "Runes"
-    },
-    "entities": {
-      "title": "Entities"
-    }
+  "manual": {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+    "d": "D",
+    "general": "General",
+    "tiles": "Tiles",
+    "tabs": "Tabs",
+    "actions": "Actions",
+    "runes": "Runes",
+    "entities": "Entities"
   }
 }

@@ -6,14 +6,7 @@ export const Breadcrumbs = (): React.ReactElement => {
   const { t } = useTranslation();
   const breadcrumbs = useAppSelector(selectBreadcrumbs);
 
-  const [topics] = breadcrumbs.reduce(
-    (previous, current): [string[], string] => {
-      const subtopic = previous[1] + "." + current;
-      previous[0].push(t(subtopic + ".title"));
-      return [previous[0], subtopic];
-    },
-    [[] as string[], "help"] as [string[], string]
-  );
+  const topics = breadcrumbs.map((b) => t("manual." + b));
 
   return <h1>{"> " + topics.join(" > ")}</h1>;
 };
