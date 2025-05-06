@@ -3,7 +3,6 @@ import Box from "./box.svg";
 import Check from "./check.svg";
 import Circle from "./circle.svg";
 import Edit from "./edit.svg";
-import Feather from "./feather.svg";
 import File from "./file.svg";
 import Heart from "./heart.svg";
 import Help from "./help-circle.svg";
@@ -47,6 +46,7 @@ import Tiwaz from "./tiwaz.svg";
 import Uruz from "./uruz.svg";
 import Wunjo from "./wunjo.svg";
 import Magic from "./magic.svg";
+import Feather from "./feather.svg";
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
