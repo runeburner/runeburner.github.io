@@ -4,7 +4,7 @@ import classes from "./Sidebar.module.css";
 import { useAppDispatch } from "../store/hooks";
 import {
   EditIcon,
-  HelpIcon,
+  BookIcon,
   MapIcon,
   SettingsIcon /* ShareIcon */,
 } from "../icons";
@@ -43,7 +43,7 @@ export const Sidebar = (): React.ReactElement => {
     <ul className={"p-0 " + classes.ul}>
       <SidebarTab page={Page.EDITOR} icon={EditIcon} />
       <SidebarTab page={Page.WORLD} icon={MapIcon} />
-      <SidebarTab page={Page.HELP} icon={HelpIcon} />
+      <SidebarTab page={Page.HELP} icon={BookIcon} />
       {/* <SidebarTab page={Page.PERKS} icon={ShareIcon} /> */}
       <SidebarTab page={Page.SETTINGS} icon={SettingsIcon} />
     </ul>

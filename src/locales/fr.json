@@ -52,5 +52,37 @@
       "name": "Travail",
       "effect": "Augmente la vitesse des travaux"
     }
+  },
+  "manual": {
+    "root": "Racine",
+    "general": "General",
+    "tiles": "Tuiles",
+    "tabs": "Onglets",
+    "actions": "Actions",
+    "runes": "Runes",
+    "entities": "Entitiés",
+
+    "gameLoop": "Boucle du jeu",
+    "attunement": "Harmonisation",
+    "editor": "Editeur",
+    "world": "Monde",
+    "perks": "Avantages",
+    "help": "Aide",
+    "settings": "Paramètres",
+    "MOVE_NEXT_TO": "MOVE_NEXT_TO",
+    "MINE": "MINE",
+    "ATTUNE": "ATTUNE",
+    "DIE": "DIE",
+    "SMASH": "SMASH",
+    "IDLE": "IDLE",
+    "WindRune": "Runes du Vent",
+    "VoidRune": "Runes du Vide",
+    "LaborRune": "Rune du Travail",
+    "golem": "Golem",
+    "heart": "Coeur",
+    "dummy": "Factice",
+    "rune_crystals": "Cristaux Runiques",
+    "rocks": "Roches",
+    "empty": "Vide"
   }
 }

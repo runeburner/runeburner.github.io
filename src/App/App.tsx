@@ -7,7 +7,7 @@ import { Page as SettingsPage } from "../Settings/Page";
 import { PageWrapper } from "../PageWrapper/PageWrapper";
 import { Page } from "../store/sidebar";
 import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
-import { HelpPage } from "../Help/Page";
+import { HelpPage } from "../Manual/Page";
 
 export const App = (): React.ReactElement => {
   useEffect(() => {

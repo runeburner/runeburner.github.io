@@ -54,15 +54,35 @@
     }
   },
   "manual": {
-    "a": "A",
-    "b": "B",
-    "c": "C",
-    "d": "D",
+    "root": "Root",
     "general": "General",
     "tiles": "Tiles",
     "tabs": "Tabs",
     "actions": "Actions",
     "runes": "Runes",
-    "entities": "Entities"
+    "entities": "Entities",
+
+    "gameLoop": "Game Loop",
+    "attunement": "Attunement",
+    "editor": "Editor",
+    "world": "World",
+    "perks": "Perks",
+    "help": "Help",
+    "settings": "Settings",
+    "MOVE_NEXT_TO": "MOVE_NEXT_TO",
+    "MINE": "MINE",
+    "ATTUNE": "ATTUNE",
+    "DIE": "DIE",
+    "SMASH": "SMASH",
+    "IDLE": "IDLE",
+    "WindRune": "Wind Runes",
+    "VoidRune": "Void Runes",
+    "LaborRune": "Labor Runes",
+    "golem": "Golem",
+    "heart": "Heart",
+    "dummy": "Dummy",
+    "rune_crystals": "Rune Crystals",
+    "rocks": "Rocks",
+    "empty": "Empty"
   }
 }
