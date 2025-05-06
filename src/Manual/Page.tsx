@@ -5,9 +5,10 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { Line } from "./Line";
 import { getTopic } from "./Topic";
 import Markdown from "react-markdown";
+import { Content } from "./Content";
 
 export const HelpPage = (): React.ReactElement => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const breadcrumbs = useAppSelector(selectBreadcrumbs);
 
   const topic = getTopic(breadcrumbs);
@@ -29,7 +30,12 @@ export const HelpPage = (): React.ReactElement => {
           ))}
         </ul>
       ) : (
-        <Markdown>{t(prefix + "content")}</Markdown>
+        <>
+          <Markdown>
+            {Content[i18n.language]?.[breadcrumbs[breadcrumbs.length - 1]] ??
+              ""}
+          </Markdown>
+        </>
       )}
     </div>
   );

@@ -3,14 +3,6 @@ type Topic = {
 };
 
 const topicTree: Topic = {
-  a: {
-    b: {
-      c: {
-        d: null,
-      },
-      e: null,
-    },
-  },
   general: {
     gameLoop: null,
     attunement: null,
