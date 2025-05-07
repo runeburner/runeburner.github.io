@@ -42,6 +42,8 @@ import rocksEN from "./manual/en/rocks.md?raw";
 import rocksFR from "./manual/fr/rocks.md?raw";
 import emptyEN from "./manual/en/empty.md?raw";
 import emptyFR from "./manual/fr/empty.md?raw";
+import incantationsEN from "./manual/en/incantations.md?raw";
+import incantationsFR from "./manual/fr/incantations.md?raw";
 
 export const Content = {
   en: {
@@ -67,6 +69,7 @@ export const Content = {
     rune_crystals: rune_crystalsEN,
     rocks: rocksEN,
     empty: emptyEN,
+    incantations: incantationsEN,
   },
   fr: {
     gameLoop: gameLoopFR,
@@ -91,5 +94,6 @@ export const Content = {
     rune_crystals: rune_crystalsFR,
     rocks: rocksFR,
     empty: emptyFR,
+    incantations: incantationsFR,
   },
 } as Record<string, Record<string, string>>;
