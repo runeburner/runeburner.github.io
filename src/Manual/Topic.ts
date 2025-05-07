@@ -6,6 +6,7 @@ const topicTree: Topic = {
   general: {
     gameLoop: null,
     attunement: null,
+    incantations: null,
   },
   tabs: {
     editor: null,
