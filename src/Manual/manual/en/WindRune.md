@@ -1,1 +1,3 @@
-This is the page for WindRune and it is under construction
+# Wind rune
+
+The wind rune determines the move speed of entities. More wind runes means faster movement speed.

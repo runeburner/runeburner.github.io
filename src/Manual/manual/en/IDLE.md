@@ -1,1 +1,3 @@
-This is the page for IDLE and it is under construction
+# IDLE
+
+The IDLE action can be returned when the golem shouldn't be doing anything for this tick.

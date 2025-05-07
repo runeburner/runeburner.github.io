@@ -1,1 +1,3 @@
-This is the page for rocks and it is under construction
+# Rocks
+
+Rock tiles are simply obstacle that must be destroyed. Some are harder than others. They must be destroyed with the MINE action.

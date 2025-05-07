@@ -1,1 +1,3 @@
-This is the page for DIE and it is under construction
+# DIE
+
+The DIE action can be return to immediately destroy your golem.

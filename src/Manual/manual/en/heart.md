@@ -1,1 +1,3 @@
-This is the page for heart and it is under construction
+# Heart
+
+The heart is the core of your army. If it dies you die. It is also the spawning point of golems and it receives attunement.
