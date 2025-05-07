@@ -1,0 +1,13 @@
+.documentation {
+  max-width: 800px;
+  text-align: justify;
+}
+
+.documentation > h1 {
+  font-size: 2em;
+  margin-bottom: calc(var(--spacing) * 2);
+}
+
+.documentation > p {
+  margin-bottom: calc(var(--spacing) * 2);
+}

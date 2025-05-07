@@ -1,14 +1,11 @@
-import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../store/hooks";
 import { selectBreadcrumbs } from "../store/manual";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Line } from "./Line";
 import { getTopic } from "./Topic";
-import Markdown from "react-markdown";
-import { Content } from "./Content";
+import { Documentation } from "./Documentation/Documentation";
 
 export const HelpPage = (): React.ReactElement => {
-  const { i18n } = useTranslation();
   const breadcrumbs = useAppSelector(selectBreadcrumbs);
 
   const topic = getTopic(breadcrumbs);
@@ -30,12 +27,7 @@ export const HelpPage = (): React.ReactElement => {
           ))}
         </ul>
       ) : (
-        <>
-          <Markdown>
-            {Content[i18n.language]?.[breadcrumbs[breadcrumbs.length - 1]] ??
-              ""}
-          </Markdown>
-        </>
+        <Documentation page={breadcrumbs[breadcrumbs.length - 1]} />
       )}
     </div>
   );
