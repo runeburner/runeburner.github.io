@@ -1,8 +1,8 @@
-type Topic = {
+export type Topic = {
   [key: string]: Topic | null;
 };
 
-const topicTree: Topic = {
+export const topicTree: Topic = {
   general: {
     gameLoop: null,
     attunement: null,

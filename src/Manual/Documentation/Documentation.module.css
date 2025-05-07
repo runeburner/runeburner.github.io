@@ -11,3 +11,8 @@
 .documentation > p {
   margin-bottom: calc(var(--spacing) * 2);
 }
+
+.documentation > p > span {
+  color: lightskyblue;
+  cursor: pointer;
+}
