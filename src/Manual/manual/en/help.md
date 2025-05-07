@@ -1,1 +1,3 @@
-This is the page for help and it is under construction
+# Help
+
+The help menu contains all the documentation for the game.

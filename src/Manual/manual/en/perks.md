@@ -1,1 +1,3 @@
-This is the page for perks and it is under construction
+# Perks
+
+Perks are an unimplemented feature where you convert attunement into harmony and spend harmony to unlock new runes or improve rune powers.
