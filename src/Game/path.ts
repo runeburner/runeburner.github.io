@@ -37,29 +37,34 @@ class InfMap {
 }
 
 export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
-  const singleStart = hashVec(start);
-  const singleGoal = hashVec(goal);
+  const hashedStart = hashVec(start);
+  const hashedGoal = hashVec(goal);
   const openSet = [hashVec(start)];
+
   const cameFrom = new Map<number, number>();
+  // gScore[n] is the currently known cost of the cheapest path from start to n.
   const gScore = new InfMap();
-  gScore.set(singleStart, 0);
+  gScore.set(hashedStart, 0);
+  // fScore[n] represents our current best guess as to how cheap
+  // a path could be from start to finish if it goes through n.
   const fScore = new InfMap();
-  fScore.set(singleStart, dist(start, goal));
+  fScore.set(hashedStart, dist(start, goal));
   while (openSet.length) {
     const currentI = openSet.reduce(
       (best, current, currentI) =>
         fScore.get(openSet[best]) < fScore.get(current) ? best : currentI,
       0
     );
-
     const current = openSet[currentI];
-    if (current === singleGoal) return reconstruct_path(cameFrom, current);
+
+    if (current === hashedGoal) return reconstruct_path(cameFrom, current);
     openSet.splice(currentI, 1);
+
     const currentV = unhashVec(current);
     const neighbors: Vec[] = [
       [currentV[0] - 1, currentV[1] - 1],
       [currentV[0] + 1, currentV[1] - 1],
-      [currentV[0] + 1, currentV[1] - 1],
+      [currentV[0] - 1, currentV[1] + 1],
       [currentV[0] + 1, currentV[1] + 1],
       [currentV[0] - 1, currentV[1]],
       [currentV[0] + 1, currentV[1]],
@@ -67,30 +72,29 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
       [currentV[0], currentV[1] + 1],
     ];
     for (const neighbor of neighbors) {
-      if (
+      const isOutsideBounds =
         neighbor[0] < 0 ||
         neighbor[1] < 0 ||
         neighbor[0] > game.plane.bounds[2] ||
-        neighbor[1] > game.plane.bounds[3]
-      ) {
-        continue;
-      }
+        neighbor[1] > game.plane.bounds[3];
+      if (isOutsideBounds) continue;
+
       const isOccupied = game.entities
         .values()
         .some((e) => eq(e.pos, neighbor));
-      const singleNeighbor = hashVec(neighbor);
+      const hashedNeighbor = hashVec(neighbor);
       const tile = game.tileAt(neighbor);
       const moveWeight =
-        singleNeighbor === singleGoal
+        hashedNeighbor === hashedGoal
           ? 0
           : EnterWeight[tile[Offset.TILE_ID] as Tile] +
-            (isOccupied && singleNeighbor !== singleGoal ? Infinity : 0);
+            (isOccupied && hashedNeighbor !== hashedGoal ? Infinity : 0);
       const tentative_gScore = gScore.get(current) + moveWeight;
-      if (tentative_gScore < gScore.get(singleNeighbor)) {
-        cameFrom.set(singleNeighbor, current);
-        gScore.set(singleNeighbor, tentative_gScore);
-        fScore.set(singleNeighbor, tentative_gScore + dist(neighbor, goal));
-        if (!openSet.includes(singleNeighbor)) openSet.push(singleNeighbor);
+      if (tentative_gScore < gScore.get(hashedNeighbor)) {
+        cameFrom.set(hashedNeighbor, current);
+        gScore.set(hashedNeighbor, tentative_gScore);
+        fScore.set(hashedNeighbor, tentative_gScore + dist(neighbor, goal));
+        if (!openSet.includes(hashedNeighbor)) openSet.push(hashedNeighbor);
       }
     }
   }
