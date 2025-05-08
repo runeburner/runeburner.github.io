@@ -15,7 +15,7 @@ export const FileExplorer = (): React.ReactElement => {
         {names.map((n) => (
           <File key={n} name={n} />
         ))}
-        <li className={`px-3 ${classes.item} flex justify-center`}>
+        <li className={`px-3 py-1 ${classes.item} flex justify-center`}>
           <PlusIcon onClick={() => setOpen(true)} />
           <CreateIncantationModal open={open} onClose={() => setOpen(false)} />
         </li>

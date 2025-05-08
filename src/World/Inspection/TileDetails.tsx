@@ -22,7 +22,7 @@ export const TileDetails = (): React.ReactElement => {
   const tileData = useGameSelector(selectTile, tileEq);
 
   return (
-    <div style={{ color: "var(--container-primary)" }}>
+    <div>
       <p>
         ({pos[0]}, {pos[1]})
       </p>

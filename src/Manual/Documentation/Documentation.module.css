@@ -13,6 +13,7 @@
 }
 
 .documentation > p > span {
-  color: lightskyblue;
+  color: var(--md-sys-color-primary);
+  text-decoration: underline;
   cursor: pointer;
 }

@@ -31,7 +31,7 @@ export const File = ({ name }: FileProps): React.ReactElement => {
   return (
     <>
       <li
-        className={`px-3 ${classes.item}`}
+        className={`px-3 py-1 ${classes.item}`}
         onClick={() => onIncantationClicked(name)}
       >
         <span className="flex">

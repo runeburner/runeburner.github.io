@@ -1,9 +1,9 @@
 .container {
   bottom: 0;
   right: 0;
-  color: var(--container-primary);
-  background-color: var(--primary-dark);
+  color: var(--md-sys-color-on-tertiary-container);
+  background-color: var(--md-sys-color-tertiary-container);
   border-radius: 10px;
-  box-shadow: 0 0 3px black;
+  box-shadow: 0 0 3px var(--md-sys-color-outline-variant);
   min-width: 125px;
 }
