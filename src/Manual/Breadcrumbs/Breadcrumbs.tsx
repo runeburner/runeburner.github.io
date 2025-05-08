@@ -1,6 +1,7 @@
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { selectBreadcrumbs, setBreadcrumbs } from "../store/manual";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { selectBreadcrumbs, setBreadcrumbs } from "../../store/manual";
 import { useTranslation } from "react-i18next";
+import classes from "./Breadcrumbs.module.css";
 
 type RecursiveBreadCrumbProps = {
   breadcrumbs: string[];
@@ -16,13 +17,13 @@ const RecursiveBreadCrumb = ({
   if (breadcrumbs.length === 0) return <></>;
   return (
     <>
+      {" > "}
       <span
-        className="cursor-pointer"
+        className={`cursor-pointer ${classes.breadcrumb}`}
         onClick={() =>
           dispatch(setBreadcrumbs(breadcrumbs.slice(0, index + 1)))
         }
       >
-        {" > "}
         {t(`manual.${breadcrumbs[index]}`)}
       </span>
       {index + 1 < breadcrumbs.length ? (
@@ -44,7 +45,7 @@ export const Breadcrumbs = (): React.ReactElement => {
   return (
     <h1>
       <span
-        className="cursor-pointer"
+        className={`cursor-pointer ${classes.breadcrumb}`}
         onClick={() => dispatch(setBreadcrumbs([]))}
       >
         {t("manual.root")}

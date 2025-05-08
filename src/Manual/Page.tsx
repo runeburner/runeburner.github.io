@@ -1,6 +1,6 @@
 import { useAppSelector } from "../store/hooks";
 import { selectBreadcrumbs } from "../store/manual";
-import { Breadcrumbs } from "./Breadcrumbs";
+import { Breadcrumbs } from "./Breadcrumbs/Breadcrumbs";
 import { Line } from "./Line";
 import { getTopic } from "./Topic";
 import { Documentation } from "./Documentation/Documentation";
