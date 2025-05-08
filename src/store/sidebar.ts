@@ -16,7 +16,7 @@ type SidebarState = {
 };
 
 const initialState: SidebarState = {
-  selected: Page.HELP,
+  selected: Page.WORLD,
 };
 
 const sidebarSlice = createSlice({

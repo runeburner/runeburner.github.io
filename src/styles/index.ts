@@ -12,3 +12,4 @@ import "./layout/size.css";
 import "./reset.css";
 import "./user-select.css";
 import "./theme.css";
+import "./slider.css";

@@ -1,29 +1,72 @@
 :root {
-  --primary-dark: #aaa;
-  --primary: #ccc;
-  --primary-light: #fff;
-  --container-dark: #333;
-  --container-primary: #444;
-  --container-primary-light: #666;
-  --highlight: #eee;
-  --border: #eeeeee44;
-  --selected: #444;
+  /* https://material-foundation.github.io/material-theme-builder/ */
+  --md-sys-color-primary: rgb(174 198 255);
+  --md-sys-color-surface-tint: rgb(174 198 255);
+  --md-sys-color-on-primary: rgb(18 47 96);
+  --md-sys-color-primary-container: rgb(44 70 120);
+  --md-sys-color-on-primary-container: rgb(216 226 255);
+  --md-sys-color-secondary: rgb(191 198 220);
+  --md-sys-color-on-secondary: rgb(41 48 65);
+  --md-sys-color-secondary-container: rgb(63 71 89);
+  --md-sys-color-on-secondary-container: rgb(219 226 249);
+  --md-sys-color-tertiary: rgb(223 187 222);
+  --md-sys-color-on-tertiary: rgb(64 40 67);
+  --md-sys-color-tertiary-container: rgb(88 62 90);
+  --md-sys-color-on-tertiary-container: rgb(252 215 251);
+  --md-sys-color-error: rgb(255 180 171);
+  --md-sys-color-on-error: rgb(105 0 5);
+  --md-sys-color-error-container: rgb(147 0 10);
+  --md-sys-color-on-error-container: rgb(255 218 214);
+  --md-sys-color-background: rgb(18 19 24);
+  --md-sys-color-on-background: rgb(226 226 233);
+  --md-sys-color-surface: rgb(18 19 24);
+  --md-sys-color-on-surface: rgb(226 226 233);
+  --md-sys-color-surface-variant: rgb(68 71 79);
+  --md-sys-color-on-surface-variant: rgb(197 198 208);
+  --md-sys-color-outline: rgb(142 144 153);
+  --md-sys-color-outline-variant: rgb(68 71 79);
+  --md-sys-color-shadow: rgb(0 0 0);
+  --md-sys-color-scrim: rgb(0 0 0);
+  --md-sys-color-inverse-surface: rgb(226 226 233);
+  --md-sys-color-inverse-on-surface: rgb(47 48 54);
+  --md-sys-color-inverse-primary: rgb(69 94 145);
+  --md-sys-color-primary-fixed: rgb(216 226 255);
+  --md-sys-color-on-primary-fixed: rgb(0 26 66);
+  --md-sys-color-primary-fixed-dim: rgb(174 198 255);
+  --md-sys-color-on-primary-fixed-variant: rgb(44 70 120);
+  --md-sys-color-secondary-fixed: rgb(219 226 249);
+  --md-sys-color-on-secondary-fixed: rgb(20 27 44);
+  --md-sys-color-secondary-fixed-dim: rgb(191 198 220);
+  --md-sys-color-on-secondary-fixed-variant: rgb(63 71 89);
+  --md-sys-color-tertiary-fixed: rgb(252 215 251);
+  --md-sys-color-on-tertiary-fixed: rgb(42 19 45);
+  --md-sys-color-tertiary-fixed-dim: rgb(223 187 222);
+  --md-sys-color-on-tertiary-fixed-variant: rgb(88 62 90);
+  --md-sys-color-surface-dim: rgb(18 19 24);
+  --md-sys-color-surface-bright: rgb(55 57 62);
+  --md-sys-color-surface-container-lowest: rgb(12 14 19);
+  --md-sys-color-surface-container-low: rgb(26 27 32);
+  --md-sys-color-surface-container: rgb(30 31 37);
+  --md-sys-color-surface-container-high: rgb(40 42 47);
+  --md-sys-color-surface-container-highest: rgb(51 53 58);
 
-  background-color: var(--container-dark);
-  color: var(--primary);
+  --primary-dark: #aaa;
+  --container-primary: #444;
+
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-primary);
 
   .btn {
     border-radius: 100px;
     padding: var(--spacing);
-    background-color: var(--primary-dark);
+    background-color: var(--md-sys-color-primary);
     border-width: 1px;
     border-style: solid;
-    border-color: var(--primary-light);
-    color: #444;
+    color: var(--md-sys-color-on-primary);
   }
 
   .btn:hover {
-    background-color: var(--primary-light);
+    background-color: var(--md-sys-color-primary-fixed);
   }
 
   .icon-button {
@@ -31,81 +74,5 @@
     padding: var(--spacing-2) var(--spacing-2) var(--spacing-2) var(--spacing-2);
     display: flex;
     align-items: center;
-  }
-
-  /* SLIDER STYLING */
-  --thumb-size: 1.5em;
-  --track-height: 0.7em;
-  --track-background: #275a8f;
-
-  input[type="range"] {
-    height: 2.2em;
-    appearance: none;
-    background: transparent;
-  }
-
-  /*webkit*/
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: var(--thumb-size);
-    height: var(--thumb-size);
-    border-radius: 1em;
-    background: #007cf8;
-    border: none;
-    box-shadow: 0 0 2px var(--container-dark);
-    margin-top: calc(
-      max((var(--track-height) - 1px - 1px) * 0.5, 0px) - var(--thumb-size) *
-        0.5
-    );
-  }
-
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: var(--track-height);
-    border-radius: 0.5em;
-    background: var(--track-background);
-    box-shadow: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb:hover {
-    background: #0061c3;
-  }
-
-  input[type="range"]::-webkit-slider-thumb:active {
-    background: #2f98f9;
-  }
-
-  input[type="range"]:active::-webkit-slider-runnable-track {
-    background: #f5f5f5;
-    border-color: #c1c1c1;
-  }
-
-  /*mozilla*/
-  input[type="range"]::-moz-range-thumb {
-    width: var(--thumb-size);
-    height: var(--thumb-size);
-    border-radius: 1em;
-    background: #007cf8;
-    border: none;
-    box-shadow: 0 0 2px var(--container-dark);
-  }
-
-  input[type="range"]::-moz-range-track {
-    height: max(calc(var(--track-height) - 1px - 1px), 0px);
-    border-radius: 0.5em;
-    background: var(--track-background);
-    box-shadow: none;
-  }
-
-  input[type="range"]::-moz-range-thumb:hover {
-    background: #0061c3;
-  }
-
-  input[type="range"]::-moz-range-thumb:active {
-    background: #2f98f9;
-  }
-
-  input[type="range"]:active::-moz-range-track {
-    background: #f5f5f5;
-    border-color: #c1c1c1;
   }
 }
