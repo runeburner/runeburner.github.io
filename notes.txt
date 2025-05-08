@@ -24,3 +24,8 @@ global mana
 super long recharging attacks
 
 fishing
+
+
+https://material-foundation.github.io/material-theme-builder/
+https://feathericons.com/
+https://colorizer.org/

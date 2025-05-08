@@ -69,7 +69,7 @@ export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
         subtr.a = camera.c.scale * heartScale;
         subtr.d = camera.c.scale * heartScale;
         ctx.setTransform(subtr);
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "rgb(255, 26, 26)";
         ctx.fill(heart);
         ctx.setTransform(transform);
         break;

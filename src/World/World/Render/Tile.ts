@@ -3,9 +3,9 @@ import { Offset, ValuesPerTile } from "../../../types/map";
 import { camera } from "../Camera";
 
 const colors = [
-  "#a2b9bc",
-  "#b2ad7f",
-  "#878f99",
+  "rgb(77, 102, 107)",
+  "rgb(147, 135, 37)",
+  "rgb(74, 105, 140)",
   "#6b5b95",
   "#6b5b95",
   "#feb236",
@@ -33,7 +33,7 @@ export const renderTiles = (ctx: CanvasRenderingContext2D): void => {
         game.plane.data[
           (j * game.plane.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
         ] > 0;
-      ctx.fillStyle = isVisible ? colors[tileID] : "#666666ff";
+      ctx.fillStyle = isVisible ? colors[tileID] : "#ffffff22";
       ctx.fillRect(i + 1 / 128, j + 1 / 128, 1 - 2 / 128, 1 - 2 / 128);
     }
   }
