@@ -3,7 +3,7 @@ const healthColor = "#fbf9f5";
 const armorColor = "#ff9e4a";
 const shieldColor = "#65c4fb";
 const emptyColor = "#00000022";
-const healthColors = [emptyColor, healthColor, armorColor, shieldColor];
+const healthColors = [healthColor, armorColor, shieldColor, emptyColor];
 
 const outerDiameter = 31 / 64;
 const innerDiameter = 20 / 64;
@@ -25,42 +25,35 @@ const chunkSize = 5;
 // return [health, armor, shield, empty] for up to chunkSize points
 const getNextPoints = <T extends EntityType, V extends object>(
   e: HealthEntity<T, V>,
-  depleted: number,
   pointsUsed: number,
   chunkSize: number
 ): [number, number, number, number] => {
-  let pointsLeft = chunkSize;
-
-  const empty = Math.min(pointsLeft, Math.max(0, depleted - pointsUsed));
-  pointsLeft = Math.max(pointsLeft - empty);
+  let pointsLeftThisChunk = chunkSize;
 
   const health = Math.min(
-    pointsLeft,
-    Math.min(Math.max(0, depleted + e.health[0] - pointsUsed), e.health[0])
+    pointsLeftThisChunk,
+    Math.max(0, e.health[0] - pointsUsed)
   );
-  pointsLeft = Math.max(pointsLeft - health);
+  pointsLeftThisChunk = Math.max(pointsLeftThisChunk - health, 0);
 
   const armor = Math.min(
-    pointsLeft,
-    Math.min(
-      Math.max(0, depleted + e.health[0] + e.armor[0] - pointsUsed),
-      e.armor[0]
-    )
+    pointsLeftThisChunk,
+    Math.min(Math.max(0, e.health[0] + e.armor[0] - pointsUsed), e.armor[0])
   );
-  pointsLeft = Math.max(pointsLeft - armor);
+  pointsLeftThisChunk = Math.max(pointsLeftThisChunk - armor);
 
   const shield = Math.min(
-    pointsLeft,
+    pointsLeftThisChunk,
     Math.min(
-      Math.max(
-        0,
-        depleted + e.health[0] + e.armor[0] + e.shield[0] - pointsUsed
-      ),
+      Math.max(0, e.health[0] + e.armor[0] + e.shield[0] - pointsUsed),
       e.shield[0]
     )
   );
-  pointsLeft = Math.max(pointsLeft - shield);
-  return [empty, health, armor, shield];
+  pointsLeftThisChunk = Math.max(pointsLeftThisChunk - shield);
+
+  const empty = Math.min(pointsLeftThisChunk, Math.max(0, pointsUsed));
+  pointsLeftThisChunk = Math.max(pointsLeftThisChunk - empty);
+  return [health, armor, shield, empty];
 };
 
 export const renderHealth = <T extends EntityType, V extends object>(
@@ -70,13 +63,6 @@ export const renderHealth = <T extends EntityType, V extends object>(
   const { health, armor, shield } = e;
 
   const totalHealth = health[1] + armor[1] + shield[1];
-  const depleted =
-    e.health[1] -
-    e.health[0] +
-    e.armor[1] -
-    e.armor[0] +
-    e.shield[1] -
-    e.shield[0];
   const c: Vec = [e.pos[0] + 0.5, e.pos[1] + 0.5];
   if (totalHealth === 0) {
     renderEmptyHealth(ctx, c);
@@ -96,7 +82,7 @@ export const renderHealth = <T extends EntityType, V extends object>(
         : totalHealth % chunkSize === 0
         ? chunkSize
         : totalHealth % chunkSize;
-    const pts = getNextPoints(e, depleted, pointsUsed, thisChunkSize);
+    const pts = getNextPoints(e, pointsUsed, thisChunkSize);
     pointsUsed += pts.reduce((acc, c) => acc + c, 0);
     let startRad = i * (spacing + chunkSize * outerRadPerPoint);
     let innerStartRad = i * (innerSpacing + chunkSize * innerRadPerPoint);
