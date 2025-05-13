@@ -34,13 +34,11 @@ export class MinHeap<T> {
 
   heapifyUp(): void {
     let i = this.heap.length - 1;
-    while (
-      this.hasParent(i) &&
-      this.heap[i] < this.heap[this.getParentIndex(i)]
-    ) {
-      const parentI = this.getParentIndex(i);
+    let parentI = Math.floor((i - 1) / 2);
+    while (parentI >= 0 && this.heap[i] < this.heap[parentI]) {
       this.swap(i, parentI);
       i = parentI;
+      parentI = Math.floor((i - 1) / 2);
     }
   }
 
@@ -85,11 +83,33 @@ export class MinHeap<T> {
   const inserts = [10, 5, 20, 3, 1, 18, 17, 11, 10, 10, 10, 2, 7, 5];
   for (const v of inserts) {
     priorityQueue.insert(v);
-    console.log("Inserted:", JSON.stringify(priorityQueue.heap));
   }
 
   while (priorityQueue.size() > 0) {
-    console.log(JSON.stringify(priorityQueue.heap));
     console.log("Removed min value:", priorityQueue.removeMin());
   }
+})();
+
+((): void => {
+  const iterations = 100;
+  let total = 0;
+  for (let i = 0; i < iterations; i++) {
+    const before = Date.now();
+    for (let j = 0; j < 100000; j++) {
+      const priorityQueue = new MinHeap();
+
+      const inserts = [10, 5, 20, 3, 1, 18, 17, 11, 10, 10, 10, 2, 7, 5];
+      for (const v of inserts) {
+        priorityQueue.insert(v);
+      }
+
+      while (priorityQueue.size() > 0) {
+        priorityQueue.removeMin();
+      }
+    }
+    const after = Date.now();
+
+    total += after - before;
+  }
+  console.log(total / iterations);
 })();
