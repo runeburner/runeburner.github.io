@@ -2,6 +2,7 @@ import { Offset } from "../types/map";
 import { EnterWeight, Tile } from "../types/tile";
 import { dist, eq, Vec } from "../types/vec";
 import { game } from "./game";
+import { MinHeap } from "./heap";
 
 // This hashing function will not work for coordinates outside {[0,0], [94_906_265, 94_906_265]}
 const hashMaxWidth = Math.floor(Math.sqrt(Number.MAX_SAFE_INTEGER));
@@ -101,3 +102,5 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
 
   return null;
 };
+
+console.log(new MinHeap<number>());
