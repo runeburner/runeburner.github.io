@@ -5,38 +5,14 @@ export class MinHeap<T> {
     this.heap = [];
   }
 
-  getLeftChildIndex(i: number): number {
-    return 2 * i + 1;
-  }
-
-  getRightChildIndex(i: number): number {
-    return 2 * i + 2;
-  }
-
-  getParentIndex(i: number): number {
-    return Math.floor((i - 1) / 2);
-  }
-
-  hasParent(index: number): boolean {
-    return this.getParentIndex(index) >= 0;
-  }
-
-  swap(i0: number, i1: number): void {
-    const tmp = this.heap[i1];
-    this.heap[i1] = this.heap[i0];
-    this.heap[i0] = tmp;
-  }
-
   insert(value: T): void {
     this.heap.push(value);
-    this.heapifyUp();
-  }
-
-  heapifyUp(): void {
     let i = this.heap.length - 1;
     let parentI = Math.floor((i - 1) / 2);
     while (parentI >= 0 && this.heap[i] < this.heap[parentI]) {
-      this.swap(i, parentI);
+      const tmp = this.heap[parentI];
+      this.heap[parentI] = this.heap[i];
+      this.heap[i] = tmp;
       i = parentI;
       parentI = Math.floor((i - 1) / 2);
     }
@@ -46,19 +22,14 @@ export class MinHeap<T> {
     if (this.heap.length === 0) throw new Error("Heap is empty");
     const minValue = this.heap[0];
     if (this.heap.length === 1) {
-      this.heap = [];
-    } else {
-      this.heap[0] = this.heap.pop()!;
-      this.heapifyDown();
+      this.heap.length = 0;
+      return minValue;
     }
-    return minValue;
-  }
-
-  heapifyDown(): void {
+    this.heap[0] = this.heap.pop()!;
     let currentIndex = 0;
-    while (this.getLeftChildIndex(currentIndex) < this.heap.length) {
-      const left = this.getLeftChildIndex(currentIndex);
-      const right = this.getRightChildIndex(currentIndex);
+    let left = 2 * currentIndex + 1;
+    let right = 2 * currentIndex + 2;
+    while (left < this.heap.length) {
       const isRightInBounds = right < this.heap.length;
       const isRightSmaller = this.heap[right] < this.heap[left];
 
@@ -66,10 +37,16 @@ export class MinHeap<T> {
 
       if (this.heap[currentIndex] < this.heap[smaller]) break;
 
-      this.swap(currentIndex, smaller);
+      const tmp = this.heap[smaller];
+      this.heap[smaller] = this.heap[currentIndex];
+      this.heap[currentIndex] = tmp;
 
       currentIndex = smaller;
+      left = 2 * currentIndex + 1;
+      right = 2 * currentIndex + 2;
     }
+
+    return minValue;
   }
 
   size(): number {
