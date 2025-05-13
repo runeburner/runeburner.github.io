@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { sidebarReducer } from "./sidebar";
 import { incantationReducer } from "./incantations";
 import { monacoModelsReducer } from "./monacoModels";
-import { resourcesReducer } from "./resources";
 import { inspectionReducer } from "./inspection";
 import { manualReducer } from "./manual";
 
@@ -11,7 +10,6 @@ export const store = configureStore({
     sidebar: sidebarReducer,
     incantations: incantationReducer,
     monacoModels: monacoModelsReducer,
-    resources: resourcesReducer,
     inspection: inspectionReducer,
     manual: manualReducer,
   },
