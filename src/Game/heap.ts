@@ -1,30 +1,30 @@
 export class MinHeap<T> {
   heap: T[];
+
   constructor() {
     this.heap = [];
   }
 
-  getLeftChildIndex(parentIndex: number): number {
-    return 2 * parentIndex + 1;
+  getLeftChildIndex(i: number): number {
+    return 2 * i + 1;
   }
 
-  getRightChildIndex(parentIndex: number): number {
-    return 2 * parentIndex + 2;
+  getRightChildIndex(i: number): number {
+    return 2 * i + 2;
   }
 
-  getParentIndex(childIndex: number): number {
-    return Math.floor((childIndex - 1) / 2);
+  getParentIndex(i: number): number {
+    return Math.floor((i - 1) / 2);
   }
 
   hasParent(index: number): boolean {
     return this.getParentIndex(index) >= 0;
   }
 
-  swap(index1: number, index2: number): void {
-    [this.heap[index1], this.heap[index2]] = [
-      this.heap[index2],
-      this.heap[index1],
-    ];
+  swap(i0: number, i1: number): void {
+    const tmp = this.heap[i1];
+    this.heap[i1] = this.heap[i0];
+    this.heap[i0] = tmp;
   }
 
   insert(value: T): void {
@@ -33,13 +33,14 @@ export class MinHeap<T> {
   }
 
   heapifyUp(): void {
-    let currentIndex = this.heap.length - 1;
+    let i = this.heap.length - 1;
     while (
-      this.hasParent(currentIndex) &&
-      this.heap[currentIndex] < this.heap[this.getParentIndex(currentIndex)]
+      this.hasParent(i) &&
+      this.heap[i] < this.heap[this.getParentIndex(i)]
     ) {
-      this.swap(currentIndex, this.getParentIndex(currentIndex));
-      currentIndex = this.getParentIndex(currentIndex);
+      const parentI = this.getParentIndex(i);
+      this.swap(i, parentI);
+      i = parentI;
     }
   }
 
@@ -58,22 +59,18 @@ export class MinHeap<T> {
   heapifyDown(): void {
     let currentIndex = 0;
     while (this.getLeftChildIndex(currentIndex) < this.heap.length) {
-      let smallerChildIndex = this.getLeftChildIndex(currentIndex);
-      if (
-        this.getRightChildIndex(currentIndex) < this.heap.length &&
-        this.heap[this.getRightChildIndex(currentIndex)] <
-          this.heap[smallerChildIndex]
-      ) {
-        smallerChildIndex = this.getRightChildIndex(currentIndex);
-      }
+      const left = this.getLeftChildIndex(currentIndex);
+      const right = this.getRightChildIndex(currentIndex);
+      const isRightInBounds = right < this.heap.length;
+      const isRightSmaller = this.heap[right] < this.heap[left];
 
-      if (this.heap[currentIndex] < this.heap[smallerChildIndex]) {
-        break;
-      } else {
-        this.swap(currentIndex, smallerChildIndex);
-      }
+      const smaller = isRightInBounds && isRightSmaller ? right : left;
 
-      currentIndex = smallerChildIndex;
+      if (this.heap[currentIndex] < this.heap[smaller]) break;
+
+      this.swap(currentIndex, smaller);
+
+      currentIndex = smaller;
     }
   }
 
@@ -85,7 +82,7 @@ export class MinHeap<T> {
 ((): void => {
   const priorityQueue = new MinHeap();
 
-  const inserts = [10, 5, 20, 3];
+  const inserts = [10, 5, 20, 3, 1, 18, 17, 11, 10, 10, 10, 2, 7, 5];
   for (const v of inserts) {
     priorityQueue.insert(v);
     console.log("Inserted:", JSON.stringify(priorityQueue.heap));
