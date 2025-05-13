@@ -2,25 +2,25 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "./hooks";
 
 type ResourceState = {
-  attunement: number;
+  musicalNotes: number;
 };
 
 const initialState: ResourceState = {
-  attunement: 0,
+  musicalNotes: 0,
 };
 
 const slice = createSlice({
   name: "resources",
   initialState,
   reducers: {
-    setAttunement: (state, action: PayloadAction<number>) => {
-      state.attunement = action.payload;
+    setMusicalNotes: (state, action: PayloadAction<number>) => {
+      state.musicalNotes = action.payload;
     },
   },
 });
 
-export const { setAttunement } = slice.actions;
+export const { setMusicalNotes } = slice.actions;
 export const resourcesReducer = slice.reducer;
 
-export const useAttunement = (): number =>
-  useAppSelector((s) => s.resources.attunement);
+export const useMusicalNotes = (): number =>
+  useAppSelector((s) => s.resources.musicalNotes);

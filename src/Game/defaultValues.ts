@@ -49,7 +49,7 @@ export const defaultEntities: Entity[] = [
     __type: EntityType.HEART,
     id: ID.next(),
     pos: [5, 5],
-    attunement: 0,
+    musicalNotes: 0,
     visionRange: 10,
     health: [25, 25],
     armor: [0, 0],

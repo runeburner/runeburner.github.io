@@ -31,7 +31,7 @@ export type HealthEntity<T extends EntityType, V extends object> = BaseEntity<
 export type HeartEntity = HealthEntity<
   typeof EntityType.HEART,
   {
-    attunement: number;
+    musicalNotes: number;
   }
 >;
 

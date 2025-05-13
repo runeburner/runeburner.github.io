@@ -5,7 +5,7 @@ export type Topic = {
 export const topicTree: Topic = {
   general: {
     gameLoop: null,
-    attunement: null,
+    musicalNotes: null,
     incantations: null,
   },
   tabs: {
@@ -18,7 +18,7 @@ export const topicTree: Topic = {
   actions: {
     MOVE_NEXT_TO: null,
     MINE: null,
-    ATTUNE: null,
+    SING: null,
     DIE: null,
     SMASH: null,
     IDLE: null,

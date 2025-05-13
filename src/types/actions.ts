@@ -5,7 +5,7 @@ export const ActionType = Object.freeze({
   IDLE: "IDLE",
   MOVE_NEXT_TO: "MOVE_NEXT_TO",
   MINE: "MINE",
-  ATTUNE: "ATTUNE",
+  SING: "SING",
   DIE: "DIE",
   SMASH: "SMASH",
 } as const);
@@ -24,7 +24,7 @@ export type Action<
 
 export type MOVE_NEXT_TO = Action<typeof ActionType.MOVE_NEXT_TO, { v: Vec }>;
 export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
-export type ATTUNE = Action<typeof ActionType.ATTUNE>;
+export type SING = Action<typeof ActionType.SING>;
 export type DIE = Action<typeof ActionType.DIE>;
 export type SMASH = Action<typeof ActionType.SMASH, { target: number }>;
 export type IDLE = Action<typeof ActionType.IDLE>;
@@ -54,8 +54,8 @@ export type MINEProgress = BaseActionProgress<
   }
 >;
 
-export type ATTUNEProgress = BaseActionProgress<
-  typeof ActionType.ATTUNE,
+export type SINGProgress = BaseActionProgress<
+  typeof ActionType.SING,
   {
     heart: Vec;
   }
@@ -66,14 +66,14 @@ export type SMASHProgress = TargettedProgress<typeof ActionType.SMASH>;
 export type ActionProgress =
   | MOVE_NEXT_TOProgress
   | MINEProgress
-  | ATTUNEProgress
+  | SINGProgress
   | SMASHProgress;
 
 export type ActionHandler = {
   [ActionType.IDLE]: [IDLE, void];
   [ActionType.MOVE_NEXT_TO]: [MOVE_NEXT_TO, MOVE_NEXT_TOProgress];
   [ActionType.MINE]: [MINE, MINEProgress];
-  [ActionType.ATTUNE]: [ATTUNE, ATTUNEProgress];
+  [ActionType.SING]: [SING, SINGProgress];
   [ActionType.DIE]: [DIE, void];
   [ActionType.SMASH]: [SMASH, SMASHProgress];
 };
