@@ -3,6 +3,7 @@ import { EnterWeight, Tile } from "../types/tile";
 import { dist, eq, Vec } from "../types/vec";
 import { game } from "./game";
 import { MinHeap } from "./heap";
+import { InfMap } from "./InfMap";
 
 // This hashing function will not work for coordinates outside {[0,0], [94_906_265, 94_906_265]}
 const hashMaxWidth = Math.floor(Math.sqrt(Number.MAX_SAFE_INTEGER));
@@ -27,39 +28,24 @@ const reconstruct_path = (
   return path.map((p) => unhashVec(p));
 };
 
-class InfMap {
-  m = new Map<number, number>();
-  get(key: number): number {
-    return this.m.get(key) ?? Infinity;
-  }
-  set(key: number, n: number): void {
-    this.m.set(key, n);
-  }
-}
-
 export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
   const hashedStart = hashVec(start);
   const hashedGoal = hashVec(goal);
-  const openSet = [hashVec(start)];
+  // fScore[n] represents our current best guess as to how cheap
+  // a path could be from start to finish if it goes through n.
+  const fScore = new InfMap();
+  fScore.set(hashedStart, dist(start, goal));
+  const openSet = new MinHeap(fScore);
+  openSet.insert(hashVec(start));
 
   const cameFrom = new Map<number, number>();
   // gScore[n] is the currently known cost of the cheapest path from start to n.
   const gScore = new InfMap();
   gScore.set(hashedStart, 0);
-  // fScore[n] represents our current best guess as to how cheap
-  // a path could be from start to finish if it goes through n.
-  const fScore = new InfMap();
-  fScore.set(hashedStart, dist(start, goal));
-  while (openSet.length) {
-    const currentI = openSet.reduce(
-      (best, current, currentI) =>
-        fScore.get(openSet[best]) < fScore.get(current) ? best : currentI,
-      0
-    );
-    const current = openSet[currentI];
+  while (openSet.size()) {
+    const current = openSet.removeMin();
 
     if (current === hashedGoal) return reconstruct_path(cameFrom, current);
-    openSet.splice(currentI, 1);
 
     const currentV = unhashVec(current);
     const neighbors: Vec[] = [
@@ -95,12 +81,11 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
         cameFrom.set(hashedNeighbor, current);
         gScore.set(hashedNeighbor, tentative_gScore);
         fScore.set(hashedNeighbor, tentative_gScore + dist(neighbor, goal));
-        if (!openSet.includes(hashedNeighbor)) openSet.push(hashedNeighbor);
+        if (!openSet.includes(hashedNeighbor)) openSet.insert(hashedNeighbor);
+        else openSet.heapifyDown();
       }
     }
   }
 
   return null;
 };
-
-console.log(new MinHeap<number>());
