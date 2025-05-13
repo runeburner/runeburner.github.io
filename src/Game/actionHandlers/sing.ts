@@ -1,15 +1,15 @@
 import {
   ActionProgress,
   ActionType,
-  ATTUNE,
-  ATTUNEProgress,
+  SING,
+  SINGProgress,
 } from "../../types/actions";
 import { Entity, EntityType } from "../../types/entity";
 import { Rune } from "../../types/rune";
 import { dist } from "../../types/vec";
 import { game } from "../game";
 
-const maker = (a: ATTUNE): ActionProgress | true | null => {
+const maker = (a: SING): ActionProgress | true | null => {
   const old = game.actions.get(a.id);
   const golem = game.entities.get(a.id);
   if (golem?.__type !== EntityType.GOLEM) return null;
@@ -28,10 +28,10 @@ const maker = (a: ATTUNE): ActionProgress | true | null => {
   if (golem.runeCrystals === 0) return null;
 
   // If we were already attuning
-  if (old && old.__type === ActionType.ATTUNE) return true;
+  if (old && old.__type === ActionType.SING) return true;
 
   return {
-    __type: ActionType.ATTUNE,
+    __type: ActionType.SING,
     progress: [0, 2],
     pos: [...golem.pos],
     heart: [...heart.pos],
@@ -40,21 +40,21 @@ const maker = (a: ATTUNE): ActionProgress | true | null => {
 const processor = (
   rate: number,
   golem: Entity,
-  action: ATTUNEProgress
+  action: SINGProgress
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
   action.progress[0] +=
     golem.runes[Rune.LABOR] *
     game.powers.workPerRune *
     rate *
-    game.powers.attuneStrength;
+    game.powers.musicalStrength;
   while (action.progress[0] >= action.progress[1] && golem.runeCrystals > 0) {
     action.progress[0] -= action.progress[1];
     golem.runeCrystals--;
-    game.addAttunement(1);
+    game.addMusicalNotes(1);
   }
 
   return golem.runeCrystals === 0;
 };
 
-export const attuneHandler = [maker, processor] as const;
+export const singHandler = [maker, processor] as const;

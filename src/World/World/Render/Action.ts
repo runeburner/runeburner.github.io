@@ -2,7 +2,7 @@ import { game } from "../../../Game/game";
 import {
   ActionProgress,
   ActionType,
-  ATTUNEProgress,
+  SINGProgress,
   MINEProgress,
   MOVE_NEXT_TOProgress,
   SMASHProgress,
@@ -50,9 +50,9 @@ const renderMine = (
   renderProgress(ctx, action.pos, action.progress, "#0000ff44");
 };
 
-const renderAttune = (
+const renderSing = (
   ctx: CanvasRenderingContext2D,
-  action: ATTUNEProgress
+  action: SINGProgress
 ): void => {
   ctx.lineWidth = 4 / 64;
   ctx.strokeStyle = "#0000ff44";
@@ -94,8 +94,8 @@ export const renderAction = (
     case ActionType.MINE:
       renderMine(ctx, p);
       break;
-    case ActionType.ATTUNE:
-      renderAttune(ctx, p);
+    case ActionType.SING:
+      renderSing(ctx, p);
       break;
     case ActionType.SMASH:
       renderSmash(ctx, p);

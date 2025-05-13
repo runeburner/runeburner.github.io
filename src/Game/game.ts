@@ -1,4 +1,4 @@
-import { setAttunement } from "../store/resources";
+import { setMusicalNotes } from "../store/resources";
 import { store } from "../store/store";
 import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
@@ -21,7 +21,7 @@ export type Game = {
   workers: EntityTicker[];
   resources: Resources;
   powers: {
-    attuneStrength: number;
+    musicalStrength: number;
     movePerRune: number;
     capacityPerRune: number;
     workPerRune: number;
@@ -37,7 +37,7 @@ export type Game = {
   findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[];
   findClosestEntity(pos: Vec, entityType: EntityType): Entity | null;
   golemSpawnCoordinates(): Vec | null;
-  addAttunement(n: number): void;
+  addMusicalNotes(n: number): void;
   determineInitialCameraPosition(cam: Camera): Camera;
   updateFoW(before: Vec | null, after: Vec | null, radius: number): void;
   animate(runes: Record<Rune, number>, incantation: string): void;
@@ -53,10 +53,10 @@ export const game = ((): Game => {
   return {
     workers: [],
     resources: {
-      attunement: 0,
+      musicalNotes: 0,
     },
     powers: {
-      attuneStrength: 1,
+      musicalStrength: 1,
       movePerRune: 2,
       capacityPerRune: 1,
       workPerRune: 1,
@@ -174,13 +174,13 @@ export const game = ((): Game => {
       if (!heart) return null;
       return game.findClosestTile(heart.pos, Tile.EMPTY, 3);
     },
-    addAttunement(n: number): void {
-      game.resources.attunement += n;
-      game.powers.attuneStrength = Math.pow(
+    addMusicalNotes(n: number): void {
+      game.resources.musicalNotes += n;
+      game.powers.musicalStrength = Math.pow(
         1.01,
-        Math.sqrt(0.5 * game.resources.attunement)
+        Math.sqrt(0.5 * game.resources.musicalNotes)
       );
-      store.dispatch(setAttunement(game.resources.attunement));
+      store.dispatch(setMusicalNotes(game.resources.musicalNotes));
     },
 
     determineInitialCameraPosition(cam: Camera): Camera {
@@ -222,10 +222,10 @@ export const game = ((): Game => {
     },
     loadMap(entities: Entity[], map: Plane): void {
       game.resources = {
-        attunement: 0,
+        musicalNotes: 0,
       };
       game.powers = {
-        attuneStrength: 1,
+        musicalStrength: 1,
         movePerRune: 2,
         capacityPerRune: 1,
         workPerRune: 1,

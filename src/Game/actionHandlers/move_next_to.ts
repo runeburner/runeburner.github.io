@@ -64,7 +64,7 @@ const processor = (
     golem.runes[Rune.WIND] *
     game.powers.movePerRune *
     rate *
-    game.powers.attuneStrength;
+    game.powers.musicalStrength;
   while (mp.progress[0] >= mp.progress[1]) {
     if (game.entityAt(mp.path[1])) {
       const newPath = aStarPath(golem.pos, mp.goal);

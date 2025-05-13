@@ -1,7 +1,7 @@
 import gameLoopEN from "./manual/en/gameLoop.md?raw";
 import gameLoopFR from "./manual/fr/gameLoop.md?raw";
-import attunementEN from "./manual/en/attunement.md?raw";
-import attunementFR from "./manual/fr/attunement.md?raw";
+import musicalNotesEN from "./manual/en/musicalNotes.md?raw";
+import musicalNotesFR from "./manual/fr/musicalNotes.md?raw";
 import editorEN from "./manual/en/editor.md?raw";
 import editorFR from "./manual/fr/editor.md?raw";
 import worldEN from "./manual/en/world.md?raw";
@@ -16,8 +16,8 @@ import MOVE_NEXT_TOEN from "./manual/en/MOVE_NEXT_TO.md?raw";
 import MOVE_NEXT_TOFR from "./manual/fr/MOVE_NEXT_TO.md?raw";
 import MINEEN from "./manual/en/MINE.md?raw";
 import MINEFR from "./manual/fr/MINE.md?raw";
-import ATTUNEEN from "./manual/en/ATTUNE.md?raw";
-import ATTUNEFR from "./manual/fr/ATTUNE.md?raw";
+import SINGEN from "./manual/en/SING.md?raw";
+import SINGFR from "./manual/fr/SING.md?raw";
 import DIEEN from "./manual/en/DIE.md?raw";
 import DIEFR from "./manual/fr/DIE.md?raw";
 import SMASHEN from "./manual/en/SMASH.md?raw";
@@ -48,7 +48,7 @@ import incantationsFR from "./manual/fr/incantations.md?raw";
 export const Content = {
   en: {
     gameLoop: gameLoopEN,
-    attunement: attunementEN,
+    musicalNotes: musicalNotesEN,
     editor: editorEN,
     world: worldEN,
     perks: perksEN,
@@ -56,7 +56,7 @@ export const Content = {
     settings: settingsEN,
     MOVE_NEXT_TO: MOVE_NEXT_TOEN,
     MINE: MINEEN,
-    ATTUNE: ATTUNEEN,
+    SING: SINGEN,
     DIE: DIEEN,
     SMASH: SMASHEN,
     IDLE: IDLEEN,
@@ -73,7 +73,7 @@ export const Content = {
   },
   fr: {
     gameLoop: gameLoopFR,
-    attunement: attunementFR,
+    musicalNotes: musicalNotesFR,
     editor: editorFR,
     world: worldFR,
     perks: perksFR,
@@ -81,7 +81,7 @@ export const Content = {
     settings: settingsFR,
     MOVE_NEXT_TO: MOVE_NEXT_TOFR,
     MINE: MINEFR,
-    ATTUNE: ATTUNEFR,
+    SING: SINGFR,
     DIE: DIEFR,
     SMASH: SMASHFR,
     IDLE: IDLEFR,

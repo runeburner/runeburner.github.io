@@ -63,7 +63,7 @@
     "entities": "Entitiés",
 
     "gameLoop": "Boucle du jeu",
-    "attunement": "Harmonisation",
+    "musicalNotes": "Notes Musicales",
     "editor": "Editeur",
     "world": "Monde",
     "perks": "Avantages",
@@ -71,7 +71,7 @@
     "settings": "Paramètres",
     "MOVE_NEXT_TO": "MOVE_NEXT_TO",
     "MINE": "MINE",
-    "ATTUNE": "ATTUNE",
+    "SING": "SING",
     "DIE": "DIE",
     "SMASH": "SMASH",
     "IDLE": "IDLE",

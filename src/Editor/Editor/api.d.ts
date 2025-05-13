@@ -12,7 +12,7 @@ type RS = {
   act: {
     MOVE_NEXT_TO(v: Vec): Action;
     MINE(v: Vec): Action;
-    ATTUNE(): Action;
+    CHANT(): Action;
     DIE(): Action;
     SMASH(id: number): Action;
   };

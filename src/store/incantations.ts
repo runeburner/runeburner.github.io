@@ -25,7 +25,7 @@ export const tick: Ticker = ({game, me, act}: RS) => {
   crystal = null;
   const heart = game.findClosestEntity(EntityType.HEART);
   if (heart === null) return act.DIE();
-  return me.isInRange(heart.pos) ? act.ATTUNE() : act.MOVE_NEXT_TO(heart.pos);
+  return me.isInRange(heart.pos) ? act.SING() : act.MOVE_NEXT_TO(heart.pos);
 }`;
 
 export const defaultFight = `export const tick: Ticker = ({ game, me, act }: RS) => {
