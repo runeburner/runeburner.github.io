@@ -6,7 +6,8 @@ import {
   FeatherIcon,
   BookIcon,
   MapIcon,
-  SettingsIcon /* ShareIcon */,
+  SettingsIcon,
+  ShareIcon,
 } from "../icons";
 
 type SidebarTabProps = {
@@ -44,7 +45,7 @@ export const Sidebar = (): React.ReactElement => {
       <SidebarTab page={Page.EDITOR} icon={FeatherIcon} />
       <SidebarTab page={Page.WORLD} icon={MapIcon} />
       <SidebarTab page={Page.HELP} icon={BookIcon} />
-      {/* <SidebarTab page={Page.PERKS} icon={ShareIcon} /> */}
+      <SidebarTab page={Page.PERKS} icon={ShareIcon} />
       <SidebarTab page={Page.SETTINGS} icon={SettingsIcon} />
     </ul>
   );
