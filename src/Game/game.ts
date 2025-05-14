@@ -191,6 +191,8 @@ export const game = ((): Game => {
         ],
         size: [...cam.size],
         scale: cam.scale,
+        targetScale: cam.targetScale,
+        scalePos: [0, 0],
       };
     },
 

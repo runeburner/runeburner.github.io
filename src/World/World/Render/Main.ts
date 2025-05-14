@@ -1,14 +1,15 @@
 import { game } from "../../../Game/game";
+import { uiFPS } from "../../uiFPS";
 import { camera } from "../Camera";
 import { renderEntities } from "./Entities";
 import { renderTiles } from "./Tile";
 
 const clear = (ctx: CanvasRenderingContext2D): void => {
   const transform = ctx.getTransform();
-  transform.e = -camera.c.pos[0] * camera.c.scale;
-  transform.f = -camera.c.pos[1] * camera.c.scale;
-  transform.a = camera.c.scale;
-  transform.d = camera.c.scale;
+  transform.e = -camera.c.pos[0] * camera.c.scale[0];
+  transform.f = -camera.c.pos[1] * camera.c.scale[0];
+  transform.a = camera.c.scale[0];
+  transform.d = camera.c.scale[0];
   ctx.setTransform(transform);
   ctx.clearRect(
     camera.c.pos[0],
@@ -19,6 +20,8 @@ const clear = (ctx: CanvasRenderingContext2D): void => {
 };
 
 export const renderWorld = (ctx: CanvasRenderingContext2D): void => {
+  camera.smoothZoom(1 / uiFPS);
+  camera.fitToContext(ctx);
   clear(ctx);
   ctx.strokeStyle = "#ffffffff";
   ctx.lineWidth = 1 / 16;
