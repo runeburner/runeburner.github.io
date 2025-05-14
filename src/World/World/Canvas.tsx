@@ -6,6 +6,21 @@ import { useAtInterval } from "./useAtInterval";
 import { useWindowResize } from "./useWindowResize";
 import { runGameSelectors } from "../../store/gameRedux";
 import { game } from "../../Game/game";
+import { Smooth } from "./smooth";
+
+((): void => {
+  const v: [number, number, number] = [0, 1, 0];
+  const delay = 200;
+  setInterval(() => {
+    v[1] = 1 - v[1];
+    console.log("switch");
+  }, 3000);
+  const smoothTimeSeconds = 1;
+  setInterval(() => {
+    Smooth(v, smoothTimeSeconds, 3000, delay / 1000);
+    console.log(`${v[0].toFixed(2)} ${v[1].toFixed(2)} ${v[2].toFixed(2)}`);
+  }, delay);
+})();
 
 export const Canvas = (
   props: HTMLProps<HTMLCanvasElement>
