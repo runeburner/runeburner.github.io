@@ -63,11 +63,11 @@ export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
         const subtr = ctx.getTransform();
         const heartScale = 0.5;
         subtr.e =
-          (e.pos[0] - camera.c.pos[0] + heartScale / 2) * camera.c.scale;
+          (e.pos[0] - camera.c.pos[0] + heartScale / 2) * camera.c.scale[0];
         subtr.f =
-          (e.pos[1] - camera.c.pos[1] + heartScale / 2) * camera.c.scale;
-        subtr.a = camera.c.scale * heartScale;
-        subtr.d = camera.c.scale * heartScale;
+          (e.pos[1] - camera.c.pos[1] + heartScale / 2) * camera.c.scale[0];
+        subtr.a = camera.c.scale[0] * heartScale;
+        subtr.d = camera.c.scale[0] * heartScale;
         ctx.setTransform(subtr);
         ctx.fillStyle = "rgb(255, 26, 26)";
         ctx.fill(heart);
