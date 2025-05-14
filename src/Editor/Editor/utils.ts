@@ -31,15 +31,20 @@ export const createNewEditor = (
 // Setup the shortcut ctrl/cmd+s to save the currently selected incantation
 const setupCtrlS = (editor: monaco.editor.IStandaloneCodeEditor): void => {
   editor.addCommand(monaco.KeyCode.KeyS | monaco.KeyMod.CtrlCmd, (): void => {
-    store.dispatch(
-      saveIncantation({
-        name: store.getState().monacoModels.incantations[
-          store.getState().monacoModels.selected
-        ].name,
-        content: editor.getValue(),
-      })
-    );
-    store.dispatch(setCurrentModelClean());
+    editor
+      .getAction("editor.action.formatDocument")
+      ?.run()
+      .then(() => {
+        store.dispatch(
+          saveIncantation({
+            name: store.getState().monacoModels.incantations[
+              store.getState().monacoModels.selected
+            ].name,
+            content: editor.getValue(),
+          })
+        );
+        store.dispatch(setCurrentModelClean());
+      });
   });
 };
 
