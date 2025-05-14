@@ -4,6 +4,7 @@ import { Rune } from "../types/rune";
 import { Tile } from "../types/tile";
 import { dist } from "../types/vec";
 import { game } from "./game";
+import { aStarPath } from "./path";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
 export const rs = {
@@ -35,6 +36,9 @@ export const rs = {
     isInRange(e: Entity, v: Vec): boolean {
       if (!isArgs([v], isVec)) return false;
       return dist(e.pos, v) <= 1;
+    },
+    hasPathTo(e: Entity, v: Vec): boolean {
+      return aStarPath(e.pos, v) !== null;
     },
   },
   act: {
