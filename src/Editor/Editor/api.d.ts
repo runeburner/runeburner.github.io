@@ -12,7 +12,7 @@ type RS = {
   act: {
     MOVE_NEXT_TO(v: Vec): Action;
     MINE(v: Vec): Action;
-    CHANT(): Action;
+    SING(): Action;
     DIE(): Action;
     SMASH(id: number): Action;
   };
@@ -20,6 +20,7 @@ type RS = {
     runeCrystals(): number;
     runeCrystalCapacity(): number;
     isInRange(v: Vec): boolean;
+    hasPathTo(v: Vec): boolean;
   };
 };
 
