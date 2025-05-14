@@ -1,6 +1,6 @@
 import { Offset } from "../types/map";
 import { EnterWeight, Tile } from "../types/tile";
-import { dist, eq, Vec } from "../types/vec";
+import { eq, Vec } from "../types/vec";
 import { game } from "./game";
 import { MinHeap } from "./heap";
 import { InfMap } from "./InfMap";
@@ -28,13 +28,18 @@ const reconstruct_path = (
   return path.map((p) => unhashVec(p));
 };
 
+// this dist formula will properly sort all possible tiles by their
+// most direct path visually while keeping actual shortest path
+const distEstimate = (v0: Vec, v1: Vec): number =>
+  Math.abs(v0[0] - v1[0]) + Math.abs(v0[1] - v1[1]);
+
 export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
   const hashedStart = hashVec(start);
   const hashedGoal = hashVec(goal);
   // fScore[n] represents our current best guess as to how cheap
   // a path could be from start to finish if it goes through n.
   const fScore = new InfMap();
-  fScore.set(hashedStart, dist(start, goal));
+  fScore.set(hashedStart, distEstimate(start, goal));
   const openSet = new MinHeap(fScore);
   openSet.insert(hashVec(start));
 
@@ -80,7 +85,10 @@ export const aStarPath = (start: Vec, goal: Vec): Vec[] | null => {
       if (tentative_gScore < gScore.get(hashedNeighbor)) {
         cameFrom.set(hashedNeighbor, current);
         gScore.set(hashedNeighbor, tentative_gScore);
-        fScore.set(hashedNeighbor, tentative_gScore + dist(neighbor, goal));
+        fScore.set(
+          hashedNeighbor,
+          tentative_gScore + distEstimate(neighbor, goal)
+        );
         if (!openSet.includes(hashedNeighbor)) openSet.insert(hashedNeighbor);
         else openSet.heapifyDown();
       }
