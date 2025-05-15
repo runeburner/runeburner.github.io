@@ -1,4 +1,4 @@
-import { HTMLProps, useRef } from "react";
+import { HTMLProps, RefObject, useRef } from "react";
 import { uiFPS } from "../uiFPS";
 import { camera } from "./Camera";
 import { renderWorld } from "./Render/Main";
@@ -7,10 +7,12 @@ import { useWindowResize } from "./useWindowResize";
 import { runGameSelectors } from "../../store/gameRedux";
 import { game } from "../../Game/game";
 
-export const Canvas = (
-  props: HTMLProps<HTMLCanvasElement>
-): React.ReactElement => {
-  const canvas = useRef<HTMLCanvasElement>(null);
+type CanvasProps = {
+  canvas: RefObject<HTMLCanvasElement>;
+} & HTMLProps<HTMLCanvasElement>;
+
+export const Canvas = (props: CanvasProps): React.ReactElement => {
+  const { canvas } = props;
   const isPanning = useRef(false);
 
   const reframe = ({ canvas }: CanvasRenderingContext2D): void => {
@@ -85,6 +87,6 @@ export const Canvas = (
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       onWheel={onWheel}
-    />
+    ></canvas>
   );
 };

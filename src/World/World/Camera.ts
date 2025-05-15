@@ -22,7 +22,7 @@ export const camera = {
     pos: [0, 0],
     size: [24, 24],
     scale: 64,
-  },
+  } as Camera,
   setPos(v: Vec): void {
     camera.c.pos = v;
   },
