@@ -1,14 +1,10 @@
 import { AABB } from "../../types/aabb";
 import { Vec } from "../../types/vec";
-import { uiFPS } from "../uiFPS";
-import { Smooth } from "./smooth";
 
 export type Camera = {
   pos: Vec;
   size: Vec;
-  scale: [number, number];
-  targetScale: number;
-  scalePos: Vec;
+  scale: number;
 };
 
 export const isInView = (camera: Camera, v: Vec): boolean => {
@@ -25,9 +21,7 @@ export const camera = {
   c: {
     pos: [0, 0],
     size: [24, 24],
-    scale: [64, 0] as [number, number],
-    targetScale: 64,
-    scalePos: [0, 0],
+    scale: 64,
   },
   setPos(v: Vec): void {
     camera.c.pos = v;
@@ -36,20 +30,16 @@ export const camera = {
     camera.c.size = v;
   },
   fitToContext(ctx: CanvasRenderingContext2D): void {
-    camera.c.size[0] = Math.floor(ctx.canvas.width) / camera.c.scale[0] + 1;
-    camera.c.size[1] = Math.floor(ctx.canvas.height) / camera.c.scale[0] + 1;
+    camera.c.size[0] = Math.floor(ctx.canvas.width) / camera.c.scale + 1;
+    camera.c.size[1] = Math.floor(ctx.canvas.height) / camera.c.scale + 1;
   },
   zoom(iin: boolean, pos: Vec): void {
-    camera.c.targetScale *= iin ? scaleFactor : 1 / scaleFactor;
-    camera.c.scalePos = pos;
-  },
-  smoothZoom(deltaTimeSec: number): void {
-    const oldScale = camera.c.scale[0];
-    Smooth(camera.c.scale, camera.c.targetScale, 1 / uiFPS, 100, deltaTimeSec);
-    const a0 = camera.c.scalePos[0] / camera.c.scale[0];
-    const a1 = camera.c.scalePos[1] / camera.c.scale[0];
-    const b0 = camera.c.scalePos[0] / oldScale;
-    const b1 = camera.c.scalePos[1] / oldScale;
+    const oldScale = camera.c.scale;
+    camera.c.scale *= iin ? scaleFactor : 1 / scaleFactor;
+    const b0 = pos[0] / oldScale;
+    const b1 = pos[1] / oldScale;
+    const a0 = pos[0] / camera.c.scale;
+    const a1 = pos[1] / camera.c.scale;
     camera.c.pos[0] += b0 - a0;
     camera.c.pos[1] += b1 - a1;
   },
