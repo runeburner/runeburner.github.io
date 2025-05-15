@@ -10,8 +10,10 @@ type ZoomProps = {
 export const Zoom = ({ canvas }: ZoomProps): React.ReactElement => {
   const onZoom = useCallback(
     (iin: boolean): void => {
-      if (!canvas.current) return;
+      const ctx = canvas.current?.getContext("2d");
+      if (!ctx || !canvas.current) return;
       camera.zoom(iin, [canvas.current.width / 2, canvas.current.height / 2]);
+      camera.fitToContext(ctx);
     },
     [canvas]
   );
