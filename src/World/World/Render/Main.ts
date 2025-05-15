@@ -21,12 +21,12 @@ const clear = (ctx: CanvasRenderingContext2D): void => {
 export const renderWorld = (ctx: CanvasRenderingContext2D): void => {
   clear(ctx);
   ctx.strokeStyle = "#ffffffff";
-  ctx.lineWidth = 1 / 16;
+  ctx.lineWidth = 1 / 32;
   ctx.strokeRect(
-    game.plane.bounds[0],
-    game.plane.bounds[1],
-    game.plane.bounds[2],
-    game.plane.bounds[3]
+    game.plane.bounds[0] - 3 / 128,
+    game.plane.bounds[1] - 3 / 128,
+    game.plane.bounds[2] + 6 / 128,
+    game.plane.bounds[3] + 6 / 128
   );
   renderTiles(ctx);
   renderEntities(ctx);
