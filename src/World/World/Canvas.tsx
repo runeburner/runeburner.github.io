@@ -30,12 +30,12 @@ export const Canvas = (
     const ctx = canvas.current?.getContext("2d");
     if (!ctx) return;
 
-    const p0 = camera.c.pos[0] - e.movementX / camera.c.scale;
-    const p1 = camera.c.pos[1] - e.movementY / camera.c.scale;
+    const p0 = camera.c.pos[0] - e.movementX / camera.c.scale[0];
+    const p1 = camera.c.pos[1] - e.movementY / camera.c.scale[0];
 
     game.ui.inspectedTile = [
-      Math.floor((e.clientX - ctx.canvas.offsetLeft) / camera.c.scale + p0),
-      Math.floor((e.clientY - ctx.canvas.offsetTop) / camera.c.scale + p1),
+      Math.floor((e.clientX - ctx.canvas.offsetLeft) / camera.c.scale[0] + p0),
+      Math.floor((e.clientY - ctx.canvas.offsetTop) / camera.c.scale[0] + p1),
     ];
     runGameSelectors();
 
