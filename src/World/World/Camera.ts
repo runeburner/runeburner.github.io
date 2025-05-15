@@ -1,6 +1,9 @@
 import { AABB } from "../../types/aabb";
 import { Vec } from "../../types/vec";
 
+const minPixelsPerTile = 12;
+const maxPixelsPerTile = 512;
+
 const clamp = (v: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, v));
 
@@ -39,7 +42,7 @@ export const camera = {
   zoom(iin: boolean, pos: Vec): void {
     const oldScale = camera.c.scale;
     camera.c.scale *= iin ? scaleFactor : 1 / scaleFactor;
-    camera.c.scale = clamp(camera.c.scale, 4, 1000);
+    camera.c.scale = clamp(camera.c.scale, minPixelsPerTile, maxPixelsPerTile);
     const b0 = pos[0] / oldScale;
     const b1 = pos[1] / oldScale;
     const a0 = pos[0] / camera.c.scale;
