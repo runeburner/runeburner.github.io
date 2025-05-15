@@ -19,10 +19,10 @@ export const Canvas = (
   };
 
   const onMouseDown = ({ button }: React.MouseEvent): boolean =>
-    (isPanning.current ||= button === 1);
+    (isPanning.current ||= button === 0);
 
   const onMouseUp = ({ button }: React.MouseEvent): boolean =>
-    (isPanning.current &&= button !== 1);
+    (isPanning.current &&= button !== 0);
 
   const onMouseLeave = (): boolean => (isPanning.current = false);
 
