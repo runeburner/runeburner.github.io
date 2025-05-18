@@ -25,6 +25,8 @@ super long recharging attacks
 
 fishing
 
+on beat actions
+
 
 https://material-foundation.github.io/material-theme-builder/
 https://feathericons.com/
