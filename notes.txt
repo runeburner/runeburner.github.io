@@ -27,6 +27,10 @@ fishing
 
 on beat actions
 
+stronger monsters at night (in-game night)
+
+illness that spreads to nearby golems
+
 
 https://material-foundation.github.io/material-theme-builder/
 https://feathericons.com/
