@@ -6,7 +6,6 @@ import { useAppDispatch } from "../../store/hooks";
 import { Topic, topicTree } from "../Topic";
 import { setBreadcrumbs } from "../../store/manual";
 import { HasTooltip, Tooltip } from "../../Tooltip/Tooltip";
-import { Fragment } from "react/jsx-runtime";
 
 type DocumentationProps = {
   page: string;
