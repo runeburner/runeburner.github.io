@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../store/hooks";
 import { Topic, topicTree } from "../Topic";
 import { setBreadcrumbs } from "../../store/manual";
+import { HasTooltip, Tooltip } from "../../Tooltip/Tooltip";
 
 type DocumentationProps = {
   page: string;
@@ -26,6 +27,26 @@ const recursiveFindBreadcrumbs = (
   return undefined;
 };
 
+type TooltipPreviewProps = {
+  page: string;
+};
+
+const previewSize = 128;
+
+const TooltipPreview = ({ page }: TooltipPreviewProps): React.ReactElement => {
+  const { i18n } = useTranslation();
+  const contentLong = Content[i18n.language]?.[page] ?? "";
+  const firstLine = contentLong.indexOf("\n");
+  const content =
+    contentLong.slice(firstLine, firstLine + previewSize) +
+    (contentLong.length > firstLine + previewSize ? "..." : "");
+  return (
+    <Tooltip>
+      <Markdown components={{ a: "span" }}>{content}</Markdown>
+    </Tooltip>
+  );
+};
+
 const ALink = ({
   href,
   children,
@@ -36,10 +57,23 @@ const ALink = ({
   const dispatch = useAppDispatch();
   const onClick = (): void => {
     if (!href) return;
+
     const breadcrumbs = recursiveFindBreadcrumbs(topicTree, href) ?? [];
     dispatch(setBreadcrumbs(breadcrumbs));
   };
-  return <span onClick={onClick}>{children}</span>;
+
+  return href ? (
+    <HasTooltip>
+      <span className={classes.link} onClick={onClick}>
+        {children}
+      </span>
+      <TooltipPreview page={href} />
+    </HasTooltip>
+  ) : (
+    <span className={classes.link} onClick={onClick}>
+      {children}
+    </span>
+  );
 };
 
 export const Documentation = ({
