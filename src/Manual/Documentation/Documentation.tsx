@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../store/hooks";
 import { Topic, topicTree } from "../Topic";
 import { setBreadcrumbs } from "../../store/manual";
 import { HasTooltip, Tooltip } from "../../Tooltip/Tooltip";
+import { Fragment } from "react/jsx-runtime";
 
 type DocumentationProps = {
   page: string;
@@ -42,7 +43,7 @@ const TooltipPreview = ({ page }: TooltipPreviewProps): React.ReactElement => {
     (contentLong.length > firstLine + previewSize ? "..." : "");
   return (
     <Tooltip>
-      <Markdown components={{ a: "span" }}>{content}</Markdown>
+      <Markdown components={{ a: Fragment, p: Fragment }}>{content}</Markdown>
     </Tooltip>
   );
 };
