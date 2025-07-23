@@ -43,7 +43,7 @@ const TooltipPreview = ({ page }: TooltipPreviewProps): React.ReactElement => {
     (contentLong.length > firstLine + previewSize ? "..." : "");
   return (
     <Tooltip>
-      <Markdown components={{ a: Fragment, p: Fragment }}>{content}</Markdown>
+      <Markdown components={{ a: "span", p: "span" }}>{content}</Markdown>
     </Tooltip>
   );
 };
