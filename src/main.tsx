@@ -9,6 +9,7 @@ import { I18NPicker } from "./i18n/I18NPicker.tsx";
 import { esbuildInit } from "./Game/esbuild.ts";
 
 import "./Realm/tutorial_0";
+import "./Realm/tutorial_1";
 import "./Realm/DevMap";
 
 ((): void => {

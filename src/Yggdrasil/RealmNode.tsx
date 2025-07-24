@@ -36,7 +36,7 @@ export const RealmNode = ({ realm }: RealmNodeProps): React.ReactElement => {
   return (
     <>
       <span
-        onClick={onClick}
+        onClick={available ? onClick : undefined}
         className={`${available ? "cursor-pointer " : ""}${cssClass}`}
       >
         ●
