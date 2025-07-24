@@ -19,7 +19,7 @@ export const Goal = (): React.ReactElement => {
     <div className={"m-4 p-2 fixed flex flex-col " + classes.container}>
       {t(`yggdrasil.realm.${realmId}`)}
       {realm?.goals.map((g, i) => (
-        <p key={i}>{t.apply(g.i18nArgs)}</p>
+        <p key={i}>{t(...g.i18nArgs)}</p>
       ))}
       {realmCompleted && (
         <button className="btn" onClick={onComplete}>

@@ -66,7 +66,8 @@
     "complete": "complete"
   },
   "goals": {
-    "destroyAllRocks": "Destroy all rocks"
+    "destroyAllRocks": "Destroy all rocks",
+    "getXNotes": "Get {{x}} notes"
   },
   "yggdrasil": {
     "enter": "enter",
