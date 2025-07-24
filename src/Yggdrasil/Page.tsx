@@ -44,7 +44,7 @@ export const YggdrasilPage = (): React.ReactElement => {
 
   return (
     <div
-      className="m-4"
+      className="m-4 select-none"
       style={{
         whiteSpace: "pre-wrap",
         fontSize: "1.5em",
