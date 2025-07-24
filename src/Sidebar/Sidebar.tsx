@@ -9,6 +9,7 @@ import {
   SettingsIcon,
   ShareIcon,
 } from "../icons";
+import { useTranslation } from "react-i18next";
 
 type SidebarTabProps = {
   page: Page;
@@ -21,13 +22,14 @@ const SidebarTab = ({
   icon: Icon,
   disabled,
 }: SidebarTabProps): ReactElement => {
+  const { t } = useTranslation();
   const isSelected = useIsPageSelected(page);
   const dispatch = useAppDispatch();
 
   return (
     <li
       className={
-        "p-4 select-none cursor-pointer " +
+        "p-4 select-none cursor-pointer flex flex-col items-center " +
         classes.li +
         " " +
         (isSelected ? classes.selected : "")
@@ -35,6 +37,7 @@ const SidebarTab = ({
       onClick={() => !disabled && dispatch(changePage(page))}
     >
       <Icon style={{ width: "32px" }} />
+      <span className="mt-1">{t(`tab.${page}`)}</span>
     </li>
   );
 };

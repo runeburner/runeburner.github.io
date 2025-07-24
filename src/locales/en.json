@@ -34,6 +34,13 @@
     "1": "Rune Crystal",
     "2": "Rock"
   },
+  "tab": {
+    "EDITOR": "Editor",
+    "WORLD": "World",
+    "PERKS": "Perks",
+    "HELP": "Help",
+    "SETTINGS": "Settings"
+  },
   "entity": {
     "HEART": "Heart",
     "GOLEM": "Golem",
