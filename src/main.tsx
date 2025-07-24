@@ -10,6 +10,7 @@ import { esbuildInit } from "./Game/esbuild.ts";
 
 import "./Realm/tutorial_0";
 import "./Realm/tutorial_1";
+import "./Realm/tutorial_2";
 import "./Realm/DevMap";
 
 ((): void => {
