@@ -37,9 +37,10 @@
   "tab": {
     "EDITOR": "Editeur",
     "WORLD": "Monde",
-    "PERKS": "Pouvoirs",
+    "MELODY": "Mélodie",
     "HELP": "Aide",
-    "SETTINGS": "Paramètres"
+    "SETTINGS": "Paramètres",
+    "YGGDRASIL": "Yggdrasil"
   },
   "entity": {
     "HEART": "Coeur",
@@ -73,7 +74,8 @@
     "musicalNotes": "Notes Musicales",
     "editor": "Editeur",
     "world": "Monde",
-    "perks": "Avantages",
+    "melody": "Mélodie",
+    "yggdrasil": "Yggdrasil",
     "help": "Aide",
     "settings": "Paramètres",
     "MOVE_NEXT_TO": "MOVE_NEXT_TO",

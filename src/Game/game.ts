@@ -24,6 +24,7 @@ export type Game = {
     capacityPerRune: number;
     workPerRune: number;
   };
+  completedRealms: string[];
   entities: Map<number, Entity>;
   actions: Map<number, ActionProgress>;
   plane: Plane;
@@ -49,6 +50,7 @@ export type Game = {
 
 export const game = ((): Game => {
   return {
+    completedRealms: [],
     workers: [],
     resources: {
       musicalNotes: 0,

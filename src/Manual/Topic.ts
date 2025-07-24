@@ -11,7 +11,8 @@ export const topicTree: Topic = {
   tabs: {
     editor: null,
     world: null,
-    perks: null,
+    melody: null,
+    yggdrasil: null,
     help: null,
     settings: null,
   },

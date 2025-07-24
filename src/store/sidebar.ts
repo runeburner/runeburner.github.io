@@ -4,9 +4,10 @@ import { useAppSelector } from "./hooks";
 export const Page = Object.freeze({
   EDITOR: "EDITOR",
   WORLD: "WORLD",
-  PERKS: "PERKS",
+  MELODY: "MELODY",
   HELP: "HELP",
   SETTINGS: "SETTINGS",
+  YGGDRASIL: "YGGDRASIL",
 } as const);
 
 export type Page = (typeof Page)[keyof typeof Page];
@@ -16,7 +17,7 @@ type SidebarState = {
 };
 
 const initialState: SidebarState = {
-  selected: Page.WORLD,
+  selected: Page.YGGDRASIL,
 };
 
 const sidebarSlice = createSlice({

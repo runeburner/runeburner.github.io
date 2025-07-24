@@ -2,12 +2,13 @@ import { Page as EditorPage } from "../Editor/Page/Page";
 import { Sidebar } from "../Sidebar/Sidebar";
 import { Page as WorldPage } from "../World/Page/Page";
 import { useEffect } from "react";
-import { Page as PerksPage } from "../Perks/Page/Page";
+import { Page as MelodyPage } from "../Melody/Page/Page";
 import { Page as SettingsPage } from "../Settings/Page";
 import { PageWrapper } from "../PageWrapper/PageWrapper";
 import { Page } from "../store/sidebar";
 import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
 import { HelpPage } from "../Manual/Page";
+import { YggdrasilPage } from "../Yggdrasil/Page";
 
 export const App = (): React.ReactElement => {
   useEffect(() => {
@@ -33,14 +34,17 @@ export const App = (): React.ReactElement => {
           <PageWrapper page={Page.WORLD}>
             <WorldPage />
           </PageWrapper>
-          <PageWrapper page={Page.PERKS}>
-            <PerksPage />
+          <PageWrapper page={Page.MELODY}>
+            <MelodyPage />
           </PageWrapper>
           <PageWrapper page={Page.HELP}>
             <HelpPage />
           </PageWrapper>
           <PageWrapper page={Page.SETTINGS}>
             <SettingsPage />
+          </PageWrapper>
+          <PageWrapper page={Page.YGGDRASIL}>
+            <YggdrasilPage />
           </PageWrapper>
         </div>
       </div>

@@ -7,7 +7,8 @@ import {
   BookIcon,
   MapIcon,
   SettingsIcon,
-  ShareIcon,
+  MusicIcon,
+  TreeIcon,
 } from "../icons";
 import { useTranslation } from "react-i18next";
 
@@ -47,8 +48,9 @@ export const Sidebar = (): React.ReactElement => {
     <ul className={"p-0 " + classes.ul}>
       <SidebarTab page={Page.EDITOR} icon={FeatherIcon} />
       <SidebarTab page={Page.WORLD} icon={MapIcon} />
+      <SidebarTab page={Page.MELODY} icon={MusicIcon} />
+      <SidebarTab page={Page.YGGDRASIL} icon={TreeIcon} />
       <SidebarTab page={Page.HELP} icon={BookIcon} />
-      <SidebarTab page={Page.PERKS} icon={ShareIcon} />
       <SidebarTab page={Page.SETTINGS} icon={SettingsIcon} />
     </ul>
   );

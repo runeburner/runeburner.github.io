@@ -47,6 +47,9 @@ import Uruz from "./uruz.svg";
 import Wunjo from "./wunjo.svg";
 import Magic from "./magic.svg";
 import Feather from "./feather.svg";
+import Music from "./music.svg";
+import Tree from "./tree.svg";
+import Note from "./note.svg";
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -113,3 +116,6 @@ export const TiwazIcon = makeIcon(Tiwaz);
 export const UruzIcon = makeIcon(Uruz);
 export const WunjoIcon = makeIcon(Wunjo);
 export const MagicIcon = makeIcon(Magic);
+export const MusicIcon = makeIcon(Music);
+export const TreeIcon = makeIcon(Tree);
+export const NoteIcon = makeIcon(Note);

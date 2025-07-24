@@ -37,9 +37,10 @@
   "tab": {
     "EDITOR": "Editor",
     "WORLD": "World",
-    "PERKS": "Perks",
+    "MELODY": "Melody",
     "HELP": "Help",
-    "SETTINGS": "Settings"
+    "SETTINGS": "Settings",
+    "YGGDRASIL": "Yggdrasil"
   },
   "entity": {
     "HEART": "Heart",
@@ -73,7 +74,8 @@
     "musicalNotes": "Musical Notes",
     "editor": "Editor",
     "world": "World",
-    "perks": "Perks",
+    "melody": "Melody",
+    "yggdrasil": "Yggdrasil",
     "help": "Help",
     "settings": "Settings",
     "MOVE_NEXT_TO": "MOVE_NEXT_TO",

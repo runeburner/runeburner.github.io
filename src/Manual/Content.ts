@@ -6,8 +6,10 @@ import editorEN from "./manual/en/editor.md?raw";
 import editorFR from "./manual/fr/editor.md?raw";
 import worldEN from "./manual/en/world.md?raw";
 import worldFR from "./manual/fr/world.md?raw";
-import perksEN from "./manual/en/perks.md?raw";
-import perksFR from "./manual/fr/perks.md?raw";
+import melodyEN from "./manual/en/melody.md?raw";
+import melodyFR from "./manual/fr/melody.md?raw";
+import yggdrasilEN from "./manual/en/yggdrasil.md?raw";
+import yggdrasilFR from "./manual/fr/yggdrasil.md?raw";
 import helpEN from "./manual/en/help.md?raw";
 import helpFR from "./manual/fr/help.md?raw";
 import settingsEN from "./manual/en/settings.md?raw";
@@ -51,7 +53,7 @@ export const Content = {
     musicalNotes: musicalNotesEN,
     editor: editorEN,
     world: worldEN,
-    perks: perksEN,
+    melody: melodyEN,
     help: helpEN,
     settings: settingsEN,
     MOVE_NEXT_TO: MOVE_NEXT_TOEN,
@@ -70,13 +72,14 @@ export const Content = {
     rocks: rocksEN,
     empty: emptyEN,
     incantations: incantationsEN,
+    yggdrasil: yggdrasilEN,
   },
   fr: {
     gameLoop: gameLoopFR,
     musicalNotes: musicalNotesFR,
     editor: editorFR,
     world: worldFR,
-    perks: perksFR,
+    melody: melodyFR,
     help: helpFR,
     settings: settingsFR,
     MOVE_NEXT_TO: MOVE_NEXT_TOFR,
@@ -95,5 +98,6 @@ export const Content = {
     rocks: rocksFR,
     empty: emptyFR,
     incantations: incantationsFR,
+    yggdrasil: yggdrasilFR,
   },
 } as Record<string, Record<string, string>>;

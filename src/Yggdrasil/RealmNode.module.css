@@ -1,0 +1,64 @@
+.lockedRealm {
+  color: gray;
+}
+
+.completedRealm {
+  color: inherit;
+  text-shadow: 0 0 5px var(--md-sys-color-primary);
+}
+
+.availableRealm {
+  animation-name: availableRealmAnimation;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes availableRealmAnimation {
+  0% {
+    color: #5bcefa;
+    text-shadow: 0 0 5px #5bcefa;
+  }
+  33% {
+    color: #f5a9b8;
+    text-shadow: 0 0 5px #f5a9b8;
+  }
+  66% {
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff;
+  }
+  100% {
+    color: #5bcefa;
+    text-shadow: 0 0 5px #5bcefa;
+  }
+}
+
+/* @keyframes availableRealmAnimation {
+  0% {
+    color: #e40303;
+    text-shadow: 0 0 5px #e40303;
+  }
+  14% {
+    color: #ff8c00;
+    text-shadow: 0 0 5px #ff8c00;
+  }
+  29% {
+    color: #ffed00;
+    text-shadow: 0 0 5px #ffed00;
+  }
+  43% {
+    color: #008026;
+    text-shadow: 0 0 5px #008026;
+  }
+  57% {
+    color: #004cff;
+    text-shadow: 0 0 5px #004cff;
+  }
+  86% {
+    color: #732982;
+    text-shadow: 0 0 5px #732982;
+  }
+  100% {
+    color: #e40303;
+    text-shadow: 0 0 5px #e40303;
+  }
+} */
