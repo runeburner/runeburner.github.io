@@ -15,6 +15,8 @@ export type UI = {
 };
 
 export type Game = {
+  realmId: string;
+  realmCompleted: boolean;
   workers: EntityTicker[];
   resources: Resources;
   powers: {
@@ -39,16 +41,19 @@ export type Game = {
   determineInitialCameraPosition(cam: Camera): Camera;
   updateFoW(before: Vec | null, after: Vec | null, radius: number): void;
   animate(runes: Record<Rune, number>, incantation: string): void;
-  loadMap(entities: Entity[], map: Plane): void;
+  loadMap(realmId: string, entities: Entity[], map: Plane): void;
   damage<T extends EntityType, V extends object>(
     entity: HealthEntity<T, V>,
     damage: number
   ): boolean;
   removeEntity(id: number): void;
+  completeRealm(realmId: string): void;
 };
 
 export const game = ((): Game => {
   return {
+    realmId: "",
+    realmCompleted: false,
     completedRealms: [],
     workers: [],
     resources: {
@@ -198,6 +203,7 @@ export const game = ((): Game => {
     animate(runes: Record<Rune, number>, incantation: string): void {
       const id = ID.next();
       const coord = game.golemSpawnCoordinates();
+
       if (!coord) return;
       const golem: GolemEntity = {
         __type: EntityType.GOLEM,
@@ -218,7 +224,9 @@ export const game = ((): Game => {
         game.entities.set(id, golem);
       });
     },
-    loadMap(entities: Entity[], map: Plane): void {
+    loadMap(realmId: string, entities: Entity[], map: Plane): void {
+      game.realmId = realmId;
+      game.realmCompleted = false;
       game.resources = {
         musicalNotes: 0,
       };
@@ -228,7 +236,6 @@ export const game = ((): Game => {
         capacityPerRune: 1,
         workPerRune: 1,
       };
-      game.entities.clear();
       game.entities.clear();
       for (const entity of entities) {
         game.entities.set(entity.id, entity);
@@ -286,6 +293,11 @@ export const game = ((): Game => {
       if (i !== -1) game.workers.splice(i, 1);
 
       return;
+    },
+    completeRealm(realmId: string): void {
+      game.realmCompleted = false;
+      game.realmId = "";
+      game.completedRealms.push(realmId);
     },
   };
 })();

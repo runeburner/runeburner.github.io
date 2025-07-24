@@ -4,12 +4,11 @@ import { registerRealm } from "../Realms";
 import mapData from "./mapData.txt?raw";
 
 const init = (): void => {
-  const entities: Entity[] = [
+  const entities = (): Entity[] => [
     {
       __type: EntityType.HEART,
       id: ID.next(),
       pos: [5, 5],
-      musicalNotes: 0,
       visionRange: 10,
       health: [25, 25],
       armor: [0, 0],
@@ -67,6 +66,7 @@ const init = (): void => {
     location: [0, 0],
     mapData: mapData,
     startingEntities: entities,
+    goals: [],
   });
 };
 

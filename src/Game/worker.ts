@@ -8,6 +8,7 @@ import { mineHandler } from "./actionHandlers/mine";
 import { move_next_toHandler } from "./actionHandlers/move_next_to";
 import { smashHandler } from "./actionHandlers/smash";
 import { game } from "./game";
+import { Realms } from "../Realm/Realms";
 
 type MakerFn<T extends ActionType> = (
   a: ActionHandler[T][0]
@@ -36,6 +37,7 @@ const fps = 30;
 const rate = 1 / fps;
 
 const gameTick = (): void => {
+  if (game.realmId == "") return;
   // Update last actions
   for (let i = 0; i < game.workers.length; i++) {
     const action = game.workers[i].tick(game.workers[i].proxy);
@@ -65,6 +67,14 @@ const gameTick = (): void => {
     const f = handler[p.__type][1] as ProcessorFn<ActionType>;
     const del = f(rate, e, p);
     if (del) game.actions.delete(e.id);
+  }
+
+  // Check if the map is completed
+  if (!game.realmCompleted) {
+    const realm = Realms.get(game.realmId);
+    if (realm?.goals.every((g) => g.check(game))) {
+      game.realmCompleted = true;
+    }
   }
 
   runGameSelectors();

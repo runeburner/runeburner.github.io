@@ -28,12 +28,7 @@ export type HealthEntity<T extends EntityType, V extends object> = BaseEntity<
   } & V
 >;
 
-export type HeartEntity = HealthEntity<
-  typeof EntityType.HEART,
-  {
-    musicalNotes: number;
-  }
->;
+export type HeartEntity = HealthEntity<typeof EntityType.HEART, object>;
 
 export type GolemEntity = HealthEntity<
   typeof EntityType.GOLEM,

@@ -1,15 +1,15 @@
+import { Game } from "../../Game/game";
 import { ID } from "../../Game/id";
 import { Entity } from "../../types/entity";
 import { registerRealm } from "../Realms";
 import mapData from "./mapData.txt?raw";
 
 const init = (): void => {
-  const entities: Entity[] = [
+  const entities = (): Entity[] => [
     {
       __type: EntityType.HEART,
       id: ID.next(),
-      pos: [5, 5],
-      musicalNotes: 0,
+      pos: [4, 5],
       visionRange: 10,
       health: [25, 25],
       armor: [0, 0],
@@ -22,6 +22,14 @@ const init = (): void => {
     location: [19, 11],
     mapData: mapData,
     startingEntities: entities,
+    goals: [
+      {
+        check: (game: Game): boolean => {
+          return game.findAllTiles([0, 0], Tile.ROCK, 999999).length === 0;
+        },
+        i18nArgs: ["goals.destroyAllRocks"],
+      },
+    ],
   });
 };
 

@@ -1,29 +1,17 @@
 import { game } from "../Game/game";
+import { ID } from "../Game/id";
 import { Offset, Plane, ValuesPerTile } from "../types/map";
 import { Realm } from "./Realm";
 
 export const registerRealm = (realm: Realm): void => {
-  Realms.push(realm);
+  Realms.set(realm.id, realm);
 };
 
-export const Realms: Realm[] = [
-  //   {
-  //     id: "tutorial_0",
-  //     location: [19, 11],
-  //     mapData: tutorial0Map,
-  //     startingEntities: Tutorial_0_entities,
-  //   },
-  //   {
-  //     id: "tutorial_1",
-  //     location: [18, 13],
-  //     parent: "tutorial_0",
-  //     mapData: "",
-  //     startingEntities: [],
-  //   },
-];
+export const Realms: Map<string, Realm> = new Map();
 
 export const loadRealm = (realm: Realm): void => {
-  game.loadMap(realm.startingEntities, parseMap(realm.mapData));
+  ID.reset();
+  game.loadMap(realm.id, realm.startingEntities(), parseMap(realm.mapData));
 };
 
 export const parseMap = (s: string): Plane => {

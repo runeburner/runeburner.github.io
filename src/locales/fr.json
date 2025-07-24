@@ -62,7 +62,18 @@
     }
   },
   "world": {
-    "theworldisempty": "Aller a yggdrasil pour choisir un monde."
+    "theworldisempty": "Aller a yggdrasil pour choisir un monde.",
+    "complete": "compléter"
+  },
+  "goals": {
+    "destroyAllRocks": "Détruit toute les roches"
+  },
+  "yggdrasil": {
+    "enter": "entrer",
+    "realm": {
+      "tutorial_0": "Tutoriel: Roche",
+      "dev_map": "Dev map, only enter for testing"
+    }
   },
   "manual": {
     "root": "Racine",
