@@ -1,5 +1,6 @@
 type IDMaker = {
   next(): number;
+  reset(): void;
 };
 
 export const ID = ((): IDMaker => {
@@ -7,6 +8,9 @@ export const ID = ((): IDMaker => {
   return {
     next(): number {
       return v++;
+    },
+    reset(): void {
+      v = 0;
     },
   };
 })();

@@ -26,7 +26,9 @@ export const TileDetails = (): React.ReactElement => {
       <p>
         ({pos[0]}, {pos[1]})
       </p>
-      <p>{t("tile." + tileData[Offset.TILE_ID])}</p>
+      {tileData[Offset.TILE_ID] !== undefined && (
+        <p>{t("tile." + tileData[Offset.TILE_ID])}</p>
+      )}
       <p>
         {t("inspection.quantity")}: {tileData[Offset.DATA_0]}
       </p>

@@ -58,9 +58,9 @@ const initialState: IncantationsState = ((): IncantationsState => {
   const localState = localStorage.getItem(INCANTATION_KEY);
   if (localState !== null) return JSON.parse(localState);
   return {
-    basic: defaultIncantation,
-    fight: defaultFight,
     rock: defaultRock,
+    fight: defaultFight,
+    runeCrystalMiner: defaultIncantation,
   };
 })();
 

@@ -61,6 +61,20 @@
       "effect": "Increase work speed"
     }
   },
+  "world": {
+    "theworldisempty": "Go to yggdrasil to select a world.",
+    "complete": "complete"
+  },
+  "goals": {
+    "destroyAllRocks": "Destroy all rocks"
+  },
+  "yggdrasil": {
+    "enter": "enter",
+    "realm": {
+      "tutorial_0": "Tutorial: Rock",
+      "dev_map": "Dev map, only enter for testing"
+    }
+  },
   "manual": {
     "root": "Root",
     "general": "General",

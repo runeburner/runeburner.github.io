@@ -8,6 +8,9 @@ import "./styles";
 import { I18NPicker } from "./i18n/I18NPicker.tsx";
 import { esbuildInit } from "./Game/esbuild.ts";
 
+import "./Realm/tutorial_0";
+import "./Realm/DevMap";
+
 ((): void => {
   const rootDiv = document.getElementById("root");
   if (!rootDiv) {
