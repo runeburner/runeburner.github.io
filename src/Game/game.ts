@@ -7,7 +7,6 @@ import { Rune } from "../types/rune";
 import { Tile } from "../types/tile";
 import { dist, Vec } from "../types/vec";
 import { Camera } from "../World/World/Camera";
-import { defaultEntities, defaultMap } from "./defaultValues";
 import { ID } from "./id";
 import { EntityTicker, launchGolem } from "./launch_golem";
 
@@ -290,5 +289,3 @@ export const game = ((): Game => {
     },
   };
 })();
-
-game.loadMap(defaultEntities, defaultMap);

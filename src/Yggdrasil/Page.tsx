@@ -1,4 +1,4 @@
-import { Realms } from "../Realm/Realm";
+import { Realms } from "../Realm/Realms";
 import { RealmNode } from "./RealmNode";
 
 const tree = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

@@ -61,6 +61,9 @@
       "effect": "Augmente la vitesse des travaux"
     }
   },
+  "world": {
+    "theworldisempty": "Aller a yggdrasil pour choisir un monde."
+  },
   "manual": {
     "root": "Racine",
     "general": "General",

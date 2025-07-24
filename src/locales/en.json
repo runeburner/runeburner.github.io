@@ -61,6 +61,9 @@
       "effect": "Increase work speed"
     }
   },
+  "world": {
+    "theworldisempty": "Go to yggdrasil to select a world."
+  },
   "manual": {
     "root": "Root",
     "general": "General",
