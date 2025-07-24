@@ -17,7 +17,7 @@ export const Page = (): React.ReactElement => {
   }
   const canvas = useRef<HTMLCanvasElement>(null);
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full">
       <Zoom canvas={canvas} />
 
       <Inspection />
