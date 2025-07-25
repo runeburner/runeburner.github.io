@@ -11,7 +11,7 @@ let crystal: Vec | null = null;
 
 const miningRoutine = ({ game, me, act }: RS) => {
   if (crystal == null || game.at(crystal)[0] !== Tile.RUNE_CRYSTAL) {
-    const crystals = game.findAll(Tile.RUNE_CRYSTAL, 5);
+    const crystals = game.findAll(Tile.RUNE_CRYSTAL, 3);
     if (crystals.length === 0) return act.DIE();
     for (const c of crystals) {
       if (!me.hasPathTo(c)) continue
@@ -59,7 +59,7 @@ const initialState: IncantationsState = ((): IncantationsState => {
   if (localState !== null) return JSON.parse(localState);
   return {
     rock: defaultRock,
-    runeCrystalMiner: defaultIncantation,
+    noteGatherer: defaultIncantation,
     // fight: defaultFight,
   };
 })();
