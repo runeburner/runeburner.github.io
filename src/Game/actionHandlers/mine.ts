@@ -4,11 +4,13 @@ import {
   MINE,
   MINEProgress,
 } from "../../types/actions";
+import { EldritchRune } from "../../types/eldritchRunes";
 import { Entity, EntityType } from "../../types/entity";
 import { Offset } from "../../types/map";
 import { Rune } from "../../types/rune";
 import { Tile } from "../../types/tile";
 import { dist, eq } from "../../types/vec";
+import { BloodRunePower } from "../formulas";
 import { game } from "../game";
 import { isArgs, isVec } from "../validation";
 
@@ -69,7 +71,8 @@ const processor = (
     game.powers.workPerRune *
     rate *
     game.powers.musicalStrength *
-    game.powers.leafPower;
+    game.powers.leafPower *
+    (golem.eldritchRune === EldritchRune.BLOOD ? BloodRunePower : 1);
   const isRuneCrystal =
     game.tileAt(action.tile)[Offset.TILE_ID] === Tile.RUNE_CRYSTAL;
   while (

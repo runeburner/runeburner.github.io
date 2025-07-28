@@ -4,9 +4,11 @@ import {
   SING,
   SINGProgress,
 } from "../../types/actions";
+import { EldritchRune } from "../../types/eldritchRunes";
 import { Entity, EntityType } from "../../types/entity";
 import { Rune } from "../../types/rune";
 import { dist } from "../../types/vec";
+import { BloodRunePower } from "../formulas";
 import { game } from "../game";
 
 const maker = (a: SING): ActionProgress | true | null => {
@@ -48,7 +50,8 @@ const processor = (
     game.powers.workPerRune *
     rate *
     game.powers.musicalStrength *
-    game.powers.leafPower;
+    game.powers.leafPower *
+    (golem.eldritchRune === EldritchRune.BLOOD ? BloodRunePower : 1);
   while (action.progress[0] >= action.progress[1] && golem.runeCrystals > 0) {
     action.progress[0] -= action.progress[1];
     golem.runeCrystals--;

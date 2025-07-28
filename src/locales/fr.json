@@ -20,7 +20,8 @@
     "incantation": "Incantation",
     "wind_description": "Tuiles par seconde: {{speed}}",
     "labor_description": "Vitesse de travail: {{speed}}",
-    "void_description": "Capacité: {{cap}}"
+    "void_description": "Capacité: {{cap}}",
+    "eldritchRune": "Rune Étrange:"
   },
   "settings": {
     "language": "langue"
@@ -74,7 +75,8 @@
   },
   "rewards": {
     "youAcquired": "Vous avez acquis",
-    "leafs": "{{amount}} feuille de Yggdrasil"
+    "leafs": "{{amount}} feuille de Yggdrasil",
+    "eldritchRune": "Rune Étrange: {{rune}}"
   },
   "yggdrasil": {
     "enter": "entrer",

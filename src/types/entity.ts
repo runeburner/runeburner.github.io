@@ -1,3 +1,4 @@
+import { EldritchRune } from "./eldritchRunes";
 import { Rune } from "./rune";
 import { Typed } from "./typed_object";
 import { Vec } from "./vec";
@@ -36,6 +37,7 @@ export type GolemEntity = HealthEntity<
     runeCrystals: number;
     runes: Record<Rune, number>;
     mana: Vec;
+    eldritchRune?: EldritchRune;
   }
 >;
 

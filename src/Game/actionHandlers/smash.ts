@@ -4,8 +4,10 @@ import {
   SMASH,
   SMASHProgress,
 } from "../../types/actions";
+import { EldritchRune } from "../../types/eldritchRunes";
 import { Entity, EntityType } from "../../types/entity";
 import { dist } from "../../types/vec";
+import { BloodRunePower } from "../formulas";
 import { game } from "../game";
 import { isArgs, isNumber } from "../validation";
 
@@ -35,7 +37,12 @@ const processor = (
   const target = game.entities.get(action.target);
   if (!target) return true;
   action.progress[0] +=
-    rate * game.powers.musicalStrength * game.powers.leafPower;
+    rate *
+    game.powers.musicalStrength *
+    game.powers.leafPower *
+    (_e.__type === EntityType.GOLEM && _e.eldritchRune === EldritchRune.BLOOD
+      ? BloodRunePower
+      : 1);
 
   while (action.progress[0] >= action.progress[1]) {
     action.progress[0] -= action.progress[1];

@@ -20,7 +20,8 @@
     "incantation": "Incantation",
     "wind_description": "Tiles per second: {{speed}}",
     "labor_description": "Work speed: {{speed}}",
-    "void_description": "Capacity: {{cap}}"
+    "void_description": "Capacity: {{cap}}",
+    "eldritchRune": "Eldritch Rune:"
   },
   "settings": {
     "language": "language"
@@ -74,7 +75,8 @@
   },
   "rewards": {
     "youAcquired": "You acquired",
-    "leafs": "{{amount}} Yggdrasil leafs"
+    "leafs": "{{amount}} Yggdrasil leafs",
+    "eldritchRune": "Eldritch Rune: {{rune}}"
   },
   "yggdrasil": {
     "enter": "enter",

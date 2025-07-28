@@ -4,9 +4,11 @@ import {
   MOVE_NEXT_TO,
   MOVE_NEXT_TOProgress,
 } from "../../types/actions";
+import { EldritchRune } from "../../types/eldritchRunes";
 import { Entity, EntityType } from "../../types/entity";
 import { Rune, RuneWeight } from "../../types/rune";
 import { dist, eq } from "../../types/vec";
+import { BloodRunePower } from "../formulas";
 import { game } from "../game";
 import { aStarPath } from "../path";
 import { isArgs, isVec } from "../validation";
@@ -65,7 +67,8 @@ const processor = (
     game.powers.movePerRune *
     rate *
     game.powers.musicalStrength *
-    game.powers.leafPower;
+    game.powers.leafPower *
+    (golem.eldritchRune === EldritchRune.BLOOD ? BloodRunePower : 1);
   while (mp.progress[0] >= mp.progress[1]) {
     if (game.entityAt(mp.path[1])) {
       const newPath = aStarPath(golem.pos, mp.goal);

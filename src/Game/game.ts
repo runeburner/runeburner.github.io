@@ -2,6 +2,7 @@ import { Realm } from "../Realm/Realm";
 import { runGameSelectors } from "../store/gameRedux";
 import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
+import { EldritchRune } from "../types/eldritchRunes";
 import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
 import { Plane, Offset, ValuesPerTile } from "../types/map";
 import { Resources } from "../types/resources";
@@ -29,6 +30,7 @@ export type Game = {
     capacityPerRune: number;
     workPerRune: number;
   };
+  eldritchRunesUnlocked: EldritchRune[];
   completedRealms: string[];
   entities: Map<number, Entity>;
   actions: Map<number, ActionProgress>;
@@ -44,7 +46,11 @@ export type Game = {
   addMusicalNotes(n: number): void;
   determineInitialCameraPosition(cam: Camera): Camera;
   updateFoW(before: Vec | null, after: Vec | null, radius: number): void;
-  animate(runes: Record<Rune, number>, incantation: string): void;
+  animate(
+    runes: Record<Rune, number>,
+    incantation: string,
+    eldritchRune: EldritchRune | undefined
+  ): void;
   loadMap(realmId: string, entities: Entity[], map: Plane): void;
   damage<T extends EntityType, V extends object>(
     entity: HealthEntity<T, V>,
@@ -71,6 +77,7 @@ export const game = ((): Game => {
       capacityPerRune: 1,
       workPerRune: 1,
     },
+    eldritchRunesUnlocked: [],
     entities: new Map(),
     actions: new Map(),
     plane: {
@@ -206,7 +213,11 @@ export const game = ((): Game => {
       };
     },
 
-    animate(runes: Record<Rune, number>, incantation: string): void {
+    animate(
+      runes: Record<Rune, number>,
+      incantation: string,
+      eldritchRune: EldritchRune | undefined
+    ): void {
       const id = ID.next();
       const coord = game.golemSpawnCoordinates();
 
@@ -222,6 +233,7 @@ export const game = ((): Game => {
         armor: [0, 0],
         shield: [0, 0],
         mana: [0, 0],
+        eldritchRune: eldritchRune,
       };
 
       launchGolem(golem, incantation).then((success) => {

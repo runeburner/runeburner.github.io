@@ -7,6 +7,7 @@ import { store } from "../../store/store";
 import { Trans, useTranslation } from "react-i18next";
 import { useIncantationNames } from "../../store/incantations";
 import { game } from "../../Game/game";
+import { EldritchRune } from "../../types/eldritchRunes";
 
 const maxRunes = 12;
 
@@ -26,6 +27,14 @@ export const AddGolemModal = ({
     incantationNames[0]
   );
 
+  const [selectedEldritchRune, setSelectedEldritchRune] = useState<
+    EldritchRune | undefined
+  >(
+    game.eldritchRunesUnlocked.length > 0
+      ? game.eldritchRunesUnlocked[0]
+      : undefined
+  );
+
   const appliedRunes = Object.entries(runes).filter((r) => r[1] > 0) as [
     Rune,
     number
@@ -38,7 +47,11 @@ export const AddGolemModal = ({
   );
 
   const onAnimate = (): void => {
-    game.animate(runes, store.getState().incantations[selectedIncantation]);
+    game.animate(
+      runes,
+      store.getState().incantations[selectedIncantation],
+      selectedEldritchRune
+    );
     onClose();
   };
 
@@ -109,6 +122,23 @@ export const AddGolemModal = ({
             ))}
           </select>
         </div>
+        {game.eldritchRunesUnlocked.length > 0 && (
+          <>
+            {t("create_golem_modal.eldritchRune")}:{" "}
+            <select
+              value={selectedEldritchRune}
+              onChange={(e) =>
+                setSelectedEldritchRune(e.target.value as EldritchRune)
+              }
+            >
+              {game.eldritchRunesUnlocked.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
         <button
           disabled={totalRunes === 0}
           className="btn w-full my-2"
