@@ -1,1 +1,3 @@
-Voici la page pour le sujet IDLE et elle est sous construction
+# IDLE
+
+L'action IDLE peut etre retourner quand le [golem](golem) ne devrait pas faire rien ce tour ci.

@@ -1,1 +1,3 @@
-Voici la page pour le sujet help et elle est sous construction
+# Aide
+
+L'onglet Aide contien le documentation pour le jeux.

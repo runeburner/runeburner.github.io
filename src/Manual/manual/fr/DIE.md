@@ -1,1 +1,3 @@
-Voici la page pour le sujet DIE et elle est sous construction
+# DIE
+
+L'action DIE peut etre retourner pour immediatement detruire le [golem](golem).

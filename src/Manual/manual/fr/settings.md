@@ -1,1 +1,3 @@
-Voici la page pour le sujet settings et elle est sous construction
+# Parametres
+
+La page des parametres contiens toutes les parametres du jeux.

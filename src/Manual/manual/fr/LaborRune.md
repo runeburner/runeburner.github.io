@@ -1,1 +1,3 @@
-Voici la page pour le sujet LaborRune et elle est sous construction
+# Rune du travail
+
+Le rune du travail augmente le vitesse de travail pour l'action [SING](SING) et [MINE](MINE). Plus de rune du travail signifie du travail plus rapide.

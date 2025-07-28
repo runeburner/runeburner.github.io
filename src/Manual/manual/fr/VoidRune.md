@@ -1,1 +1,3 @@
-Voici la page pour le sujet VoidRune et elle est sous construction
+# Rune du Vide
+
+Le Rune du Vide détermine la capacité d'un [golem](golem). Plus de Rune du Vide signifie une plus grande capacité.
