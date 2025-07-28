@@ -21,7 +21,7 @@
     "wind_description": "Tuiles par seconde: {{speed}}",
     "labor_description": "Vitesse de travail: {{speed}}",
     "void_description": "Capacité: {{cap}}",
-    "eldritchRune": "Rune Étrange:"
+    "eldritchRune": "Rune Étrange"
   },
   "settings": {
     "language": "langue"

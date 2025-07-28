@@ -21,7 +21,7 @@
     "wind_description": "Tiles per second: {{speed}}",
     "labor_description": "Work speed: {{speed}}",
     "void_description": "Capacity: {{cap}}",
-    "eldritchRune": "Eldritch Rune:"
+    "eldritchRune": "Eldritch Rune"
   },
   "settings": {
     "language": "language"

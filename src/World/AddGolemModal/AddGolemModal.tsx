@@ -112,6 +112,7 @@ export const AddGolemModal = ({
         <div className="my-2">
           {t("create_golem_modal.incantation")}:{" "}
           <select
+            className="select"
             value={selectedIncantation}
             onChange={(e) => setSelectedIncantation(e.target.value)}
           >
@@ -124,8 +125,9 @@ export const AddGolemModal = ({
         </div>
         {game.eldritchRunesUnlocked.length > 0 && (
           <>
-            {t("create_golem_modal.eldritchRune")}:{" "}
+            {t("create_golem_modal.eldritchRune")}{" "}
             <select
+              className="select"
               value={selectedEldritchRune}
               onChange={(e) =>
                 setSelectedEldritchRune(e.target.value as EldritchRune)

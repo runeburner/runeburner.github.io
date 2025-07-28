@@ -22,8 +22,12 @@ export const Page = (): React.ReactElement => {
 
   return (
     <div className="m-4">
-      <p>{t("settings.language")}:</p>
-      <select value={i18n.language} onChange={onLanguageChange}>
+      <span>{t("settings.language")}: </span>
+      <select
+        className="select inline"
+        value={i18n.language}
+        onChange={onLanguageChange}
+      >
         {Object.keys(Languages).map((l) => (
           <option key={l} value={l}>
             {l}

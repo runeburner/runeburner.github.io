@@ -57,11 +57,12 @@
   color: var(--md-sys-color-primary);
 
   .btn {
-    border-radius: 100px;
+    border-radius: 5px;
     padding: var(--spacing);
     background-color: var(--md-sys-color-primary);
     border-width: 1px;
     border-style: solid;
+    border-color: #00000000;
     color: var(--md-sys-color-on-primary);
   }
 
@@ -70,8 +71,18 @@
   }
 
   .btn:disabled {
-    background-color: var(--md-sys-color-tertiary);
-    color: var(--md-sys-color-on-tertiary);
+    background-color: #00000000;
+    color: var(--md-sys-color-tertiary);
+  }
+
+  .select {
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    cursor: pointer;
+    font-size: 1em;
+    color: var(--md-sys-color-primary);
+    background-color: var(--md-sys-color-surface);
   }
 
   .icon-button {
