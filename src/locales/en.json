@@ -29,6 +29,9 @@
     "quantity": "Quantity",
     "hardness": "Hardness"
   },
+  "resources": {
+    "actionSpeed": "{{amount}}% faster actions"
+  },
   "tile": {
     "0": "Empty",
     "1": "Rune Crystal",
@@ -69,13 +72,29 @@
     "destroyAllRocks": "Destroy all rocks",
     "getXNotes": "Get {{x}} notes"
   },
+  "rewards": {
+    "youAcquired": "You acquired",
+    "leafs": "{{amount}} Yggdrasil leafs"
+  },
   "yggdrasil": {
     "enter": "enter",
     "realm": {
-      "tutorial_0": "Tutorial: Rock",
-      "tutorial_1": "Tutorial: Mining",
-      "tutorial_2": "Tutorial: Mix",
-      "dev_map": "Dev map, only enter for testing"
+      "tutorial_0": {
+        "title": "Tutorial: Rock",
+        "instructions": "Animate a golem with 6 wind rune, 6 labor rune, and the 'rock' incantation. This golem will destroy all the rocks in the level."
+      },
+      "tutorial_1": {
+        "title": "Tutorial: Mining",
+        "instructions": "Animate a golem with 4 of each runes and the 'noteGatherer' incantation. This golem will locate the nearest rune crystal, mine it until its capacity is full, return to the core, and sing to increase your note count."
+      },
+      "tutorial_2": {
+        "title": "Tutorial: Mix",
+        "instructions": "In this tutorial you will need to modify the 'noteGatherer' incantation in the Editor to collect the rune crystal."
+      },
+      "dev_map": {
+        "title": "Dev map, only enter for testing",
+        "instructions": "This realm is only used to test various mechanics"
+      }
     }
   },
   "manual": {

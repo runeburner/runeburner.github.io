@@ -24,7 +24,11 @@ const maker = (a: MINE): ActionProgress | true | null => {
 
   // If the golem is full.
   const capacity = golem.runes[Rune.VOID] * game.powers.capacityPerRune;
-  if (golem.runeCrystals === capacity) return null;
+  if (
+    game.tileAt(a.v)[Offset.TILE_ID] === Tile.RUNE_CRYSTAL &&
+    golem.runeCrystals === capacity
+  )
+    return null;
 
   // If we're trying to mine anything other than a mana crystal
   const tile = game.tileAt(a.v);
@@ -46,7 +50,7 @@ const maker = (a: MINE): ActionProgress | true | null => {
   };
 };
 
-const Mineables: Tile[] = [Tile.ROCK, Tile.RUNE_CRYSTAL];
+const Mineables: Readonly<Tile[]> = [Tile.ROCK, Tile.RUNE_CRYSTAL];
 
 const isMinable = (v: Vec): boolean => {
   return Mineables.includes(game.tileAt(v)[Offset.TILE_ID] as Tile);
@@ -64,10 +68,13 @@ const processor = (
     golem.runes[Rune.LABOR] *
     game.powers.workPerRune *
     rate *
-    game.powers.musicalStrength;
+    game.powers.musicalStrength *
+    game.powers.leafPower;
+  const isRuneCrystal =
+    game.tileAt(action.tile)[Offset.TILE_ID] === Tile.RUNE_CRYSTAL;
   while (
     action.progress[0] >= action.progress[1] &&
-    golem.runeCrystals < capacity &&
+    (!isRuneCrystal || golem.runeCrystals < capacity) &&
     isMinable(action.tile)
   ) {
     action.progress[0] -= action.progress[1];
@@ -83,7 +90,10 @@ const processor = (
     game.setTileAt(action.tile, t);
   }
 
-  return golem.runeCrystals === capacity || !isMinable(action.tile);
+  return (
+    (isRuneCrystal && golem.runeCrystals === capacity) ||
+    !isMinable(action.tile)
+  );
 };
 
 export const mineHandler = [maker, processor] as const;

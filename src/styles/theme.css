@@ -65,8 +65,13 @@
     color: var(--md-sys-color-on-primary);
   }
 
-  .btn:hover {
+  .btn:hover:enabled {
     background-color: var(--md-sys-color-primary-fixed);
+  }
+
+  .btn:disabled {
+    background-color: var(--md-sys-color-tertiary);
+    color: var(--md-sys-color-on-tertiary);
   }
 
   .icon-button {

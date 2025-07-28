@@ -50,6 +50,9 @@ import Feather from "./feather.svg";
 import Music from "./music.svg";
 import Tree from "./tree.svg";
 import Note from "./note.svg";
+import Leaf from "./leaf.svg";
+
+// https://lucide.dev/icons/leaf
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -119,3 +122,4 @@ export const MagicIcon = makeIcon(Magic);
 export const MusicIcon = makeIcon(Music);
 export const TreeIcon = makeIcon(Tree);
 export const NoteIcon = makeIcon(Note);
+export const LeafIcon = makeIcon(Leaf);

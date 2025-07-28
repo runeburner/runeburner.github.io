@@ -20,7 +20,7 @@ const maker = (a: MOVE_NEXT_TO): ActionProgress | true | null => {
 
   const weight = Object.entries(golem.runes).reduce(
     (weight, [rune, amt]) => RuneWeight[rune as Rune] * amt + weight,
-    0
+    1
   );
   // Calculate new path
   const old = game.actions.get(a.id);
@@ -64,7 +64,8 @@ const processor = (
     golem.runes[Rune.WIND] *
     game.powers.movePerRune *
     rate *
-    game.powers.musicalStrength;
+    game.powers.musicalStrength *
+    game.powers.leafPower;
   while (mp.progress[0] >= mp.progress[1]) {
     if (game.entityAt(mp.path[1])) {
       const newPath = aStarPath(golem.pos, mp.goal);

@@ -67,6 +67,7 @@ const init = (): void => {
     mapData: mapData,
     startingEntities: entities,
     goals: [],
+    rewards: [],
   });
 };
 

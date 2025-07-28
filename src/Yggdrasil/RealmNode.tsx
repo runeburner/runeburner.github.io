@@ -35,18 +35,25 @@ export const RealmNode = ({ realm }: RealmNodeProps): React.ReactElement => {
   };
   return (
     <>
-      <span
-        onClick={available ? onClick : undefined}
-        className={`${available ? "cursor-pointer " : ""}${cssClass}`}
-      >
+      <span onClick={onClick} className={`cursor-pointer ${cssClass}`}>
         ●
       </span>
       <Modal open={open} onClose={() => setOpen(false)}>
-        <div className="flex flex-col">
-          <p>{t(`yggdrasil.realm.${realm.id}`)}</p>
-          <button className={"btn"} onClick={onEnter}>
-            {t("yggdrasil.enter")}
-          </button>
+        <div className="flex flex-col" style={{ maxWidth: "400px" }}>
+          <p>{t(`yggdrasil.realm.${realm.id}.title`)}</p>
+          {realm.goals.length > 0 && (
+            <ul>
+              {realm.goals.map((g, i) => (
+                <li key={i}>· {t(...g.i18nArgs)}</li>
+              ))}
+            </ul>
+          )}
+          <p>{t(`yggdrasil.realm.${realm.id}.instructions`)}</p>
+          {available && (
+            <button className={"btn"} onClick={onEnter}>
+              {t("yggdrasil.enter")}
+            </button>
+          )}
         </div>
       </Modal>
     </>

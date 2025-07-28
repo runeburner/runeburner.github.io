@@ -2,6 +2,7 @@ import { Game } from "../../Game/game";
 import { ID } from "../../Game/id";
 import { Entity } from "../../types/entity";
 import { registerRealm } from "../Realms";
+import { AddYggdrasilLeafs } from "../Rewards";
 import mapData from "./mapData.txt?raw";
 
 const init = (): void => {
@@ -31,6 +32,7 @@ const init = (): void => {
         i18nArgs: ["goals.getXNotes", { x: 64 }],
       },
     ],
+    rewards: [AddYggdrasilLeafs(1)],
   });
 };
 

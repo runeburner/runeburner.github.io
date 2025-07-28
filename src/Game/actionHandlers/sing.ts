@@ -47,7 +47,8 @@ const processor = (
     golem.runes[Rune.LABOR] *
     game.powers.workPerRune *
     rate *
-    game.powers.musicalStrength;
+    game.powers.musicalStrength *
+    game.powers.leafPower;
   while (action.progress[0] >= action.progress[1] && golem.runeCrystals > 0) {
     action.progress[0] -= action.progress[1];
     golem.runeCrystals--;

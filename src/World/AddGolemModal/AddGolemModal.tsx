@@ -16,7 +16,7 @@ export const AddGolemModal = ({
 }: ModalProps): React.ReactElement => {
   const { t } = useTranslation();
   const [runes, setRunes] = useState<Record<Rune, number>>(
-    Object.fromEntries(Object.values(Rune).map((r) => [r, 4])) as Record<
+    Object.fromEntries(Object.values(Rune).map((r) => [r, 0])) as Record<
       Rune,
       number
     >
@@ -34,7 +34,7 @@ export const AddGolemModal = ({
   const disabled = totalRunes >= maxRunes;
   const weight = appliedRunes.reduce(
     (w, [rune, amt]) => w + RuneWeight[rune as Rune] * amt,
-    0
+    1
   );
 
   const onAnimate = (): void => {
@@ -109,7 +109,11 @@ export const AddGolemModal = ({
             ))}
           </select>
         </div>
-        <button className="btn w-full my-2" onClick={onAnimate}>
+        <button
+          disabled={totalRunes === 0}
+          className="btn w-full my-2"
+          onClick={onAnimate}
+        >
           {t("create_golem_modal.animate")}
         </button>
       </div>

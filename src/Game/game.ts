@@ -1,3 +1,5 @@
+import { Realm } from "../Realm/Realm";
+import { runGameSelectors } from "../store/gameRedux";
 import { BoundedAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
 import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
@@ -7,6 +9,7 @@ import { Rune } from "../types/rune";
 import { Tile } from "../types/tile";
 import { dist, Vec } from "../types/vec";
 import { Camera } from "../World/World/Camera";
+import { leafPower } from "./formulas";
 import { ID } from "./id";
 import { EntityTicker, launchGolem } from "./launch_golem";
 
@@ -20,6 +23,7 @@ export type Game = {
   workers: EntityTicker[];
   resources: Resources;
   powers: {
+    leafPower: number;
     musicalStrength: number;
     movePerRune: number;
     capacityPerRune: number;
@@ -47,7 +51,7 @@ export type Game = {
     damage: number
   ): boolean;
   removeEntity(id: number): void;
-  completeRealm(realmId: string): void;
+  completeRealm(realm: Realm): void;
 };
 
 export const game = ((): Game => {
@@ -58,8 +62,10 @@ export const game = ((): Game => {
     workers: [],
     resources: {
       musicalNotes: 0,
+      leafs: 0,
     },
     powers: {
+      leafPower: 1,
       musicalStrength: 1,
       movePerRune: 2,
       capacityPerRune: 1,
@@ -229,8 +235,10 @@ export const game = ((): Game => {
       game.realmCompleted = false;
       game.resources = {
         musicalNotes: 0,
+        leafs: game.resources.leafs,
       };
       game.powers = {
+        leafPower: leafPower(game.resources.leafs),
         musicalStrength: 1,
         movePerRune: 2,
         capacityPerRune: 1,
@@ -294,10 +302,15 @@ export const game = ((): Game => {
 
       return;
     },
-    completeRealm(realmId: string): void {
+    completeRealm(realm: Realm): void {
       game.realmCompleted = false;
       game.realmId = "";
-      game.completedRealms.push(realmId);
+      if (!game.completedRealms.includes(realm.id)) {
+        game.completedRealms.push(realm.id);
+        realm.rewards.forEach((r) => r.apply(game));
+      }
+      game.powers.leafPower = leafPower(game.resources.leafs);
+      runGameSelectors();
     },
   };
 })();

@@ -29,6 +29,9 @@
     "quantity": "Quantité",
     "hardness": "Dureté"
   },
+  "resources": {
+    "actionSpeed": "Actions {{amount}}% plus rapide"
+  },
   "tile": {
     "0": "Vide",
     "1": "Cristal Runique",
@@ -69,13 +72,29 @@
     "destroyAllRocks": "Détruit toute les roches",
     "getXNotes": "Obtien {{x}} notes"
   },
+  "rewards": {
+    "youAcquired": "Vous avez acquis",
+    "leafs": "{{amount}} feuille de Yggdrasil"
+  },
   "yggdrasil": {
     "enter": "entrer",
     "realm": {
-      "tutorial_0": "Tutoriel: Roche",
-      "tutorial_1": "Tutorial: Miner",
-      "tutorial_2": "Tutorial: Mix",
-      "dev_map": "Dev map, only enter for testing"
+      "tutorial_0": {
+        "title": "Tutoriel: Roche",
+        "instructions": "Anime un golem avec 6 rune du Vent, 6 rune du Travail, et l'incantation 'rock'. Le golem va détruire toutes les roches dans le niveau."
+      },
+      "tutorial_1": {
+        "title": "Tutorial: Miner",
+        "instructions": "Anime un golem avec 4 de chaque rune et l'incantation 'noteGatherer'. Le golem va aller a cote du crystal runique le plus proche, miner le crystal jusqu'a ce que le golem soit plein, retourner a cote du coeur, et chanter pour augmenter les notes."
+      },
+      "tutorial_2": {
+        "title": "Tutorial: Mix",
+        "instructions": "Dans ce tutorial vous allez devoir modifier l'incantation 'noteGatherer' dans l'Editeur pour collecter le crystal runique."
+      },
+      "dev_map": {
+        "title": "Dev map, only enter for testing",
+        "instructions": "Ce monde existe seulement pour tester le jeux."
+      }
     }
   },
   "manual": {
