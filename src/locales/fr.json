@@ -93,6 +93,10 @@
         "title": "Tutorial: Mix",
         "instructions": "Dans ce tutorial vous allez devoir modifier l'incantation 'noteGatherer' dans l'Editeur pour collecter le crystal runique."
       },
+      "tutorial_3": {
+        "title": "Tutorial: Brouillard de Guerre",
+        "instructions": "Le Crystal Runique est cache dans le brouillard de guerre a la droite."
+      },
       "dev_map": {
         "title": "Dev map, only enter for testing",
         "instructions": "Ce monde existe seulement pour tester le jeux."

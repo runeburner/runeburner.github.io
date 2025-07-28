@@ -93,6 +93,10 @@
         "title": "Tutorial: Mix",
         "instructions": "In this tutorial you will need to modify the 'noteGatherer' incantation in the Editor to collect the rune crystal."
       },
+      "tutorial_3": {
+        "title": "Tutorial: Fog of War",
+        "instructions": "The rune crystal is hidden in the fog of war to the right."
+      },
       "dev_map": {
         "title": "Dev map, only enter for testing",
         "instructions": "This realm is only used to test various mechanics"
