@@ -25,6 +25,7 @@ export const RuneSlider = ({
       <div className={"m-2 flex items-center"}>
         <Icon style={{ width: "24px", height: "24px" }} />
         <MinusIcon
+          style={{ width: "24px" }}
           onClick={() =>
             onUpdate((runes) => ({
               ...runes,
@@ -34,6 +35,7 @@ export const RuneSlider = ({
         />
         {amount}
         <PlusIcon
+          style={{ width: "24px" }}
           onClick={() =>
             !disabled &&
             onUpdate((runes) => ({
