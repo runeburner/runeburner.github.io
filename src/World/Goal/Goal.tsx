@@ -3,7 +3,7 @@ import { game, Game } from "../../Game/game";
 import { useGameSelector } from "../../store/gameRedux";
 import classes from "./Goal.module.css";
 import { Realms } from "../../Realm/Realms";
-import { HelpIcon } from "../../icons";
+import { CircleQuestionMarkIcon } from "../../icons";
 import { Modal } from "../../Modal/Modal";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
@@ -29,7 +29,7 @@ export const Goal = (): React.ReactElement => {
     <div className={"m-4 p-2 fixed flex flex-col " + classes.container}>
       <div className="flex">
         {t(`yggdrasil.realm.${realmId}.title`)}&nbsp;
-        <HelpIcon
+        <CircleQuestionMarkIcon
           onClick={() => setHelpOpen(true)}
           className="cursor-pointer"
           style={{ width: "1em" }}

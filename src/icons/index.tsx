@@ -2,10 +2,10 @@ import Book from "./book.svg";
 import Box from "./box.svg";
 import Check from "./check.svg";
 import Circle from "./circle.svg";
-import Edit from "./edit.svg";
+import SquarePen from "./square-pen.svg";
 import File from "./file.svg";
 import Heart from "./heart.svg";
-import Help from "./help-circle.svg";
+import CircleQuestionMark from "./circle-question-mark.svg";
 import Hexagon from "./hexagon.svg";
 import Italic from "./italic.svg";
 import List from "./list.svg";
@@ -13,12 +13,12 @@ import Lock from "./lock.svg";
 import Map from "./map.svg";
 import Menu from "./menu.svg";
 import Settings from "./settings.svg";
-import Share from "./share.svg";
+import Share2 from "./share-2.svg";
 import Shield from "./shield.svg";
 import Trash from "./trash.svg";
 import X from "./x.svg";
 import Zap from "./zap.svg";
-import PlusSquare from "./plus-square.svg";
+import SquarePlus from "./square-plus.svg";
 import Plus from "./plus.svg";
 import Minus from "./minus.svg";
 import Aido from "./aido.svg";
@@ -45,14 +45,12 @@ import Sowilo from "./sowilo.svg";
 import Tiwaz from "./tiwaz.svg";
 import Uruz from "./uruz.svg";
 import Wunjo from "./wunjo.svg";
-import Magic from "./magic.svg";
+import Sparkles from "./sparkles.svg";
 import Feather from "./feather.svg";
 import Music from "./music.svg";
 import Tree from "./tree.svg";
-import Note from "./note.svg";
+import Music3 from "./music-3.svg";
 import Leaf from "./leaf.svg";
-
-// https://lucide.dev/icons/leaf
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -70,7 +68,7 @@ const makeIcon =
   };
 
 export const CircleIcon = makeIcon(Circle);
-export const EditIcon = makeIcon(Edit);
+export const SquarePenIcon = makeIcon(SquarePen);
 export const FileIcon = makeIcon(File);
 export const ListIcon = makeIcon(List);
 export const MapIcon = makeIcon(Map);
@@ -80,7 +78,7 @@ export const BookIcon = makeIcon(Book);
 export const MenuIcon = makeIcon(Menu);
 export const ItalicIcon = makeIcon(Italic);
 export const CheckIcon = makeIcon(Check);
-export const ShareIcon = makeIcon(Share);
+export const Share2Icon = makeIcon(Share2);
 export const ZapIcon = makeIcon(Zap);
 export const ShieldIcon = makeIcon(Shield);
 export const SettingsIcon = makeIcon(Settings);
@@ -89,10 +87,10 @@ export const FeatherIcon = makeIcon(Feather);
 export const BoxIcon = makeIcon(Box);
 export const HexagonIcon = makeIcon(Hexagon);
 export const LockIcon = makeIcon(Lock);
-export const PlusSquareIcon = makeIcon(PlusSquare);
+export const SquarePlusIcon = makeIcon(SquarePlus);
 export const PlusIcon = makeIcon(Plus);
 export const MinusIcon = makeIcon(Minus);
-export const HelpIcon = makeIcon(Help);
+export const CircleQuestionMarkIcon = makeIcon(CircleQuestionMark);
 
 export const AidoIcon = makeIcon(Aido);
 export const AlgizIcon = makeIcon(Algiz);
@@ -118,8 +116,8 @@ export const SowiloIcon = makeIcon(Sowilo);
 export const TiwazIcon = makeIcon(Tiwaz);
 export const UruzIcon = makeIcon(Uruz);
 export const WunjoIcon = makeIcon(Wunjo);
-export const MagicIcon = makeIcon(Magic);
+export const SparklesIcon = makeIcon(Sparkles);
 export const MusicIcon = makeIcon(Music);
 export const TreeIcon = makeIcon(Tree);
-export const NoteIcon = makeIcon(Note);
+export const Music3Icon = makeIcon(Music3);
 export const LeafIcon = makeIcon(Leaf);

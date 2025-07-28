@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EditIcon, LockIcon } from "../../icons";
+import { SquarePenIcon, LockIcon } from "../../icons";
 import { Modal } from "../../Modal/Modal";
 import classes from "./Node.module.css";
 import { NodeStatus } from "./NodeStatus";
@@ -20,7 +20,7 @@ const statusIconClasses: Record<string, string> = {
 };
 
 type NodeProps = {
-  icon: typeof EditIcon;
+  icon: typeof SquarePenIcon;
   x: number;
   y: number;
   title: string;

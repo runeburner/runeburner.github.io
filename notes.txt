@@ -32,5 +32,5 @@ stronger monsters at night (in-game night)
 illness that spreads to nearby golems
 
 https://material-foundation.github.io/material-theme-builder/
-https://feathericons.com/
+https://lucide.dev/icons/
 https://colorizer.org/

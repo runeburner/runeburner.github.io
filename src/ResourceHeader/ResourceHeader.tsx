@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Game } from "../Game/game";
-import { LeafIcon, NoteIcon } from "../icons";
+import { LeafIcon, Music3Icon } from "../icons";
 import { useGameSelector } from "../store/gameRedux";
 import { HasTooltip, Tooltip } from "../Tooltip/Tooltip";
 import classes from "./ResourceHeader.module.css";
@@ -20,7 +20,7 @@ export const ResourceHeader = (): React.ReactElement => {
     <div className={"py-2 flex-center w-full " + classes.container}>
       <span>{musicalNotes}</span>
       <HasTooltip>
-        <NoteIcon style={{ height: "24px", width: "24px" }} />
+        <Music3Icon style={{ height: "24px", width: "24px" }} />
         <Tooltip>
           {t("resources.actionSpeed", {
             amount: ((musicalPower - 1) * 100).toFixed(0),

@@ -1,9 +1,9 @@
 import { Rune } from "../../../types/rune";
-import { EditIcon, MinusIcon, PlusIcon } from "../../../icons";
+import { SquarePenIcon, MinusIcon, PlusIcon } from "../../../icons";
 import { useTranslation } from "react-i18next";
 
 type RuneSliderProps = {
-  icon: typeof EditIcon;
+  icon: typeof SquarePenIcon;
   amount: number;
   disabled?: boolean;
   rune: Rune;
