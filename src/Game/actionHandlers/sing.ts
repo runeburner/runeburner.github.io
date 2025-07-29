@@ -1,3 +1,4 @@
+import { GLOBAL_SPEED_UP } from "../../debug";
 import {
   ActionProgress,
   ActionType,
@@ -46,6 +47,7 @@ const processor = (
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
   action.progress[0] +=
+    GLOBAL_SPEED_UP *
     golem.runes[Rune.LABOR] *
     game.powers.workPerRune *
     rate *

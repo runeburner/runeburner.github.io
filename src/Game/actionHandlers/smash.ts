@@ -1,3 +1,4 @@
+import { GLOBAL_SPEED_UP } from "../../debug";
 import {
   ActionProgress,
   ActionType,
@@ -37,6 +38,7 @@ const processor = (
   const target = game.entities.get(action.target);
   if (!target) return true;
   action.progress[0] +=
+    GLOBAL_SPEED_UP *
     rate *
     game.powers.musicalStrength *
     game.powers.leafPower *

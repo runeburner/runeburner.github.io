@@ -1,3 +1,4 @@
+import { GLOBAL_SPEED_UP } from "../../debug";
 import {
   ActionProgress,
   ActionType,
@@ -63,6 +64,7 @@ const processor = (
 ): boolean => {
   if (golem.__type !== EntityType.GOLEM) return true;
   mp.progress[0] +=
+    GLOBAL_SPEED_UP *
     golem.runes[Rune.WIND] *
     game.powers.movePerRune *
     rate *

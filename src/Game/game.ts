@@ -46,6 +46,7 @@ export type Game = {
   addMusicalNotes(n: number): void;
   determineInitialCameraPosition(cam: Camera): Camera;
   updateFoW(before: Vec | null, after: Vec | null, radius: number): void;
+  canSeeTile(v: Vec): boolean;
   animate(
     runes: Record<Rune, number>,
     incantation: string,
@@ -121,6 +122,14 @@ export const game = ((): Game => {
         }
       }
     },
+    canSeeTile(v: Vec): boolean {
+      return (
+        game.plane.data[
+          (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile +
+            Offset.FOG_OF_WAR
+        ] !== 0
+      );
+    },
     entityAt(v: Vec): Entity | undefined {
       return game.entities
         .values()
@@ -136,6 +145,7 @@ export const game = ((): Game => {
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
           const v: Vec = [i, j];
+          if (!game.canSeeTile(v)) continue;
           const tile = game.tileAt(v);
 
           if (tile[0] === wantTile && !game.entityAt(v)) {
@@ -159,6 +169,7 @@ export const game = ((): Game => {
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
           const v: Vec = [i, j];
+          if (!game.canSeeTile(v)) continue;
           const tile = game.tileAt(v);
 
           if (tile[0] === wantTile && !game.entityAt(v)) {
@@ -175,7 +186,7 @@ export const game = ((): Game => {
       const v = entities.reduce(
         (res: [number, Entity | null], e): [number, Entity | null] => {
           const d = dist(e.pos, pos);
-          if (d < res[0]) {
+          if (d < res[0] && game.canSeeTile(e.pos)) {
             return [d, e];
           }
           return res;
