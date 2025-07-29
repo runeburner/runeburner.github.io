@@ -21,6 +21,8 @@ type Module = {
 window.Tile = Tile;
 window.EntityType = EntityType;
 
+const memory: object = {};
+
 export const launchGolem = async (
   entity: Entity,
   incantation: string
@@ -43,6 +45,7 @@ export const launchGolem = async (
     }
 
     const proxy = {
+      memory: memory,
       game: new Proxy(rs.game, {
         get(_, prop: keyof typeof rs.game) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

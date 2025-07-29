@@ -8,6 +8,8 @@ type Vec = [number, number];
  */
 type Action = { __type: string };
 
+type RSMemory = object;
+
 type RSGame = {
   /**
    * Search for a given type of tile.
@@ -95,6 +97,10 @@ type RSMe = {
  * An object containing all the functions that incantations need to control entities.
  */
 type RS = {
+  /**
+   * An object shared between all incantations. Used for communication. To be used at the players discretion.
+   */
+  memory: RSMemory;
   /**
    * Contains all functions related to querying the map.
    */
