@@ -1,1 +1,1 @@
-export const GLOBAL_SPEED_UP = 10;
+export const GLOBAL_SPEED_UP = 1;
