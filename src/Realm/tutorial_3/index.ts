@@ -21,7 +21,7 @@ const init = (): void => {
   registerRealm({
     id: "tutorial_3",
     location: [17, 16],
-    parent: "tutorial_2",
+    // parent: "tutorial_2",
     mapData: mapData,
     startingEntities: entities,
     goals: [
