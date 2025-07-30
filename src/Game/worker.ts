@@ -2,7 +2,7 @@ import { runGameSelectors } from "../store/gameRedux";
 import { ActionHandler, ActionProgress, ActionType } from "../types/actions";
 import { Entity } from "../types/entity";
 import { singHandler } from "./actionHandlers/sing";
-import { dieHandler } from "./actionHandlers/die";
+import { fadeHandler } from "./actionHandlers/fade";
 import { idleHandler } from "./actionHandlers/idle";
 import { mineHandler } from "./actionHandlers/mine";
 import { move_next_toHandler } from "./actionHandlers/move_next_to";
@@ -29,7 +29,7 @@ const handler = {
   [ActionType.MOVE_NEXT_TO]: move_next_toHandler,
   [ActionType.MINE]: mineHandler,
   [ActionType.SING]: singHandler,
-  [ActionType.DIE]: dieHandler,
+  [ActionType.FADE]: fadeHandler,
   [ActionType.SMASH]: smashHandler,
 } as const satisfies Handler;
 

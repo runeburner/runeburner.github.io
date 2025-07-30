@@ -1,4 +1,4 @@
-import { SING, DIE, MINE, MOVE_NEXT_TO, SMASH } from "../types/actions";
+import { SING, FADE, MINE, MOVE_NEXT_TO, SMASH } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Rune } from "../types/rune";
 import { Tile } from "../types/tile";
@@ -49,7 +49,7 @@ export const rs = {
     }),
     MINE: (e: Entity, v: Vec): MINE => ({ __type: "MINE", v: v, id: e.id }),
     SING: (e: Entity): SING => ({ __type: "SING", id: e.id }),
-    DIE: (e: Entity): DIE => ({ __type: "DIE", id: e.id }),
+    FADE: (e: Entity): FADE => ({ __type: "FADE", id: e.id }),
     SMASH: (e: Entity, id: number): SMASH => ({
       __type: "SMASH",
       id: e.id,
