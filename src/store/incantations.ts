@@ -12,12 +12,12 @@ let crystal: Vec | null = null;
 const miningRoutine = ({ game, me, act }: RS) => {
   if (crystal == null || game.at(crystal)[0] !== Tile.RUNE_CRYSTAL) {
     const crystals = game.findAll(Tile.RUNE_CRYSTAL, 3);
-    if (crystals.length === 0) return act.DIE();
+    if (crystals.length === 0) return act.FADE();
     for (const c of crystals) {
       if (!me.hasPathTo(c)) continue
       crystal = c;
     }
-    if (crystal === null) return act.DIE();
+    if (crystal === null) return act.FADE();
   }
 
   return me.isInRange(crystal) ? act.MINE(crystal) : act.MOVE_NEXT_TO(crystal);
@@ -26,7 +26,7 @@ const miningRoutine = ({ game, me, act }: RS) => {
 const singingRoutine = ({ game, me, act }: RS) => {
   crystal = null;
   const heart = game.findClosestEntity(EntityType.HEART);
-  if (heart === null) return act.DIE();
+  if (heart === null) return act.FADE();
   return me.isInRange(heart.pos) ? act.SING() : act.MOVE_NEXT_TO(heart.pos);
 }
 
@@ -41,13 +41,13 @@ export const tick: Ticker = (rs: RS) => {
 
 export const defaultFight = `export const tick: Ticker = ({ game, me, act }: RS) => {
   const dummy = game.findClosestEntity(EntityType.DUMMY);
-  if (dummy === null) return act.DIE();
+  if (dummy === null) return act.FADE();
   return me.isInRange(dummy.pos) ? act.SMASH(dummy.id) : act.MOVE_NEXT_TO(dummy.pos);
 }`;
 
 export const defaultRock = `export const tick: Ticker = ({ game, me, act }: RS) => {
   const rock = game.findNearest(Tile.ROCK, 3);
-  if (rock === null) return act.DIE();
+  if (rock === null) return act.FADE();
   return me.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
 }`;
 

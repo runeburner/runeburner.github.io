@@ -6,6 +6,7 @@ import {
   MINEProgress,
   MOVE_NEXT_TOProgress,
   SMASHProgress,
+  FADEProgress,
 } from "../../../types/actions";
 import { renderProgress } from "./Progress";
 
@@ -83,6 +84,13 @@ const renderSmash = (
   }
 };
 
+const renderFade = (
+  ctx: CanvasRenderingContext2D,
+  action: FADEProgress
+): void => {
+  renderProgress(ctx, action.pos, action.progress, "#88ffff44");
+};
+
 export const renderAction = (
   ctx: CanvasRenderingContext2D,
   p: ActionProgress
@@ -100,5 +108,7 @@ export const renderAction = (
     case ActionType.SMASH:
       renderSmash(ctx, p);
       break;
+    case ActionType.FADE:
+      renderFade(ctx, p);
   }
 };

@@ -6,7 +6,7 @@ export const ActionType = Object.freeze({
   MOVE_NEXT_TO: "MOVE_NEXT_TO",
   MINE: "MINE",
   SING: "SING",
-  DIE: "DIE",
+  FADE: "FADE",
   SMASH: "SMASH",
 } as const);
 
@@ -25,7 +25,7 @@ export type Action<
 export type MOVE_NEXT_TO = Action<typeof ActionType.MOVE_NEXT_TO, { v: Vec }>;
 export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
 export type SING = Action<typeof ActionType.SING>;
-export type DIE = Action<typeof ActionType.DIE>;
+export type FADE = Action<typeof ActionType.FADE>;
 export type SMASH = Action<typeof ActionType.SMASH, { target: number }>;
 export type IDLE = Action<typeof ActionType.IDLE>;
 
@@ -63,17 +63,20 @@ export type SINGProgress = BaseActionProgress<
 
 export type SMASHProgress = TargettedProgress<typeof ActionType.SMASH>;
 
+export type FADEProgress = BaseActionProgress<typeof ActionType.FADE>;
+
 export type ActionProgress =
   | MOVE_NEXT_TOProgress
   | MINEProgress
   | SINGProgress
-  | SMASHProgress;
+  | SMASHProgress
+  | FADEProgress;
 
 export type ActionHandler = {
   [ActionType.IDLE]: [IDLE, void];
   [ActionType.MOVE_NEXT_TO]: [MOVE_NEXT_TO, MOVE_NEXT_TOProgress];
   [ActionType.MINE]: [MINE, MINEProgress];
   [ActionType.SING]: [SING, SINGProgress];
-  [ActionType.DIE]: [DIE, void];
+  [ActionType.FADE]: [FADE, FADEProgress];
   [ActionType.SMASH]: [SMASH, SMASHProgress];
 };

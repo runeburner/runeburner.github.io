@@ -58,10 +58,10 @@ type RSAct = {
    */
   SING(): Action;
   /**
-   * Remove the golem from the map.
+   * Remove the golem from the map, restoring 1 life.
    * @returns An `Action` to be returned by the global `tick` function.
    */
-  DIE(): Action;
+  FADE(): Action;
   /**
    * Attack another entity.
    * @param id The entity ID to attack.

@@ -20,8 +20,8 @@ import MINEEN from "./manual/en/MINE.md?raw";
 import MINEFR from "./manual/fr/MINE.md?raw";
 import SINGEN from "./manual/en/SING.md?raw";
 import SINGFR from "./manual/fr/SING.md?raw";
-import DIEEN from "./manual/en/DIE.md?raw";
-import DIEFR from "./manual/fr/DIE.md?raw";
+import FADEEN from "./manual/en/FADE.md?raw";
+import FADEFR from "./manual/fr/FADE.md?raw";
 import SMASHEN from "./manual/en/SMASH.md?raw";
 import SMASHFR from "./manual/fr/SMASH.md?raw";
 import IDLEEN from "./manual/en/IDLE.md?raw";
@@ -59,7 +59,7 @@ export const Content = {
     MOVE_NEXT_TO: MOVE_NEXT_TOEN,
     MINE: MINEEN,
     SING: SINGEN,
-    DIE: DIEEN,
+    FADE: FADEEN,
     SMASH: SMASHEN,
     IDLE: IDLEEN,
     WindRune: WindRuneEN,
@@ -85,7 +85,7 @@ export const Content = {
     MOVE_NEXT_TO: MOVE_NEXT_TOFR,
     MINE: MINEFR,
     SING: SINGFR,
-    DIE: DIEFR,
+    FADE: FADEFR,
     SMASH: SMASHFR,
     IDLE: IDLEFR,
     WindRune: WindRuneFR,

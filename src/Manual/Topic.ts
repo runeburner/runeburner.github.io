@@ -20,7 +20,7 @@ export const topicTree: Topic = {
     MOVE_NEXT_TO: null,
     MINE: null,
     SING: null,
-    DIE: null,
+    FADE: null,
     SMASH: null,
     IDLE: null,
   },
