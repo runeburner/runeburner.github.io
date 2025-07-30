@@ -23,16 +23,20 @@ export const StatsPage = (): React.ReactElement => {
           speed: ((leafPower(leaves) - 1) * 100).toFixed(0),
         })}
       </p>
-      <span>{t("stats.eldritchRunes")}</span>
       {eldritchRunes.length > 0 && (
-        <ul>
-          {eldritchRunes.map((e, i) => (
-            <li className="ml-2" key={i}>
-              <p>· {t(`eldritchRunes.${e}.title`)}</p>
-              <p>{t(`eldritchRunes.${e}.description`, EldritchRunesI18N[e])}</p>
-            </li>
-          ))}
-        </ul>
+        <>
+          <span>{t("stats.eldritchRunes")}</span>
+          <ul>
+            {eldritchRunes.map((e, i) => (
+              <li className="ml-2" key={i}>
+                <p>· {t(`eldritchRunes.${e}.title`)}</p>
+                <p>
+                  {t(`eldritchRunes.${e}.description`, EldritchRunesI18N[e])}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
