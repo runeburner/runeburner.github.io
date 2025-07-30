@@ -44,7 +44,8 @@
     "MELODY": "Melody",
     "HELP": "Help",
     "SETTINGS": "Settings",
-    "YGGDRASIL": "Yggdrasil"
+    "YGGDRASIL": "Yggdrasil",
+    "STATS": "Stats"
   },
   "entity": {
     "HEART": "Heart",
@@ -76,7 +77,17 @@
   "rewards": {
     "youAcquired": "You acquired",
     "leafs": "{{amount}} Yggdrasil leafs",
-    "eldritchRune": "Eldritch Rune: {{rune}}"
+    "eldritchRune": "A new Eldritch Rune"
+  },
+  "stats": {
+    "eldritchRunes": "Eldritch Runes acquired",
+    "yggdrasilLeaves": "{{leaves}} Yggdrasil Leaves, boosting speed by {{speed}}%"
+  },
+  "eldritchRunes": {
+    "BLOOD": {
+      "title": "Blood",
+      "description": "Increase golem speed by {{amount}}%. Based on real-life blood donations."
+    }
   },
   "yggdrasil": {
     "enter": "enter",

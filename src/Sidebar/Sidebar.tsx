@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
-import { changePage, Page, useIsPageSelected } from "../store/sidebar";
+import { ReactElement, useCallback } from "react";
+import { changePage, Page } from "../store/sidebar";
 import classes from "./Sidebar.module.css";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   FeatherIcon,
   BookIcon,
@@ -9,8 +9,10 @@ import {
   SettingsIcon,
   MusicIcon,
   TreeIcon,
+  ChartBarIcon,
 } from "../icons";
 import { useTranslation } from "react-i18next";
+import { RootState } from "../store/store";
 
 type SidebarTabProps = {
   page: Page;
@@ -24,7 +26,9 @@ const SidebarTab = ({
   disabled,
 }: SidebarTabProps): ReactElement => {
   const { t } = useTranslation();
-  const isSelected = useIsPageSelected(page);
+  const isSelected = useAppSelector(
+    useCallback((s: RootState) => s.sidebar.selected === page, [page])
+  );
   const dispatch = useAppDispatch();
 
   return (
@@ -50,6 +54,7 @@ export const Sidebar = (): React.ReactElement => {
       <SidebarTab page={Page.WORLD} icon={MapIcon} />
       <SidebarTab page={Page.MELODY} icon={MusicIcon} />
       <SidebarTab page={Page.YGGDRASIL} icon={TreeIcon} />
+      <SidebarTab page={Page.STATS} icon={ChartBarIcon} />
       <SidebarTab page={Page.HELP} icon={BookIcon} />
       <SidebarTab page={Page.SETTINGS} icon={SettingsIcon} />
     </ul>

@@ -17,6 +17,6 @@ export const UnlockEldritchRune = (r: EldritchRune): Reward => {
       if (!game.eldritchRunesUnlocked.includes(r))
         game.eldritchRunesUnlocked.push(r);
     },
-    i18nArgs: ["rewards.eldritchRune", { rune: r }],
+    i18nArgs: ["rewards.eldritchRune"],
   };
 };

@@ -51,6 +51,7 @@ import Music from "./music.svg";
 import Tree from "./tree.svg";
 import Music3 from "./music-3.svg";
 import Leaf from "./leaf.svg";
+import ChartBar from "./chart-bar.svg";
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -121,3 +122,4 @@ export const MusicIcon = makeIcon(Music);
 export const TreeIcon = makeIcon(Tree);
 export const Music3Icon = makeIcon(Music3);
 export const LeafIcon = makeIcon(Leaf);
+export const ChartBarIcon = makeIcon(ChartBar);

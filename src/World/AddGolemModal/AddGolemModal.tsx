@@ -135,7 +135,7 @@ export const AddGolemModal = ({
             >
               {game.eldritchRunesUnlocked.map((r) => (
                 <option key={r} value={r}>
-                  {r}
+                  {t(`eldritchRunes.${r}.title`)}
                 </option>
               ))}
             </select>

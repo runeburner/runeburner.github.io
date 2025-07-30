@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useAppSelector } from "./hooks";
 
 export const Page = Object.freeze({
   EDITOR: "EDITOR",
   WORLD: "WORLD",
   MELODY: "MELODY",
   HELP: "HELP",
+  STATS: "STATS",
   SETTINGS: "SETTINGS",
   YGGDRASIL: "YGGDRASIL",
 } as const);
@@ -17,7 +17,7 @@ type SidebarState = {
 };
 
 const initialState: SidebarState = {
-  selected: Page.YGGDRASIL,
+  selected: Page.STATS,
 };
 
 const sidebarSlice = createSlice({
@@ -32,6 +32,3 @@ const sidebarSlice = createSlice({
 
 export const { changePage } = sidebarSlice.actions;
 export const sidebarReducer = sidebarSlice.reducer;
-
-export const useIsPageSelected = (page: Page): boolean =>
-  useAppSelector((s) => s.sidebar.selected === page);
