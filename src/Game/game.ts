@@ -338,6 +338,7 @@ export const game = ((): Game => {
       game.livesLeft = 0;
       game.entities.clear();
       game.actions.clear();
+      game.workers = [];
       if (!game.completedRealms.includes(realm.id)) {
         game.completedRealms.push(realm.id);
         realm.rewards.forEach((r) => r.apply(game));
