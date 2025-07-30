@@ -44,7 +44,8 @@
     "MELODY": "Mélodie",
     "HELP": "Aide",
     "SETTINGS": "Paramètres",
-    "YGGDRASIL": "Yggdrasil"
+    "YGGDRASIL": "Yggdrasil",
+    "STATS": "Stats"
   },
   "entity": {
     "HEART": "Coeur",
@@ -76,7 +77,17 @@
   "rewards": {
     "youAcquired": "Vous avez acquis",
     "leafs": "{{amount}} feuille de Yggdrasil",
-    "eldritchRune": "Rune Étrange: {{rune}}"
+    "eldritchRune": "Une nouvelle Rune Étrange"
+  },
+  "stats": {
+    "eldritchRunes": "Runes Étranges acquis",
+    "yggdrasilLeaves": "{{leaves}} feuille de Yggdrasil, qui augmente la vitesse par {{speed}}%"
+  },
+  "eldritchRunes": {
+    "BLOOD": {
+      "title": "Sang",
+      "description": "Augmente la vitesse des golems par {{amount}}%. Basée sur les dons de sang dans la vrai vie."
+    }
   },
   "yggdrasil": {
     "enter": "entrer",
