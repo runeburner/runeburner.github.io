@@ -23,6 +23,7 @@ const init = (): void => {
     id: "tutorial_1",
     location: [18, 13],
     // parent: "tutorial_0",
+    golemLives: 99,
     mapData: mapData,
     startingEntities: entities,
     goals: [

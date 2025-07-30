@@ -21,6 +21,7 @@ export type UI = {
 export type Game = {
   realmId: string;
   realmCompleted: boolean;
+  livesLeft: number;
   workers: EntityTicker[];
   resources: Resources;
   powers: {
@@ -52,7 +53,7 @@ export type Game = {
     incantation: string,
     eldritchRune: EldritchRune | undefined
   ): void;
-  loadMap(realmId: string, entities: Entity[], map: Plane): void;
+  loadMap(realm: Realm, map: Plane): void;
   damage<T extends EntityType, V extends object>(
     entity: HealthEntity<T, V>,
     damage: number
@@ -65,6 +66,7 @@ export const game = ((): Game => {
   return {
     realmId: "",
     realmCompleted: false,
+    livesLeft: 0,
     completedRealms: [],
     workers: [],
     resources: {
@@ -229,6 +231,8 @@ export const game = ((): Game => {
       incantation: string,
       eldritchRune: EldritchRune | undefined
     ): void {
+      if (game.livesLeft <= 0) return;
+      game.livesLeft--;
       const id = ID.next();
       const coord = game.golemSpawnCoordinates();
 
@@ -253,9 +257,10 @@ export const game = ((): Game => {
         game.entities.set(id, golem);
       });
     },
-    loadMap(realmId: string, entities: Entity[], map: Plane): void {
-      game.realmId = realmId;
+    loadMap(realm: Realm, map: Plane): void {
+      game.realmId = realm.id;
       game.realmCompleted = false;
+      game.livesLeft = realm.golemLives;
       game.resources = {
         musicalNotes: 0,
         leafs: game.resources.leafs,
@@ -268,6 +273,7 @@ export const game = ((): Game => {
         workPerRune: 1,
       };
       game.entities.clear();
+      const entities = realm.startingEntities();
       for (const entity of entities) {
         game.entities.set(entity.id, entity);
       }

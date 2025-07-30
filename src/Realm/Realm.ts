@@ -18,6 +18,7 @@ export type Realm = Readonly<{
   location: Vec;
   parent?: string;
   mapData: string;
+  golemLives: number;
   startingEntities: () => Entity[];
   goals: Goal[];
   rewards: Reward[];

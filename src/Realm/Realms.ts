@@ -11,7 +11,7 @@ export const Realms: Map<string, Realm> = new Map();
 
 export const loadRealm = (realm: Realm): void => {
   ID.reset();
-  game.loadMap(realm.id, realm.startingEntities(), parseMap(realm.mapData));
+  game.loadMap(realm, parseMap(realm.mapData));
 };
 
 export const parseMap = (s: string): Plane => {

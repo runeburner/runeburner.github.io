@@ -64,6 +64,7 @@ const init = (): void => {
   registerRealm({
     id: "dev_map",
     location: [0, 0],
+    golemLives: 99,
     mapData: mapData,
     startingEntities: entities,
     goals: [],
