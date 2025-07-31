@@ -8,8 +8,6 @@ type Vec = [number, number];
  */
 type Action = { __type: string };
 
-type Entity = { __type: string };
-
 type RSMemory = object;
 
 type RSWorld = {
@@ -57,6 +55,11 @@ type RSAct = {
    * @returns An `Action` to be returned by the global `tick` function.
    */
   SMASH(id: number): Action;
+  /**
+   * Do nothing
+   * @returns An `Action` to be returned by the global `tick` function.
+   */
+  IDLE(): Action;
 };
 
 type RSMe = {
@@ -87,10 +90,6 @@ type RSMe = {
  */
 type RS = {
   /**
-   * An object shared between all incantations. Used for communication. To be used at the players discretion.
-   */
-  memory: RSMemory;
-  /**
    * Contains all functions related to querying the map.
    */
   world: RSWorld;
@@ -116,10 +115,16 @@ declare const Tile: Readonly<{
   readonly EMPTY: 0;
 }>;
 
+/**
+ * Typed object can be used to differentiate between types.
+ */
 declare type Typed<T, V> = {
   __type: T;
 } & V;
 
+/**
+ * All possible entity type
+ */
 declare const EntityType = Object.freeze({
   HEART: "HEART",
   GOLEM: "GOLEM",
@@ -179,6 +184,9 @@ declare type RockEntity = MineableEntity<typeof EntityType.ROCK>;
 
 declare type RuneCrystalEntity = MineableEntity<typeof EntityType.RUNE_CRYSTAL>;
 
+/**
+ * All entity types
+ */
 declare type Entity =
   | HeartEntity
   | GolemEntity
@@ -187,6 +195,16 @@ declare type Entity =
   | RuneCrystalEntity;
 
 declare interface Window {
+  /**
+   * All different types of tiles.
+   */
   Tile: typeof Tile;
+  /**
+   * All different types of entities.
+   */
   EntityType: typeof EntityType;
+  /**
+   * An object shared between all incantations. Used for communication. To be used at the players discretion.
+   */
+  Memory: RSMemory;
 }
