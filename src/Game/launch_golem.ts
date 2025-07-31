@@ -23,12 +23,12 @@ window.EntityType = EntityType;
 const memory: RSMemory = {};
 
 type ProxyObject<T extends object> = {
-  [key in keyof T]: T[key] extends (...args: never) => unknown
-    ? (entity: Entity, ...args: Parameters<T[key]>) => ReturnType<T[key]>
-    : key extends "memory"
-    ? T[key]
+  [key in keyof T]: key extends "memory"
+    ? RSMemory
     : T[key] extends object
     ? ProxyObject<T[key]>
+    : T[key] extends (...args: never) => unknown
+    ? (entity: Entity, ...args: Parameters<T[key]>) => ReturnType<T[key]>
     : never;
 };
 
