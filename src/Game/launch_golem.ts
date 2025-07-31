@@ -20,7 +20,7 @@ type Module = {
 window.Tile = Tile;
 window.EntityType = EntityType;
 
-const memory: object = {};
+const memory: RSMemory = {};
 
 type ProxyObject<T extends object> = {
   [key in keyof T]: T[key] extends (...args: never) => unknown
