@@ -9,7 +9,7 @@ export type EntityTicker = {
   id: number;
   tick: (rs: RS) => Action;
   objectURL: string;
-  proxy: ProxyObject<RS>;
+  proxy: ProxyRSNamespace<RS>;
   lastAction: Action;
 };
 
@@ -22,11 +22,15 @@ window.EntityType = EntityType;
 
 const memory: RSMemory = {};
 
-type ProxyObject<T extends object> = {
-  [key in keyof T]: key extends "memory"
+export type ProxyRS = {
+  [key in keyof RS]: key extends "memory"
     ? RSMemory
-    : T[key] extends object
-    ? ProxyObject<T[key]>
+    : ProxyRSNamespace<RS[key]>;
+};
+
+type ProxyRSNamespace<T extends object> = {
+  [key in keyof T]: T[key] extends object
+    ? ProxyRSNamespace<T[key]>
     : T[key] extends (...args: never) => unknown
     ? (entity: Entity, ...args: Parameters<T[key]>) => ReturnType<T[key]>
     : never;
@@ -42,7 +46,7 @@ const proxied = <T extends object>(obj: T, entity: Entity): any => {
   };
 };
 
-const proxyRS = (entity: Entity): ProxyObject<RS> => {
+const proxyRS = (entity: Entity): ProxyRS => {
   return {
     memory: memory,
     world: new Proxy(rs.world, proxied(rs.world, entity)),

@@ -3,10 +3,12 @@ import { Entity, EntityType } from "../types/entity";
 import { Rune } from "../types/rune";
 import { dist } from "../types/vec";
 import { game } from "./game";
+import { ProxyRS } from "./launch_golem";
 import { aStarPath } from "./path";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
-export const rs = {
+export const rs: ProxyRS = {
+  memory: {},
   world: {
     findAll(e: Entity, entity: EntityType, radius: number): Entity[] {
       if (!isArgs([entity, radius], isString, isNumber)) return [];
