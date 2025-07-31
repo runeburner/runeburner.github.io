@@ -39,10 +39,17 @@ const proxyHandler = <T extends object>(
   obj: InternalRSNamespace<T>,
   entity: Entity
 ): ProxyHandler<T> => {
+  const memo: T = Object.create(null);
   return {
-    get(_: unknown, prop: keyof T & string) {
+    get(_: unknown, prop: keyof T & string): unknown {
+      const m = memo[prop];
+      if (m) return m;
+
+      const targetF = obj[prop];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (...args: unknown[]): any => (obj[prop] as any)(entity, ...args);
+      const f = (targetF as any).bind(undefined, entity);
+      memo[prop] = f;
+      return f;
     },
   };
 };
