@@ -37,7 +37,7 @@ type ProxyRSNamespace<T extends object> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const proxied = <T extends object>(obj: T, entity: Entity): any => {
+const proxyHandler = <T extends object>(obj: T, entity: Entity): any => {
   return {
     get(_: unknown, prop: keyof typeof obj) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,9 +49,9 @@ const proxied = <T extends object>(obj: T, entity: Entity): any => {
 const proxyRS = (entity: Entity): ProxyRS => {
   return {
     memory: memory,
-    world: new Proxy(rs.world, proxied(rs.world, entity)),
-    act: new Proxy(rs.act, proxied(rs.act, entity)),
-    me: new Proxy(rs.me, proxied(rs.me, entity)),
+    world: new Proxy(rs.world, proxyHandler(rs.world, entity)),
+    act: new Proxy(rs.act, proxyHandler(rs.act, entity)),
+    me: new Proxy(rs.me, proxyHandler(rs.me, entity)),
   };
 };
 
