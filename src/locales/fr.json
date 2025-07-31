@@ -36,9 +36,7 @@
     "actionSpeed": "Actions {{amount}}% plus rapide"
   },
   "tile": {
-    "0": "Vide",
-    "1": "Cristal Runique",
-    "2": "Roche"
+    "0": "Vide"
   },
   "tab": {
     "EDITOR": "Editeur",

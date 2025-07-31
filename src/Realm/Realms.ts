@@ -33,16 +33,6 @@ export const parseMap = (s: string): Plane => {
     for (let i = 0; i < bounds[2]; i++) {
       data[(j * width + i) * ValuesPerTile + Offset.TILE_ID] =
         mapData[j][i][Offset.TILE_ID];
-
-      if (
-        mapData[j][i][Offset.TILE_ID] === Tile.RUNE_CRYSTAL ||
-        mapData[j][i][Offset.TILE_ID] === Tile.ROCK
-      ) {
-        data[(j * width + i) * ValuesPerTile + Offset.DATA_0] =
-          mapData[j][i][Offset.DATA_0];
-        data[(j * width + i) * ValuesPerTile + Offset.DATA_1] =
-          mapData[j][i][Offset.DATA_1];
-      }
     }
   }
 

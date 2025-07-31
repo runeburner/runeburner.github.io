@@ -14,43 +14,30 @@ type RSMemory = object;
 
 type RSWorld = {
   /**
-   * Search for a given type of tile.
-   * @param tile The type of tile to search for.
+   * Search for all entities of a given type.
+   * @param entityType The type of entity to search for.
    * @param radius The maximum search radius around this entity.
-   * @returns The closest tile of that type if found, null if none is found.
+   * @returns The list of all entities of the given type that are within the search parameters.
    */
-  findNearest(tile: Tile, radius: number): Vec | null;
-  /**
-   * Search for all tiles of a given type.
-   * @param tile The type of tile to search for.
-   * @param radius The maximum search radius around this entity.
-   * @returns The list of all tiles of the given type that are within the search radius.
-   */
-  findAll(tile: Tile, radius: number): Entity[];
+  findAll(entityType: EntityType, radius: number): Entity[];
   /**
    * Find the entity of the given type that is closest to this entity.
    * @param entityType The type of entity to find.
    * @returns The entity if found, null if not.
    */
   findClosestEntity(entityType: EntityType): Entity | null;
-  /**
-   * Inspect a given tile, returning the underlying data.
-   * @param v The tile to inspect.
-   * @returns The raw data representing the tile at `v`.
-   */
-  at(v: Vec): Int32Array;
 };
 
 type RSAct = {
   /**
-   * Moves this entity next to the given tile.
-   * @param v The tile to move towards.
+   * Moves this entity next to the given location.
+   * @param v The location to move towards.
    * @returns An `Action` to be returned by the global `tick` function.
    *  */
   MOVE_NEXT_TO(v: Vec): Action;
   /**
-   * Mine a tile. The effect depends on the tile.
-   * @param v The tile to mine.
+   * Mine an entity. The effect depends on the entity.
+   * @param v The entity to mine.
    * @returns An `Action` to be returned by the global `tick` function.
    */
   MINE(id: number): Action;
@@ -127,8 +114,6 @@ type Ticker = (rs: RS) => Action;
  */
 declare const Tile: Readonly<{
   readonly EMPTY: 0;
-  readonly RUNE_CRYSTAL: 1;
-  readonly ROCK: 2;
 }>;
 
 declare type Typed<T, V> = {

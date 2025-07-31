@@ -47,13 +47,13 @@ const maker = (a: MINE): ActionProgress | true | null => {
   )
     return null;
 
-  // If we were already mining this tile.
+  // If we were already mining this entity.
   const wasMining = old && old.__type === ActionType.MINE;
   if (wasMining && old.target === a.target) return true;
   return {
     __type: ActionType.MINE,
     pos: [...golem.pos],
-    // If we swap mining tile in the middle, carry over progress
+    // If we swap mining entity in the middle, carry over progress
     progress: wasMining ? old.progress : [0, target.hardness],
     target: a.target,
   };

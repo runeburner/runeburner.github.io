@@ -1,7 +1,6 @@
 import { SING, FADE, MINE, MOVE_NEXT_TO, SMASH } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Rune } from "../types/rune";
-import { Tile } from "../types/tile";
 import { dist } from "../types/vec";
 import { game } from "./game";
 import { aStarPath } from "./path";
@@ -9,17 +8,9 @@ import { isArgs, isNumber, isString, isVec } from "./validation";
 
 export const rs = {
   world: {
-    findNearest(e: Entity, tile: Tile, radius: number): Vec | null {
-      if (!isArgs([tile, radius], isNumber, isNumber)) return null;
-      return game.findClosestTile(e.pos, tile, radius);
-    },
     findAll(e: Entity, entity: EntityType, radius: number): Entity[] {
       if (!isArgs([entity, radius], isString, isNumber)) return [];
       return structuredClone(game.findAllEntities(e.pos, entity, radius));
-    },
-    at(_e: Entity, v: Vec): Int32Array {
-      if (!isArgs([v], isVec)) return new Int32Array();
-      return game.tileAt(v);
     },
     findClosestEntity(e: Entity, entityType: EntityType): Entity | null {
       if (!isArgs([entityType], isString)) return null;
