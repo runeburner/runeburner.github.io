@@ -9,7 +9,7 @@ type IncantationsState = Record<string, string>;
 export const defaultIncantation = `let mining = true;
 let crystal: RuneCrystalEntity | null = null;
 
-const miningRoutine = ({ world, me, act, memory }: RS) => {
+const miningRoutine = ({ world, me, act }: RS) => {
   if (crystal == null || crystal.quantity === 0) {
     const crystals = world.findAll(EntityType.RUNE_CRYSTAL, 3) as RuneCrystalEntity[];
     if (crystals.length === 0) return act.FADE();
@@ -39,13 +39,13 @@ export const tick: Ticker = (rs: RS) => {
   return singingRoutine(rs)
 }`;
 
-export const defaultFight = `export const tick: Ticker = ({ world, me, act, memory }: RS) => {
+export const defaultFight = `export const tick: Ticker = ({ world, me, act }: RS) => {
   const dummy = world.findClosestEntity(EntityType.DUMMY);
   if (dummy === null) return act.FADE();
   return me.isInRange(dummy.pos) ? act.SMASH(dummy.id) : act.MOVE_NEXT_TO(dummy.pos);
 }`;
 
-export const defaultRock = `export const tick: Ticker = ({ world, me, act, memory }: RS) => {
+export const defaultRock = `export const tick: Ticker = ({ world, me, act }: RS) => {
   const rock = world.findClosestEntity(EntityType.ROCK) as RockEntity | null;
   if (rock === null) return act.FADE();
   return me.isInRange(rock.pos) ? act.MINE(rock.id) : act.MOVE_NEXT_TO(rock.pos);

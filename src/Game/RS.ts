@@ -12,11 +12,10 @@ import { Rune } from "../types/rune";
 import { dist } from "../types/vec";
 import { game } from "./game";
 import { aStarPath } from "./path";
-import { InternalRS } from "./proxy";
+import { InternalRSNamespace } from "./proxy";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
-export const rs: InternalRS = {
-  memory: {},
+export const rs: InternalRSNamespace<RS> = {
   world: {
     findAll(e: Entity, entity: EntityType, radius: number): Entity[] {
       if (!isArgs([entity, radius], isString, isNumber)) return [];

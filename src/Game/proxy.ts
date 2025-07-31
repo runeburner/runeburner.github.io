@@ -1,12 +1,6 @@
 import { rs } from "./RS";
 
-export type InternalRS = {
-  [key in keyof RS]: key extends "memory"
-    ? RSMemory
-    : InternalRSNamespace<RS[key]>;
-};
-
-type InternalRSNamespace<T extends object> = {
+export type InternalRSNamespace<T extends object> = {
   [key in keyof T]: T[key] extends object
     ? InternalRSNamespace<T[key]>
     : T[key] extends (...args: never) => unknown
@@ -42,11 +36,8 @@ const createProxy = <T extends object>(
   return p;
 };
 
-const memory: RSMemory = {};
-
 export const proxyRS = (entity: Entity): RS => {
   return {
-    memory: memory,
     world: createProxy(rs.world, entity),
     act: createProxy(rs.act, entity),
     me: createProxy(rs.me, entity),
