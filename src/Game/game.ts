@@ -14,10 +14,6 @@ import { leafPower } from "./formulas";
 import { ID } from "./id";
 import { EntityTicker, launchGolem } from "./launch_golem";
 
-export type UI = {
-  inspectedTile: Vec;
-};
-
 export type Game = {
   realmId: string;
   realmCompleted: boolean;
@@ -36,7 +32,6 @@ export type Game = {
   entities: Map<number, Entity>;
   actions: Map<number, ActionProgress>;
   plane: Plane;
-  ui: UI;
   tileAt(v: Vec): Int32Array;
   setTileAt(v: Vec, t: Int32Array): void;
   entityAt(v: Vec): Entity | undefined;
@@ -89,9 +84,6 @@ export const game = ((): Game => {
     plane: {
       bounds: new Int32Array(),
       data: new Int32Array(),
-    },
-    ui: {
-      inspectedTile: [0, 0],
     },
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
