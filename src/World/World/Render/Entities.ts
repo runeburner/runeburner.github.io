@@ -1,5 +1,6 @@
 import { game } from "../../../Game/game";
 import { EntityType, GolemEntity } from "../../../types/entity";
+import { Offset, ValuesPerTile } from "../../../types/map";
 import { Rune } from "../../../types/rune";
 import { camera } from "../Camera";
 import { renderAction } from "./Action";
@@ -71,6 +72,13 @@ const runeCrystalPath = new Path2D(
 export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
   for (const e of game.entities.values()) {
     if (!camera.isInView(e.pos)) continue;
+    if (
+      game.plane.data[
+        (e.pos[1] * game.plane.bounds[2] + e.pos[0]) * ValuesPerTile +
+          Offset.FOG_OF_WAR
+      ] === 0
+    )
+      continue;
     switch (e.__type) {
       case EntityType.GOLEM: {
         renderHealth(ctx, e);
