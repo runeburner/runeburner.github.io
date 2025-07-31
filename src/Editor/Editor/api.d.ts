@@ -12,7 +12,7 @@ type Entity = { __type: string };
 
 type RSMemory = object;
 
-type RSGame = {
+type RSWorld = {
   /**
    * Search for a given type of tile.
    * @param tile The type of tile to search for.
@@ -106,7 +106,7 @@ type RS = {
   /**
    * Contains all functions related to querying the map.
    */
-  game: RSGame;
+  world: RSWorld;
   /**
    * Contains all functions that generate `Action`s to be returned by `tick`.
    */
@@ -131,16 +131,75 @@ declare const Tile: Readonly<{
   readonly ROCK: 2;
 }>;
 
-/**
- * All possible EntityType
- */
-declare const EntityType: Readonly<{
-  readonly HEART: "HEART";
-  readonly GOLEM: "GOLEM";
-  readonly DUMMY: "DUMMY";
-  readonly ROCK: "ROCK";
-  readonly RUNE_CRYSTAL: "RUNE_CRYSTAL";
-}>;
+declare type Typed<T, V> = {
+  __type: T;
+} & V;
+
+declare const EntityType = Object.freeze({
+  HEART: "HEART",
+  GOLEM: "GOLEM",
+  DUMMY: "DUMMY",
+  ROCK: "ROCK",
+  RUNE_CRYSTAL: "RUNE_CRYSTAL",
+} as const);
+
+declare type EntityType = (typeof EntityType)[keyof typeof EntityType];
+
+declare type BaseEntity<T extends EntityType, V extends object> = Typed<
+  T,
+  {
+    id: number;
+    pos: Vec;
+  } & V
+>;
+
+declare type HealthEntity<T extends EntityType, V extends object> = BaseEntity<
+  T,
+  {
+    health: Vec;
+    armor: Vec;
+    shield: Vec;
+  } & V
+>;
+
+declare type HeartEntity = HealthEntity<
+  typeof EntityType.HEART,
+  {
+    visionRange: number;
+  }
+>;
+
+declare type GolemEntity = HealthEntity<
+  typeof EntityType.GOLEM,
+  {
+    runeCrystals: number;
+    runes: Record<Rune, number>;
+    mana: Vec;
+    eldritchRune?: EldritchRune;
+    visionRange: number;
+  }
+>;
+
+declare type DummyEntity = HealthEntity<typeof EntityType.DUMMY, object>;
+
+declare type MineableEntity<T extends EntityType> = BaseEntity<
+  T,
+  {
+    quantity: number;
+    hardness: number;
+  }
+>;
+
+declare type RockEntity = MineableEntity<typeof EntityType.ROCK>;
+
+declare type RuneCrystalEntity = MineableEntity<typeof EntityType.RUNE_CRYSTAL>;
+
+declare type Entity =
+  | HeartEntity
+  | GolemEntity
+  | DummyEntity
+  | RockEntity
+  | RuneCrystalEntity;
 
 declare interface Window {
   Tile: typeof Tile;

@@ -7,11 +7,11 @@ const INCANTATION_KEY = "RUNEBURNER_INCANTATIONS";
 type IncantationsState = Record<string, string>;
 
 export const defaultIncantation = `let mining = true;
-let crystal: Entity | null = null;
+let crystal: RuneCrystalEntity | null = null;
 
-const miningRoutine = ({ game, me, act }: RS) => {
+const miningRoutine = ({ world, me, act }: RS) => {
   if (crystal == null || crystal.quantity === 0) {
-    const crystals = game.findAll(EntityType.RUNE_CRYSTAL, 3);
+    const crystals = world.findAll(EntityType.RUNE_CRYSTAL, 3) as RuneCrystalEntity[];
     if (crystals.length === 0) return act.FADE();
     for (const c of crystals) {
       if (!me.hasPathTo(c.pos)) continue
@@ -23,9 +23,9 @@ const miningRoutine = ({ game, me, act }: RS) => {
   return me.isInRange(crystal.pos) ? act.MINE(crystal.id) : act.MOVE_NEXT_TO(crystal.pos);
 }
 
-const singingRoutine = ({ game, me, act }: RS) => {
+const singingRoutine = ({ world, me, act }: RS) => {
   crystal = null;
-  const heart = game.findClosestEntity(EntityType.HEART);
+  const heart = world.findClosestEntity(EntityType.HEART) as HeartEntity;
   if (heart === null) return act.FADE();
   return me.isInRange(heart.pos) ? act.SING() : act.MOVE_NEXT_TO(heart.pos);
 }
@@ -39,14 +39,14 @@ export const tick: Ticker = (rs: RS) => {
   return singingRoutine(rs)
 }`;
 
-export const defaultFight = `export const tick: Ticker = ({ game, me, act }: RS) => {
-  const dummy = game.findClosestEntity(EntityType.DUMMY);
+export const defaultFight = `export const tick: Ticker = ({ world, me, act }: RS) => {
+  const dummy = world.findClosestEntity(EntityType.DUMMY);
   if (dummy === null) return act.FADE();
   return me.isInRange(dummy.pos) ? act.SMASH(dummy.id) : act.MOVE_NEXT_TO(dummy.pos);
 }`;
 
-export const defaultRock = `export const tick: Ticker = ({ game, me, act }: RS) => {
-  const rock = game.findClosestEntity(EntityType.ROCK, 3);
+export const defaultRock = `export const tick: Ticker = ({ world, me, act }: RS) => {
+  const rock = world.findClosestEntity(EntityType.ROCK) as RockEntity | null;
   if (rock === null) return act.FADE();
   return me.isInRange(rock.pos) ? act.MINE(rock.id) : act.MOVE_NEXT_TO(rock.pos);
 }`;

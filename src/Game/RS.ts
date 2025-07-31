@@ -8,7 +8,7 @@ import { aStarPath } from "./path";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
 export const rs = {
-  game: {
+  world: {
     findNearest(e: Entity, tile: Tile, radius: number): Vec | null {
       if (!isArgs([tile, radius], isNumber, isNumber)) return null;
       return game.findClosestTile(e.pos, tile, radius);

@@ -46,12 +46,12 @@ export const launchGolem = async (
 
     const proxy = {
       memory: memory,
-      game: new Proxy(rs.game, {
-        get(_, prop: keyof typeof rs.game) {
+      world: new Proxy(rs.world, {
+        get(_, prop: keyof typeof rs.world) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return (...args: unknown[]): any =>
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (rs.game[prop] as any)(entity, ...args);
+            (rs.world[prop] as any)(entity, ...args);
         },
       }),
       act: new Proxy(rs.act, {
