@@ -39,16 +39,16 @@ const proxyHandler = <T extends object>(
   obj: InternalRSNamespace<T>,
   entity: Entity
 ): ProxyHandler<T> => {
-  const memo: T = Object.create(null);
+  const cache: Partial<Record<keyof T & string, unknown>> = {};
   return {
     get(_: unknown, prop: keyof T & string): unknown {
-      const m = memo[prop];
+      const m = cache[prop];
       if (m) return m;
 
       const targetF = obj[prop];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const f = (targetF as any).bind(undefined, entity);
-      memo[prop] = f;
+      if (typeof targetF !== "function") return targetF;
+      const f = targetF.bind(undefined, entity);
+      cache[prop] = f;
       return f;
     },
   };
@@ -103,48 +103,3 @@ export const launchGolem = async (
     return true;
   });
 };
-
-((): void => {
-  type API = {
-    foo(): void;
-    bar(n: number): void;
-  };
-
-  type Internal<T> = {
-    [key in keyof T]: T[key] extends (...args: never) => unknown
-      ? (s: string, ...args: Parameters<T[key]>) => ReturnType<T[key]>
-      : never;
-  };
-
-  const iAPI: Internal<API> = {
-    foo(s: string): void {
-      console.log(s);
-    },
-    bar(s: string, n: number): void {
-      console.log(s, n);
-    },
-  };
-
-  const s = "soo";
-  const memo: Partial<API> = {};
-  const proxyHandler: ProxyHandler<API> = {
-    get(_: unknown, p: keyof API & string) {
-      const m = memo[p];
-      if (m) return m;
-
-      const targetF = iAPI[p];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const f = (targetF as any).bind(undefined, s);
-      memo[p] = f;
-      return f;
-    },
-  };
-  const api = new Proxy(Object.create(null), proxyHandler);
-
-  api.foo();
-  api.foo();
-  api.foo();
-  api.bar(3);
-  api.bar(1);
-  api.bar(2);
-})();
