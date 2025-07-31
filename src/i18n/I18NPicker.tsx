@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal } from "../Modal/Modal";
-import ENFlag from "./en.svg";
-import FRFlag from "./fr.svg";
+import ENFlag from "./flags/en.svg";
+import FRFlag from "./flags/fr.svg";
 import classes from "./I18NPicker.module.css";
 import i18n from "./i18n";
 

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Game } from "../Game/game";
-import { LeafIcon, Music3Icon, HeartIcon } from "../icons";
+import { LeafIcon, Music3Icon, HeartIcon, PersonStandingIcon } from "../icons";
 import { useGameSelector } from "../store/gameRedux";
 import { HasTooltip, Tooltip } from "../Tooltip/Tooltip";
 import classes from "./ResourceHeader.module.css";
@@ -10,6 +10,8 @@ const selectLeaves = (g: Game): number => g.resources.leafs;
 const selectMusicalPower = (g: Game): number => g.powers.musicalStrength;
 const selectLeafPower = (g: Game): number => g.powers.leafPower;
 const selectLivesLeft = (g: Game): number => g.livesLeft;
+const selectGolemCount = (g: Game): number => g.resources.golems;
+const selectMaxGolemCount = (g: Game): number => g.resources.maxGolems;
 
 export const ResourceHeader = (): React.ReactElement => {
   const { t } = useTranslation();
@@ -18,6 +20,8 @@ export const ResourceHeader = (): React.ReactElement => {
   const musicalPower = useGameSelector(selectMusicalPower);
   const leafPower = useGameSelector(selectLeafPower);
   const liveLeft = useGameSelector(selectLivesLeft);
+  const golemCount = useGameSelector(selectGolemCount);
+  const maxGolemCount = useGameSelector(selectMaxGolemCount);
   return (
     <div className={"py-2 flex-center w-full " + classes.container}>
       <span className="mx-2">{musicalNotes}</span>
@@ -40,6 +44,10 @@ export const ResourceHeader = (): React.ReactElement => {
       </HasTooltip>
       <span className="mx-2">{liveLeft}</span>
       <HeartIcon style={{ height: "24px", width: "24px" }} />
+      <span className="mx-2">
+        {golemCount} / {maxGolemCount}
+      </span>
+      <PersonStandingIcon style={{ height: "24px", width: "24px" }} />
     </div>
   );
 };

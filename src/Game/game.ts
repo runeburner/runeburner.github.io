@@ -72,6 +72,8 @@ export const game = ((): Game => {
     resources: {
       musicalNotes: 0,
       leafs: 0,
+      golems: 0,
+      maxGolems: 3,
     },
     powers: {
       leafPower: 1,
@@ -233,6 +235,7 @@ export const game = ((): Game => {
     ): void {
       if (game.livesLeft <= 0) return;
       game.livesLeft--;
+      game.resources.golems++;
       const id = ID.next();
       const coord = game.golemSpawnCoordinates();
 
@@ -264,6 +267,8 @@ export const game = ((): Game => {
       game.resources = {
         musicalNotes: 0,
         leafs: game.resources.leafs,
+        golems: 0,
+        maxGolems: 3,
       };
       game.powers = {
         leafPower: leafPower(game.resources.leafs),
@@ -315,6 +320,8 @@ export const game = ((): Game => {
     removeEntity(id: number): void {
       const entity = game.entities.get(id);
       if (!entity) return;
+
+      if (entity.__type === EntityType.GOLEM) game.resources.golems--;
       game.updateFoW(entity.pos, null, entity.visionRange);
       game.actions.delete(id);
       game.entities.delete(id);
