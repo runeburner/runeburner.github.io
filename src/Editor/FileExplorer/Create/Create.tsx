@@ -25,7 +25,11 @@ export const CreateIncantationModal = ({
   return (
     <Modal open={open} onClose={onClose}>
       <div className="flex">
-        <input value={editName} onChange={(e) => setEditName(e.target.value)} />
+        <input
+          className="input"
+          value={editName}
+          onChange={(e) => setEditName(e.target.value)}
+        />
         <button className={"btn ml-2"} onClick={onCreate} disabled={exists}>
           {t("editor.create")}
         </button>

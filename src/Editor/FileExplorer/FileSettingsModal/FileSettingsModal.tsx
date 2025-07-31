@@ -41,6 +41,7 @@ export const FileSettingsModal = ({
       <div className="flex flex-col justify-center">
         <div className="flex">
           <input
+            className="input"
             value={editName}
             onChange={(e) => setEditName(e.target.value)}
           />

@@ -7,7 +7,7 @@ import {
   BookIcon,
   MapIcon,
   SettingsIcon,
-  MusicIcon,
+  // MusicIcon,
   TreeIcon,
   ChartBarIcon,
 } from "../icons";
