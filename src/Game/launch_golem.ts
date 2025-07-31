@@ -9,8 +9,12 @@ export type EntityTicker = {
   id: number;
   tick: (rb: unknown) => Action;
   objectURL: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  proxy: any;
+  proxy: {
+    memory: object;
+    world: ProxyObject<RS["world"]>;
+    act: ProxyObject<RS["act"]>;
+    me: ProxyObject<RS["me"]>;
+  };
   lastAction: Action;
 };
 
@@ -22,6 +26,22 @@ window.Tile = Tile;
 window.EntityType = EntityType;
 
 const memory: object = {};
+
+type ProxyObject<T extends object> = {
+  [key in keyof T]: T[key] extends (...args: never) => unknown
+    ? (entity: Entity, ...args: Parameters<T[key]>) => ReturnType<T[key]>
+    : never;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const proxied = <T extends object>(obj: T, entity: Entity): any => {
+  return {
+    get(_: unknown, prop: keyof typeof obj) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (...args: unknown[]): any => (obj[prop] as any)(entity, ...args);
+    },
+  };
+};
 
 export const launchGolem = async (
   entity: Entity,
@@ -46,30 +66,9 @@ export const launchGolem = async (
 
     const proxy = {
       memory: memory,
-      world: new Proxy(rs.world, {
-        get(_, prop: keyof typeof rs.world) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (...args: unknown[]): any =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (rs.world[prop] as any)(entity, ...args);
-        },
-      }),
-      act: new Proxy(rs.act, {
-        get(_, prop: keyof typeof rs.act) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (...args: unknown[]): any =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (rs.act[prop] as any)(entity, ...args);
-        },
-      }),
-      me: new Proxy(rs.me, {
-        get(_, prop: keyof typeof rs.me) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return (...args: unknown[]): any =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (rs.me[prop] as any)(entity, ...args);
-        },
-      }),
+      world: new Proxy(rs.world, proxied(rs.world, entity)),
+      act: new Proxy(rs.act, proxied(rs.act, entity)),
+      me: new Proxy(rs.me, proxied(rs.me, entity)),
     };
     game.workers.push({
       id: entity.id,

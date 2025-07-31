@@ -1,5 +1,5 @@
 import { SING, FADE, MINE, MOVE_NEXT_TO, SMASH } from "../types/actions";
-import { Entity, EntityType, GolemEntity } from "../types/entity";
+import { Entity, EntityType } from "../types/entity";
 import { Rune } from "../types/rune";
 import { dist } from "../types/vec";
 import { game } from "./game";
@@ -18,10 +18,12 @@ export const rs = {
     },
   },
   me: {
-    runeCrystals(e: GolemEntity): number {
+    runeCrystals(e: Entity): number {
+      if (e.__type !== EntityType.GOLEM) return -1;
       return e.runeCrystals;
     },
-    runeCrystalCapacity(e: GolemEntity): number {
+    runeCrystalCapacity(e: Entity): number {
+      if (e.__type !== EntityType.GOLEM) return -1;
       return e.runes[Rune.VOID] * game.powers.capacityPerRune;
     },
     isInRange(e: Entity, v: Vec): boolean {
