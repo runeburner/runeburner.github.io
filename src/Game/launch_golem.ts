@@ -38,10 +38,9 @@ type InternalRSNamespace<T extends object> = {
 const proxyHandler = <T extends object>(
   obj: InternalRSNamespace<T>,
   entity: Entity
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): any => {
+): ProxyHandler<T> => {
   return {
-    get(_: unknown, prop: keyof typeof obj) {
+    get(_: unknown, prop: keyof T & string) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (...args: unknown[]): any => (obj[prop] as any)(entity, ...args);
     },
@@ -53,8 +52,8 @@ const createProxy = <T extends object>(
   entity: Entity
 ): T => {
   const handler = proxyHandler(t, entity);
-  const p = new Proxy(t, handler);
-  return p as T;
+  const p = new Proxy<T>(Object.create(null), handler);
+  return p;
 };
 
 const proxyRS = (entity: Entity): RS => {
@@ -97,3 +96,48 @@ export const launchGolem = async (
     return true;
   });
 };
+
+((): void => {
+  type API = {
+    foo(): void;
+    bar(n: number): void;
+  };
+
+  type Internal<T> = {
+    [key in keyof T]: T[key] extends (...args: never) => unknown
+      ? (s: string, ...args: Parameters<T[key]>) => ReturnType<T[key]>
+      : never;
+  };
+
+  const iAPI: Internal<API> = {
+    foo(s: string): void {
+      console.log(s);
+    },
+    bar(s: string, n: number): void {
+      console.log(s, n);
+    },
+  };
+
+  const s = "soo";
+  const memo: Partial<API> = {};
+  const proxyHandler: ProxyHandler<API> = {
+    get(_: unknown, p: keyof API & string) {
+      const m = memo[p];
+      if (m) return m;
+
+      const targetF = iAPI[p];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const f = (targetF as any).bind(undefined, s);
+      memo[p] = f;
+      return f;
+    },
+  };
+  const api = new Proxy(Object.create(null), proxyHandler);
+
+  api.foo();
+  api.foo();
+  api.foo();
+  api.bar(3);
+  api.bar(1);
+  api.bar(2);
+})();
