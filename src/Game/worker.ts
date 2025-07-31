@@ -40,7 +40,7 @@ const gameTick = (): void => {
   if (game.realmId == "") return;
   // Update last actions
   for (let i = 0; i < game.workers.length; i++) {
-    const action = game.workers[i].tick(game.workers[i].proxy);
+    const action = game.workers[i].tick();
     game.workers[i].lastAction = action;
   }
 

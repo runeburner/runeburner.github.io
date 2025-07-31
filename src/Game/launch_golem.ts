@@ -7,9 +7,8 @@ import { esbuildIsInit, transpile } from "./esbuild";
 
 export type EntityTicker = {
   id: number;
-  tick: (rs: RS) => Action;
+  tick: () => Action;
   objectURL: string;
-  proxy: ProxyRSNamespace<RS>;
   lastAction: Action;
 };
 
@@ -22,22 +21,25 @@ window.EntityType = EntityType;
 
 const memory: RSMemory = {};
 
-export type ProxyRS = {
+export type InternalRS = {
   [key in keyof RS]: key extends "memory"
     ? RSMemory
-    : ProxyRSNamespace<RS[key]>;
+    : InternalRSNamespace<RS[key]>;
 };
 
-type ProxyRSNamespace<T extends object> = {
+type InternalRSNamespace<T extends object> = {
   [key in keyof T]: T[key] extends object
-    ? ProxyRSNamespace<T[key]>
+    ? InternalRSNamespace<T[key]>
     : T[key] extends (...args: never) => unknown
     ? (entity: Entity, ...args: Parameters<T[key]>) => ReturnType<T[key]>
     : never;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const proxyHandler = <T extends object>(obj: T, entity: Entity): any => {
+const proxyHandler = <T extends object>(
+  obj: InternalRSNamespace<T>,
+  entity: Entity
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any => {
   return {
     get(_: unknown, prop: keyof typeof obj) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,12 +48,21 @@ const proxyHandler = <T extends object>(obj: T, entity: Entity): any => {
   };
 };
 
-const proxyRS = (entity: Entity): ProxyRS => {
+const createProxy = <T extends object>(
+  t: InternalRSNamespace<T>,
+  entity: Entity
+): T => {
+  const handler = proxyHandler(t, entity);
+  const p = new Proxy(t, handler);
+  return p as T;
+};
+
+const proxyRS = (entity: Entity): RS => {
   return {
     memory: memory,
-    world: new Proxy(rs.world, proxyHandler(rs.world, entity)),
-    act: new Proxy(rs.act, proxyHandler(rs.act, entity)),
-    me: new Proxy(rs.me, proxyHandler(rs.me, entity)),
+    world: createProxy(rs.world, entity),
+    act: createProxy(rs.act, entity),
+    me: createProxy(rs.me, entity),
   };
 };
 
@@ -71,16 +82,16 @@ export const launchGolem = async (
 
   const p: Promise<Module> = import(/* @vite-ignore */ o);
   return p.then((m) => {
-    if (!m.tick || typeof m.tick !== "function") {
+    const tick = m.tick;
+    if (!tick || typeof tick !== "function") {
       URL.revokeObjectURL(o);
       return false;
     }
 
     game.workers.push({
       id: entity.id,
-      tick: m.tick,
+      tick: () => tick(proxyRS(entity)),
       objectURL: o,
-      proxy: proxyRS(entity),
       lastAction: { __type: ActionType.IDLE, id: entity.id },
     });
     return true;
