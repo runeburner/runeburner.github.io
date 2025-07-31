@@ -17,6 +17,64 @@ const init = (): void => {
       armor: [0, 0],
       shield: [0, 0],
     },
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [2, 2],
+      quantity: 16,
+      hardness: 1,
+    },
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [2, 3],
+      quantity: 16,
+      hardness: 1,
+    },
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [2, 4],
+      quantity: 16,
+      hardness: 1,
+    },
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [2, 5],
+      quantity: 16,
+      hardness: 1,
+    },
+
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [4, 1],
+      quantity: 16,
+      hardness: 1,
+    },
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [5, 1],
+      quantity: 16,
+      hardness: 1,
+    },
+
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [4, 2],
+      quantity: 16,
+      hardness: 1,
+    },
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [5, 2],
+      quantity: 16,
+      hardness: 1,
+    },
   ];
 
   registerRealm({

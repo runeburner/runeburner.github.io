@@ -1,6 +1,6 @@
 import { Realm } from "../Realm/Realm";
 import { runGameSelectors } from "../store/gameRedux";
-import { BoundedAABB } from "../types/aabb";
+import { BoundedAABB, IsInAABB, RadiusAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
 import { EldritchRune } from "../types/eldritchRunes";
 import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
@@ -13,10 +13,6 @@ import { Camera } from "../World/World/Camera";
 import { leafPower } from "./formulas";
 import { ID } from "./id";
 import { EntityTicker, launchGolem } from "./launch_golem";
-
-export type UI = {
-  inspectedTile: Vec;
-};
 
 export type Game = {
   realmId: string;
@@ -36,13 +32,13 @@ export type Game = {
   entities: Map<number, Entity>;
   actions: Map<number, ActionProgress>;
   plane: Plane;
-  ui: UI;
   tileAt(v: Vec): Int32Array;
   setTileAt(v: Vec, t: Int32Array): void;
   entityAt(v: Vec): Entity | undefined;
   findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null;
   findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[];
   findClosestEntity(pos: Vec, entityType: EntityType): Entity | null;
+  findAllEntities(pos: Vec, entityType: EntityType, radius: number): Entity[];
   golemSpawnCoordinates(): Vec | null;
   addMusicalNotes(n: number): void;
   determineInitialCameraPosition(cam: Camera): Camera;
@@ -88,9 +84,6 @@ export const game = ((): Game => {
     plane: {
       bounds: new Int32Array(),
       data: new Int32Array(),
-    },
-    ui: {
-      inspectedTile: [0, 0],
     },
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
@@ -199,6 +192,18 @@ export const game = ((): Game => {
       );
       return v[1];
     },
+    findAllEntities(
+      pos: Vec,
+      entityType: EntityType,
+      radius: number
+    ): Entity[] {
+      const aabb = RadiusAABB(pos, radius);
+
+      return game.entities
+        .values()
+        .filter((e) => e.__type === entityType && IsInAABB(aabb, e.pos))
+        .toArray();
+    },
     golemSpawnCoordinates(): Vec | null {
       const heart = game.entities
         .values()
@@ -286,7 +291,7 @@ export const game = ((): Game => {
       game.actions.clear();
       game.plane = map;
       for (const e of entities) {
-        game.updateFoW(null, e.pos, e.visionRange);
+        if ("visionRange" in e) game.updateFoW(null, e.pos, e.visionRange);
       }
     },
     damage<T extends EntityType, V extends object>(
@@ -322,7 +327,8 @@ export const game = ((): Game => {
       if (!entity) return;
 
       if (entity.__type === EntityType.GOLEM) game.resources.golems--;
-      game.updateFoW(entity.pos, null, entity.visionRange);
+      if ("visionRange" in entity)
+        game.updateFoW(entity.pos, null, entity.visionRange);
       game.actions.delete(id);
       game.entities.delete(id);
 

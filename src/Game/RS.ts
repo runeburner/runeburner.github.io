@@ -1,29 +1,20 @@
 import { SING, FADE, MINE, MOVE_NEXT_TO, SMASH } from "../types/actions";
 import { Entity, EntityType, GolemEntity } from "../types/entity";
 import { Rune } from "../types/rune";
-import { Tile } from "../types/tile";
 import { dist } from "../types/vec";
 import { game } from "./game";
 import { aStarPath } from "./path";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
 export const rs = {
-  game: {
-    findNearest(e: Entity, tile: Tile, radius: number): Vec | null {
-      if (!isArgs([tile, radius], isNumber, isNumber)) return null;
-      return game.findClosestTile(e.pos, tile, radius);
-    },
-    findAll(e: Entity, tile: Tile, radius: number): Vec[] {
-      if (!isArgs([tile, radius], isNumber, isNumber)) return [];
-      return game.findAllTiles(e.pos, tile, radius);
-    },
-    at(_e: Entity, v: Vec): Int32Array {
-      if (!isArgs([v], isVec)) return new Int32Array();
-      return game.tileAt(v);
+  world: {
+    findAll(e: Entity, entity: EntityType, radius: number): Entity[] {
+      if (!isArgs([entity, radius], isString, isNumber)) return [];
+      return structuredClone(game.findAllEntities(e.pos, entity, radius));
     },
     findClosestEntity(e: Entity, entityType: EntityType): Entity | null {
       if (!isArgs([entityType], isString)) return null;
-      return game.findClosestEntity(e.pos, entityType);
+      return structuredClone(game.findClosestEntity(e.pos, entityType));
     },
   },
   me: {
@@ -47,7 +38,11 @@ export const rs = {
       id: e.id,
       v: v,
     }),
-    MINE: (e: Entity, v: Vec): MINE => ({ __type: "MINE", v: v, id: e.id }),
+    MINE: (e: Entity, target: number): MINE => ({
+      __type: "MINE",
+      target: target,
+      id: e.id,
+    }),
     SING: (e: Entity): SING => ({ __type: "SING", id: e.id }),
     FADE: (e: Entity): FADE => ({ __type: "FADE", id: e.id }),
     SMASH: (e: Entity, id: number): SMASH => ({

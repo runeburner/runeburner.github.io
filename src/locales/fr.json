@@ -36,9 +36,7 @@
     "actionSpeed": "Actions {{amount}}% plus rapide"
   },
   "tile": {
-    "0": "Vide",
-    "1": "Cristal Runique",
-    "2": "Roche"
+    "0": "Vide"
   },
   "tab": {
     "EDITOR": "Editeur",
@@ -52,7 +50,9 @@
   "entity": {
     "HEART": "Coeur",
     "GOLEM": "Golem",
-    "DUMMY": "Mannequin"
+    "DUMMY": "Mannequin",
+    "RUNE_CRYSTAL": "Cristal Runique",
+    "ROCK": "Roche"
   },
   "runes": {
     "WIND": {

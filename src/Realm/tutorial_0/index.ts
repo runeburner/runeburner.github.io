@@ -1,6 +1,6 @@
 import { Game } from "../../Game/game";
 import { ID } from "../../Game/id";
-import { Entity } from "../../types/entity";
+import { Entity, EntityType } from "../../types/entity";
 import { registerRealm } from "../Realms";
 import { AddYggdrasilLeafs } from "../Rewards";
 import mapData from "./mapData.txt?raw";
@@ -16,6 +16,34 @@ const init = (): void => {
       armor: [0, 0],
       shield: [0, 0],
     },
+    {
+      __type: EntityType.ROCK,
+      id: ID.next(),
+      pos: [3, 2],
+      quantity: 8,
+      hardness: 5,
+    },
+    {
+      __type: EntityType.ROCK,
+      id: ID.next(),
+      pos: [4, 2],
+      quantity: 8,
+      hardness: 5,
+    },
+    {
+      __type: EntityType.ROCK,
+      id: ID.next(),
+      pos: [5, 2],
+      quantity: 4,
+      hardness: 20,
+    },
+    {
+      __type: EntityType.ROCK,
+      id: ID.next(),
+      pos: [5, 3],
+      quantity: 8,
+      hardness: 5,
+    },
   ];
 
   registerRealm({
@@ -27,7 +55,9 @@ const init = (): void => {
     goals: [
       {
         check: (game: Game): boolean => {
-          return game.findAllTiles([0, 0], Tile.ROCK, 999999).length === 0;
+          return !game.entities
+            .values()
+            .some((e) => e.__type === EntityType.ROCK);
         },
         i18nArgs: ["goals.destroyAllRocks"],
       },

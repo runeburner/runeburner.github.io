@@ -16,6 +16,13 @@ const init = (): void => {
       armor: [0, 0],
       shield: [0, 0],
     },
+    {
+      __type: EntityType.RUNE_CRYSTAL,
+      id: ID.next(),
+      pos: [13, 4],
+      quantity: 96,
+      hardness: 1,
+    },
   ];
 
   registerRealm({

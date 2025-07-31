@@ -8,50 +8,39 @@ type Vec = [number, number];
  */
 type Action = { __type: string };
 
+type Entity = { __type: string };
+
 type RSMemory = object;
 
-type RSGame = {
+type RSWorld = {
   /**
-   * Search for a given type of tile.
-   * @param tile The type of tile to search for.
+   * Search for all entities of a given type.
+   * @param entityType The type of entity to search for.
    * @param radius The maximum search radius around this entity.
-   * @returns The closest tile of that type if found, null if none is found.
+   * @returns The list of all entities of the given type that are within the search parameters.
    */
-  findNearest(tile: Tile, radius: number): Vec | null;
-  /**
-   * Search for all tiles of a given type.
-   * @param tile The type of tile to search for.
-   * @param radius The maximum search radius around this entity.
-   * @returns The list of all tiles of the given type that are within the search radius.
-   */
-  findAll(tile: Tile, radius: number): Vec[];
+  findAll(entityType: EntityType, radius: number): Entity[];
   /**
    * Find the entity of the given type that is closest to this entity.
    * @param entityType The type of entity to find.
    * @returns The entity if found, null if not.
    */
   findClosestEntity(entityType: EntityType): Entity | null;
-  /**
-   * Inspect a given tile, returning the underlying data.
-   * @param v The tile to inspect.
-   * @returns The raw data representing the tile at `v`.
-   */
-  at(v: Vec): Int32Array;
 };
 
 type RSAct = {
   /**
-   * Moves this entity next to the given tile.
-   * @param v The tile to move towards.
+   * Moves this entity next to the given location.
+   * @param v The location to move towards.
    * @returns An `Action` to be returned by the global `tick` function.
    *  */
   MOVE_NEXT_TO(v: Vec): Action;
   /**
-   * Mine a tile. The effect depends on the tile.
-   * @param v The tile to mine.
+   * Mine an entity. The effect depends on the entity.
+   * @param v The entity to mine.
    * @returns An `Action` to be returned by the global `tick` function.
    */
-  MINE(v: Vec): Action;
+  MINE(id: number): Action;
   /**
    * Converts Rune Crystals to Musical Notes.
    * @returns An `Action` to be returned by the global `tick` function.
@@ -104,7 +93,7 @@ type RS = {
   /**
    * Contains all functions related to querying the map.
    */
-  game: RSGame;
+  world: RSWorld;
   /**
    * Contains all functions that generate `Action`s to be returned by `tick`.
    */
@@ -125,18 +114,77 @@ type Ticker = (rs: RS) => Action;
  */
 declare const Tile: Readonly<{
   readonly EMPTY: 0;
-  readonly RUNE_CRYSTAL: 1;
-  readonly ROCK: 2;
 }>;
 
-/**
- * All possible EntityType
- */
-declare const EntityType: Readonly<{
-  readonly HEART: "HEART";
-  readonly GOLEM: "GOLEM";
-  readonly DUMMY: "DUMMY";
-}>;
+declare type Typed<T, V> = {
+  __type: T;
+} & V;
+
+declare const EntityType = Object.freeze({
+  HEART: "HEART",
+  GOLEM: "GOLEM",
+  DUMMY: "DUMMY",
+  ROCK: "ROCK",
+  RUNE_CRYSTAL: "RUNE_CRYSTAL",
+} as const);
+
+declare type EntityType = (typeof EntityType)[keyof typeof EntityType];
+
+declare type BaseEntity<T extends EntityType, V extends object> = Typed<
+  T,
+  {
+    id: number;
+    pos: Vec;
+  } & V
+>;
+
+declare type HealthEntity<T extends EntityType, V extends object> = BaseEntity<
+  T,
+  {
+    health: Vec;
+    armor: Vec;
+    shield: Vec;
+  } & V
+>;
+
+declare type HeartEntity = HealthEntity<
+  typeof EntityType.HEART,
+  {
+    visionRange: number;
+  }
+>;
+
+declare type GolemEntity = HealthEntity<
+  typeof EntityType.GOLEM,
+  {
+    runeCrystals: number;
+    runes: Record<Rune, number>;
+    mana: Vec;
+    eldritchRune?: EldritchRune;
+    visionRange: number;
+  }
+>;
+
+declare type DummyEntity = HealthEntity<typeof EntityType.DUMMY, object>;
+
+declare type MineableEntity<T extends EntityType> = BaseEntity<
+  T,
+  {
+    quantity: number;
+    hardness: number;
+  }
+>;
+
+declare type RockEntity = MineableEntity<typeof EntityType.ROCK>;
+
+declare type RuneCrystalEntity = MineableEntity<typeof EntityType.RUNE_CRYSTAL>;
+
+declare type Entity =
+  | HeartEntity
+  | GolemEntity
+  | DummyEntity
+  | RockEntity
+  | RuneCrystalEntity;
 
 declare interface Window {
   Tile: typeof Tile;

@@ -6,98 +6,94 @@ import {
   MINEProgress,
 } from "../../types/actions";
 import { EldritchRune } from "../../types/eldritchRunes";
-import { Entity, EntityType } from "../../types/entity";
-import { Offset } from "../../types/map";
+import {
+  Entity,
+  EntityType,
+  RockEntity,
+  RuneCrystalEntity,
+} from "../../types/entity";
 import { Rune } from "../../types/rune";
-import { Tile } from "../../types/tile";
-import { dist, eq } from "../../types/vec";
+import { dist } from "../../types/vec";
 import { BloodRunePower } from "../formulas";
 import { game } from "../game";
-import { isArgs, isVec } from "../validation";
+import { isArgs, isNumber } from "../validation";
+
+const Mineables: Readonly<EntityType[]> = [
+  EntityType.ROCK,
+  EntityType.RUNE_CRYSTAL,
+];
+
+const isMinable = (e: Entity): e is RockEntity | RuneCrystalEntity => {
+  return Mineables.includes(e.__type);
+};
 
 const maker = (a: MINE): ActionProgress | true | null => {
-  if (!isArgs([a.v], isVec)) return null;
+  if (!isArgs([a.target], isNumber)) return null;
   const old = game.actions.get(a.id);
   const golem = game.entities.get(a.id);
 
   if (golem?.__type !== EntityType.GOLEM) return null;
+  const target = game.entities.get(a.target);
+  if (!target || !isMinable(target)) return null;
 
   // If it's too far.
-  if (dist(golem.pos, a.v) > 1) return null;
+  if (dist(golem.pos, target.pos) > 1) return null;
 
   // If the golem is full.
   const capacity = golem.runes[Rune.VOID] * game.powers.capacityPerRune;
   if (
-    game.tileAt(a.v)[Offset.TILE_ID] === Tile.RUNE_CRYSTAL &&
+    target.__type === EntityType.RUNE_CRYSTAL &&
     golem.runeCrystals === capacity
   )
     return null;
 
-  // If we're trying to mine anything other than a mana crystal
-  const tile = game.tileAt(a.v);
-  if (
-    tile[Offset.TILE_ID] !== Tile.RUNE_CRYSTAL &&
-    tile[Offset.TILE_ID] !== Tile.ROCK
-  )
-    return null;
-
-  // If we were already mining this tile.
+  // If we were already mining this entity.
   const wasMining = old && old.__type === ActionType.MINE;
-  if (wasMining && eq(old.tile, a.v)) return true;
+  if (wasMining && old.target === a.target) return true;
   return {
     __type: ActionType.MINE,
     pos: [...golem.pos],
-    // If we swap mining tile in the middle, carry over progress
-    progress: wasMining ? old.progress : [0, tile[Offset.DATA_1]],
-    tile: [...a.v],
+    // If we swap mining entity in the middle, carry over progress
+    progress: wasMining ? old.progress : [0, target.hardness],
+    target: a.target,
   };
-};
-
-const Mineables: Readonly<Tile[]> = [Tile.ROCK, Tile.RUNE_CRYSTAL];
-
-const isMinable = (v: Vec): boolean => {
-  return Mineables.includes(game.tileAt(v)[Offset.TILE_ID] as Tile);
 };
 
 const processor = (
   rate: number,
-  golem: Entity,
+  actor: Entity,
   action: MINEProgress
 ): boolean => {
-  if (golem.__type !== EntityType.GOLEM) return true;
-  if (!isMinable(action.tile)) return true;
-  const capacity = golem.runes[Rune.VOID] * game.powers.capacityPerRune;
+  if (actor.__type !== EntityType.GOLEM) return true;
+  const target = game.entities.get(action.target);
+  if (!target) return true;
+  if (!isMinable(target)) return true;
+  const capacity = actor.runes[Rune.VOID] * game.powers.capacityPerRune;
   action.progress[0] +=
     GLOBAL_SPEED_UP *
-    golem.runes[Rune.LABOR] *
+    actor.runes[Rune.LABOR] *
     game.powers.workPerRune *
     rate *
     game.powers.musicalStrength *
     game.powers.leafPower *
-    (golem.eldritchRune === EldritchRune.BLOOD ? BloodRunePower : 1);
-  const isRuneCrystal =
-    game.tileAt(action.tile)[Offset.TILE_ID] === Tile.RUNE_CRYSTAL;
+    (actor.eldritchRune === EldritchRune.BLOOD ? BloodRunePower : 1);
+  const isRuneCrystal = target.__type === EntityType.RUNE_CRYSTAL;
   while (
     action.progress[0] >= action.progress[1] &&
-    (!isRuneCrystal || golem.runeCrystals < capacity) &&
-    isMinable(action.tile)
+    (!isRuneCrystal || actor.runeCrystals < capacity) &&
+    target.quantity > 0
   ) {
     action.progress[0] -= action.progress[1];
-    if (game.tileAt(action.tile)[Offset.TILE_ID] === Tile.RUNE_CRYSTAL)
-      golem.runeCrystals++;
+    if (isRuneCrystal) actor.runeCrystals++;
 
-    // reduce resources
-    const t = game.tileAt(action.tile);
-    t[Offset.DATA_0]--;
-    if (t[Offset.DATA_0] === 0) {
-      t[Offset.TILE_ID] = 0;
+    target.quantity--;
+    if (target.quantity === 0) {
+      game.removeEntity(target.id);
     }
-    game.setTileAt(action.tile, t);
   }
 
   return (
-    (isRuneCrystal && golem.runeCrystals === capacity) ||
-    !isMinable(action.tile)
+    (isRuneCrystal && actor.runeCrystals === capacity) || target.quantity <= 0
   );
 };
 

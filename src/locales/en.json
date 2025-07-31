@@ -36,9 +36,7 @@
     "actionSpeed": "{{amount}}% faster actions"
   },
   "tile": {
-    "0": "Empty",
-    "1": "Rune Crystal",
-    "2": "Rock"
+    "0": "Empty"
   },
   "tab": {
     "EDITOR": "Editor",
@@ -52,7 +50,9 @@
   "entity": {
     "HEART": "Heart",
     "GOLEM": "Golem",
-    "DUMMY": "Dummy"
+    "DUMMY": "Dummy",
+    "RUNE_CRYSTAL": "Rune Crystal",
+    "ROCK": "Rock"
   },
   "runes": {
     "WIND": {

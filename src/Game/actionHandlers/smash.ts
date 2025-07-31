@@ -36,7 +36,7 @@ const processor = (
   action: SMASHProgress
 ): boolean => {
   const target = game.entities.get(action.target);
-  if (!target) return true;
+  if (!target || !("health" in target)) return true;
   action.progress[0] +=
     GLOBAL_SPEED_UP *
     rate *

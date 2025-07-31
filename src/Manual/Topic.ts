@@ -33,11 +33,11 @@ export const topicTree: Topic = {
     golem: null,
     heart: null,
     dummy: null,
+    rocks: null,
+    rune_crystals: null,
   },
   tiles: {
     rune_crystals: null,
-    rocks: null,
-    empty: null,
   },
 };
 
