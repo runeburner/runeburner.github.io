@@ -1,10 +1,18 @@
-import { SING, FADE, MINE, MOVE_NEXT_TO, SMASH } from "../types/actions";
+import {
+  SING,
+  FADE,
+  MINE,
+  MOVE_NEXT_TO,
+  SMASH,
+  IDLE,
+  ActionType,
+} from "../types/actions";
 import { Entity, EntityType } from "../types/entity";
 import { Rune } from "../types/rune";
 import { dist } from "../types/vec";
 import { game } from "./game";
-import { InternalRS } from "./launch_golem";
 import { aStarPath } from "./path";
+import { InternalRS } from "./proxy";
 import { isArgs, isNumber, isString, isVec } from "./validation";
 
 export const rs: InternalRS = {
@@ -38,21 +46,22 @@ export const rs: InternalRS = {
   },
   act: {
     MOVE_NEXT_TO: (e: Entity, v: Vec): MOVE_NEXT_TO => ({
-      __type: "MOVE_NEXT_TO",
+      __type: ActionType.MOVE_NEXT_TO,
       id: e.id,
       v: v,
     }),
     MINE: (e: Entity, target: number): MINE => ({
-      __type: "MINE",
+      __type: ActionType.MINE,
       target: target,
       id: e.id,
     }),
-    SING: (e: Entity): SING => ({ __type: "SING", id: e.id }),
-    FADE: (e: Entity): FADE => ({ __type: "FADE", id: e.id }),
+    SING: (e: Entity): SING => ({ __type: ActionType.SING, id: e.id }),
+    FADE: (e: Entity): FADE => ({ __type: ActionType.FADE, id: e.id }),
     SMASH: (e: Entity, id: number): SMASH => ({
-      __type: "SMASH",
+      __type: ActionType.SMASH,
       id: e.id,
       target: id,
     }),
+    IDLE: (e: Entity): IDLE => ({ __type: ActionType.IDLE, id: e.id }),
   },
 };

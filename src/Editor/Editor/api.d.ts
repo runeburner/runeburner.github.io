@@ -57,6 +57,11 @@ type RSAct = {
    * @returns An `Action` to be returned by the global `tick` function.
    */
   SMASH(id: number): Action;
+  /**
+   * Do nothing
+   * @returns An `Action` to be returned by the global `tick` function.
+   */
+  IDLE(): Action;
 };
 
 type RSMe = {

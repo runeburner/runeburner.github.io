@@ -7,6 +7,7 @@ import "./i18n/i18n.ts";
 import "./styles";
 import { I18NPicker } from "./i18n/I18NPicker.tsx";
 import { esbuildInit } from "./Game/esbuild.ts";
+import { SetupGlobalEnums } from "./Game/setupEnums.ts";
 
 import "./Realm/tutorial_0";
 import "./Realm/tutorial_1";
@@ -29,3 +30,4 @@ import "./Realm/DevMap";
 })();
 
 esbuildInit();
+SetupGlobalEnums();
