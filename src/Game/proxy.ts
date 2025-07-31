@@ -1,15 +1,27 @@
 import { rs } from "./RS";
 
-export type InternalRSNamespace<T extends object> = {
+export type InternalAPI<T extends object> = {
   [key in keyof T]: T[key] extends object
-    ? InternalRSNamespace<T[key]>
+    ? InternalAPI<T[key]>
     : T[key] extends (...args: never) => unknown
     ? (entity: Entity, ...args: Parameters<T[key]>) => ReturnType<T[key]>
     : never;
 };
 
+const createSubProxy = (
+  target: NonNullable<unknown>,
+  entity: Entity
+): unknown => {
+  switch (typeof target) {
+    case "object":
+      return createProxy(target, entity);
+    case "function":
+      return target.bind(undefined, entity);
+  }
+};
+
 const proxyHandler = <T extends object>(
-  obj: InternalRSNamespace<T>,
+  obj: Record<keyof T & string, unknown>,
   entity: Entity
 ): ProxyHandler<T> => {
   const cache: Partial<Record<keyof T, unknown>> = {};
@@ -18,17 +30,19 @@ const proxyHandler = <T extends object>(
       const m = cache[prop];
       if (m) return m;
 
-      const targetF = obj[prop];
-      if (typeof targetF !== "function") return targetF;
-      const f = targetF.bind(undefined, entity);
-      cache[prop] = f;
-      return f;
+      const target = obj[prop];
+      if (!target) return;
+
+      const proxy = createSubProxy(target, entity);
+      cache[prop] = proxy;
+
+      return proxy;
     },
   };
 };
 
-const createProxy = <T extends object>(
-  t: InternalRSNamespace<T>,
+const createProxy = <T extends InternalAPI<T>>(
+  t: Record<keyof T & string, unknown>,
   entity: Entity
 ): T => {
   const handler = proxyHandler(t, entity);
@@ -37,9 +51,5 @@ const createProxy = <T extends object>(
 };
 
 export const proxyRS = (entity: Entity): RS => {
-  return {
-    world: createProxy(rs.world, entity),
-    act: createProxy(rs.act, entity),
-    me: createProxy(rs.me, entity),
-  };
+  return createProxy(rs, entity);
 };
