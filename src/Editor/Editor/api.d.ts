@@ -194,6 +194,9 @@ declare type Entity =
   | RockEntity
   | RuneCrystalEntity;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const Memory: any;
+
 declare interface Window {
   /**
    * All different types of tiles.
