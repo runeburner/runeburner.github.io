@@ -42,6 +42,15 @@ const proxied = <T extends object>(obj: T, entity: Entity): any => {
   };
 };
 
+const proxyRS = (entity: Entity): ProxyObject<RS> => {
+  return {
+    memory: memory,
+    world: new Proxy(rs.world, proxied(rs.world, entity)),
+    act: new Proxy(rs.act, proxied(rs.act, entity)),
+    me: new Proxy(rs.me, proxied(rs.me, entity)),
+  };
+};
+
 export const launchGolem = async (
   entity: Entity,
   incantation: string
@@ -58,22 +67,16 @@ export const launchGolem = async (
 
   const p: Promise<Module> = import(/* @vite-ignore */ o);
   return p.then((m) => {
-    if (!m.tick) {
+    if (!m.tick || typeof m.tick !== "function") {
       URL.revokeObjectURL(o);
       return false;
     }
 
-    const proxy = {
-      memory: memory,
-      world: new Proxy(rs.world, proxied(rs.world, entity)),
-      act: new Proxy(rs.act, proxied(rs.act, entity)),
-      me: new Proxy(rs.me, proxied(rs.me, entity)),
-    };
     game.workers.push({
       id: entity.id,
       tick: m.tick,
       objectURL: o,
-      proxy: proxy,
+      proxy: proxyRS(entity),
       lastAction: { __type: ActionType.IDLE, id: entity.id },
     });
     return true;
