@@ -16,7 +16,7 @@ export const createNewEditor = (
     language: "typescript",
     theme: "vs-dark",
     automaticLayout: true,
-    fontSize: 26,
+    fontSize: parseInt(localStorage.getItem("EDITOR_FONT_SIZE") ?? "20"),
   });
 
   addLibrary();

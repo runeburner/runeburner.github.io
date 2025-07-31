@@ -11,7 +11,8 @@
     "save": "Sauver",
     "delete": "Effacer",
     "defaultFileName": "sanstitre",
-    "create": "Créer"
+    "create": "Créer",
+    "fontSize": "Taille de police"
   },
   "create_golem_modal": {
     "runes": "Runes",
