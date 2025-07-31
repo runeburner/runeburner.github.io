@@ -12,10 +12,13 @@ export const FileExplorer = (): React.ReactElement => {
   const names = useIncantationNames();
 
   return (
-    <div className="h-full py-2">
+    <div className={`h-full ${classes.container}`}>
       <ul>
-        <li className={`px-3 py-1 ${classes.item} flex justify-center`}>
+        <li
+          className={`p-3 ${classes.item} flex justify-center ${classes.header}`}
+        >
           <SettingsIcon
+            className="mx-3"
             style={{ width: "24px" }}
             onClick={() => setSettingsOpen(true)}
           />
@@ -24,6 +27,7 @@ export const FileExplorer = (): React.ReactElement => {
             onClose={() => setSettingsOpen(false)}
           />
           <FilePlusIcon
+            className="mx-3"
             style={{ width: "24px" }}
             onClick={() => setCreateOpen(true)}
           />

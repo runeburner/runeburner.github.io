@@ -3,3 +3,15 @@
   color: var(--md-sys-color-on-secondary-container);
   cursor: pointer;
 }
+
+.container {
+  border-right-color: var(--md-sys-color-outline-variant);
+  border-right-width: 1px;
+  border-right-style: solid;
+}
+
+.header {
+  border-bottom-color: var(--md-sys-color-outline-variant);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
