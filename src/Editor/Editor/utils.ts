@@ -7,6 +7,7 @@ import {
 } from "../../store/monacoModels";
 import { saveIncantation } from "../../store/incantations";
 import apiDefs from "./api.d.ts?raw";
+import { EditorSettings } from "../EditorSettings";
 
 export const createNewEditor = (
   ref: React.MutableRefObject<HTMLDivElement | null>
@@ -14,11 +15,10 @@ export const createNewEditor = (
   const editor = monaco.editor.create(ref.current!, {
     model: null,
     language: "typescript",
-    theme: "vs-dark",
+    theme: EditorSettings.theme,
     automaticLayout: true,
-    fontSize: parseInt(localStorage.getItem("EDITOR_FONT_SIZE") ?? "20"),
+    fontSize: EditorSettings.fontSize,
   });
-
   addLibrary();
   setupCtrlS(editor);
   setupDirtying(editor);

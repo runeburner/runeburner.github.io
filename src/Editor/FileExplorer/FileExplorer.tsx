@@ -4,7 +4,7 @@ import { FilePlusIcon, SettingsIcon } from "../../icons";
 import { File } from "./File/File";
 import { CreateIncantationModal } from "./Create/Create";
 import { useState } from "react";
-import { EditorSettingsModal } from "./EditorSettingsModal/SettingsModal";
+import { EditorSettingsModal } from "./EditorSettingsModal/EditorSettingsModal";
 
 export const FileExplorer = (): React.ReactElement => {
   const [settingsOpen, setSettingsOpen] = useState(false);

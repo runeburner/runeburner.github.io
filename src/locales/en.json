@@ -12,7 +12,8 @@
     "delete": "Delete",
     "defaultFileName": "untitled",
     "create": "Create",
-    "fontSize": "Font Size"
+    "fontSize": "Font Size",
+    "theme": "Theme"
   },
   "create_golem_modal": {
     "runes": "Runes",
