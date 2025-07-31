@@ -7,19 +7,14 @@ import { esbuildIsInit, transpile } from "./esbuild";
 
 export type EntityTicker = {
   id: number;
-  tick: (rb: unknown) => Action;
+  tick: (rs: RS) => Action;
   objectURL: string;
-  proxy: {
-    memory: object;
-    world: ProxyObject<RS["world"]>;
-    act: ProxyObject<RS["act"]>;
-    me: ProxyObject<RS["me"]>;
-  };
+  proxy: ProxyObject<RS>;
   lastAction: Action;
 };
 
 type Module = {
-  tick?: (rb: unknown) => Action;
+  tick?: (rs: RS) => Action;
 };
 
 window.Tile = Tile;
@@ -30,6 +25,10 @@ const memory: object = {};
 type ProxyObject<T extends object> = {
   [key in keyof T]: T[key] extends (...args: never) => unknown
     ? (entity: Entity, ...args: Parameters<T[key]>) => ReturnType<T[key]>
+    : key extends "memory"
+    ? T[key]
+    : T[key] extends object
+    ? ProxyObject<T[key]>
     : never;
 };
 
