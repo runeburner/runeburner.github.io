@@ -46,8 +46,11 @@ const renderMine = (
   ctx.strokeStyle = "#0000ff44";
   ctx.beginPath();
   ctx.moveTo(action.pos[0] + 0.5, action.pos[1] + 0.5);
-  ctx.lineTo(action.tile[0] + 0.5, action.tile[1] + 0.5);
-  ctx.stroke();
+  const target = game.entities.get(action.target);
+  if (target) {
+    ctx.lineTo(target.pos[0] + 0.5, target.pos[1] + 0.5);
+    ctx.stroke();
+  }
   renderProgress(ctx, action.pos, action.progress, "#0000ff44");
 };
 

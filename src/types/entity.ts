@@ -7,6 +7,8 @@ export const EntityType = Object.freeze({
   HEART: "HEART",
   GOLEM: "GOLEM",
   DUMMY: "DUMMY",
+  ROCK: "ROCK",
+  RUNE_CRYSTAL: "RUNE_CRYSTAL",
 } as const);
 
 export type EntityType = (typeof EntityType)[keyof typeof EntityType];
@@ -15,7 +17,6 @@ export type BaseEntity<T extends EntityType, V extends object> = Typed<
   T,
   {
     id: number;
-    visionRange: number;
     pos: Vec;
   } & V
 >;
@@ -29,7 +30,12 @@ export type HealthEntity<T extends EntityType, V extends object> = BaseEntity<
   } & V
 >;
 
-export type HeartEntity = HealthEntity<typeof EntityType.HEART, object>;
+export type HeartEntity = HealthEntity<
+  typeof EntityType.HEART,
+  {
+    visionRange: number;
+  }
+>;
 
 export type GolemEntity = HealthEntity<
   typeof EntityType.GOLEM,
@@ -38,9 +44,27 @@ export type GolemEntity = HealthEntity<
     runes: Record<Rune, number>;
     mana: Vec;
     eldritchRune?: EldritchRune;
+    visionRange: number;
   }
 >;
 
 export type DummyEntity = HealthEntity<typeof EntityType.DUMMY, object>;
 
-export type Entity = HeartEntity | GolemEntity | DummyEntity;
+export type MineableEntity<T extends EntityType> = BaseEntity<
+  T,
+  {
+    quantity: number;
+    hardness: number;
+  }
+>;
+
+export type RockEntity = MineableEntity<typeof EntityType.ROCK>;
+
+export type RuneCrystalEntity = MineableEntity<typeof EntityType.RUNE_CRYSTAL>;
+
+export type Entity =
+  | HeartEntity
+  | GolemEntity
+  | DummyEntity
+  | RockEntity
+  | RuneCrystalEntity;

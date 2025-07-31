@@ -52,7 +52,9 @@
   "entity": {
     "HEART": "Heart",
     "GOLEM": "Golem",
-    "DUMMY": "Dummy"
+    "DUMMY": "Dummy",
+    "RUNE_CRYSTAL": "Rune Crystal",
+    "ROCK": "Rock"
   },
   "runes": {
     "WIND": {

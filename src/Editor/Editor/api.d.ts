@@ -8,6 +8,8 @@ type Vec = [number, number];
  */
 type Action = { __type: string };
 
+type Entity = { __type: string };
+
 type RSMemory = object;
 
 type RSGame = {
@@ -24,7 +26,7 @@ type RSGame = {
    * @param radius The maximum search radius around this entity.
    * @returns The list of all tiles of the given type that are within the search radius.
    */
-  findAll(tile: Tile, radius: number): Vec[];
+  findAll(tile: Tile, radius: number): Entity[];
   /**
    * Find the entity of the given type that is closest to this entity.
    * @param entityType The type of entity to find.
@@ -51,7 +53,7 @@ type RSAct = {
    * @param v The tile to mine.
    * @returns An `Action` to be returned by the global `tick` function.
    */
-  MINE(v: Vec): Action;
+  MINE(id: number): Action;
   /**
    * Converts Rune Crystals to Musical Notes.
    * @returns An `Action` to be returned by the global `tick` function.
@@ -136,6 +138,8 @@ declare const EntityType: Readonly<{
   readonly HEART: "HEART";
   readonly GOLEM: "GOLEM";
   readonly DUMMY: "DUMMY";
+  readonly ROCK: "ROCK";
+  readonly RUNE_CRYSTAL: "RUNE_CRYSTAL";
 }>;
 
 declare interface Window {

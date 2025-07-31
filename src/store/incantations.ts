@@ -7,20 +7,20 @@ const INCANTATION_KEY = "RUNEBURNER_INCANTATIONS";
 type IncantationsState = Record<string, string>;
 
 export const defaultIncantation = `let mining = true;
-let crystal: Vec | null = null;
+let crystal: Entity | null = null;
 
 const miningRoutine = ({ game, me, act }: RS) => {
-  if (crystal == null || game.at(crystal)[0] !== Tile.RUNE_CRYSTAL) {
-    const crystals = game.findAll(Tile.RUNE_CRYSTAL, 3);
+  if (crystal == null || crystal.quantity === 0) {
+    const crystals = game.findAll(EntityType.RUNE_CRYSTAL, 3);
     if (crystals.length === 0) return act.FADE();
     for (const c of crystals) {
-      if (!me.hasPathTo(c)) continue
+      if (!me.hasPathTo(c.pos)) continue
       crystal = c;
     }
     if (crystal === null) return act.FADE();
   }
 
-  return me.isInRange(crystal) ? act.MINE(crystal) : act.MOVE_NEXT_TO(crystal);
+  return me.isInRange(crystal.pos) ? act.MINE(crystal.id) : act.MOVE_NEXT_TO(crystal.pos);
 }
 
 const singingRoutine = ({ game, me, act }: RS) => {
@@ -46,9 +46,9 @@ export const defaultFight = `export const tick: Ticker = ({ game, me, act }: RS)
 }`;
 
 export const defaultRock = `export const tick: Ticker = ({ game, me, act }: RS) => {
-  const rock = game.findNearest(Tile.ROCK, 3);
+  const rock = game.findClosestEntity(EntityType.ROCK, 3);
   if (rock === null) return act.FADE();
-  return me.isInRange(rock) ? act.MINE(rock) : act.MOVE_NEXT_TO(rock);
+  return me.isInRange(rock.pos) ? act.MINE(rock.id) : act.MOVE_NEXT_TO(rock.pos);
 }`;
 
 export const emptyFile = `export const tick: Ticker = (rs: RS) => {

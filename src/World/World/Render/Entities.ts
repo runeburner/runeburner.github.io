@@ -39,6 +39,35 @@ const renderRuneArcs = (
   }
 };
 
+const fillPath = (
+  ctx: CanvasRenderingContext2D,
+  p: Path2D,
+  color: string,
+  scale: number,
+  pos: Vec
+): void => {
+  const transform = ctx.getTransform();
+  const subtr = ctx.getTransform();
+  subtr.e = (pos[0] - camera.c.pos[0] + scale / 2) * camera.c.scale;
+  subtr.f = (pos[1] - camera.c.pos[1] + scale / 2) * camera.c.scale;
+  subtr.a = camera.c.scale * scale;
+  subtr.d = camera.c.scale * scale;
+  ctx.setTransform(subtr);
+  ctx.fillStyle = color;
+  ctx.fill(p);
+  ctx.setTransform(transform);
+};
+
+const rockPath = new Path2D("m8 3 4 8 5-5 5 15H2L8 3z");
+
+const heartPath = new Path2D(
+  "M2 9h20 M0.8683333333 0.1920833333a0.2291666667 0.2291666667 0 0 0-0.3241666667 0L0.5 0.23625l-0.04416666667-0.04416666667a0.2291666667 0.2291666667 0 0 0-0.3241666667 0.3241666667l0.04416666667 0.04416666667L0.5 0.8845833333l0.3241666667-0.3241666667 0.04416666667-0.04416666667a0.2291666667 0.2291666667 0 0 0 0-0.3241666667z"
+);
+
+const runeCrystalPath = new Path2D(
+  "M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z"
+);
+
 export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
   for (const e of game.entities.values()) {
     if (!camera.isInView(e.pos)) continue;
@@ -56,26 +85,19 @@ export const renderEntities = (ctx: CanvasRenderingContext2D): void => {
       }
       case EntityType.HEART: {
         renderHealth(ctx, e);
-        const heart = new Path2D(
-          "M0.8683333333 0.1920833333a0.2291666667 0.2291666667 0 0 0-0.3241666667 0L0.5 0.23625l-0.04416666667-0.04416666667a0.2291666667 0.2291666667 0 0 0-0.3241666667 0.3241666667l0.04416666667 0.04416666667L0.5 0.8845833333l0.3241666667-0.3241666667 0.04416666667-0.04416666667a0.2291666667 0.2291666667 0 0 0 0-0.3241666667z"
-        );
-        const transform = ctx.getTransform();
-        const subtr = ctx.getTransform();
-        const heartScale = 0.5;
-        subtr.e =
-          (e.pos[0] - camera.c.pos[0] + heartScale / 2) * camera.c.scale;
-        subtr.f =
-          (e.pos[1] - camera.c.pos[1] + heartScale / 2) * camera.c.scale;
-        subtr.a = camera.c.scale * heartScale;
-        subtr.d = camera.c.scale * heartScale;
-        ctx.setTransform(subtr);
-        ctx.fillStyle = "rgb(255, 26, 26)";
-        ctx.fill(heart);
-        ctx.setTransform(transform);
+        fillPath(ctx, heartPath, "rgb(255, 26, 26)", 0.5, e.pos);
         break;
       }
       case EntityType.DUMMY: {
         renderHealth(ctx, e);
+        break;
+      }
+      case EntityType.ROCK: {
+        fillPath(ctx, rockPath, "#4a698c", 0.04, e.pos);
+        break;
+      }
+      case EntityType.RUNE_CRYSTAL: {
+        fillPath(ctx, runeCrystalPath, "#938725", 0.04, e.pos);
         break;
       }
     }

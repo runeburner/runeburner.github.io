@@ -1,4 +1,6 @@
-// of exactly 4
+import { Vec } from "./vec";
+
+// Array of exactly 4
 // minX, minY, maxX, maxY
 export type AABB = Int32Array;
 
@@ -20,3 +22,7 @@ export const AddAABB = (v0: AABB, v1: AABB): AABB =>
     Math.min(v0[2], v1[2]),
     Math.min(v0[3], v1[3]),
   ]);
+
+export const IsInAABB = (aabb: AABB, v: Vec): boolean => {
+  return aabb[0] <= v[0] && aabb[1] <= v[1] && v[0] < aabb[2] && v[1] < aabb[3];
+};

@@ -23,7 +23,7 @@ export type Action<
 >;
 
 export type MOVE_NEXT_TO = Action<typeof ActionType.MOVE_NEXT_TO, { v: Vec }>;
-export type MINE = Action<typeof ActionType.MINE, { v: Vec }>;
+export type MINE = Action<typeof ActionType.MINE, { target: number }>;
 export type SING = Action<typeof ActionType.SING>;
 export type FADE = Action<typeof ActionType.FADE>;
 export type SMASH = Action<typeof ActionType.SMASH, { target: number }>;
@@ -47,12 +47,7 @@ export type MOVE_NEXT_TOProgress = BaseActionProgress<
   }
 >;
 
-export type MINEProgress = BaseActionProgress<
-  typeof ActionType.MINE,
-  {
-    tile: Vec;
-  }
->;
+export type MINEProgress = TargettedProgress<typeof ActionType.MINE>;
 
 export type SINGProgress = BaseActionProgress<
   typeof ActionType.SING,
