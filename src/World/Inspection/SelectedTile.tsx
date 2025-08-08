@@ -1,10 +1,11 @@
-import { useAppSelector } from "../../store/hooks";
-import { RootState } from "../../store/store";
+import { Game } from "../../Game/game";
+import { useGameSelector } from "../../store/gameRedux";
+import { eq } from "../../types/vec";
 
-const selectInspectionTile = (s: RootState): Vec => s.inspection.pos;
+const selectInspectedTile = (g: Game): Vec => g.ui.inspectedTile;
 
 export const SelectedTile = (): React.ReactElement => {
-  const pos = useAppSelector(selectInspectionTile);
+  const pos = useGameSelector(selectInspectedTile, eq);
 
   return (
     <p>

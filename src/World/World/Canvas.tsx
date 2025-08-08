@@ -4,15 +4,14 @@ import { camera } from "./Camera";
 import { renderWorld } from "./Render/Main";
 import { useAtInterval } from "./useAtInterval";
 import { useWindowResize } from "./useWindowResize";
-import { useAppDispatch } from "../../store/hooks";
-import { setInspectionTile } from "../../store/inspection";
+import { runGameSelectors } from "../../store/gameRedux";
+import { game } from "../../Game/game";
 
 type CanvasProps = {
   canvas: RefObject<HTMLCanvasElement>;
 } & HTMLProps<HTMLCanvasElement>;
 
 export const Canvas = (props: CanvasProps): React.ReactElement => {
-  const dispatch = useAppDispatch();
   const { canvas } = props;
   const isPanning = useRef(false);
 
@@ -36,12 +35,13 @@ export const Canvas = (props: CanvasProps): React.ReactElement => {
     const p0 = camera.c.pos[0] - e.movementX / camera.c.scale;
     const p1 = camera.c.pos[1] - e.movementY / camera.c.scale;
 
-    dispatch(
-      setInspectionTile([
-        Math.floor((e.clientX - ctx.canvas.offsetLeft) / camera.c.scale + p0),
-        Math.floor((e.clientY - ctx.canvas.offsetTop) / camera.c.scale + p1),
-      ])
-    );
+    game.ui.inspectedTile = [
+      Math.floor((e.clientX - ctx.canvas.offsetLeft) / camera.c.scale + p0),
+
+      Math.floor((e.clientY - ctx.canvas.offsetTop) / camera.c.scale + p1),
+    ];
+
+    runGameSelectors();
 
     if (!isPanning.current) return;
     camera.c.pos[0] = p0;
