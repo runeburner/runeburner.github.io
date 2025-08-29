@@ -1,5 +1,6 @@
 import { game } from "../../../Game/game";
 import { camera } from "../Camera";
+import { renderSpecialEffects } from "../SpecialEffect";
 import { renderEntities } from "./Entities";
 import { renderTiles } from "./Tile";
 
@@ -30,4 +31,5 @@ export const renderWorld = (ctx: CanvasRenderingContext2D): void => {
   );
   renderTiles(ctx);
   renderEntities(ctx);
+  renderSpecialEffects(ctx);
 };

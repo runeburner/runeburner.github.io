@@ -34,3 +34,11 @@ illness that spreads to nearby golems
 https://material-foundation.github.io/material-theme-builder/
 https://lucide.dev/icons/
 https://colorizer.org/
+
+miasma tree
+rune increase tempo based on donations
+rune increase tempo based on unspent music notes
+rune increase tempo when half health
+
+ability to switch golam script
+ability to save golem preset

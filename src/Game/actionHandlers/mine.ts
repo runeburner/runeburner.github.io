@@ -86,6 +86,12 @@ const processor = (
     action.progress[0] -= action.progress[1];
     if (isRuneCrystal) actor.runeCrystals++;
 
+    game.addSpecialEffect({
+      pos: [target.pos[0], target.pos[1] + 0.5],
+      actionType: action.__type,
+      amount: 1,
+    });
+
     target.quantity--;
     if (target.quantity === 0) {
       game.removeEntity(target.id);

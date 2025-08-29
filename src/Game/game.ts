@@ -1,6 +1,6 @@
 import { Realm } from "../Realm/Realm";
 import { runGameSelectors } from "../store/gameRedux";
-import { BoundedAABB, IsInAABB, RadiusAABB } from "../types/aabb";
+import { AABB, BoundedAABB, IsInAABB, RadiusAABB } from "../types/aabb";
 import { ActionProgress } from "../types/actions";
 import { EldritchRune } from "../types/eldritchRunes";
 import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
@@ -13,9 +13,12 @@ import { Camera } from "../World/World/Camera";
 import { leafPower } from "./formulas";
 import { ID } from "./id";
 import { EntityTicker, launchGolem } from "./launch_golem";
+import { SpecialEffect } from "./SpecialEffect";
 
 export type UI = {
   inspectedTile: Vec;
+  camera: AABB;
+  events: SpecialEffect[];
 };
 
 export type Game = {
@@ -61,6 +64,7 @@ export type Game = {
   ): boolean;
   removeEntity(id: number): void;
   completeRealm(realm: Realm): void;
+  addSpecialEffect(effect: SpecialEffect): void;
 };
 
 export const game = ((): Game => {
@@ -92,6 +96,8 @@ export const game = ((): Game => {
     },
     ui: {
       inspectedTile: [0, 0],
+      camera: new Int32Array([0, 0, 0, 0]),
+      events: [],
     },
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
@@ -366,6 +372,10 @@ export const game = ((): Game => {
       }
       game.powers.leafPower = leafPower(game.resources.leafs);
       runGameSelectors();
+    },
+
+    addSpecialEffect(effect: SpecialEffect): void {
+      game.ui.events.push(effect);
     },
   };
 })();
