@@ -37,6 +37,9 @@ const fps = 30;
 const rate = 1 / fps;
 
 const gameTick = (): void => {
+  runGameSelectors();
+  if (game.framesLeft === 0) return;
+  game.framesLeft--;
   if (game.realmId == "") return;
   // Update last actions
   for (let i = 0; i < game.workers.length; i++) {
@@ -76,8 +79,6 @@ const gameTick = (): void => {
       game.realmCompleted = true;
     }
   }
-
-  runGameSelectors();
 };
 
 setInterval(gameTick, 1000 / fps);

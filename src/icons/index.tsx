@@ -54,6 +54,9 @@ import Leaf from "./leaf.svg";
 import ChartBar from "./chart-bar.svg";
 import FilePlus from "./file-plus.svg";
 import PersonStanding from "./person-standing.svg";
+import Pause from "./pause.svg";
+import Play from "./play.svg";
+import SkipForward from "./skip-forward.svg";
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -127,3 +130,6 @@ export const LeafIcon = makeIcon(Leaf);
 export const ChartBarIcon = makeIcon(ChartBar);
 export const FilePlusIcon = makeIcon(FilePlus);
 export const PersonStandingIcon = makeIcon(PersonStanding);
+export const PauseIcon = makeIcon(Pause);
+export const PlayIcon = makeIcon(Play);
+export const SkipForwardIcon = makeIcon(SkipForward);

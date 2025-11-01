@@ -6,6 +6,7 @@ import { useGameSelector } from "../../store/gameRedux";
 import { useTranslation } from "react-i18next";
 import { Goal } from "../Goal/Goal";
 import { Game } from "../../Game/game";
+import { TimeControls } from "../TimeControls/TimeControl";
 
 const selectIsInRealm = (g: Game): boolean => !!g.realmId;
 
@@ -23,6 +24,7 @@ export const Page = (): React.ReactElement => {
   return (
     <div className="w-full h-full">
       <Zoom canvas={canvas} />
+      <TimeControls />
 
       <Inspection />
       <Canvas canvas={canvas} className="w-full h-full" />

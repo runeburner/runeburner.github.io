@@ -40,6 +40,7 @@ export type Game = {
   actions: Map<number, ActionProgress>;
   plane: Plane;
   ui: UI;
+  framesLeft: number;
   tileAt(v: Vec): Int32Array;
   setTileAt(v: Vec, t: Int32Array): void;
   entityAt(v: Vec): Entity | undefined;
@@ -99,6 +100,7 @@ export const game = ((): Game => {
       camera: new Int32Array([0, 0, 0, 0]),
       events: [],
     },
+    framesLeft: Infinity,
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
       return game.plane.data.slice(start, start + ValuesPerTile);
