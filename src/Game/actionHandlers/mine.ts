@@ -89,7 +89,6 @@ const processor = (
     game.addSpecialEffect({
       pos: [target.pos[0], target.pos[1] + 0.5],
       actionType: action.__type,
-      amount: 1,
     });
 
     target.quantity--;
