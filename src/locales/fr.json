@@ -45,7 +45,8 @@
     "HELP": "Aide",
     "SETTINGS": "Paramètres",
     "YGGDRASIL": "Yggdrasil",
-    "STATS": "Stats"
+    "STATS": "Stats",
+    "CHEAT": "Triche"
   },
   "entity": {
     "HEART": "Coeur",
@@ -149,5 +150,9 @@
     "rocks": "Roches",
     "empty": "Vide",
     "incantations": "Incantations"
+  },
+  "cheat": {
+    "GLOBAL_SPEED_UP": "Augmentation de vitesse mondiale",
+    "AUTO_LOAD_REALM": "Entrer un monde automatiquement"
   }
 }

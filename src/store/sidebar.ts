@@ -8,6 +8,7 @@ export const Page = Object.freeze({
   STATS: "STATS",
   SETTINGS: "SETTINGS",
   YGGDRASIL: "YGGDRASIL",
+  CHEAT: "CHEAT",
 } as const);
 
 export type Page = (typeof Page)[keyof typeof Page];

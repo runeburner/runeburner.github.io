@@ -3,16 +3,20 @@ import { parseMap, Realms } from "./Realm/Realms";
 import { changePage, Page } from "./store/sidebar";
 import { store } from "./store/store";
 
+export const GLOBAL_SPEED_UP_KEY = "GLOBAL_SPEED_UP";
+
 export const GLOBAL_SPEED_UP = ((): number => {
-  const f = parseFloat(localStorage.getItem("GLOBAL_SPEED_UP") ?? "1");
+  const f = parseFloat(localStorage.getItem(GLOBAL_SPEED_UP_KEY) ?? "1");
   if (isNaN(f)) return 1;
   if (f < 0) return 1;
   return f;
 })();
 
+export const AUTO_LOAD_REALM_KEY = "AUTO_LOAD_REALM";
+
 ((): void => {
   setTimeout(() => {
-    const autoRealm = localStorage.getItem("AUTO_LOAD_REALM");
+    const autoRealm = localStorage.getItem(AUTO_LOAD_REALM_KEY);
     if (!autoRealm) return;
     const realm = Realms.get(autoRealm);
     if (!realm) {

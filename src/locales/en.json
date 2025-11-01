@@ -45,7 +45,8 @@
     "HELP": "Help",
     "SETTINGS": "Settings",
     "YGGDRASIL": "Yggdrasil",
-    "STATS": "Stats"
+    "STATS": "Stats",
+    "CHEAT": "Cheat"
   },
   "entity": {
     "HEART": "Heart",
@@ -149,5 +150,9 @@
     "rocks": "Rocks",
     "empty": "Empty",
     "incantations": "Incantations"
+  },
+  "cheat": {
+    "GLOBAL_SPEED_UP": "Global speed up",
+    "AUTO_LOAD_REALM": "Automatically load realm"
   }
 }

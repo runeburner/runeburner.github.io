@@ -57,6 +57,8 @@ import PersonStanding from "./person-standing.svg";
 import Pause from "./pause.svg";
 import Play from "./play.svg";
 import SkipForward from "./skip-forward.svg";
+import CPU from "./cpu.svg";
+import Terminal from "./terminal.svg";
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -133,3 +135,5 @@ export const PersonStandingIcon = makeIcon(PersonStanding);
 export const PauseIcon = makeIcon(Pause);
 export const PlayIcon = makeIcon(Play);
 export const SkipForwardIcon = makeIcon(SkipForward);
+export const CPUIcon = makeIcon(CPU);
+export const TerminalIcon = makeIcon(Terminal);

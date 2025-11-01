@@ -10,6 +10,7 @@ import { ResourceHeader } from "../ResourceHeader/ResourceHeader";
 import { HelpPage } from "../Manual/Page";
 import { YggdrasilPage } from "../Yggdrasil/Page";
 import { StatsPage } from "../Stats/Page";
+import { CheatPage } from "../Cheat/CheatPage";
 
 export const App = (): React.ReactElement => {
   useEffect(() => {
@@ -49,6 +50,9 @@ export const App = (): React.ReactElement => {
           </PageWrapper>
           <PageWrapper page={Page.YGGDRASIL}>
             <YggdrasilPage />
+          </PageWrapper>
+          <PageWrapper page={Page.CHEAT}>
+            <CheatPage />
           </PageWrapper>
         </div>
       </div>

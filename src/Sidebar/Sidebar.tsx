@@ -10,6 +10,7 @@ import {
   // MusicIcon,
   TreeIcon,
   ChartBarIcon,
+  TerminalIcon,
 } from "../icons";
 import { useTranslation } from "react-i18next";
 import { RootState } from "../store/store";
@@ -57,6 +58,7 @@ export const Sidebar = (): React.ReactElement => {
       <SidebarTab page={Page.STATS} icon={ChartBarIcon} />
       <SidebarTab page={Page.HELP} icon={BookIcon} />
       <SidebarTab page={Page.SETTINGS} icon={SettingsIcon} />
+      <SidebarTab page={Page.CHEAT} icon={TerminalIcon} />
     </ul>
   );
 };
