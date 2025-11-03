@@ -18,7 +18,7 @@ export const TimeControls = (): React.ReactElement => {
   };
 
   return (
-    <div className={"m-4 p-2 fixed flex " + classes.container}>
+    <div className={"m-4 p-2 absolute flex " + classes.container}>
       <button className={"btn mr-2"}>
         <SkipForwardIcon style={{ width: "24px" }} onClick={advanceFrame} />
       </button>

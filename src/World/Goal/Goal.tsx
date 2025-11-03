@@ -26,7 +26,7 @@ export const Goal = (): React.ReactElement => {
     dispatch(changePage(Page.YGGDRASIL));
   };
   return (
-    <div className={"m-4 p-2 fixed flex flex-col " + classes.container}>
+    <div className={"m-4 p-2 absolute flex flex-col " + classes.container}>
       <div className="flex">
         {t(`yggdrasil.realm.${realmId}.title`)}&nbsp;
         <CircleQuestionMarkIcon
