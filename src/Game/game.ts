@@ -13,6 +13,7 @@ import { Camera } from "../World/World/Camera";
 import { leafPower } from "./formulas";
 import { ID } from "./id";
 import { EntityTicker, launchGolem } from "./launch_golem";
+import { LaborMelody, VoidMelody, WindMelody } from "./Melodies/Melodies";
 import { SpecialEffect } from "./SpecialEffect";
 
 export type UI = {
@@ -41,6 +42,8 @@ export type Game = {
   plane: Plane;
   ui: UI;
   framesLeft: number;
+  melodies: Record<string, boolean>;
+  choords: number;
   tileAt(v: Vec): Int32Array;
   setTileAt(v: Vec, t: Int32Array): void;
   entityAt(v: Vec): Entity | undefined;
@@ -66,6 +69,7 @@ export type Game = {
   removeEntity(id: number): void;
   completeRealm(realm: Realm): void;
   addSpecialEffect(effect: SpecialEffect): void;
+  unlockMelody(id: string): void;
 };
 
 export const game = ((): Game => {
@@ -101,6 +105,12 @@ export const game = ((): Game => {
       events: [],
     },
     framesLeft: Infinity,
+    melodies: {
+      [WindMelody.id]: true,
+      [LaborMelody.id]: true,
+      [VoidMelody.id]: true,
+    },
+    choords: 2,
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
       return game.plane.data.slice(start, start + ValuesPerTile);
@@ -268,7 +278,7 @@ export const game = ((): Game => {
         id: id,
         visionRange: 5,
         runeCrystals: 0,
-        health: [0, 0],
+        health: [runes[Rune.HEALTH] * 5, runes[Rune.HEALTH] * 5],
         armor: [0, 0],
         shield: [0, 0],
         mana: [0, 0],
@@ -378,6 +388,12 @@ export const game = ((): Game => {
 
     addSpecialEffect(effect: SpecialEffect): void {
       game.ui.events.push(effect);
+    },
+
+    unlockMelody(id: string): void {
+      if (game.choords <= 0 || game.melodies[id]) return;
+      game.choords--;
+      game.melodies[id] = true;
     },
   };
 })();

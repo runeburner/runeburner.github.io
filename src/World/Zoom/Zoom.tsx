@@ -33,7 +33,7 @@ export const Zoom = ({ canvas }: ZoomProps): React.ReactElement => {
   }, [onZoom]);
 
   return (
-    <div className={"m-4 p-2 fixed flex flex-col " + classes.container}>
+    <div className={"m-4 p-2 absolute flex flex-col " + classes.container}>
       <button className={"btn mb-2"}>
         <PlusIcon style={{ width: "24px" }} onClick={() => onZoom(true)} />
       </button>

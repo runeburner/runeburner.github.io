@@ -1,4 +1,6 @@
 .container {
+  top: 0;
+  left: 0;
   color: var(--md-sys-color-on-tertiary-container);
   background-color: var(--md-sys-color-tertiary-container);
   border-radius: 10px;

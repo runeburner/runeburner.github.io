@@ -1,0 +1,9 @@
+.pathAvailable {
+  stroke: var(--md-sys-color-primary);
+  stroke-width: 5;
+}
+
+.pathUnavailable {
+  stroke: var(--md-sys-color-on-secondary);
+  stroke-width: 5;
+}

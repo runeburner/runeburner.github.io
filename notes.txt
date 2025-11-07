@@ -1,3 +1,7 @@
+Add ability to inspect entity
+ability to switch golem script
+ability to save golem preset
+
 healing plants
 escort mission
 
@@ -40,5 +44,18 @@ rune increase tempo based on donations
 rune increase tempo based on unspent music notes
 rune increase tempo when half health
 
-ability to switch golam script
-ability to save golem preset
+
+notes singing particles
+FADE animation of a ghost filling?
+pause play advance frame
+inspect entity
+tie actions to runes
+
+
+Musical tree nodes:
+	Unlock runes like health, shield, armor
+	Increase health per rune
+	Prevent fatal hit
+	shield regenerate faster
+	Increase rune limit
+	Carry more crystals per void runes

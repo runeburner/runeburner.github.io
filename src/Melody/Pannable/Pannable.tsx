@@ -15,12 +15,11 @@ export const Pannable = ({
   const [pos, setPos] = useState<Vec>([startX, startY]);
   const isPanning = useRef(false);
 
-  const onMouseDown = (e: React.MouseEvent): void => {
-    if (e.button == 1) isPanning.current = true;
-  };
-  const onMouseUp = (e: React.MouseEvent): void => {
-    if (e.button === 1) isPanning.current = false;
-  };
+  const onMouseDown = ({ button }: React.MouseEvent): boolean =>
+    (isPanning.current ||= button === 0);
+
+  const onMouseUp = ({ button }: React.MouseEvent): boolean =>
+    (isPanning.current &&= button !== 0);
 
   const onMouseMove = (e: React.MouseEvent): void => {
     if (!isPanning.current) return;

@@ -22,12 +22,12 @@ export const Page = (): React.ReactElement => {
     );
   }
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
+      <Canvas canvas={canvas} className="w-full h-full" />
+
       <Zoom canvas={canvas} />
       <TimeControls />
-
       <Inspection />
-      <Canvas canvas={canvas} className="w-full h-full" />
       <Goal />
     </div>
   );

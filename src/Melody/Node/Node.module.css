@@ -5,10 +5,10 @@
 }
 
 .purchasedContainer {
-  background-color: white;
-  box-shadow: 0 0 5px gold;
+  background-color: var(--md-sys-color-primary-container);
+  box-shadow: 0 0 5px var(--md-sys-color-primary-container);
   border-style: solid;
-  border-color: gold;
+  border-color: var(--md-sys-color-primary-container);
 }
 
 .purchasedIcon {
@@ -16,7 +16,7 @@
 }
 
 .availableContainer {
-  background-color: white;
+  background-color: var(--md-sys-color-primary-container);
   border-style: solid;
   animation-name: availableContainerAnimation;
   animation-duration: 4s;
@@ -35,11 +35,11 @@
     border-color: #a770ef;
   }
   33% {
-    box-shadow: 0 0 5px #cf8bf3;
+    box-shadow: 0 0 15px #cf8bf3;
     border-color: #cf8bf3;
   }
   66% {
-    box-shadow: 0 0 5px #fdb99b;
+    box-shadow: 0 0 15px #fdb99b;
     border-color: #fdb99b;
   }
   100% {
@@ -62,17 +62,8 @@
   }
 }
 
-.unlockedContainer {
-  background-color: white;
-  box-shadow: 0 0 5px grey;
-}
-
-.unlockedIcon {
-  color: grey;
-}
-
 .lockedContainer {
-  background-color: #ffffffaa;
+  background-color: var(--md-sys-color-primary-container);
   box-shadow: none;
 }
 
