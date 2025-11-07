@@ -6,15 +6,32 @@ import { Rune, RuneWeight } from "../../types/rune";
 import { store } from "../../store/store";
 import { Trans, useTranslation } from "react-i18next";
 import { useIncantationNames } from "../../store/incantations";
-import { game } from "../../Game/game";
+import { Game, game } from "../../Game/game";
 import { EldritchRune } from "../../types/eldritchRunes";
+import {
+  HealthMelody,
+  LaborMelody,
+  VoidMelody,
+  WindMelody,
+} from "../../Game/Melodies/Melodies";
+import { useGameSelector } from "../../store/gameRedux";
 
 const maxRunes = 12;
+
+const selectIsWindUnlocked = (g: Game): boolean => g.melodies[WindMelody.id];
+const selectIsLaborUnlocked = (g: Game): boolean => g.melodies[LaborMelody.id];
+const selectIsVoidUnlocked = (g: Game): boolean => g.melodies[VoidMelody.id];
+const selectIsHealthUnlocked = (g: Game): boolean =>
+  g.melodies[HealthMelody.id];
 
 export const AddGolemModal = ({
   open,
   onClose,
 }: ModalProps): React.ReactElement => {
+  const isWindUnlocked = useGameSelector(selectIsWindUnlocked);
+  const isLaborUnlocked = useGameSelector(selectIsLaborUnlocked);
+  const isVoidUnlocked = useGameSelector(selectIsVoidUnlocked);
+  const isHealthUnlocked = useGameSelector(selectIsHealthUnlocked);
   const { t } = useTranslation();
   const [runes, setRunes] = useState<Record<Rune, number>>(
     Object.fromEntries(Object.values(Rune).map((r) => [r, 0])) as Record<
@@ -61,54 +78,85 @@ export const AddGolemModal = ({
         <p style={{ fontSize: "2em" }} className="mb-2">
           {t("create_golem_modal.runes")}: {totalRunes} / {maxRunes}
         </p>
-        <RuneSlider
-          onUpdate={setRunes}
-          rune={Rune.WIND}
-          icon={EhwazIcon}
-          amount={runes[Rune.WIND]}
-          disabled={disabled}
-        />
-        <p>
-          <Trans
-            i18nKey="create_golem_modal.wind_description"
-            values={{
-              speed: (
-                (runes[Rune.WIND] * game.powers.movePerRune) /
-                weight
-              ).toFixed(2),
-            }}
-          />
-        </p>
-        <RuneSlider
-          onUpdate={setRunes}
-          rune={Rune.LABOR}
-          icon={TiwazIcon}
-          amount={runes[Rune.LABOR]}
-          disabled={disabled}
-        />
-        <p>
-          <Trans
-            i18nKey="create_golem_modal.labor_description"
-            values={{
-              speed: runes[Rune.LABOR] * game.powers.workPerRune,
-            }}
-          />
-        </p>
-        <RuneSlider
-          onUpdate={setRunes}
-          rune={Rune.VOID}
-          icon={OthalanIcon}
-          amount={runes[Rune.VOID]}
-          disabled={disabled}
-        />
-        <p>
-          <Trans
-            i18nKey="create_golem_modal.void_description"
-            values={{
-              cap: runes[Rune.VOID] * game.powers.capacityPerRune,
-            }}
-          />
-        </p>
+        {isWindUnlocked && (
+          <>
+            <RuneSlider
+              onUpdate={setRunes}
+              rune={Rune.WIND}
+              icon={EhwazIcon}
+              amount={runes[Rune.WIND]}
+              disabled={disabled}
+            />
+            <p>
+              <Trans
+                i18nKey="create_golem_modal.wind_description"
+                values={{
+                  speed: (
+                    (runes[Rune.WIND] * game.powers.movePerRune) /
+                    weight
+                  ).toFixed(2),
+                }}
+              />
+            </p>
+          </>
+        )}
+        {isLaborUnlocked && (
+          <>
+            <RuneSlider
+              onUpdate={setRunes}
+              rune={Rune.LABOR}
+              icon={TiwazIcon}
+              amount={runes[Rune.LABOR]}
+              disabled={disabled}
+            />
+            <p>
+              <Trans
+                i18nKey="create_golem_modal.labor_description"
+                values={{
+                  speed: runes[Rune.LABOR] * game.powers.workPerRune,
+                }}
+              />
+            </p>
+          </>
+        )}
+        {isVoidUnlocked && (
+          <>
+            <RuneSlider
+              onUpdate={setRunes}
+              rune={Rune.VOID}
+              icon={OthalanIcon}
+              amount={runes[Rune.VOID]}
+              disabled={disabled}
+            />
+            <p>
+              <Trans
+                i18nKey="create_golem_modal.void_description"
+                values={{
+                  cap: runes[Rune.VOID] * game.powers.capacityPerRune,
+                }}
+              />
+            </p>
+          </>
+        )}
+        {isHealthUnlocked && (
+          <>
+            <RuneSlider
+              onUpdate={setRunes}
+              rune={Rune.HEALTH}
+              icon={OthalanIcon}
+              amount={runes[Rune.HEALTH]}
+              disabled={disabled}
+            />
+            <p>
+              <Trans
+                i18nKey="create_golem_modal.void_description"
+                values={{
+                  cap: runes[Rune.HEALTH] * game.powers.capacityPerRune,
+                }}
+              />
+            </p>
+          </>
+        )}
         <div className="my-2">
           {t("create_golem_modal.incantation")}:{" "}
           <select

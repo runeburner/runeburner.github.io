@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { SquarePenIcon, LockIcon } from "../../icons";
-import { Modal } from "../../Modal/Modal";
+import { useCallback } from "react";
 import classes from "./Node.module.css";
 import { NodeStatus } from "./NodeStatus";
-import { Vec } from "../../types/vec";
+import { runGameSelectors, useGameSelector } from "../../store/gameRedux";
+import { game, Game } from "../../Game/game";
+import { Melody } from "../../Game/Melodies/Melodies";
+import { useTranslation } from "react-i18next";
+import { HasTooltip, Tooltip } from "../../Tooltip/Tooltip";
 
 const statusContainerClasses: Record<string, string> = {
   PURCHASED: classes.purchasedContainer,
@@ -20,47 +22,57 @@ const statusIconClasses: Record<string, string> = {
 };
 
 type NodeProps = {
-  icon: typeof SquarePenIcon;
-  x: number;
-  y: number;
-  title: string;
-  lvl: Vec;
-  description: string;
-  status: NodeStatus;
+  melody: Melody;
 };
 
-export const Node = (props: NodeProps): React.ReactElement => {
-  const [open, setOpen] = useState(false);
-  const { x, y } = props;
-  const { title, description } = props;
-  const { lvl } = props;
-  const { icon } = props;
-  const { status } = props;
+const selectCanBuy = (g: Game): boolean => g.choords > 0;
 
-  const Icon = status !== NodeStatus.LOCKED ? icon : LockIcon;
+export const Node = ({ melody }: NodeProps): React.ReactElement => {
+  const { t } = useTranslation();
+  const isBought = useGameSelector(
+    useCallback((g: Game) => g.melodies[melody.id], [melody])
+  );
+  const hasPrerequisite = useGameSelector(
+    useCallback(
+      (g: Game) => g.melodies[melody.require ?? ""] ?? false,
+      [melody]
+    )
+  );
+  const hasChoords = useGameSelector(selectCanBuy);
+  const { x, y } = melody;
+  const { icon } = melody;
+
+  const status = isBought
+    ? NodeStatus.PURCHASED
+    : hasChoords && hasPrerequisite
+    ? NodeStatus.AVAILABLE
+    : NodeStatus.LOCKED;
+  const Icon = icon;
+
+  const onClick = (): void => {
+    game.unlockMelody(melody.id);
+    runGameSelectors();
+  };
   return (
-    <>
+    <HasTooltip className="absolute" style={{ left: x, top: y }}>
       <div
-        onClick={() => setOpen(true)}
+        onClick={onClick}
         className={
-          "p-4 select-none absolute " +
+          "p-4 select-none " +
           classes.node +
           " " +
           statusContainerClasses[status]
         }
-        style={{ left: x, top: y }}
       >
         <Icon className={statusIconClasses[status]} />
+        <Tooltip>
+          <span style={{ fontSize: "2em" }}>
+            {t(`melodies.${melody.id}.title`)}
+          </span>
+          <br />
+          <span>{t(`melodies.${melody.id}.description`)}</span>
+        </Tooltip>
       </div>
-
-      {open && (
-        <Modal open={true} onClose={() => setOpen(false)}>
-          <h1>
-            {title} {lvl[0]}/{lvl[1]}
-          </h1>
-          <p>{description}</p>
-        </Modal>
-      )}
-    </>
+    </HasTooltip>
   );
 };

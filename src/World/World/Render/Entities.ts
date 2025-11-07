@@ -11,6 +11,7 @@ const runeColors = {
   [Rune.VOID]: "#ff000088",
   [Rune.LABOR]: "#0000ff88",
   [Rune.WIND]: "#00ff0088",
+  [Rune.HEALTH]: "#ff0000",
 };
 const renderRuneArcs = (
   ctx: CanvasRenderingContext2D,

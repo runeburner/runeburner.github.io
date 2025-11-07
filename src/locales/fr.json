@@ -67,6 +67,10 @@
     "LABOR": {
       "name": "Travail",
       "effect": "Augmente la vitesse des travaux"
+    },
+    "HEALTH": {
+      "name": "Vie",
+      "effect": "Augmente la vie"
     }
   },
   "world": {
@@ -154,5 +158,35 @@
   "cheat": {
     "GLOBAL_SPEED_UP": "Augmentation de vitesse mondiale",
     "AUTO_LOAD_REALM": "Entrer un monde automatiquement"
+  },
+  "melodies": {
+    "WIND": {
+      "title": "Vent",
+      "description": "Debloque la rune Vent"
+    },
+    "LABOR": {
+      "title": "Travail",
+      "description": "Debloque la rune Travail"
+    },
+    "VOID": {
+      "title": "Vide",
+      "description": "Debloque la rune Vide"
+    },
+    "HEALTH": {
+      "title": "Vie",
+      "description": "Debloque la rune Vie"
+    },
+    "EXTRA_HEALTH_1": {
+      "title": "Vie extra",
+      "description": "Chaque rune de vie donne 1 vie de plus"
+    },
+    "ARMOR": {
+      "title": "Armure",
+      "description": "Debloque la rune Armure"
+    },
+    "SHELL": {
+      "title": "Carapace",
+      "description": "Debloque le rune Carapace"
+    }
   }
 }

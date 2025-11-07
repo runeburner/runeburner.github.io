@@ -18,7 +18,7 @@ type SidebarState = {
 };
 
 const initialState: SidebarState = {
-  selected: Page.YGGDRASIL,
+  selected: Page.MELODY,
 };
 
 const sidebarSlice = createSlice({
