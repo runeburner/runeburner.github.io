@@ -10,6 +10,5 @@ export default defineConfig({
       provider: playwright(),
       instances: [{ browser: "chromium" }],
     },
-    exclude: ["src/**/*.svg"],
   },
 });
