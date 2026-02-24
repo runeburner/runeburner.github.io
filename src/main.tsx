@@ -14,6 +14,8 @@ import "./Realm/tutorial_1";
 import "./Realm/tutorial_2";
 import "./Realm/tutorial_3";
 import "./Realm/DevMap";
+import { GameContext } from "./App/GameContext.tsx";
+import { game } from "./Game/game.ts";
 
 ((): void => {
   const rootDiv = document.getElementById("root");
@@ -24,8 +26,10 @@ import "./Realm/DevMap";
   createRoot(rootDiv).render(
     <Provider store={store}>
       <I18NPicker />
-      <App />
-    </Provider>
+      <GameContext.Provider value={game}>
+        <App />
+      </GameContext.Provider>
+    </Provider>,
   );
 })();
 

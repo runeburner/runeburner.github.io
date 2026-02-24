@@ -72,7 +72,7 @@ export type Game = {
   unlockMelody(id: string): void;
 };
 
-export const game = ((): Game => {
+export const freshGame = (): Game => {
   return {
     realmId: "",
     realmCompleted: false,
@@ -112,34 +112,34 @@ export const game = ((): Game => {
     },
     choords: 0,
     tileAt(v: Vec): Int32Array {
-      const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
-      return game.plane.data.slice(start, start + ValuesPerTile);
+      const start = (v[1] * this.plane.bounds[2] + v[0]) * ValuesPerTile;
+      return this.plane.data.slice(start, start + ValuesPerTile);
     },
     setTileAt(v: Vec, t: Int32Array): void {
-      const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
-      game.plane.data.set(t, start);
+      const start = (v[1] * this.plane.bounds[2] + v[0]) * ValuesPerTile;
+      this.plane.data.set(t, start);
     },
     updateFoW(before: Vec | null, after: Vec | null, radius: number): void {
       if (before !== null) {
-        const bounds = BoundedAABB(game.plane.bounds, before, radius);
+        const bounds = BoundedAABB(this.plane.bounds, before, radius);
 
         for (let i = bounds[0]; i <= bounds[2]; i++) {
           for (let j = bounds[1]; j <= bounds[3]; j++) {
             const x =
-              (j * game.plane.bounds[2] + i) * ValuesPerTile +
+              (j * this.plane.bounds[2] + i) * ValuesPerTile +
               Offset.FOG_OF_WAR;
-            game.plane.data[x]--;
+            this.plane.data[x]--;
           }
         }
       }
 
       if (after !== null) {
-        const bounds = BoundedAABB(game.plane.bounds, after, radius);
+        const bounds = BoundedAABB(this.plane.bounds, after, radius);
 
         for (let i = bounds[0]; i <= bounds[2]; i++) {
           for (let j = bounds[1]; j <= bounds[3]; j++) {
-            game.plane.data[
-              (j * game.plane.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
+            this.plane.data[
+              (j * this.plane.bounds[2] + i) * ValuesPerTile + Offset.FOG_OF_WAR
             ]++;
           }
         }
@@ -147,31 +147,31 @@ export const game = ((): Game => {
     },
     canSeeTile(v: Vec): boolean {
       return (
-        game.plane.data[
-          (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile +
+        this.plane.data[
+          (v[1] * this.plane.bounds[2] + v[0]) * ValuesPerTile +
             Offset.FOG_OF_WAR
         ] !== 0
       );
     },
     entityAt(v: Vec): Entity | undefined {
-      return game.entities
+      return this.entities
         .values()
         .find((e) => e.pos[0] === v[0] && e.pos[1] === v[1]);
     },
     findClosestTile(pos: Vec, wantTile: Tile, radius: number): Vec | null {
       const x = Math.max(0, pos[0] - Math.floor(radius));
-      const X = Math.min(game.plane.bounds[2], pos[0] + Math.ceil(radius));
+      const X = Math.min(this.plane.bounds[2], pos[0] + Math.ceil(radius));
       const y = Math.max(0, pos[1] - Math.floor(radius));
-      const Y = Math.min(game.plane.bounds[3], pos[1] + Math.ceil(radius));
+      const Y = Math.min(this.plane.bounds[3], pos[1] + Math.ceil(radius));
       let closestTile: Vec | null = null;
       let closestDist = 1e99;
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
           const v: Vec = [i, j];
-          if (!game.canSeeTile(v)) continue;
-          const tile = game.tileAt(v);
+          if (!this.canSeeTile(v)) continue;
+          const tile = this.tileAt(v);
 
-          if (tile[0] === wantTile && !game.entityAt(v)) {
+          if (tile[0] === wantTile && !this.entityAt(v)) {
             const dist = Math.abs(pos[0] - i) + Math.abs(pos[1] - j);
             if (dist < closestDist) {
               closestTile = v;
@@ -184,18 +184,18 @@ export const game = ((): Game => {
     },
     findAllTiles(pos: Vec, wantTile: Tile, radius: number): Vec[] {
       const x = Math.max(0, pos[0] - Math.floor(radius));
-      const X = Math.min(game.plane.bounds[2], pos[0] + Math.ceil(radius));
+      const X = Math.min(this.plane.bounds[2], pos[0] + Math.ceil(radius));
       const y = Math.max(0, pos[1] - Math.floor(radius));
-      const Y = Math.min(game.plane.bounds[3], pos[1] + Math.ceil(radius));
+      const Y = Math.min(this.plane.bounds[3], pos[1] + Math.ceil(radius));
 
       const tiles: Vec[] = [];
       for (let j = y; j < Y; j++) {
         for (let i = x; i < X; i++) {
           const v: Vec = [i, j];
-          if (!game.canSeeTile(v)) continue;
-          const tile = game.tileAt(v);
+          if (!this.canSeeTile(v)) continue;
+          const tile = this.tileAt(v);
 
-          if (tile[0] === wantTile && !game.entityAt(v)) {
+          if (tile[0] === wantTile && !this.entityAt(v)) {
             tiles.push(v);
           }
         }
@@ -203,13 +203,13 @@ export const game = ((): Game => {
       return tiles;
     },
     findClosestEntity(pos: Vec, entityType: EntityType): Entity | null {
-      const entities = game.entities
+      const entities = this.entities
         .values()
         .filter((e) => e.__type === entityType);
       const v = entities.reduce(
         (res: [number, Entity | null], e): [number, Entity | null] => {
           const d = dist(e.pos, pos);
-          if (d < res[0] && game.canSeeTile(e.pos)) {
+          if (d < res[0] && this.canSeeTile(e.pos)) {
             return [d, e];
           }
           return res;
@@ -225,28 +225,28 @@ export const game = ((): Game => {
     ): Entity[] {
       const aabb = RadiusAABB(pos, radius);
 
-      return game.entities
+      return this.entities
         .values()
         .filter((e) => e.__type === entityType && IsInAABB(aabb, e.pos))
         .toArray();
     },
     golemSpawnCoordinates(): Vec | null {
-      const heart = game.entities
+      const heart = this.entities
         .values()
         .find((e) => e.__type === EntityType.HEART);
       if (!heart) return null;
-      return game.findClosestTile(heart.pos, Tile.EMPTY, 3);
+      return this.findClosestTile(heart.pos, Tile.EMPTY, 3);
     },
     addMusicalNotes(n: number): void {
-      game.resources.musicalNotes += n;
-      game.powers.musicalStrength = Math.pow(
+      this.resources.musicalNotes += n;
+      this.powers.musicalStrength = Math.pow(
         1.01,
-        Math.sqrt(0.5 * game.resources.musicalNotes),
+        Math.sqrt(0.5 * this.resources.musicalNotes),
       );
     },
 
     determineInitialCameraPosition(cam: Camera): Camera {
-      const core = game.entities
+      const core = this.entities
         .values()
         .find((e) => e.__type === EntityType.HEART);
       return {
@@ -264,11 +264,11 @@ export const game = ((): Game => {
       incantation: string,
       eldritchRune: EldritchRune | undefined,
     ): void {
-      if (game.livesLeft <= 0) return;
-      game.livesLeft--;
-      game.resources.golems++;
+      if (this.livesLeft <= 0) return;
+      this.livesLeft--;
+      this.resources.golems++;
       const id = ID.next();
-      const coord = game.golemSpawnCoordinates();
+      const coord = this.golemSpawnCoordinates();
 
       if (!coord) return;
       const golem: GolemEntity = {
@@ -286,38 +286,38 @@ export const game = ((): Game => {
       };
 
       launchGolem(golem, incantation).then((success) => {
-        game.updateFoW(null, golem.pos, golem.visionRange);
+        this.updateFoW(null, golem.pos, golem.visionRange);
         if (!success) return;
-        game.entities.set(id, golem);
+        this.entities.set(id, golem);
       });
     },
     loadMap(realm: Realm, map: Plane): void {
-      game.realmId = realm.id;
-      game.realmCompleted = false;
-      game.livesLeft = realm.golemLives;
-      game.resources = {
+      this.realmId = realm.id;
+      this.realmCompleted = false;
+      this.livesLeft = realm.golemLives;
+      this.resources = {
         musicalNotes: 0,
-        leafs: game.resources.leafs,
+        leafs: this.resources.leafs,
         golems: 0,
         maxGolems: 3,
       };
-      game.powers = {
-        leafPower: leafPower(game.resources.leafs),
+      this.powers = {
+        leafPower: leafPower(this.resources.leafs),
         musicalStrength: 1,
         movePerRune: 2,
         capacityPerRune: 1,
         workPerRune: 1,
       };
-      game.entities.clear();
+      this.entities.clear();
       const entities = realm.startingEntities();
       for (const entity of entities) {
-        game.entities.set(entity.id, entity);
+        this.entities.set(entity.id, entity);
       }
 
-      game.actions.clear();
-      game.plane = map;
+      this.actions.clear();
+      this.plane = map;
       for (const e of entities) {
-        if ("visionRange" in e) game.updateFoW(null, e.pos, e.visionRange);
+        if ("visionRange" in e) this.updateFoW(null, e.pos, e.visionRange);
       }
     },
     damage<T extends EntityType, V extends object>(
@@ -345,55 +345,57 @@ export const game = ((): Game => {
         entity.armor[0] === 0 &&
         entity.shield[0] === 0;
 
-      if (die) game.removeEntity(entity.id);
+      if (die) this.removeEntity(entity.id);
       return die;
     },
     removeEntity(id: number): void {
-      const entity = game.entities.get(id);
+      const entity = this.entities.get(id);
       if (!entity) return;
 
-      if (entity.__type === EntityType.GOLEM) game.resources.golems--;
+      if (entity.__type === EntityType.GOLEM) this.resources.golems--;
       if ("visionRange" in entity)
-        game.updateFoW(entity.pos, null, entity.visionRange);
-      game.actions.delete(id);
-      game.entities.delete(id);
+        this.updateFoW(entity.pos, null, entity.visionRange);
+      this.actions.delete(id);
+      this.entities.delete(id);
 
       // delete actions targetting directly this entity.
-      for (const [aid, action] of game.actions.entries()) {
+      for (const [aid, action] of this.actions.entries()) {
         if (action && "target" in action && action.target === id) {
-          game.actions.delete(aid);
+          this.actions.delete(aid);
         }
       }
 
-      const i = game.workers.findIndex((w) => w.id === id);
-      if (i !== -1) game.workers.splice(i, 1);
+      const i = this.workers.findIndex((w) => w.id === id);
+      if (i !== -1) this.workers.splice(i, 1);
 
       return;
     },
     completeRealm(realm: Realm): void {
-      game.realmCompleted = false;
-      game.realmId = "";
-      game.resources.musicalNotes = 0;
-      game.livesLeft = 0;
-      game.entities.clear();
-      game.actions.clear();
-      game.workers = [];
-      if (!game.completedRealms.includes(realm.id)) {
-        game.completedRealms.push(realm.id);
+      this.realmCompleted = false;
+      this.realmId = "";
+      this.resources.musicalNotes = 0;
+      this.livesLeft = 0;
+      this.entities.clear();
+      this.actions.clear();
+      this.workers = [];
+      if (!this.completedRealms.includes(realm.id)) {
+        this.completedRealms.push(realm.id);
         realm.rewards.forEach((r) => r.apply(game));
       }
-      game.powers.leafPower = leafPower(game.resources.leafs);
+      this.powers.leafPower = leafPower(this.resources.leafs);
       runGameSelectors();
     },
 
     addSpecialEffect(effect: SpecialEffect): void {
-      game.ui.events.push(effect);
+      this.ui.events.push(effect);
     },
 
     unlockMelody(id: string): void {
-      if (game.choords <= 0 || game.melodies[id]) return;
-      game.choords--;
-      game.melodies[id] = true;
+      if (this.choords <= 0 || this.melodies[id]) return;
+      this.choords--;
+      this.melodies[id] = true;
     },
   };
-})();
+};
+
+export const game = freshGame();

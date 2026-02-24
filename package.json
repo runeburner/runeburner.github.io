@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "test": "vitest"
+    "test:dev": "vitest --config=vitest.dev.config.ts",
+    "test:ci": "vitest run --config=vitest.ci.config.ts"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.2",
@@ -24,6 +25,9 @@
     "@eslint/js": "^9.17.0",
     "@types/react": "^18.3.26",
     "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^5.1.4",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "baseline-browser-mapping": "^2.10.0",
     "eslint": "^9.39.3",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -34,6 +38,7 @@
     "vite": "^7.1.12",
     "vite-plugin-checker": "^0.12.0",
     "vite-plugin-svgr": "^4.5.0",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "vitest-browser-react": "^2.0.5"
   }
 }

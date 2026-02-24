@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { game, Game } from "../Game/game";
+import { GameContext } from "../App/GameContext";
 
 const trieq = <T>(a: T, b: T): boolean => a === b;
 
@@ -36,8 +37,9 @@ const incr = (n: number): number => n + 1;
 
 export const useGameSelector = <T>(
   f: (g: Game) => T,
-  eq: (a: T, b: T) => boolean = trieq
+  eq: (a: T, b: T) => boolean = trieq,
 ): T => {
+  const game = useContext(GameContext);
   const [, setValue] = useState(0);
   const ref = useRef(f(game));
   useEffect(() => {
