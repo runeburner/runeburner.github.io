@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.2",
-    "esbuild-wasm": "^0.25.11",
+    "esbuild-wasm": "^0.27.3",
     "i18next": "^25.6.0",
     "monaco-editor": "^0.53.0",
     "react": "^19.2.0",
