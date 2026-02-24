@@ -1,10 +1,10 @@
-import * as assert from "assert";
+import { describe, it, expect } from "vitest";
 import { leafPower } from "./formulas";
 
-describe("formulas", function () {
-  describe("#leafPower()", function () {
-    it("should be 2 percent per leaf", function () {
-      assert.equal(leafPower(2), 1.02);
+describe("formulas", () => {
+  describe("leafPower", () => {
+    it("should be 2 percent per leaf", () => {
+      expect(leafPower(2)).toBe(1.02);
     });
   });
 });
