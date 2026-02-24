@@ -160,33 +160,53 @@
     "AUTO_LOAD_REALM": "Automatically load realm"
   },
   "melodies": {
+    "CORE": {
+      "title": "Core",
+      "description": "Unlock default runes"
+    },
     "WIND": {
       "title": "Wind",
-      "description": "Unlock the Wind rune"
+      "description": "Unlock the Wind rune."
     },
     "LABOR": {
       "title": "Labor",
-      "description": "Unlock the Labor rune"
+      "description": "Unlock the Labor rune."
     },
     "VOID": {
       "title": "Void",
-      "description": "Unlock the Void rune"
+      "description": "Unlock the Void rune."
     },
     "HEALTH": {
       "title": "Health",
-      "description": "Unlock the Health rune"
+      "description": "Unlock the Health rune."
     },
-    "EXTRA_HEALTH_1": {
+    "EXTRA_HEALTH": {
       "title": "Extra Health",
-      "description": "Every Health rune gives 1 extra life"
+      "description": "Every Health rune gives 1 extra life."
     },
     "ARMOR": {
       "title": "Armor",
-      "description": "Unlock the Armor rune"
+      "description": "Unlock the Armor rune."
+    },
+    "THICK_ARMOR": {
+      "title": "Thick armor",
+      "description": "Armor is more effective."
     },
     "SHELL": {
       "title": "Shell",
-      "description": "Unlock the Shell rune"
+      "description": "Unlock the Shell rune."
+    },
+    "SHELL_RECHARGE": {
+      "title": "Shell recharge",
+      "description": "Shell recharge faster."
+    },
+    "MORE_RUNES": {
+      "title": "More runes",
+      "description": "Fit 3 more rune per golem."
+    },
+    "FATAL": {
+      "title": "Fatal",
+      "description": "Golem's survive with 1 hp once."
     }
   }
 }

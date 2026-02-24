@@ -59,12 +59,12 @@ export type Game = {
   animate(
     runes: Record<Rune, number>,
     incantation: string,
-    eldritchRune: EldritchRune | undefined
+    eldritchRune: EldritchRune | undefined,
   ): void;
   loadMap(realm: Realm, map: Plane): void;
   damage<T extends EntityType, V extends object>(
     entity: HealthEntity<T, V>,
-    damage: number
+    damage: number,
   ): boolean;
   removeEntity(id: number): void;
   completeRealm(realm: Realm): void;
@@ -110,7 +110,7 @@ export const game = ((): Game => {
       [LaborMelody.id]: true,
       [VoidMelody.id]: true,
     },
-    choords: 2,
+    choords: 0,
     tileAt(v: Vec): Int32Array {
       const start = (v[1] * game.plane.bounds[2] + v[0]) * ValuesPerTile;
       return game.plane.data.slice(start, start + ValuesPerTile);
@@ -214,14 +214,14 @@ export const game = ((): Game => {
           }
           return res;
         },
-        [1e99, null]
+        [1e99, null],
       );
       return v[1];
     },
     findAllEntities(
       pos: Vec,
       entityType: EntityType,
-      radius: number
+      radius: number,
     ): Entity[] {
       const aabb = RadiusAABB(pos, radius);
 
@@ -241,7 +241,7 @@ export const game = ((): Game => {
       game.resources.musicalNotes += n;
       game.powers.musicalStrength = Math.pow(
         1.01,
-        Math.sqrt(0.5 * game.resources.musicalNotes)
+        Math.sqrt(0.5 * game.resources.musicalNotes),
       );
     },
 
@@ -262,7 +262,7 @@ export const game = ((): Game => {
     animate(
       runes: Record<Rune, number>,
       incantation: string,
-      eldritchRune: EldritchRune | undefined
+      eldritchRune: EldritchRune | undefined,
     ): void {
       if (game.livesLeft <= 0) return;
       game.livesLeft--;
@@ -322,7 +322,7 @@ export const game = ((): Game => {
     },
     damage<T extends EntityType, V extends object>(
       entity: HealthEntity<T, V>,
-      damage: number
+      damage: number,
     ): boolean {
       if (entity.health[0] > 0) {
         const dmg = Math.min(entity.health[0], damage);

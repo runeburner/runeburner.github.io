@@ -62,6 +62,9 @@ import Terminal from "./terminal.svg";
 import Pickaxe from "./pickaxe.svg";
 import CircleOff from "./circle-off.svg";
 import Wind from "./wind.svg";
+import HeartCrack from "./heart-crack.svg";
+import DiamondPlus from "./diamond-plus.svg";
+import Star from "./star.svg";
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -143,3 +146,6 @@ export const TerminalIcon = makeIcon(Terminal);
 export const PickaxeIcon = makeIcon(Pickaxe);
 export const CircleOffIcon = makeIcon(CircleOff);
 export const WindIcon = makeIcon(Wind);
+export const HeartCrackIcon = makeIcon(HeartCrack);
+export const DiamondPlusIcon = makeIcon(DiamondPlus);
+export const StarIcon = makeIcon(Star);

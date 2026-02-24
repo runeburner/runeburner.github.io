@@ -25,28 +25,27 @@ type NodeProps = {
   melody: Melody;
 };
 
-const selectCanBuy = (g: Game): boolean => g.choords > 0;
-
 export const Node = ({ melody }: NodeProps): React.ReactElement => {
   const { t } = useTranslation();
-  const isBought = useGameSelector(
-    useCallback((g: Game) => g.melodies[melody.id], [melody])
-  );
-  const hasPrerequisite = useGameSelector(
+  const status = useGameSelector(
     useCallback(
-      (g: Game) => g.melodies[melody.require ?? ""] ?? false,
-      [melody]
-    )
+      (g: Game) => {
+        const isBought = g.melodies[melody.id];
+        const hasPrerequisite = g.melodies[melody.require ?? ""] ?? false;
+        const hasChoords = g.choords > 0;
+        return isBought
+          ? NodeStatus.PURCHASED
+          : hasChoords && hasPrerequisite
+            ? NodeStatus.AVAILABLE
+            : NodeStatus.LOCKED;
+      },
+      [melody],
+    ),
   );
-  const hasChoords = useGameSelector(selectCanBuy);
+
   const { x, y } = melody;
   const { icon } = melody;
 
-  const status = isBought
-    ? NodeStatus.PURCHASED
-    : hasChoords && hasPrerequisite
-    ? NodeStatus.AVAILABLE
-    : NodeStatus.LOCKED;
   const Icon = icon;
 
   const onClick = (): void => {
@@ -67,10 +66,10 @@ export const Node = ({ melody }: NodeProps): React.ReactElement => {
         <Icon className={statusIconClasses[status]} />
         <Tooltip>
           <span style={{ fontSize: "2em" }}>
-            {t(`melodies.${melody.id}.title`)}
+            {t(`melodies.${melody.localeId}.title`)}
           </span>
           <br />
-          <span>{t(`melodies.${melody.id}.description`)}</span>
+          <span>{t(`melodies.${melody.localeId}.description`)}</span>
         </Tooltip>
       </div>
     </HasTooltip>
