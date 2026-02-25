@@ -1,12 +1,16 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { game, Game } from "../Game/game";
-import { GameContext } from "../App/GameContext";
 
 const trieq = <T>(a: T, b: T): boolean => a === b;
 
 export const arrayShallowEquals = <T>(a: T[], b: T[]): boolean => {
   if (a.length != b.length) return false;
-  return a.every((v, i) => b[i] === v);
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      return false;
+    }
+  }
+  return true;
 };
 
 export const runGameSelectors = (): void => {
@@ -39,7 +43,6 @@ export const useGameSelector = <T>(
   f: (g: Game) => T,
   eq: (a: T, b: T) => boolean = trieq,
 ): T => {
-  const game = useContext(GameContext);
   const [, setValue] = useState(0);
   const ref = useRef(f(game));
   useEffect(() => {

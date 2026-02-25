@@ -399,3 +399,7 @@ export const freshGame = (): Game => {
 };
 
 export const game = freshGame();
+
+export const resetGame = (): void => {
+  Object.assign(game, freshGame());
+};
