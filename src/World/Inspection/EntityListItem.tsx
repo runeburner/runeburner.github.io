@@ -4,6 +4,7 @@ import { Game } from "../../Game/game";
 import { EntityType } from "../../types/entity";
 import { useTranslation } from "react-i18next";
 import { GolemDetails } from "./GolemDetails";
+import { GolemFader } from "./GolemFader";
 
 type EntityListItemProps = {
   entityID: number;
@@ -17,14 +18,15 @@ export const EntityListItem = ({
   const __type = useGameSelector(
     useCallback(
       (g: Game): EntityType | undefined => g.entities.get(entityID)?.__type,
-      [entityID]
-    )
+      [entityID],
+    ),
   );
   return (
     <>
       <li onClick={() => setExpanded((b) => !b)}>
         <b>
-          {t(`entity.${__type}`)} ({entityID})
+          {t(`entity.${__type}`)} ({entityID}){" "}
+          {__type === EntityType.GOLEM && <GolemFader entityID={entityID} />}
         </b>
       </li>
       {expanded && (

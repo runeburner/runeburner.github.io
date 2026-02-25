@@ -1,7 +1,7 @@
 import { Realm } from "../Realm/Realm";
 import { runGameSelectors } from "../store/gameRedux";
 import { AABB, BoundedAABB, IsInAABB, RadiusAABB } from "../types/aabb";
-import { ActionProgress } from "../types/actions";
+import { ActionProgress, ActionType, FADE } from "../types/actions";
 import { EldritchRune } from "../types/eldritchRunes";
 import { Entity, EntityType, GolemEntity, HealthEntity } from "../types/entity";
 import { Plane, Offset, ValuesPerTile } from "../types/map";
@@ -70,6 +70,7 @@ export type Game = {
   completeRealm(realm: Realm): void;
   addSpecialEffect(effect: SpecialEffect): void;
   unlockMelody(id: string): void;
+  fadeWorker(id: number): void;
 };
 
 export const freshGame = (): Game => {
@@ -394,6 +395,13 @@ export const freshGame = (): Game => {
       if (this.choords <= 0 || this.melodies[id]) return;
       this.choords--;
       this.melodies[id] = true;
+    },
+
+    fadeWorker(id: number): void {
+      this.workers.forEach((w) => {
+        if (w.id !== id) return;
+        w.tick = (): FADE => ({ __type: ActionType.FADE, id: id });
+      });
     },
   };
 };

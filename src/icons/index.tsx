@@ -65,6 +65,7 @@ import Wind from "./wind.svg";
 import HeartCrack from "./heart-crack.svg";
 import DiamondPlus from "./diamond-plus.svg";
 import Star from "./star.svg";
+import XOctagon from "./x-octagon.svg";
 
 type HTMLDivProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -149,3 +150,4 @@ export const WindIcon = makeIcon(Wind);
 export const HeartCrackIcon = makeIcon(HeartCrack);
 export const DiamondPlusIcon = makeIcon(DiamondPlus);
 export const StarIcon = makeIcon(Star);
+export const XOctagonIcon = makeIcon(XOctagon);
